@@ -1,0 +1,12 @@
+@import "../abstracts/variables";
+
+.loading {
+  &__dialog {
+    &--title {
+      font-size: x-large;
+      color: $text-color;
+      padding-top: 30px;
+      padding-bottom: 10px;
+    }
+  }
+}
