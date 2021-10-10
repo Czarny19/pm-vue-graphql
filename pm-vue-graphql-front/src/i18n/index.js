@@ -6,10 +6,14 @@ export const messages = {
             username: 'Nazwa użytkownika',
             password: 'Hasło',
             logIn: 'Zaloguj się',
-            logInDemo: 'Użytkownik demonstracyjny'
+            logInDemo: 'Użytkownik demonstracyjny',
+            logInProgress: 'Logowanie...'
         },
         dashboard: {
-            title: 'Projektant stron'
+            apps: 'Aplikacje',
+            dataSource: 'Źródło danych',
+            styles: 'Motywy',
+            createDate: 'Data utworzenia'
         }
     }
 }

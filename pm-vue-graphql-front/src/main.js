@@ -1,18 +1,20 @@
-import Vue from 'vue'
-import App from './App.vue'
-import VueI18n from 'vue-i18n'
-import VModal from 'vue-js-modal/dist/index.nocss'
-import router from './router'
-import {messages} from './i18n'
-import vuetify from './plugins/vuetify'
+import Vue from "vue";
+import App from "./App.vue";
+import VueI18n from "vue-i18n";
+import VModal from "vue-js-modal/dist/index.nocss";
+import router from "./router";
+import {messages} from "./i18n";
+import vuetify from "./plugins/vuetify";
 
-import VueApollo from 'vue-apollo'
-import ApolloClient from 'apollo-client'
-import {HttpLink} from 'apollo-link-http'
-import {InMemoryCache} from 'apollo-cache-inmemory'
+import VueApollo from "vue-apollo";
+import ApolloClient from "apollo-client";
+import {HttpLink} from "apollo-link-http";
+import {InMemoryCache} from "apollo-cache-inmemory";
+import {persistCache} from 'apollo-cache-persist';
 
-import 'roboto-fontface/css/roboto/roboto-fontface.css'
-import '@fortawesome/fontawesome-free/css/all.css'
+import "roboto-fontface/css/roboto/roboto-fontface.css";
+import "@fortawesome/fontawesome-free/css/all.css";
+import {typeDefs} from "@/graphql/typedefs";
 
 document.title = 'PM Vue-Graphql Demo'
 
@@ -25,8 +27,12 @@ const getHeaders = () => {
     return headers
 };
 
+export const cache = new InMemoryCache({addTypename: true})
+
+persistCache({cache, storage: window.localStorage})
+
 const link = new HttpLink({uri: 'https://magister-app.herokuapp.com/v1/graphql', fetch, headers: getHeaders()})
-const client = new ApolloClient({link: link, cache: new InMemoryCache({addTypename: true})})
+const client = new ApolloClient({typeDefs: typeDefs, link: link, cache: cache, resolvers: {}})
 const apolloProvider = new VueApollo({defaultClient: client})
 
 Vue.use(VueI18n)
@@ -36,3 +42,5 @@ Vue.use(VueApollo)
 export const i18n = new VueI18n({locale: 'pl', messages})
 
 new Vue({router, apolloProvider, i18n, vuetify, render: h => h(App)}).$mount('#app')
+
+

@@ -4,4 +4,15 @@
     font-size: x-large;
     font-weight: normal;
   }
+
+  &__user {
+    &--icon {
+      color: white !important;
+    }
+
+    &--email {
+      padding-left: 20px;
+      color: white !important;
+    }
+  }
 }

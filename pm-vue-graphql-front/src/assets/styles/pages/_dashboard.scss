@@ -1,19 +1,9 @@
+@import "../abstracts/variables";
+
 .dashboard {
-  &__topbar {
-    &--wrapper {
-      width: 100%;
-      background-color: lightgray;
-      min-height: 60px;
-    }
-
-    &--title {
-
-    }
-  }
-
-  &__sidebar {
-    &--wrapper {
-      height: 100%;
+  &__navigation {
+    &--tabs {
+      border-radius: 0 !important;
     }
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="login__bg--fill">
-    <LoadingDialog :dialog="loadingDialog" title="Wczytywanie..."/>
+    <LoadingDialog :dialog="loadingDialog" :title="$t('login.logInProgress')"/>
 
     <v-container class="login__bg--form">
       <v-row justify="center">
@@ -34,8 +34,9 @@
 </template>
 
 <script>
-import {GET_USER_QUERY} from "@/graphql/user";
 import LoadingDialog from "@/components/common/LoadingDialog";
+import {cache} from "@/main";
+import {GET_USER_QUERY} from "@/graphql/queries/user";
 
 export default {
   name: 'LoginPage',
@@ -80,7 +81,19 @@ export default {
         this.doLogin = false
 
         if (data.USER.length) {
-          this.$router.push({name: 'Projects'})
+          cache.writeData({
+            data: {
+              currentUser: [
+                {
+                  __typename: 'User',
+                  id: data.USER[0].id,
+                  email: data.USER[0].email,
+                },
+              ],
+            },
+          });
+
+          this.$router.push({name: 'Dashboard'})
         }
       },
     }

@@ -1,15 +1,29 @@
 <template>
   <div class="overflow-hidden">
-    <v-app-bar color="primary" elevate-on-scroll scroll-target="#scrolling-techniques-7">
+    <v-app-bar color="primary">
       <v-toolbar-title class="app-bar__title">{{ $t('title') }}</v-toolbar-title>
       <v-spacer></v-spacer>
+      <v-icon class="app-bar__user--icon">fa-user</v-icon>
+      <div class="app-bar__user--email">{{ currentUser[0].email }}</div>
     </v-app-bar>
   </div>
 </template>
 
 <script>
+import {CURRENT_USER} from "@/graphql/queries/user";
+
 export default {
-  name: 'AppBar'
+  name: 'AppBar',
+  data() {
+    return {
+      currentUser: [0]
+    }
+  },
+  apollo: {
+    currentUser: {
+      query: CURRENT_USER
+    }
+  }
 }
 </script>
 

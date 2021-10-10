@@ -1,36 +1,58 @@
 <template>
-  <div>
-    <DashboardTopBar/>
-    <v-container fluid class="dashboard__sidebar--wrapper pa-0">
-      <v-row no-gutters>
-        <v-col cols="2">
-          <DashboardComponentBar/>
-        </v-col>
-        <v-col cols="8">
-          <DashboardCanvas :project-name="project.title"/>
-        </v-col>
-      </v-row>
-    </v-container>
-  </div>
+  <v-card class="dashboard__navigation--tabs">
+    <v-tabs v-model="tab" background-color="secondary" centered dark icons-and-text fixed-tabs>
+      <v-tabs-slider></v-tabs-slider>
+
+      <v-tab href="#tab-1">
+        {{ $t('dashboard.apps') }}
+        <v-icon class="pb-2">fa-tablet</v-icon>
+      </v-tab>
+
+      <v-tab href="#tab-2">
+        {{ $t('dashboard.dataSource') }}
+        <v-icon class="pb-2">fa-database</v-icon>
+      </v-tab>
+
+      <v-tab href="#tab-3">
+        {{ $t('dashboard.styles') }}
+        <v-icon class="pb-2">fa-pencil-ruler</v-icon>
+      </v-tab>
+    </v-tabs>
+
+    <v-tabs-items v-model="tab">
+      <v-tab-item :value="'tab-1'">
+        <v-card flat>
+          <DashboardAppsTab/>
+        </v-card>
+      </v-tab-item>
+
+      <v-tab-item :value="'tab-2'">
+        <v-card flat>
+          <DashboardDataTab/>
+        </v-card>
+      </v-tab-item>
+
+      <v-tab-item :value="'tab-3'">
+        <v-card flat>
+          <DashboardStyleTab/>
+        </v-card>
+      </v-tab-item>
+    </v-tabs-items>
+  </v-card>
 </template>
 
 <script>
-import DashboardComponentBar from "@/components/dashboard/DashboardComponentBar";
-import DashboardTopBar from "@/components/dashboard/DashboardTopBar";
-import DashboardCanvas from "@/components/dashboard/DashboardCanvas";
-import Project from "@/models/project";
+import DashboardAppsTab from "@/components/dashboard/DashboardAppsTab";
+import DashboardDataTab from "@/components/dashboard/DashboardDataTab";
+import DashboardStyleTab from "@/components/dashboard/DashboardStyleTab";
 
 export default {
   name: 'DashboardPage',
-  components: {DashboardCanvas, DashboardTopBar, DashboardComponentBar},
+  components: {DashboardStyleTab, DashboardDataTab, DashboardAppsTab},
   data: () => ({
-    currentTab: 0,
-    project: {}
+    tab: 1,
   }),
-  beforeMount() {
-    // tODO load project
-    this.project = new Project({id: 0, title: 'Project 1'})
-  }
+  methods: {}
 }
 </script>
 
