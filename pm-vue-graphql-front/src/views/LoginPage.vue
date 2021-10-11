@@ -20,7 +20,7 @@
                       </v-btn>
                     </v-col>
                     <v-col cols="12" class="pt-4">
-                      <v-btn block large color="secondary" @click="submitWithDemo">{{ $t('login.logInDemo') }}</v-btn>
+                      <v-btn block large color="accent" @click="submitWithDemo">{{ $t('login.logInDemo') }}</v-btn>
                     </v-col>
                   </v-row>
                 </v-container>

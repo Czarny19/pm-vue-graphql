@@ -10,6 +10,7 @@ export const messages = {
             logInProgress: 'Logowanie...'
         },
         dashboard: {
+            dashboard: 'Panel sterowania',
             apps: 'Aplikacje',
             dataSource: 'Źródło danych',
             styles: 'Motywy',

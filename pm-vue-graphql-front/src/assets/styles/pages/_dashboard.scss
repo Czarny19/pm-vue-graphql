@@ -2,8 +2,15 @@
 
 .dashboard {
   &__navigation {
-    &--tabs {
-      border-radius: 0 !important;
+    &--title {
+      color: white;
+      font-size: x-large;
+    }
+  }
+
+  &__tabs {
+    &--container {
+      height: 100%;
     }
   }
 }
