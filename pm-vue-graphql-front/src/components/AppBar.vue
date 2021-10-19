@@ -4,7 +4,7 @@
       <v-toolbar-title class="app-bar__title">{{ $t('title') }}</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-icon class="app-bar__user--icon">fa-user</v-icon>
-      <div class="app-bar__user--email">{{ currentUser[0].email }}</div>
+      <div class="app-bar__user--email">{{ currentUser.email }}</div>
     </v-app-bar>
   </div>
 </template>
@@ -16,7 +16,7 @@ export default {
   name: 'AppBar',
   data() {
     return {
-      currentUser: [0]
+      currentUser: []
     }
   },
   apollo: {

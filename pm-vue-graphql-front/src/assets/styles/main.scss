@@ -2,10 +2,11 @@
 
 @import "abstracts/variables";
 
-@import "components/appbar";
-@import "components/sidebar";
+@import "components/bar";
 @import "components/loading";
 @import "components/text";
+@import "components/button";
 
 @import "pages/login";
 @import "pages/dashboard";
+@import "pages/theme";

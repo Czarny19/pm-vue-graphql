@@ -16,3 +16,23 @@ export const GET_PROJECT_BY_ID_QUERY = gql`query getProjectById($id: bigint!) {
         id
     }
 }`
+
+export const ADD_PROJECT_FOR_USER = gql`mutation addProjectForUser(
+    $user_id: bigint!,
+    $name: String!,
+    $description: String!
+) {
+    insert_PROJECT(objects: {description: $description, name: $name, definition: "", user_id: $user_id}) {
+        returning {
+            id
+        }
+    }
+}`
+
+export const DELETE_PROJECT = gql`mutation deleteProject($id: bigint!) {
+    delete_PROJECT(where: {id: {_eq: $id}}) {
+        returning {
+            id
+        }
+    }
+}`

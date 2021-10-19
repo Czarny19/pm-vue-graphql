@@ -6,13 +6,13 @@
     <div>
       <v-row no-gutters>
         <v-col cols="12" sm="12" md="12" lg="5" xl="5" class="pb-2 pr-2 pl-2">
-          <DashboardAppsTab/>
+          <DashboardProjectsTab/>
         </v-col>
         <v-col cols="12" sm="12" md="12" lg="4" xl="4" class="pb-2 pr-2 pl-2">
           <DashboardDataTab/>
         </v-col>
         <v-col cols="12" sm="12" md="12" lg="3" xl="3" class="pb-2 pr-2 pl-2">
-          <DashboardStyleTab/>
+          <DashboardThemesTab/>
         </v-col>
       </v-row>
     </div>
@@ -20,17 +20,13 @@
 </template>
 
 <script>
-import DashboardAppsTab from "@/components/dashboard/DashboardAppsTab";
-import DashboardDataTab from "@/components/dashboard/DashboardDataTab";
-import DashboardStyleTab from "@/components/dashboard/DashboardStyleTab";
+import DashboardProjectsTab from "@/views/dashboard/components/DashboardProjectsTab";
+import DashboardDataTab from "@/views/dashboard/components/DashboardDataTab";
+import DashboardThemesTab from "@/views/dashboard/components/DashboardThemesTab";
 
 export default {
   name: 'DashboardPage',
-  components: {DashboardStyleTab, DashboardDataTab, DashboardAppsTab},
-  data: () => ({
-    tab: 1,
-  }),
-  methods: {}
+  components: {DashboardThemesTab, DashboardDataTab, DashboardProjectsTab}
 }
 </script>
 

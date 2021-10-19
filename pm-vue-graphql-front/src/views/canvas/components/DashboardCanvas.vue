@@ -8,13 +8,11 @@
 </template>
 
 <script>
-import Page from "@/models/page";
-
 export default {
   name: 'DashboardCanvas',
   props: {
     projectName: String,
-    currentPage: Page
+    currentPage: Object
   }
 }
 </script>

@@ -34,20 +34,22 @@
 </template>
 
 <script>
-import LoadingDialog from "@/components/common/LoadingDialog";
+import LoadingDialog from "@/components/LoadingDialog";
 import {cache} from "@/main";
 import {GET_USER_QUERY} from "@/graphql/queries/user";
 
 export default {
   name: 'LoginPage',
   components: {LoadingDialog},
-  data: () => ({
-    valid: false,
-    username: '',
-    password: '',
-    doLogin: false,
-    loadingDialog: false
-  }),
+  data() {
+    return {
+      valid: false,
+      username: '',
+      password: '',
+      doLogin: false,
+      loadingDialog: false
+    }
+  },
   methods: {
     submit() {
     },
@@ -83,13 +85,11 @@ export default {
         if (data.USER.length) {
           cache.writeData({
             data: {
-              currentUser: [
-                {
-                  __typename: 'User',
-                  id: data.USER[0].id,
-                  email: data.USER[0].email,
-                },
-              ],
+              currentUser: {
+                __typename: 'User',
+                id: data.USER[0].id,
+                email: data.USER[0].email,
+              },
             },
           });
 

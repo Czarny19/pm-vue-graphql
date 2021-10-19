@@ -1,17 +1,17 @@
 <template>
   <div class="side-bar__container--wrapper">
-    <div>Komponenty</div>
+    <div class="accent pa-2">{{ $t('canvas.components') }}</div>
     <div>
-      <v-container>
+      <v-container fluid>
         <v-row no-gutters>
           <template v-for="(component) in components">
             <v-col cols="12" sm="12" md="12" lg="6" xl="6" :key="component.id">
               <v-card class="ma-4">
                 <v-card-title>
-                  <v-icon class="ma-auto">{{component.icon}}</v-icon>
+                  <v-icon class="ma-auto">{{ component.icon }}</v-icon>
                 </v-card-title>
                 <v-card-text>
-                  {{component.title}}
+                  {{ component.title }}
                 </v-card-text>
               </v-card>
             </v-col>
@@ -24,7 +24,7 @@
 
 <script>
 export default {
-  name: "DashboardComponentBar",
+  name: "CanvasComponentBar",
   computed: {
     components() {
       return [

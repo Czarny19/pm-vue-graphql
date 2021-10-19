@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import AppBar from "@/components/common/AppBar";
+import AppBar from "@/components/AppBar";
 
 export default {
   name: 'App',

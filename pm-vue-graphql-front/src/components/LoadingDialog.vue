@@ -4,7 +4,7 @@
       <v-card>
         <v-card-text class="pt-6">
           <v-progress-circular indeterminate color="primary" size="50"/>
-          <div class="loading__dialog--title">{{ title }}</div>
+          <div class="dialog--title">{{ title }}</div>
         </v-card-text>
       </v-card>
     </v-dialog>
