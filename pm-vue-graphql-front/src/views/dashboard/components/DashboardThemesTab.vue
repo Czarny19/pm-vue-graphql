@@ -38,7 +38,7 @@
       </v-expansion-panels>
 
       <div class="text-right mt-auto">
-        <v-btn class="ml-auto mt-4 mb-2" color="success" @click="createTheme">{{ $t('dashboard.newApp') }}</v-btn>
+        <v-btn class="ml-auto mt-4 mb-2" color="success" @click="createTheme">{{ $t('dashboard.addTheme') }}</v-btn>
       </div>
     </v-card-text>
   </v-card>

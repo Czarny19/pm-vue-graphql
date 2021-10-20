@@ -1,5 +1,7 @@
 <template>
   <v-container>
+    <LoadingDialog :dialog="loadingDialog" :title="$t('theme.saving')"/>
+
     <v-row>
       <v-col cols="12">
         <v-card class="ma-4" color="accent">
@@ -101,10 +103,13 @@
 <script>
 import ThemePreview from "@/views/theme/components/ThemePreview";
 import ThemeColorField from "@/views/theme/components/ThemeColorField";
+import LoadingDialog from "@/components/LoadingDialog";
+import {ADD_THEME_FOR_USER, GET_THEME_BY_ID} from "@/graphql/queries/theme";
+import {CURRENT_USER} from "@/graphql/queries/user";
 
 export default {
   name: 'ThemePage',
-  components: {ThemeColorField, ThemePreview},
+  components: {LoadingDialog, ThemeColorField, ThemePreview},
   data() {
     return {
       name: '',
@@ -126,9 +131,43 @@ export default {
       },
     }
   },
+  computed: {
+    themeId() {
+      return this.$route.params.themeId
+    }
+  },
   methods: {
     submit() {
+      if (this.themeId) {
+        return
+      }
 
+      this.$refs.form.validate()
+
+      if (this.valid) {
+        this.loadingDialog = true
+
+        this.$apollo.mutate({
+          mutation: ADD_THEME_FOR_USER,
+          variables: {
+            user_id: this.currentUser.id,
+            name: this.name,
+            primary: this.colors['primary_color'],
+            secondary: this.colors['secondary_color'],
+            accent: this.colors['accent_color'],
+            info: this.colors['info_color'],
+            success: this.colors['success_color'],
+            error: this.colors['error_color'],
+            text1: this.colors['text_color_1'],
+            text2: this.colors['text_color_2']
+          }
+        }).then(() => {
+          this.loadingDialog = false
+          this.$router.back()
+        }).catch(() => {
+          this.loadingDialog = false
+        })
+      }
     },
     updatePrimary(color) {
       this.colors['primary_color'] = color
@@ -153,6 +192,26 @@ export default {
     },
     updateText2(color) {
       this.colors['text_color_2'] = color
+    }
+  },
+  apollo: {
+    currentUser: {
+      query: CURRENT_USER
+    },
+    THEME: {
+      query: GET_THEME_BY_ID,
+      fetchPolicy: 'network-only',
+      variables() {
+        return {
+          id: this.themeId
+        }
+      },
+      skip() {
+        return !this.themeId
+      },
+      result({data}) {
+        this.name = data.THEME.name
+      }
     }
   }
 }

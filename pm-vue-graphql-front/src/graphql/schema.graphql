@@ -121,7 +121,9 @@ type THEME {
     name: String!
     primary_color: String!
     secondary_color: String!
-    succes_color: String!
+    success_color: String!
+    text_color_1: String!
+    text_color_2: String!
     user_id: bigint!
 }
 
@@ -162,7 +164,9 @@ type THEME_max_fields {
     name: String
     primary_color: String
     secondary_color: String
-    succes_color: String
+    success_color: String
+    text_color_1: String
+    text_color_2: String
     user_id: bigint
 }
 
@@ -176,7 +180,9 @@ type THEME_min_fields {
     name: String
     primary_color: String
     secondary_color: String
-    succes_color: String
+    success_color: String
+    text_color_1: String
+    text_color_2: String
     user_id: bigint
 }
 
@@ -681,7 +687,11 @@ enum THEME_select_column {
     "column name"
     secondary_color
     "column name"
-    succes_color
+    success_color
+    "column name"
+    text_color_1
+    "column name"
+    text_color_2
     "column name"
     user_id
 }
@@ -705,7 +715,11 @@ enum THEME_update_column {
     "column name"
     secondary_color
     "column name"
-    succes_color
+    success_color
+    "column name"
+    text_color_1
+    "column name"
+    text_color_2
     "column name"
     user_id
 }
@@ -967,7 +981,9 @@ input THEME_bool_exp {
     name: String_comparison_exp
     primary_color: String_comparison_exp
     secondary_color: String_comparison_exp
-    succes_color: String_comparison_exp
+    success_color: String_comparison_exp
+    text_color_1: String_comparison_exp
+    text_color_2: String_comparison_exp
     user_id: bigint_comparison_exp
 }
 
@@ -987,7 +1003,9 @@ input THEME_insert_input {
     name: String
     primary_color: String
     secondary_color: String
-    succes_color: String
+    success_color: String
+    text_color_1: String
+    text_color_2: String
     user_id: bigint
 }
 
@@ -1001,7 +1019,9 @@ input THEME_max_order_by {
     name: order_by
     primary_color: order_by
     secondary_color: order_by
-    succes_color: order_by
+    success_color: order_by
+    text_color_1: order_by
+    text_color_2: order_by
     user_id: order_by
 }
 
@@ -1015,7 +1035,9 @@ input THEME_min_order_by {
     name: order_by
     primary_color: order_by
     secondary_color: order_by
-    succes_color: order_by
+    success_color: order_by
+    text_color_1: order_by
+    text_color_2: order_by
     user_id: order_by
 }
 
@@ -1042,7 +1064,9 @@ input THEME_order_by {
     name: order_by
     primary_color: order_by
     secondary_color: order_by
-    succes_color: order_by
+    success_color: order_by
+    text_color_1: order_by
+    text_color_2: order_by
     user_id: order_by
 }
 
@@ -1061,7 +1085,9 @@ input THEME_set_input {
     name: String
     primary_color: String
     secondary_color: String
-    succes_color: String
+    success_color: String
+    text_color_1: String
+    text_color_2: String
     user_id: bigint
 }
 

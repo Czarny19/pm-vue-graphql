@@ -62,7 +62,8 @@ export const messages = {
             primaryText: 'Tekst 1',
             primaryExampleText: 'Kolor tekstu 1:<br/>Przykładowy tekst wyświetlany na stronie',
             secondaryText: 'Tekst 2',
-            secondaryExampleText: 'Kolor tekstu 2:<br/>Przykładowy tekst wyświetlany na stronie'
+            secondaryExampleText: 'Kolor tekstu 2:<br/>Przykładowy tekst wyświetlany na stronie',
+            saving: 'Zapisywanie motywu'
         },
         canvas: {
             title: 'Edytor aplikacji',

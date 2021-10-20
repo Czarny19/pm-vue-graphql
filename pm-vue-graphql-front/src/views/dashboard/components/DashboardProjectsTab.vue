@@ -43,7 +43,7 @@
       </v-expansion-panels>
 
       <div class="text-right">
-        <v-btn class="mt-4 mb-2" color="success" @click="openProject">{{ $t('dashboard.addApp') }}</v-btn>
+        <v-btn class="mt-4 mb-2" color="success" @click="openProject">{{ $t('dashboard.addProject') }}</v-btn>
       </div>
     </v-card-text>
   </v-card>

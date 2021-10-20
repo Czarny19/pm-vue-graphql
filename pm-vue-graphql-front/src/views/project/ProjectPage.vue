@@ -49,7 +49,7 @@ import {CURRENT_USER} from "@/graphql/queries/user";
 import LoadingDialog from "@/components/LoadingDialog";
 
 export default {
-  name: 'AddAppPage',
+  name: 'ProjectPage',
   components: {LoadingDialog},
   data() {
     return {

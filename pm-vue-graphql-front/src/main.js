@@ -11,10 +11,10 @@ import ApolloClient from "apollo-client";
 import {HttpLink} from "apollo-link-http";
 import {InMemoryCache} from "apollo-cache-inmemory";
 import {persistCache} from 'apollo-cache-persist';
+import {typeDefs} from "@/graphql/typedefs";
 
 import "roboto-fontface/css/roboto/roboto-fontface.css";
 import "@fortawesome/fontawesome-free/css/all.css";
-import {typeDefs} from "@/graphql/typedefs";
 
 document.title = 'PM Vue-Graphql Demo'
 
@@ -29,7 +29,8 @@ const getHeaders = () => {
 
 export const cache = new InMemoryCache({addTypename: true})
 
-persistCache({cache, storage: window.localStorage})
+persistCache({cache, storage: window.localStorage}).then(() => {
+})
 
 const link = new HttpLink({uri: 'https://magister-app.herokuapp.com/v1/graphql', fetch, headers: getHeaders()})
 const client = new ApolloClient({typeDefs: typeDefs, link: link, cache: cache, resolvers: {}})

@@ -2,7 +2,7 @@
   <v-card class="theme__preview--container elevation-16 mx-auto">
     <nav class="v-toolbar elevation-0 transparent mt-0 pr-0 pl-0" data-booted="true">
       <v-toolbar :color="primary">
-        <v-btn plain>
+        <v-btn plain class="mr-2">
           <v-icon size="20">fa-arrow-left</v-icon>
         </v-btn>
         {{ $t('theme.example') }}
