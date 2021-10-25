@@ -11,7 +11,7 @@
 
     <v-card-text v-if="projects.length === 0">
       <v-icon class="pt-6" x-large>fa-tablet</v-icon>
-      <div class="pt-2">{{ $t('dashboard.noProjects') }}</div>
+      <div class="pt-6 title-text">{{ $t('dashboard.noProjects') }}</div>
       <v-btn class="mt-6 dashboard__tabs--first-button" color="success" @click="createProject">
         {{ $t('dashboard.addFirstProject') }}
       </v-btn>
@@ -21,18 +21,30 @@
       <v-expansion-panels>
         <v-expansion-panel v-for="project in projects" :key="project.id">
           <v-expansion-panel-header class="primary text-left" expand-icon="fa-angle-down">
-            <div class="text-on-accent">{{ project.name }}</div>
+            {{ project.name }}
           </v-expansion-panel-header>
           <v-expansion-panel-content>
-            <v-card-text class="text-left text-h6 pl-0 pr-0">
+            <v-card-text class="text-left text-h6 pl-0 pr-0 text-on-primary">
               {{ project.description }}
             </v-card-text>
-            <v-card-subtitle class="text-left text-body-2 pa-0 pb-1">
-              {{ $t('dashboard.createDate') }}: {{ project.create_date }}
+            <v-card-subtitle class="text-left text-body-2 pa-0 pb-5">
+              <div class="text-on-primary">{{ $t('dashboard.createDate') }}:</div>
+              <div class="medium-text">{{ project.create_date }}</div>
+            </v-card-subtitle>
+            <v-card-subtitle class="text-left text-body-2 pa-0 pb-5">
+              <div class="text-on-primary">{{ $t('dashboard.theme') }}:</div>
+              <div class="medium-text">{{ project.project_theme.name }}</div>
+            </v-card-subtitle>
+            <v-card-subtitle class="text-left text-body-2 pa-0 pb-3">
+              <div class="text-on-primary"> {{ $t('dashboard.dataSource') }}:</div>
+              <div v-if="project.project_data_source" class="medium-text">
+                {{ project.project_data_source.name }}
+              </div>
+              <div v-else class="medium-text">{{ $t('common.none') }}</div>
             </v-card-subtitle>
             <v-divider/>
             <v-card-actions class="pl-0 pr-0 pt-4">
-              <v-btn class="pl-4 pr-4 ml-auto mr-2" color="primary" @click="openProjectCanvas(project.id)">
+              <v-btn class="pl-4 pr-4 ml-auto mr-2" color="accent" @click="openProjectCanvas(project.id)">
                 {{ $t('common.open') }}
               </v-btn>
               <v-btn class="pl-4 pr-4 mr-2" color="info" @click="openModifyProject(project.id)">

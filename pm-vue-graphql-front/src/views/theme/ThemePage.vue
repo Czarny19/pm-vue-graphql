@@ -179,6 +179,7 @@ export default {
         mutation: UPDATE_THEME_FOR_ID,
         variables: {
           id: this.themeId,
+          name: this.name,
           primary: this.colors['primary_color'],
           secondary: this.colors['secondary_color'],
           accent: this.colors['accent_color'],

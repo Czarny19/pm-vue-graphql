@@ -1,6 +1,7 @@
 <template>
   <v-card color="secondary" class="dashboard__tabs--container">
     <DeleteConfirmationDialog :dialog="deleteDialog" @confirmed="deleteTheme" @cancelled="cancelDeleteTheme"/>
+
     <DashboardThemeWarningDialog :dialog="warningDialog" @closed="closeWarningDialog"/>
 
     <v-card-title class="primary">
@@ -10,27 +11,30 @@
 
     <v-card-text v-if="themes.length === 0">
       <v-icon class="pt-6" x-large>fa-folder-open</v-icon>
-      <div class="pt-2">{{ $t('dashboard.noThemes') }}</div>
-      <v-btn class="mt-6" color="success" @click="createTheme">{{ $t('dashboard.addFirstTheme') }}</v-btn>
+      <div class="pt-6 title-text">{{ $t('dashboard.noThemes') }}</div>
+      <v-btn class="mt-6 dashboard__tabs--first-button" color="success" @click="createTheme">
+        {{ $t('dashboard.addFirstTheme') }}
+      </v-btn>
     </v-card-text>
 
     <v-card-text v-else class="pa-2">
       <v-expansion-panels>
         <v-expansion-panel v-for="theme in themes" :key="theme.id">
           <v-expansion-panel-header class="primary text-left" expand-icon="fa-angle-down">
-            <div class="text-on-accent mr-2">{{ theme.name }}</div>
-            <div class="dashboard__tabs--color-display" :style="{'background-color': theme.primary_color}"/>
-            <div class="dashboard__tabs--color-display" :style="{'background-color': theme.secondary_color}"/>
-            <div class="dashboard__tabs--color-display" :style="{'background-color': theme.accent_color}"/>
-            <div class="dashboard__tabs--color-display" :style="{'background-color': theme.info_color}"/>
-            <div class="dashboard__tabs--color-display" :style="{'background-color': theme.success_color}"/>
-            <div class="dashboard__tabs--color-display" :style="{'background-color': theme.error_color}"/>
-            <div class="dashboard__tabs--color-display" :style="{'background-color': theme.text_color_1}"/>
-            <div class="dashboard__tabs--color-display mr-4" :style="{'background-color': theme.text_color_2}"/>
+            {{ theme.name }}
           </v-expansion-panel-header>
 
-          <v-expansion-panel-content>
-            <div class="pl-0 pr-0 pt-4 text-left">
+          <v-expansion-panel-content class="pt-4">
+            <ColorWithDescription :color="theme.primary_color" :description="$t('theme.primary')"/>
+            <ColorWithDescription :color="theme.secondary_color" :description="$t('theme.secondary')"/>
+            <ColorWithDescription :color="theme.accent_color" :description="$t('theme.accent')"/>
+            <ColorWithDescription :color="theme.info_color" :description="$t('theme.info')"/>
+            <ColorWithDescription :color="theme.success_color" :description="$t('theme.success')"/>
+            <ColorWithDescription :color="theme.error_color" :description="$t('theme.error')"/>
+            <ColorWithDescription :color="theme.text_color_1" :description="$t('theme.primaryText')"/>
+            <ColorWithDescription :color="theme.text_color_2" :description="$t('theme.secondaryText')"/>
+
+            <div class="pl-0 pr-0 pt-6 text-left">
               <v-btn class="mr-4" color="info" min-width="100" @click="openModifyTheme(theme.id)">
                 {{ $t('common.modify') }}
                 <v-icon class="ml-4" x-small>fa-pen</v-icon>
@@ -57,10 +61,11 @@ import {DELETE_THEME, GET_USER_THEMES_QUERY} from "@/graphql/queries/theme";
 import DeleteConfirmationDialog from "@/components/DeleteConfirmationDialog";
 import DashboardThemeWarningDialog from "@/views/dashboard/components/warnings/DashboardThemeWarningDialog";
 import {GET_PROJECTS_WITH_THEME} from "@/graphql/queries/project";
+import ColorWithDescription from "@/components/ColorWithDescription";
 
 export default {
   name: 'DashboardThemesTab',
-  components: {DashboardThemeWarningDialog, DeleteConfirmationDialog},
+  components: {ColorWithDescription, DashboardThemeWarningDialog, DeleteConfirmationDialog},
   data() {
     return {
       warningDialog: false,

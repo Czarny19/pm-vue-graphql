@@ -6,6 +6,12 @@ export const GET_USER_PROJECTS = gql`query getAllUserProjects($user_id: bigint!)
         name
         description
         create_date
+        project_theme {
+            name
+        },
+        project_data_source {
+            name
+        }
     }
 }`
 

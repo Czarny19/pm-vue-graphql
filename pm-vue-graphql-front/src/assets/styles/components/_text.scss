@@ -1,3 +1,19 @@
+@import "../abstracts/variables";
+
 .text-on-accent {
   color: white;
+}
+
+.text-on-primary {
+  color: $text-color;
+}
+
+.title-text {
+  font-size: 20px;
+  font-weight: normal;
+}
+
+.medium-text {
+  font-size: medium;
+  font-weight: bold;
 }

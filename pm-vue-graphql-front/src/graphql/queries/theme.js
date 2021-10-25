@@ -61,6 +61,7 @@ export const ADD_THEME_FOR_USER = gql`mutation addThemeForUser(
 
 export const UPDATE_THEME_FOR_ID = gql`mutation updateThemeForId(
     $id: bigint!,
+    $name: String!,
     $primary: String!,
     $secondary: String!,
     $accent: String!,
@@ -72,6 +73,7 @@ export const UPDATE_THEME_FOR_ID = gql`mutation updateThemeForId(
     update_THEME(
         where: {id: {_eq: $id}},
         _set: {
+            name: $name,
             primary_color: $primary,
             secondary_color: $secondary,
             accent_color: $accent,

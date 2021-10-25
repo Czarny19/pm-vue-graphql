@@ -8,7 +8,8 @@ export const messages = {
             open: 'Otwórz',
             save: 'Zapisz',
             ok: 'ok',
-            cancel: 'Anuluj'
+            cancel: 'Anuluj',
+            none: 'Brak'
         },
         delete: {
             title: 'Czy na pewno chcesz usunąć wybrany element?',
@@ -25,8 +26,10 @@ export const messages = {
         dashboard: {
             dashboard: 'Panel sterowania',
             projects: 'Aplikacje',
-            dataSource: 'Źródła danych',
+            dataSources: 'Źródła danych',
+            dataSource: 'Źródło danych',
             themes: 'Motywy',
+            theme: 'Motyw',
             createDate: 'Data utworzenia',
             addProject: 'Nowa aplikacja',
             addFirstProject: 'Dodaj pierwszą aplikację',

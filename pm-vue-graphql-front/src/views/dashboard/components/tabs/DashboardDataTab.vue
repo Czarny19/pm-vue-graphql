@@ -2,7 +2,7 @@
   <v-card color="secondary" class="dashboard__tabs--container">
     <v-card-title class="primary">
       <v-icon class="pr-4">fa-database</v-icon>
-      {{ $t('dashboard.dataSource') }}
+      {{ $t('dashboard.dataSources') }}
     </v-card-title>
     <v-card-text>
 
