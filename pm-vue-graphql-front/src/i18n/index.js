@@ -1,6 +1,7 @@
 export const messages = {
     pl: {
         title: 'PM Vue-Graphql Demo',
+        footer: 'Prototyp platformy low-code<br>PM Vue-Graphql Demo',
         common: {
             delete: 'Usuń',
             modify: 'Edytuj',
