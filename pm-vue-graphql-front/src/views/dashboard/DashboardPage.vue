@@ -20,9 +20,9 @@
 </template>
 
 <script>
-import DashboardProjectsTab from "@/views/dashboard/components/DashboardProjectsTab";
-import DashboardDataTab from "@/views/dashboard/components/DashboardDataTab";
-import DashboardThemesTab from "@/views/dashboard/components/DashboardThemesTab";
+import DashboardProjectsTab from "@/views/dashboard/components/tabs/DashboardProjectsTab";
+import DashboardDataTab from "@/views/dashboard/components/tabs/DashboardDataTab";
+import DashboardThemesTab from "@/views/dashboard/components/tabs/DashboardThemesTab";
 
 export default {
   name: 'DashboardPage',

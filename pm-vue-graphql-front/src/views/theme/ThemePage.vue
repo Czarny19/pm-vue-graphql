@@ -1,8 +1,12 @@
 <template>
   <v-container>
-    <LoadingDialog :dialog="loadingDialog" :title="$t('theme.saving')"/>
+    <LoadingDialog :dialog="saving" :title="$t('theme.saving')"/>
 
-    <v-row>
+    <div v-if="loading" class="text-center">
+      <v-progress-circular class="ml-auto mr-auto page_loading" indeterminate color="primary" size="50"/>
+    </div>
+
+    <v-row v-else>
       <v-col cols="12">
         <v-card class="ma-4" color="accent">
           <v-card-title>{{ $t('theme.interfaceTheme') }}</v-card-title>
@@ -104,7 +108,7 @@
 import ThemePreview from "@/views/theme/components/ThemePreview";
 import ThemeColorField from "@/views/theme/components/ThemeColorField";
 import LoadingDialog from "@/components/LoadingDialog";
-import {ADD_THEME_FOR_USER, GET_THEME_BY_ID} from "@/graphql/queries/theme";
+import {ADD_THEME_FOR_USER, GET_THEME_BY_ID, UPDATE_THEME_FOR_ID} from "@/graphql/queries/theme";
 import {CURRENT_USER} from "@/graphql/queries/user";
 
 export default {
@@ -112,9 +116,10 @@ export default {
   components: {LoadingDialog, ThemeColorField, ThemePreview},
   data() {
     return {
+      loading: true,
+      saving: false,
       name: '',
       valid: false,
-      loadingDialog: false,
       nameRules: [
         v => !!v || this.$t('theme.nameRequired'),
         v => (v && v.length <= 30) || this.$t('theme.nameTooLong'),
@@ -138,35 +143,11 @@ export default {
   },
   methods: {
     submit() {
-      if (this.themeId) {
-        return
-      }
-
       this.$refs.form.validate()
 
       if (this.valid) {
-        this.loadingDialog = true
-
-        this.$apollo.mutate({
-          mutation: ADD_THEME_FOR_USER,
-          variables: {
-            user_id: this.currentUser.id,
-            name: this.name,
-            primary: this.colors['primary_color'],
-            secondary: this.colors['secondary_color'],
-            accent: this.colors['accent_color'],
-            info: this.colors['info_color'],
-            success: this.colors['success_color'],
-            error: this.colors['error_color'],
-            text1: this.colors['text_color_1'],
-            text2: this.colors['text_color_2']
-          }
-        }).then(() => {
-          this.loadingDialog = false
-          this.$router.back()
-        }).catch(() => {
-          this.loadingDialog = false
-        })
+        this.saving = true
+        this.themeId ? this.updateTheme() : this.createTheme()
       }
     },
     updatePrimary(color) {
@@ -192,6 +173,49 @@ export default {
     },
     updateText2(color) {
       this.colors['text_color_2'] = color
+    },
+    updateTheme() {
+      this.$apollo.mutate({
+        mutation: UPDATE_THEME_FOR_ID,
+        variables: {
+          id: this.themeId,
+          primary: this.colors['primary_color'],
+          secondary: this.colors['secondary_color'],
+          accent: this.colors['accent_color'],
+          info: this.colors['info_color'],
+          success: this.colors['success_color'],
+          error: this.colors['error_color'],
+          text1: this.colors['text_color_1'],
+          text2: this.colors['text_color_2']
+        }
+      }).then(() => {
+        this.saving = false
+        this.$router.back()
+      }).catch(() => {
+        this.saving = false
+      })
+    },
+    createTheme() {
+      this.$apollo.mutate({
+        mutation: ADD_THEME_FOR_USER,
+        variables: {
+          user_id: this.currentUser.id,
+          name: this.name,
+          primary: this.colors['primary_color'],
+          secondary: this.colors['secondary_color'],
+          accent: this.colors['accent_color'],
+          info: this.colors['info_color'],
+          success: this.colors['success_color'],
+          error: this.colors['error_color'],
+          text1: this.colors['text_color_1'],
+          text2: this.colors['text_color_2']
+        }
+      }).then(() => {
+        this.saving = false
+        this.$router.back()
+      }).catch(() => {
+        this.saving = false
+      })
     }
   },
   apollo: {
@@ -207,10 +231,20 @@ export default {
         }
       },
       skip() {
+        this.loading = false
         return !this.themeId
       },
       result({data}) {
-        this.name = data.THEME.name
+        this.loading = false
+        this.name = data.THEME[0].name
+        this.colors['primary_color'] = data.THEME[0].primary_color
+        this.colors['secondary_color'] = data.THEME[0].secondary_color
+        this.colors['accent_color'] = data.THEME[0].accent_color
+        this.colors['info_color'] = data.THEME[0].info_color
+        this.colors['success_color'] = data.THEME[0].success_color
+        this.colors['error_color'] = data.THEME[0].error_color
+        this.colors['text_color_1'] = data.THEME[0].text_color_1
+        this.colors['text_color_2'] = data.THEME[0].text_color_2
       }
     }
   }

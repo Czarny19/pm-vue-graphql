@@ -5,3 +5,11 @@
   text-align: center;
   background-color: #3d3d3d;
 }
+
+.v-input__prepend-outer {
+  margin-right: 20px !important;
+
+  .v-icon {
+    font-size: 20px;
+  }
+}

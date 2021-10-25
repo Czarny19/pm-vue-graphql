@@ -1,5 +1,9 @@
 <template>
   <v-card color="secondary" class="dashboard__tabs--container">
+    <DeleteConfirmationDialog :dialog="deleteDialog" @confirmed="deleteProject" @cancelled="cancelDeleteProject"/>
+
+    <DashboardProjectWarningDialog :dialog="warningDialog" @closed="closeWarningDialog"/>
+
     <v-card-title class="primary">
       <v-icon class="pr-4">fa-tablet</v-icon>
       {{ $t('dashboard.projects') }}
@@ -8,7 +12,7 @@
     <v-card-text v-if="projects.length === 0">
       <v-icon class="pt-6" x-large>fa-tablet</v-icon>
       <div class="pt-2">{{ $t('dashboard.noProjects') }}</div>
-      <v-btn class="mt-6 dashboard__tabs--first-button" color="success" @click="openProject">
+      <v-btn class="mt-6 dashboard__tabs--first-button" color="success" @click="createProject">
         {{ $t('dashboard.addFirstProject') }}
       </v-btn>
     </v-card-text>
@@ -34,7 +38,7 @@
               <v-btn class="pl-4 pr-4 mr-2" color="info" @click="openModifyProject(project.id)">
                 {{ $t('common.modify') }}
               </v-btn>
-              <v-btn class="pl-4 pr-4" color="error" @click="deleteProject(project.id)">
+              <v-btn class="pl-4 pr-4" color="error" @click="deleteProjectClicked(project.id)">
                 {{ $t('common.delete') }}
               </v-btn>
             </v-card-actions>
@@ -43,43 +47,69 @@
       </v-expansion-panels>
 
       <div class="text-right">
-        <v-btn class="mt-4 mb-2" color="success" @click="openProject">{{ $t('dashboard.addProject') }}</v-btn>
+        <v-btn class="mt-4 mb-2" color="success" @click="createProject">{{ $t('dashboard.addProject') }}</v-btn>
       </div>
     </v-card-text>
   </v-card>
 </template>
 
 <script>
-import {DELETE_PROJECT, GET_USER_PROJECTS_QUERY} from "@/graphql/queries/project";
+import {DELETE_PROJECT, GET_USER_PROJECTS} from "@/graphql/queries/project";
 import {CURRENT_USER} from "@/graphql/queries/user";
+import DashboardProjectWarningDialog from "@/views/dashboard/components/warnings/DashboardProjectWarningDialog";
+import {GET_USER_THEMES_QUERY} from "@/graphql/queries/theme";
+import DeleteConfirmationDialog from "@/components/DeleteConfirmationDialog";
 
 export default {
   name: 'DashboardProjectsTab',
+  components: {DeleteConfirmationDialog, DashboardProjectWarningDialog},
   data() {
     return {
+      warningDialog: false,
+      deleteDialog: false,
+      deleteId: null,
       currentUser: null,
-      projects: []
+      projects: [],
+      themes: []
     }
   },
   methods: {
-    openProject() {
-      this.$router.push({name: 'Project'})
+    createProject() {
+      if (this.themes.length === 0) {
+        this.warningDialog = true
+        return
+      }
+
+      this.$router.push({name: 'NewProject'})
     },
     openProjectCanvas(id) {
       this.$router.push({name: 'Canvas', params: {projectId: id}})
     },
-    openModifyProject() {
-
+    openModifyProject(id) {
+      this.$router.push({name: 'Project', params: {projectId: id}})
     },
-    deleteProject(id) {
+    deleteProjectClicked(id) {
+      this.deleteId = id
+      this.deleteDialog = true
+    },
+    cancelDeleteProject() {
+      this.deleteId = null
+      this.deleteDialog = false
+    },
+    deleteProject() {
+      this.deleteDialog = false
+
       this.$apollo.mutate({
         mutation: DELETE_PROJECT,
         variables: {
-          id: id
+          id: this.deleteId
         }
       }).then(() => {
         this.$apollo.queries.PROJECT.refetch()
       })
+    },
+    closeWarningDialog() {
+      this.warningDialog = false
     }
   },
   apollo: {
@@ -87,7 +117,7 @@ export default {
       query: CURRENT_USER
     },
     PROJECT: {
-      query: GET_USER_PROJECTS_QUERY,
+      query: GET_USER_PROJECTS,
       fetchPolicy: 'network-only',
       variables() {
         return {
@@ -100,6 +130,21 @@ export default {
       result({data}) {
         this.projects = data.PROJECT
       },
+    },
+    THEME: {
+      query: GET_USER_THEMES_QUERY,
+      fetchPolicy: 'network-only',
+      variables() {
+        return {
+          user_id: this.currentUser.id
+        }
+      },
+      skip() {
+        return !this.currentUser
+      },
+      result({data}) {
+        this.themes = data.THEME
+      }
     }
   }
 }

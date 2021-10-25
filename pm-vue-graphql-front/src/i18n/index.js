@@ -7,7 +7,12 @@ export const messages = {
             additionalOptions: 'Dodatkowe opcje',
             open: 'Otwórz',
             save: 'Zapisz',
-            ok: 'ok'
+            ok: 'ok',
+            cancel: 'Anuluj'
+        },
+        delete: {
+            title: 'Czy na pewno chcesz usunąć wybrany element?',
+            msg: 'Element zostanie na stałe usuniety, bez możliwości odzyskania danych.'
         },
         login: {
             logInTitle: 'Logowanie',
@@ -28,18 +33,33 @@ export const messages = {
             noProjects: 'Brak aplikacji',
             noThemes: 'Brak motywów',
             addFirstTheme: 'Dodaj domyślny motyw aplikacji',
-            addTheme: 'Dodaj motyw'
+            addTheme: 'Dodaj motyw',
+            projectThemeWarning: 'Motyw wymagany',
+            projectThemeRequired: 'Przed utworzeniem projektu należy utworzyć co najmniej jeden motyw.<br>' +
+                'Motyw jest wymagany podczas konfiguracji nowego projektu.',
+            themeDeleteWarning: 'Nie można usunąć motywu',
+            themeProjectExists: 'Nie można usunąć wybranego motywu.<br>' +
+                'Motyw jest przypisany do jednego lub kilku istniejących projektów.<br>' +
+                'Zmodyfikuj lub usuń projekty korzystające z motywu i spróbuj ponownie.'
         },
         project: {
             newProject: 'Nowa aplikacja',
             name: 'Nazwa',
             description: 'Opis',
-            create: 'Utwórz',
+            create: 'Zapisz',
             nameRequired: 'Nazwa jest wymagana',
             nameTooLong: 'Nazwa nie może być dłuższa niż 30 znaków',
             descriptionRequired: 'Opis jest wymagany',
             descriptionTooLong: 'Opis nie może być dłuższy niż 200 znaków',
-            saving: 'Tworzenie nowej aplikacji...'
+            saving: 'Zapisywanie aplikacji...',
+            configInfo: 'Konfiguracja aplikacji',
+            themeInfo: 'Wybrany motyw zostanie przypisany do projektu.' +
+                '<br>Projekt może mieć przypisany jedynie jeden motyw.',
+            dbInfo: 'Wybrane źródło danych będzie dostępne z poziomu edytora.' +
+                '<br>Projekt może mieć przypisane jedynie jedno źródło danych.',
+            theme: 'Motyw',
+            themeRequired: 'Motyw jest wymagany',
+            dataSource: 'Źródło danych'
         },
         datasource: {},
         theme: {
