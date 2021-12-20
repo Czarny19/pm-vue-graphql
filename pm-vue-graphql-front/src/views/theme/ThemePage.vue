@@ -3,7 +3,7 @@
     <LoadingDialog :dialog="saving" :title="$t('theme.saving')"/>
 
     <div v-if="loading" class="text-center">
-      <v-progress-circular class="ml-auto mr-auto page_loading" indeterminate color="primary" size="50"/>
+      <v-progress-circular class="ml-auto mr-auto page-loading" indeterminate color="primary" size="50"/>
     </div>
 
     <v-row v-else>

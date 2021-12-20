@@ -1,0 +1,262 @@
+{
+  "widgets": [
+    {
+      "id": "",
+      "title": "Page",
+      "icon": "fa-th",
+      "children": [],
+      "props": [
+        {
+          "title": "Page"
+        }
+      ]
+    },
+    {
+      "id": "",
+      "title": "Container",
+      "icon": "fa-arrows-alt-h",
+      "children": [],
+      "propGroups": [
+        {
+          "id": "colors",
+          "props": [
+            {
+              "id": "background-color",
+              "value": "#FFFFFF",
+              "type": "CSS",
+              "dataType": "String"
+            }
+          ]
+        },
+        {
+          "id": "border",
+          "props": [
+            {
+              "id": "border-top",
+              "value": "auto",
+              "type": "CSS",
+              "dataType": "String"
+            },
+            {
+              "id": "border-bottom",
+              "value": "auto",
+              "type": "CSS",
+              "dataType": "String"
+            },
+            {
+              "id": "border-left",
+              "value": "auto",
+              "type": "CSS",
+              "dataType": "String"
+            },
+            {
+              "id": "border-right",
+              "value": "auto",
+              "type": "CSS",
+              "dataType": "String"
+            }
+          ]
+        },
+        {
+          "id": "paddings",
+          "props": [
+            {
+              "id": "padding-top",
+              "value": "auto",
+              "type": "CSS",
+              "dataType": "String"
+            },
+            {
+              "id": "padding-bottom",
+              "value": "auto",
+              "type": "CSS",
+              "dataType": "String"
+            },
+            {
+              "id": "padding-left",
+              "value": "auto",
+              "type": "CSS",
+              "dataType": "String"
+            },
+            {
+              "id": "padding-right",
+              "value": "auto",
+              "type": "CSS",
+              "dataType": "String"
+            }
+          ]
+        },
+        {
+          "id": "margins",
+          "props": [
+            {
+              "id": "margin-top",
+              "value": "auto",
+              "type": "CSS",
+              "dataType": "String"
+            },
+            {
+              "id": "margin-bottom",
+              "value": "auto",
+              "type": "CSS",
+              "dataType": "String"
+            },
+            {
+              "id": "margin-left",
+              "value": "auto",
+              "type": "CSS",
+              "dataType": "String"
+            },
+            {
+              "id": "margin-right",
+              "value": "auto",
+              "type": "CSS",
+              "dataType": "String"
+            }
+          ]
+        },
+        {
+          "id": "dimensions",
+          "props": [
+            {
+              "id": "min-height",
+              "value": "100px",
+              "type": "CSS",
+              "dataType": "String"
+            },
+            {
+              "id": "height",
+              "value": "100px",
+              "type": "CSS",
+              "dataType": "String"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "",
+      "title": "Row",
+      "icon": "fa-arrows-alt-v",
+      "children": [],
+      "props": [
+        {
+          "id": "background-color",
+          "value": "#FFFFFF",
+          "type": "CSS",
+          "dataType": "String"
+        },
+        {
+          "id": "padding-top",
+          "value": "auto",
+          "type": "CSS",
+          "dataType": "String"
+        },
+        {
+          "id": "padding-bottom",
+          "value": "auto",
+          "type": "CSS",
+          "dataType": "String"
+        },
+        {
+          "id": "padding-left",
+          "value": "auto",
+          "type": "CSS",
+          "dataType": "String"
+        },
+        {
+          "id": "padding-right",
+          "value": "auto",
+          "type": "CSS",
+          "dataType": "String"
+        },
+        {
+          "id": "min-height",
+          "value": "100px",
+          "type": "CSS",
+          "dataType": "String"
+        }
+      ]
+    },
+    {
+      "id": "",
+      "title": "Column",
+      "icon": "fa-arrows-alt-h",
+      "children": [],
+      "props": [
+        {
+          "id": "background-color",
+          "value": "#FFFFFF",
+          "type": "CSS",
+          "dataType": "String"
+        },
+        {
+          "id": "padding-top",
+          "value": "auto",
+          "type": "CSS",
+          "dataType": "String"
+        },
+        {
+          "id": "padding-bottom",
+          "value": "auto",
+          "type": "CSS",
+          "dataType": "String"
+        },
+        {
+          "id": "padding-left",
+          "value": "auto",
+          "type": "CSS",
+          "dataType": "String"
+        },
+        {
+          "id": "padding-right",
+          "value": "auto",
+          "type": "CSS",
+          "dataType": "String"
+        },
+        {
+          "id": "min-height",
+          "value": "100px",
+          "type": "CSS",
+          "dataType": "String"
+        }
+      ]
+    },
+    {
+      "id": "",
+      "title": "Button",
+      "icon": "fa-caret-square-right",
+      "children": [],
+      "props": [
+        {
+          "title": "Page",
+          "background-color": "#FFFFFF"
+        }
+      ]
+    },
+    {
+      "id": "",
+      "title": "Text",
+      "icon": "fa-quote-right",
+      "children": [],
+      "props": [
+        {
+          "title": "Page",
+          "background-color": "#FFFFFF"
+        }
+      ]
+    },
+    {
+      "id": "",
+      "title": "Text-Field",
+      "icon": "fa-keyboard",
+      "children": [],
+      "props": [
+        {
+          "title": "Page",
+          "background-color": "#FFFFFF"
+        }
+      ]
+    }
+  ]
+}

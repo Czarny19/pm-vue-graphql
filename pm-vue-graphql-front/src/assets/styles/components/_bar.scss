@@ -20,15 +20,11 @@
   }
 }
 
-.toolbar {
-  border: 1px solid $primary;
+.footer {
+  margin-top: auto;
+  height: 50px;
 }
 
-.side-bar {
-  &__container {
-    &--wrapper {
-      border-right: 4px solid $primary;
-      height: 100%;
-    }
-  }
+.toolbar {
+  border: 1px solid $primary;
 }

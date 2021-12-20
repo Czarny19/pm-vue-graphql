@@ -10,7 +10,9 @@ export const messages = {
             save: 'Zapisz',
             ok: 'ok',
             cancel: 'Anuluj',
-            none: 'Brak'
+            none: 'Brak',
+            back: 'Wróć',
+            close: 'Zamknij'
         },
         delete: {
             title: 'Czy na pewno chcesz usunąć wybrany element?',
@@ -27,6 +29,7 @@ export const messages = {
         dashboard: {
             dashboard: 'Panel sterowania',
             projects: 'Aplikacje',
+            editor: 'Edytor',
             dataSources: 'Źródła danych',
             dataSource: 'Źródło danych',
             themes: 'Motywy',
@@ -91,7 +94,31 @@ export const messages = {
         },
         canvas: {
             title: 'Edytor aplikacji',
-            components: 'Komponenty'
+            components: 'Komponenty',
+            properties: 'Właściwości'
+        },
+        prop: {
+            id: "Id",
+            bgColor: "Tło",
+            pdTop: "Górny",
+            pdBot: "Dolny",
+            pdLeft: "Lewy",
+            pdRight: "Prawy",
+            height: "Wysokość",
+            minHeigth: "Min. wysokość",
+            colors: "Kolory",
+            paddings: "Paddingi",
+            margins: "Marginesy",
+            dimensions: "Wymiary",
+            mrTop: "Górny",
+            mrBot: "Dolny",
+            mrLeft: "Lewy",
+            mrRight: "Prawy",
+            border: "Obramowanie",
+            borderTop: "Górne",
+            borderBot: "Dolne",
+            borderLeft: "Lewe",
+            borderRight: "Prawe"
         }
     }
 }

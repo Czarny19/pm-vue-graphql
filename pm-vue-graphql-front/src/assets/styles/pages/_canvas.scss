@@ -1,0 +1,88 @@
+@import "../abstracts/variables";
+
+.canvas {
+  &__container {
+    &--wrapper {
+      margin-bottom: auto;
+    }
+  }
+
+  &__editor {
+    &--toolbox {
+      height: 80vh;
+      overflow-y: scroll;
+    }
+
+    &--toolbox-title {
+      background-color: $accent;
+      padding-left: 16px;
+      padding-top: 12px;
+      padding-bottom: 12px;
+      font-size: large;
+    }
+
+    &--toolbox-widget {
+      cursor: grab;
+
+      div {
+        border-radius: 10px;
+      }
+
+      :hover {
+        background-color: $accent !important;
+      }
+    }
+
+    &--display {
+      background-color: #D9D9D9;
+      height: 80vh;
+    }
+
+    &--element {
+      border: 1px black dotted;
+      min-height: 30px;
+      padding: 20px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    &--element:hover {
+      border: 2px darkgoldenrod dotted;
+    }
+
+    &--expansion-panel {
+      .v-expansion-panel-header--active {
+        height: 50px !important;
+        min-height: 50px !important;
+      }
+    }
+
+    &--prop-label {
+      font-size: 11px;
+    }
+
+    &--prop-text-field {
+      .v-text-field .v-input__control .v-input__slot {
+        min-height: auto !important;
+        display: flex !important;
+        align-items: center !important;
+        caret-color: white;
+        font-size: 11px;
+      }
+    }
+
+    &--id-label {
+      font-size: 13px;
+    }
+
+    &--id-text-field {
+      .v-text-field .v-input__control .v-input__slot {
+        min-height: auto !important;
+        display: flex !important;
+        align-items: center !important;
+        caret-color: white;
+        font-size: 13px;
+      }
+    }
+  }
+}

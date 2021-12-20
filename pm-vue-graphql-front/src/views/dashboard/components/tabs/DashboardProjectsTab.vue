@@ -9,7 +9,11 @@
       {{ $t('dashboard.projects') }}
     </v-card-title>
 
-    <v-card-text v-if="projects.length === 0">
+    <v-card-text v-if="loading">
+      <v-progress-circular class="ml-auto mr-auto card-loading" indeterminate color="primary" size="50"/>
+    </v-card-text>
+
+    <v-card-text v-else-if="projects.length === 0 && !loading">
       <v-icon class="pt-6" x-large>fa-tablet</v-icon>
       <div class="pt-6 title-text">{{ $t('dashboard.noProjects') }}</div>
       <v-btn class="mt-6 dashboard__tabs--first-button" color="success" @click="createProject">
@@ -45,7 +49,7 @@
             <v-divider/>
             <v-card-actions class="pl-0 pr-0 pt-4">
               <v-btn class="pl-4 pr-4 ml-auto mr-2" color="accent" @click="openProjectCanvas(project.id)">
-                {{ $t('common.open') }}
+                {{ $t('dashboard.editor') }}
               </v-btn>
               <v-btn class="pl-4 pr-4 mr-2" color="info" @click="openModifyProject(project.id)">
                 {{ $t('common.modify') }}
@@ -77,6 +81,7 @@ export default {
   components: {DeleteConfirmationDialog, DashboardProjectWarningDialog},
   data() {
     return {
+      loading: true,
       warningDialog: false,
       deleteDialog: false,
       deleteId: null,
@@ -140,6 +145,7 @@ export default {
         return !this.currentUser
       },
       result({data}) {
+        this.loading = false
         this.projects = data.PROJECT
       },
     },

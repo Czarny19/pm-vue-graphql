@@ -9,7 +9,11 @@
       {{ $t('dashboard.themes') }}
     </v-card-title>
 
-    <v-card-text v-if="themes.length === 0">
+    <v-card-text v-if="loading">
+      <v-progress-circular class="ml-auto mr-auto card-loading" indeterminate color="primary" size="50"/>
+    </v-card-text>
+
+    <v-card-text v-else-if="themes.length === 0 && !loading">
       <v-icon class="pt-6" x-large>fa-folder-open</v-icon>
       <div class="pt-6 title-text">{{ $t('dashboard.noThemes') }}</div>
       <v-btn class="mt-6 dashboard__tabs--first-button" color="success" @click="createTheme">
@@ -68,6 +72,7 @@ export default {
   components: {ColorWithDescription, DashboardThemeWarningDialog, DeleteConfirmationDialog},
   data() {
     return {
+      loading: true,
       warningDialog: false,
       deleteDialog: false,
       deleteId: null,
@@ -123,6 +128,7 @@ export default {
         return !this.currentUser
       },
       result({data}) {
+        this.loading = false
         this.themes = data.THEME
       }
     },

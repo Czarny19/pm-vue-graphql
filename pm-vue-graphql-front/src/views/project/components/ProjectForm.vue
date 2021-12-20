@@ -6,7 +6,7 @@
     <div class="pb-2 pr-2 pl-2">
       <v-card v-if="loading">
         <div class="text-center">
-          <v-progress-circular class="ml-auto mr-auto page_loading" indeterminate color="primary" size="50"/>
+          <v-progress-circular class="ml-auto mr-auto page-loading" indeterminate color="primary" size="50"/>
         </div>
       </v-card>
 
