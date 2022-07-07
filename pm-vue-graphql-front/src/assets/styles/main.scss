@@ -2,13 +2,6 @@
 
 @import "abstracts/variables";
 
-@import "components/bar";
-@import "components/loading";
-@import "components/text";
-@import "components/button";
-@import "components/color";
-
-@import "pages/login";
-@import "pages/dashboard";
-@import "pages/theme";
-@import "pages/canvas";
+@import "components/common";
+@import "components/theme";
+@import "components/canvas";

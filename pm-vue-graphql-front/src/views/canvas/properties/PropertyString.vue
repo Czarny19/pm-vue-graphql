@@ -6,7 +6,7 @@
           <div class="canvas__editor--prop-label">{{ label }}:</div>
         </v-col>
         <v-col class="pa-2 canvas__editor--prop-text-field">
-          <v-text-field outlined flat single-line hide-details v-model="prop.value" height="30"></v-text-field>
+          <v-text-field outlined flat single-line hide-details v-model="currentProp.value" height="30"></v-text-field>
         </v-col>
       </v-row>
     </v-container>
@@ -19,6 +19,14 @@ export default {
   props: {
     prop: Object,
     label: String
+  },
+  data() {
+    return {
+      currentProp: {}
+    }
+  },
+  async beforeMount() {
+    this.currentProp = this.prop
   }
 }
 </script>

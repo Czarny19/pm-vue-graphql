@@ -1,97 +1,132 @@
 <template>
-  <v-card color="secondary" class="dashboard__tabs--container">
-    <DeleteConfirmationDialog :dialog="deleteDialog" @confirmed="deleteProject" @cancelled="cancelDeleteProject"/>
+  <div>
+    <DeleteConfirmationDialog :dialog="deleteDialog" @confirm="deleteProject" @cancel="cancelDeleteProject"/>
 
-    <DashboardProjectWarningDialog :dialog="warningDialog" @closed="closeWarningDialog"/>
+    <InfoDialog
+        :dialog="warningDialog"
+        :title="i18n('dashboard.projectThemeWarning')"
+        :msg="i18n('dashboard.projectThemeRequired')"
+        @close="closeWarningDialog">
+    </InfoDialog>
 
-    <v-card-title class="primary">
-      <v-icon class="pr-4">fa-tablet</v-icon>
-      {{ $t('dashboard.projects') }}
-    </v-card-title>
+    <v-card class="mb-4" color="primary">
+      <TitleCard :title="i18n('dashboard.projects')" icon="fa-tablet"/>
+    </v-card>
 
-    <v-card-text v-if="loading">
-      <v-progress-circular class="ml-auto mr-auto card-loading" indeterminate color="primary" size="50"/>
-    </v-card-text>
+    <v-card color="primary">
+      <LoadingCircular v-if="loading"/>
+      <DashboardTabNoData v-else-if="!projects.length && !loading" :msg="i18n('dashboard.noProjects')"/>
+    </v-card>
 
-    <v-card-text v-else-if="projects.length === 0 && !loading">
-      <v-icon class="pt-6" x-large>fa-tablet</v-icon>
-      <div class="pt-6 title-text">{{ $t('dashboard.noProjects') }}</div>
-      <v-btn class="mt-6 dashboard__tabs--first-button" color="success" @click="createProject">
-        {{ $t('dashboard.addFirstProject') }}
+    <v-expansion-panels v-if="projects.length && !loading">
+      <v-expansion-panel v-for="project in projects" :key="project.id">
+        <v-expansion-panel-header class="text-start text-body-1" expand-icon="fa-angle-down" color="secondary">
+          {{ project.name }}
+        </v-expansion-panel-header>
+
+        <v-expansion-panel-content>
+          <div class="text-h6 text-start pt-4">
+            {{ project.description }}
+          </div>
+
+          <div class="text-start">
+            <v-container fluid class="pt-4 pb-4 pl-0 pr-0">
+              <v-row no-gutters>
+                <v-col>
+                  <div class="text-body-2">{{ i18n('dashboard.createDate') }}:</div>
+                  <div class="text-body-1 font-weight-bold">{{ project.create_date }}</div>
+                </v-col>
+
+                <v-col>
+                  <div class="text-body-2">{{ i18n('dashboard.theme') }}:</div>
+                  <div class="text-body-1 font-weight-bold">{{ project.project_theme.name }}</div>
+                </v-col>
+
+                <v-col>
+                  <div class="text-body-2">{{ i18n('dashboard.dataSource') }}:</div>
+                  <div v-if="project.project_data_source" class="text-body-1 font-weight-bold">
+                    {{ project.project_data_source.name }}
+                  </div>
+                  <div v-else class="text-body-1 font-weight-bold">{{ i18n('common.none') }}</div>
+                </v-col>
+              </v-row>
+            </v-container>
+          </div>
+
+          <v-divider></v-divider>
+
+          <v-container fluid class="pa-0 pt-4">
+            <v-row no-gutters>
+              <v-col cols="6" class="text-start">
+                <IconButton
+                    :label="i18n('common.modify')"
+                    color="info"
+                    icon="fa-edit"
+                    @click="openModifyProject(project.id)">
+                </IconButton>
+              </v-col>
+
+              <v-col class="text-end">
+                <IconButton
+                    :label="i18n('common.delete')"
+                    color="error"
+                    icon="fa-trash"
+                    @click="deleteProjectClicked(project.id)">
+                </IconButton>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+    </v-expansion-panels>
+
+    <v-card class="pa-4 mt-4 text-end" color="primary">
+      <v-btn class="pa-5" min-width="300" color="success" @click="createProject">
+        {{ i18n('dashboard.addProject') }}
+        <v-icon small class="pl-6">fa-plus</v-icon>
       </v-btn>
-    </v-card-text>
-
-    <v-card-text v-else class="pa-2">
-      <v-expansion-panels>
-        <v-expansion-panel v-for="project in projects" :key="project.id">
-          <v-expansion-panel-header class="primary text-left" expand-icon="fa-angle-down">
-            {{ project.name }}
-          </v-expansion-panel-header>
-          <v-expansion-panel-content>
-            <v-card-text class="text-left text-h6 pl-0 pr-0 text-on-primary">
-              {{ project.description }}
-            </v-card-text>
-            <v-card-subtitle class="text-left text-body-2 pa-0 pb-5">
-              <div class="text-on-primary">{{ $t('dashboard.createDate') }}:</div>
-              <div class="medium-text">{{ project.create_date }}</div>
-            </v-card-subtitle>
-            <v-card-subtitle class="text-left text-body-2 pa-0 pb-5">
-              <div class="text-on-primary">{{ $t('dashboard.theme') }}:</div>
-              <div class="medium-text">{{ project.project_theme.name }}</div>
-            </v-card-subtitle>
-            <v-card-subtitle class="text-left text-body-2 pa-0 pb-3">
-              <div class="text-on-primary"> {{ $t('dashboard.dataSource') }}:</div>
-              <div v-if="project.project_data_source" class="medium-text">
-                {{ project.project_data_source.name }}
-              </div>
-              <div v-else class="medium-text">{{ $t('common.none') }}</div>
-            </v-card-subtitle>
-            <v-divider/>
-            <v-card-actions class="pl-0 pr-0 pt-4">
-              <v-btn class="pl-4 pr-4 ml-auto mr-2" color="accent" @click="openProjectCanvas(project.id)">
-                {{ $t('dashboard.editor') }}
-              </v-btn>
-              <v-btn class="pl-4 pr-4 mr-2" color="info" @click="openModifyProject(project.id)">
-                {{ $t('common.modify') }}
-              </v-btn>
-              <v-btn class="pl-4 pr-4" color="error" @click="deleteProjectClicked(project.id)">
-                {{ $t('common.delete') }}
-              </v-btn>
-            </v-card-actions>
-          </v-expansion-panel-content>
-        </v-expansion-panel>
-      </v-expansion-panels>
-
-      <div class="text-right">
-        <v-btn class="mt-4 mb-2" color="success" @click="createProject">{{ $t('dashboard.addProject') }}</v-btn>
-      </div>
-    </v-card-text>
-  </v-card>
+    </v-card>
+  </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from "vue";
+import DeleteConfirmationDialog from "@/components/dialog/DeleteConfirmationDialog.vue";
+import TitleCard from "@/components/card/TitleCard.vue";
+import LoadingCircular from "@/components/loading/LoadingCircular.vue";
+import DashboardTabNoData from "@/views/dashboard/components/tabs/DashboardTabNoData.vue";
+import IconButton from "@/components/button/IconButton.vue";
 import {DELETE_PROJECT, GET_USER_PROJECTS} from "@/graphql/queries/project";
 import {CURRENT_USER} from "@/graphql/queries/user";
-import DashboardProjectWarningDialog from "@/views/dashboard/components/warnings/DashboardProjectWarningDialog";
 import {GET_USER_THEMES_QUERY} from "@/graphql/queries/theme";
-import DeleteConfirmationDialog from "@/components/DeleteConfirmationDialog";
+import InfoDialog from "@/components/dialog/InfoDialog.vue";
 
-export default {
+export default Vue.extend({
   name: 'DashboardProjectsTab',
-  components: {DeleteConfirmationDialog, DashboardProjectWarningDialog},
+  components: {
+    InfoDialog,
+    IconButton,
+    DashboardTabNoData,
+    LoadingCircular,
+    TitleCard,
+    DeleteConfirmationDialog
+  },
   data() {
     return {
       loading: true,
       warningDialog: false,
       deleteDialog: false,
-      deleteId: null,
-      currentUser: null,
+      deleteId: -1,
+      currentUser: {id: -1},
       projects: [],
       themes: []
     }
   },
   methods: {
-    createProject() {
+    i18n(key: string): string {
+      return this.$t(key).toString()
+    },
+    createProject(): void {
       if (this.themes.length === 0) {
         this.warningDialog = true
         return
@@ -99,21 +134,18 @@ export default {
 
       this.$router.push({name: 'NewProject'})
     },
-    openProjectCanvas(id) {
-      this.$router.push({name: 'Canvas', params: {projectId: id}})
-    },
-    openModifyProject(id) {
+    openModifyProject(id: string): void {
       this.$router.push({name: 'Project', params: {projectId: id}})
     },
-    deleteProjectClicked(id) {
+    deleteProjectClicked(id: number): void {
       this.deleteId = id
       this.deleteDialog = true
     },
-    cancelDeleteProject() {
-      this.deleteId = null
+    cancelDeleteProject(): void {
+      this.deleteId = -1
       this.deleteDialog = false
     },
-    deleteProject() {
+    deleteProject(): void {
       this.deleteDialog = false
 
       this.$apollo.mutate({
@@ -125,7 +157,7 @@ export default {
         this.$apollo.queries.PROJECT.refetch()
       })
     },
-    closeWarningDialog() {
+    closeWarningDialog(): void {
       this.warningDialog = false
     }
   },
@@ -136,15 +168,15 @@ export default {
     PROJECT: {
       query: GET_USER_PROJECTS,
       fetchPolicy: 'network-only',
-      variables() {
+      variables(): { userId: number } {
         return {
-          user_id: this.currentUser.id
+          userId: this.currentUser.id
         }
       },
-      skip() {
+      skip(): boolean {
         return !this.currentUser
       },
-      result({data}) {
+      result({data}): void {
         this.loading = false
         this.projects = data.PROJECT
       },
@@ -152,20 +184,20 @@ export default {
     THEME: {
       query: GET_USER_THEMES_QUERY,
       fetchPolicy: 'network-only',
-      variables() {
+      variables(): { userId: number } {
         return {
-          user_id: this.currentUser.id
+          userId: this.currentUser.id
         }
       },
-      skip() {
+      skip(): boolean {
         return !this.currentUser
       },
-      result({data}) {
+      result({data}): void {
         this.themes = data.THEME
       }
     }
   }
-}
+})
 </script>
 
 <style scoped>

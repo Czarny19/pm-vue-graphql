@@ -1,33 +1,117 @@
 <template>
-  <v-card class="ma-4" color="accent">
-    <v-card-title>
-      {{ $t('dashboard.dashboard') }}
-    </v-card-title>
-    <div>
-      <v-row no-gutters>
-        <v-col cols="12" sm="12" md="12" lg="5" xl="5" class="pb-2 pr-2 pl-2">
-          <DashboardProjectsTab/>
-        </v-col>
-        <v-col cols="12" sm="12" md="12" lg="4" xl="4" class="pb-2 pr-2 pl-2">
-          <DashboardDataTab/>
-        </v-col>
-        <v-col cols="12" sm="12" md="12" lg="3" xl="3" class="pb-2 pr-2 pl-2">
-          <DashboardThemesTab/>
-        </v-col>
-      </v-row>
-    </div>
-  </v-card>
+  <div>
+    <LoginDialog @signup="openSignUp"/>
+
+    <SignUpDialog :dialog="signUpOpen" :user-id="userId"/>
+
+    <template v-if="$auth.isAuthenticated">
+      <DashboardNavigation :tab="currentTab" @tabchange="setTab"/>
+
+      <v-container fluid class="pa-4">
+        <v-row>
+          <v-col>
+            <DashboardNavCard
+                :title="i18n('dashboard.addProject')"
+                :sub-title="i18n('dashboard.addProjectDesc')"
+                icon="fa-tablet"
+                :on-click="addProject">
+            </DashboardNavCard>
+          </v-col>
+          <v-col>
+            <DashboardNavCard
+                :title="i18n('dashboard.addDataSource')"
+                :sub-title="i18n('dashboard.addDataSourceDesc')"
+                icon="fa-database"
+                :on-click="addDataSource">
+            </DashboardNavCard>
+          </v-col>
+          <v-col>
+            <DashboardNavCard
+                :title="i18n('dashboard.addTheme')"
+                :sub-title="i18n('dashboard.addThemeDesc')"
+                icon="fa-palette"
+                :on-click="addTheme">
+            </DashboardNavCard>
+          </v-col>
+        </v-row>
+      </v-container>
+
+      <v-divider></v-divider>
+
+      <v-container fluid class="pa-4">
+        <v-row>
+          <v-col>
+            <DashboardProjectsTab v-if="currentTab === 0"/>
+            <DashboardThemesTab v-else-if="currentTab === 1"/>
+            <DashboardDataSourcesTab v-else/>
+          </v-col>
+        </v-row>
+      </v-container>
+    </template>
+  </div>
 </template>
 
-<script>
-import DashboardProjectsTab from "@/views/dashboard/components/tabs/DashboardProjectsTab";
-import DashboardDataTab from "@/views/dashboard/components/tabs/DashboardDataTab";
-import DashboardThemesTab from "@/views/dashboard/components/tabs/DashboardThemesTab";
+<script lang="ts">
+import Vue from "vue";
+import DashboardNavigation from "@/views/dashboard/components/navigation/DashboardNavigation.vue";
+import DashboardNavCard from "@/views/dashboard/components/navigation/DashboardNavCard.vue";
+import DashboardProjectsTab from "@/views/dashboard/components/tabs/DashboardProjectsTab.vue";
+import DashboardDataSourcesTab from "@/views/dashboard/components/tabs/DashboardDataSourcesTab.vue";
+import DashboardThemesTab from "@/views/dashboard/components/tabs/DashboardThemesTab.vue";
+import LoginDialog from "@/views/dashboard/components/login/LoginDialog.vue";
+import SignUpDialog from "@/views/dashboard/components/login/SignUpDialog.vue";
+import {CURRENT_USER} from "@/graphql/queries/user";
 
-export default {
+export default Vue.extend({
   name: 'DashboardPage',
-  components: {DashboardThemesTab, DashboardDataTab, DashboardProjectsTab}
-}
+  components: {
+    SignUpDialog,
+    LoginDialog,
+    DashboardThemesTab,
+    DashboardDataSourcesTab,
+    DashboardProjectsTab,
+    DashboardNavCard,
+    DashboardNavigation
+  },
+  data() {
+    return {
+      currentTab: 0,
+      signUpOpen: false,
+      userId: -1,
+      currentUser: {},
+    }
+  },
+  methods: {
+    i18n(key: string): string {
+      return this.$t(key).toString()
+    },
+    setTab(tab: number): void {
+      this.currentTab = tab
+      this.$cookies.set('pmvg_dashtab', tab)
+    },
+    addProject(): void {
+      this.$router.push({name: 'NewProject'})
+    },
+    addDataSource(): void {
+      this.$router.push({name: 'NewDataSource'})
+    },
+    addTheme(): void {
+      this.$router.push({name: 'NewTheme'})
+    },
+    openSignUp(id: number): void {
+      this.userId = id
+      this.signUpOpen = true
+    }
+  },
+  apollo: {
+    currentUser: {
+      query: CURRENT_USER
+    }
+  },
+  async beforeMount() {
+    this.currentTab = Number(this.$cookies.get('pmvg_dashtab'))
+  }
+})
 </script>
 
 <style scoped>

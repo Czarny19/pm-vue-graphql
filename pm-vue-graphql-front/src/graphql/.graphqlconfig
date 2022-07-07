@@ -1,5 +1,5 @@
 {
-  "name": "Untitled GraphQL Schema",
+  "name": "magister-app",
   "schemaPath": "schema.graphql",
   "extensions": {
     "endpoints": {

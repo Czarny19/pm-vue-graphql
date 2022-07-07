@@ -1,102 +1,141 @@
 <template>
-  <v-card color="secondary" class="dashboard__tabs--container">
-    <DeleteConfirmationDialog :dialog="deleteDialog" @confirmed="deleteTheme" @cancelled="cancelDeleteTheme"/>
+  <div>
+    <DeleteConfirmationDialog :dialog="deleteDialog" @confirm="deleteTheme" @cancel="cancelDeleteTheme"/>
 
-    <DashboardThemeWarningDialog :dialog="warningDialog" @closed="closeWarningDialog"/>
+    <InfoDialog
+        :dialog="warningDialog"
+        :title="i18n('dashboard.themeDeleteWarning')"
+        :msg="i18n('dashboard.themeProjectExists')"
+        @close="closeWarningDialog">
+    </InfoDialog>
 
-    <v-card-title class="primary">
-      <v-icon class="pr-4">fa-pencil-ruler</v-icon>
-      {{ $t('dashboard.themes') }}
-    </v-card-title>
+    <v-card class="mb-4" color="primary">
+      <TitleCard :title="i18n('dashboard.themes')" icon="fa-palette"/>
+    </v-card>
 
-    <v-card-text v-if="loading">
-      <v-progress-circular class="ml-auto mr-auto card-loading" indeterminate color="primary" size="50"/>
-    </v-card-text>
+    <v-card color="primary">
+      <LoadingCircular v-if="loading"/>
+      <DashboardTabNoData v-else-if="!themes.length && !loading" :msg="i18n('dashboard.noThemes')"/>
+    </v-card>
 
-    <v-card-text v-else-if="themes.length === 0 && !loading">
-      <v-icon class="pt-6" x-large>fa-folder-open</v-icon>
-      <div class="pt-6 title-text">{{ $t('dashboard.noThemes') }}</div>
-      <v-btn class="mt-6 dashboard__tabs--first-button" color="success" @click="createTheme">
-        {{ $t('dashboard.addFirstTheme') }}
+    <v-expansion-panels v-if="themes.length && !loading">
+      <v-expansion-panel v-for="(theme, index) in themes" :key="theme.id">
+        <v-expansion-panel-header class="text-start text-body-1" expand-icon="fa-angle-down" color="secondary">
+          {{ theme.name }}
+        </v-expansion-panel-header>
+
+        <v-expansion-panel-content>
+          <ColorReadOnlyList class="pt-6" :theme="colors(index)"/>
+
+          <v-tooltip top color="primary" class="pa-4" min-width="600">
+            <template v-slot:activator="{ on, attrs }">
+              <div class="text-start">
+                <v-btn class="mb-4 mt-0 ml-4 pa-4" color="primary" min-width="200" v-bind="attrs" v-on="on">
+                  {{ i18n('dashboard.themePreview') }}
+                  <v-icon small class="pl-6">fa-message</v-icon>
+                </v-btn>
+              </div>
+            </template>
+            <ThemePreview :colors="colors(index)"/>
+          </v-tooltip>
+
+          <v-divider></v-divider>
+
+          <v-container fluid class="pa-0 pt-4">
+            <v-row no-gutters>
+              <v-col cols="6" class="text-start">
+                <IconButton
+                    :label="i18n('common.modify')"
+                    color="info"
+                    icon="fa-edit"
+                    @click="openModifyTheme(theme.id)">
+                </IconButton>
+              </v-col>
+
+              <v-col class="text-end">
+                <IconButton
+                    :label="i18n('common.delete')"
+                    color="error"
+                    icon="fa-trash"
+                    @click="deleteThemeClicked(theme.id)">
+                </IconButton>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+    </v-expansion-panels>
+
+    <v-card class="pa-4 mt-4 text-end" color="primary">
+      <v-btn class="pa-5" min-width="300" color="success" @click="createTheme">
+        {{ i18n('dashboard.addTheme') }}
+        <v-icon small class="pl-6">fa-plus</v-icon>
       </v-btn>
-    </v-card-text>
-
-    <v-card-text v-else class="pa-2">
-      <v-expansion-panels>
-        <v-expansion-panel v-for="theme in themes" :key="theme.id">
-          <v-expansion-panel-header class="primary text-left" expand-icon="fa-angle-down">
-            {{ theme.name }}
-          </v-expansion-panel-header>
-
-          <v-expansion-panel-content class="pt-4">
-            <ColorWithDescription :color="theme.primary_color" :description="$t('theme.primary')"/>
-            <ColorWithDescription :color="theme.secondary_color" :description="$t('theme.secondary')"/>
-            <ColorWithDescription :color="theme.accent_color" :description="$t('theme.accent')"/>
-            <ColorWithDescription :color="theme.info_color" :description="$t('theme.info')"/>
-            <ColorWithDescription :color="theme.success_color" :description="$t('theme.success')"/>
-            <ColorWithDescription :color="theme.error_color" :description="$t('theme.error')"/>
-            <ColorWithDescription :color="theme.text_color_1" :description="$t('theme.primaryText')"/>
-            <ColorWithDescription :color="theme.text_color_2" :description="$t('theme.secondaryText')"/>
-
-            <div class="pl-0 pr-0 pt-6 text-left">
-              <v-btn class="mr-4" color="info" min-width="100" @click="openModifyTheme(theme.id)">
-                {{ $t('common.modify') }}
-                <v-icon class="ml-4" x-small>fa-pen</v-icon>
-              </v-btn>
-              <v-btn color="error" min-width="100" @click="deleteThemeClicked(theme.id)">
-                {{ $t('common.delete') }}
-                <v-icon class="ml-4" small>fa-times-circle</v-icon>
-              </v-btn>
-            </div>
-          </v-expansion-panel-content>
-        </v-expansion-panel>
-      </v-expansion-panels>
-
-      <div class="text-right mt-auto">
-        <v-btn class="ml-auto mt-4 mb-2" color="success" @click="createTheme">{{ $t('dashboard.addTheme') }}</v-btn>
-      </div>
-    </v-card-text>
-  </v-card>
+    </v-card>
+  </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from "vue";
+import DeleteConfirmationDialog from "@/components/dialog/DeleteConfirmationDialog.vue";
+import TitleCard from "@/components/card/TitleCard.vue";
+import LoadingCircular from "@/components/loading/LoadingCircular.vue";
+import DashboardTabNoData from "@/views/dashboard/components/tabs/DashboardTabNoData.vue";
+import ColorReadOnlyList from "@/components/theme/ColorReadOnlyList.vue";
+import IconButton from "@/components/button/IconButton.vue";
+import ThemePreview from "@/components/theme/ThemePreview.vue";
+import InfoDialog from "@/components/dialog/InfoDialog.vue";
 import {CURRENT_USER} from "@/graphql/queries/user";
 import {DELETE_THEME, GET_USER_THEMES_QUERY} from "@/graphql/queries/theme";
-import DeleteConfirmationDialog from "@/components/DeleteConfirmationDialog";
-import DashboardThemeWarningDialog from "@/views/dashboard/components/warnings/DashboardThemeWarningDialog";
 import {GET_PROJECTS_WITH_THEME} from "@/graphql/queries/project";
-import ColorWithDescription from "@/components/ColorWithDescription";
+import {Colors} from "@/plugins/types";
 
-export default {
+export default Vue.extend({
   name: 'DashboardThemesTab',
-  components: {ColorWithDescription, DashboardThemeWarningDialog, DeleteConfirmationDialog},
+  components: {
+    InfoDialog,
+    ThemePreview,
+    IconButton,
+    ColorReadOnlyList,
+    DashboardTabNoData,
+    LoadingCircular,
+    TitleCard,
+    DeleteConfirmationDialog
+  },
   data() {
     return {
       loading: true,
       warningDialog: false,
       deleteDialog: false,
-      deleteId: null,
+      deleteId: -1,
       projectWithThemeExists: false,
-      currentUser: null,
-      themes: []
+      currentUser: {id: -1},
+      themes: [],
+      panels: []
     }
   },
   methods: {
-    createTheme() {
+    i18n(key: string): string {
+      return this.$t(key).toString()
+    },
+    colors(index: number): Colors {
+      return this.themes[index] as Colors;
+    },
+    createTheme(): void {
       this.$router.push({name: 'NewTheme'})
     },
-    openModifyTheme(id) {
+    openModifyTheme(id: string): void {
       this.$router.push({name: 'Theme', params: {themeId: id}})
     },
-    deleteThemeClicked(id) {
+    deleteThemeClicked(id: number): void {
       this.deleteId = id
       this.$apollo.queries.PROJECT.refresh()
     },
-    cancelDeleteTheme() {
-      this.deleteId = null
+    cancelDeleteTheme(): void {
+      this.deleteId = -1
       this.deleteDialog = false
     },
-    deleteTheme() {
+    deleteTheme(): void {
       this.deleteDialog = false
 
       this.$apollo.mutate({
@@ -108,7 +147,7 @@ export default {
         this.$apollo.queries.THEME.refetch()
       })
     },
-    closeWarningDialog() {
+    closeWarningDialog(): void {
       this.warningDialog = false
     }
   },
@@ -119,15 +158,15 @@ export default {
     THEME: {
       query: GET_USER_THEMES_QUERY,
       fetchPolicy: 'network-only',
-      variables() {
+      variables(): { userId: number } {
         return {
-          user_id: this.currentUser.id
+          userId: this.currentUser.id
         }
       },
-      skip() {
+      skip(): boolean {
         return !this.currentUser
       },
-      result({data}) {
+      result({data}): void {
         this.loading = false
         this.themes = data.THEME
       }
@@ -135,18 +174,18 @@ export default {
     PROJECT: {
       query: GET_PROJECTS_WITH_THEME,
       fetchPolicy: 'network-only',
-      variables() {
+      variables(): { id: number } {
         return {
           id: this.deleteId
         }
       },
-      skip() {
-        return !this.deleteId
+      skip(): boolean {
+        return this.deleteId < 0
       },
-      result({data}) {
+      result({data}): void {
         if (data.PROJECT.length) {
           this.warningDialog = true
-          this.deleteId = null
+          this.deleteId = -1
           return
         }
 
@@ -154,7 +193,7 @@ export default {
       }
     }
   }
-}
+})
 </script>
 
 <style scoped>

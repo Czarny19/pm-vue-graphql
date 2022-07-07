@@ -8,9 +8,14 @@ schema {
 
 "columns and relationships of \"DATA_SOURCE\""
 type DATA_SOURCE {
+    "Data source address"
     address: String!
+    create_date: date!
+    "Id"
     id: bigint!
     name: String!
+    secret: String
+    user_id: bigint
 }
 
 "aggregated selection of \"DATA_SOURCE\""
@@ -37,20 +42,27 @@ type DATA_SOURCE_aggregate_fields {
 "aggregate avg on columns"
 type DATA_SOURCE_avg_fields {
     id: Float
+    user_id: Float
 }
 
 "aggregate max on columns"
 type DATA_SOURCE_max_fields {
     address: String
+    create_date: date
     id: bigint
     name: String
+    secret: String
+    user_id: bigint
 }
 
 "aggregate min on columns"
 type DATA_SOURCE_min_fields {
     address: String
+    create_date: date
     id: bigint
     name: String
+    secret: String
+    user_id: bigint
 }
 
 "response of any mutation on the table \"DATA_SOURCE\""
@@ -64,36 +76,43 @@ type DATA_SOURCE_mutation_response {
 "aggregate stddev on columns"
 type DATA_SOURCE_stddev_fields {
     id: Float
+    user_id: Float
 }
 
 "aggregate stddev_pop on columns"
 type DATA_SOURCE_stddev_pop_fields {
     id: Float
+    user_id: Float
 }
 
 "aggregate stddev_samp on columns"
 type DATA_SOURCE_stddev_samp_fields {
     id: Float
+    user_id: Float
 }
 
 "aggregate sum on columns"
 type DATA_SOURCE_sum_fields {
     id: bigint
+    user_id: bigint
 }
 
 "aggregate var_pop on columns"
 type DATA_SOURCE_var_pop_fields {
     id: Float
+    user_id: Float
 }
 
 "aggregate var_samp on columns"
 type DATA_SOURCE_var_samp_fields {
     id: Float
+    user_id: Float
 }
 
 "aggregate variance on columns"
 type DATA_SOURCE_variance_fields {
     id: Float
+    user_id: Float
 }
 
 "columns and relationships of \"PROJECT\""
@@ -230,6 +249,7 @@ type PROJECT_variance_fields {
 "columns and relationships of \"THEME\""
 type THEME {
     accent_color: String!
+    background_color: String!
     create_date: date!
     error_color: String!
     id: bigint!
@@ -273,6 +293,7 @@ type THEME_avg_fields {
 "aggregate max on columns"
 type THEME_max_fields {
     accent_color: String
+    background_color: String
     create_date: date
     error_color: String
     id: bigint
@@ -289,6 +310,7 @@ type THEME_max_fields {
 "aggregate min on columns"
 type THEME_min_fields {
     accent_color: String
+    background_color: String
     create_date: date
     error_color: String
     id: bigint
@@ -356,11 +378,11 @@ type THEME_variance_fields {
 type USER {
     email: String!
     id: bigint!
-    password: String!
     "An object relationship"
     projects: PROJECT
     "An object relationship"
     themes: THEME
+    username: String!
 }
 
 "aggregated selection of \"USER\""
@@ -393,14 +415,14 @@ type USER_avg_fields {
 type USER_max_fields {
     email: String
     id: bigint
-    password: String
+    username: String
 }
 
 "aggregate min on columns"
 type USER_min_fields {
     email: String
     id: bigint
-    password: String
+    username: String
 }
 
 "response of any mutation on the table \"USER\""
@@ -454,7 +476,10 @@ type mutation_root {
         where: DATA_SOURCE_bool_exp!
     ): DATA_SOURCE_mutation_response
     "delete single row from the table: \"DATA_SOURCE\""
-    delete_DATA_SOURCE_by_pk(id: bigint!): DATA_SOURCE
+    delete_DATA_SOURCE_by_pk(
+        "Id"
+        id: bigint!
+    ): DATA_SOURCE
     "delete data from the table: \"PROJECT\""
     delete_PROJECT(
         "filter the rows which have to be deleted"
@@ -631,7 +656,10 @@ type query_root {
         where: DATA_SOURCE_bool_exp
     ): DATA_SOURCE_aggregate!
     "fetch data from the table: \"DATA_SOURCE\" using primary key columns"
-    DATA_SOURCE_by_pk(id: bigint!): DATA_SOURCE
+    DATA_SOURCE_by_pk(
+        "Id"
+        id: bigint!
+    ): DATA_SOURCE
     "fetch data from the table: \"PROJECT\""
     PROJECT(
         "distinct select on columns"
@@ -747,7 +775,10 @@ type subscription_root {
         where: DATA_SOURCE_bool_exp
     ): DATA_SOURCE_aggregate!
     "fetch data from the table: \"DATA_SOURCE\" using primary key columns"
-    DATA_SOURCE_by_pk(id: bigint!): DATA_SOURCE
+    DATA_SOURCE_by_pk(
+        "Id"
+        id: bigint!
+    ): DATA_SOURCE
     "fetch data from the table: \"PROJECT\""
     PROJECT(
         "distinct select on columns"
@@ -845,9 +876,15 @@ enum DATA_SOURCE_select_column {
     "column name"
     address
     "column name"
+    create_date
+    "column name"
     id
     "column name"
     name
+    "column name"
+    secret
+    "column name"
+    user_id
 }
 
 "update columns of table \"DATA_SOURCE\""
@@ -855,9 +892,15 @@ enum DATA_SOURCE_update_column {
     "column name"
     address
     "column name"
+    create_date
+    "column name"
     id
     "column name"
     name
+    "column name"
+    secret
+    "column name"
+    user_id
 }
 
 "unique or primary key constraints on table \"PROJECT\""
@@ -917,6 +960,8 @@ enum THEME_select_column {
     "column name"
     accent_color
     "column name"
+    background_color
+    "column name"
     create_date
     "column name"
     error_color
@@ -944,6 +989,8 @@ enum THEME_select_column {
 enum THEME_update_column {
     "column name"
     accent_color
+    "column name"
+    background_color
     "column name"
     create_date
     "column name"
@@ -983,7 +1030,7 @@ enum USER_select_column {
     "column name"
     id
     "column name"
-    password
+    username
 }
 
 "update columns of table \"USER\""
@@ -993,7 +1040,7 @@ enum USER_update_column {
     "column name"
     id
     "column name"
-    password
+    username
 }
 
 "column ordering options"
@@ -1011,6 +1058,12 @@ enum order_by {
     "in the descending order, nulls last"
     desc_nulls_last
 }
+
+scalar bigint
+
+scalar date
+
+scalar xml
 
 "order by aggregate values of table \"DATA_SOURCE\""
 input DATA_SOURCE_aggregate_order_by {
@@ -1036,6 +1089,7 @@ input DATA_SOURCE_arr_rel_insert_input {
 "order by avg() on columns of table \"DATA_SOURCE\""
 input DATA_SOURCE_avg_order_by {
     id: order_by
+    user_id: order_by
 }
 
 "Boolean expression to filter rows from the table \"DATA_SOURCE\". All fields are combined with a logical 'AND'."
@@ -1044,34 +1098,47 @@ input DATA_SOURCE_bool_exp {
     _not: DATA_SOURCE_bool_exp
     _or: [DATA_SOURCE_bool_exp]
     address: String_comparison_exp
+    create_date: date_comparison_exp
     id: bigint_comparison_exp
     name: String_comparison_exp
+    secret: String_comparison_exp
+    user_id: bigint_comparison_exp
 }
 
 "input type for incrementing integer column in table \"DATA_SOURCE\""
 input DATA_SOURCE_inc_input {
     id: bigint
+    user_id: bigint
 }
 
 "input type for inserting data into table \"DATA_SOURCE\""
 input DATA_SOURCE_insert_input {
     address: String
+    create_date: date
     id: bigint
     name: String
+    secret: String
+    user_id: bigint
 }
 
 "order by max() on columns of table \"DATA_SOURCE\""
 input DATA_SOURCE_max_order_by {
     address: order_by
+    create_date: order_by
     id: order_by
     name: order_by
+    secret: order_by
+    user_id: order_by
 }
 
 "order by min() on columns of table \"DATA_SOURCE\""
 input DATA_SOURCE_min_order_by {
     address: order_by
+    create_date: order_by
     id: order_by
     name: order_by
+    secret: order_by
+    user_id: order_by
 }
 
 "input type for inserting object relation for remote table \"DATA_SOURCE\""
@@ -1090,55 +1157,69 @@ input DATA_SOURCE_on_conflict {
 "ordering options when selecting data from \"DATA_SOURCE\""
 input DATA_SOURCE_order_by {
     address: order_by
+    create_date: order_by
     id: order_by
     name: order_by
+    secret: order_by
+    user_id: order_by
 }
 
 "primary key columns input for table: \"DATA_SOURCE\""
 input DATA_SOURCE_pk_columns_input {
+    "Id"
     id: bigint!
 }
 
 "input type for updating data in table \"DATA_SOURCE\""
 input DATA_SOURCE_set_input {
     address: String
+    create_date: date
     id: bigint
     name: String
+    secret: String
+    user_id: bigint
 }
 
 "order by stddev() on columns of table \"DATA_SOURCE\""
 input DATA_SOURCE_stddev_order_by {
     id: order_by
+    user_id: order_by
 }
 
 "order by stddev_pop() on columns of table \"DATA_SOURCE\""
 input DATA_SOURCE_stddev_pop_order_by {
     id: order_by
+    user_id: order_by
 }
 
 "order by stddev_samp() on columns of table \"DATA_SOURCE\""
 input DATA_SOURCE_stddev_samp_order_by {
     id: order_by
+    user_id: order_by
 }
 
 "order by sum() on columns of table \"DATA_SOURCE\""
 input DATA_SOURCE_sum_order_by {
     id: order_by
+    user_id: order_by
 }
 
 "order by var_pop() on columns of table \"DATA_SOURCE\""
 input DATA_SOURCE_var_pop_order_by {
     id: order_by
+    user_id: order_by
 }
 
 "order by var_samp() on columns of table \"DATA_SOURCE\""
 input DATA_SOURCE_var_samp_order_by {
     id: order_by
+    user_id: order_by
 }
 
 "order by variance() on columns of table \"DATA_SOURCE\""
 input DATA_SOURCE_variance_order_by {
     id: order_by
+    user_id: order_by
 }
 
 "order by aggregate values of table \"PROJECT\""
@@ -1383,6 +1464,7 @@ input THEME_bool_exp {
     _not: THEME_bool_exp
     _or: [THEME_bool_exp]
     accent_color: String_comparison_exp
+    background_color: String_comparison_exp
     create_date: date_comparison_exp
     error_color: String_comparison_exp
     id: bigint_comparison_exp
@@ -1405,6 +1487,7 @@ input THEME_inc_input {
 "input type for inserting data into table \"THEME\""
 input THEME_insert_input {
     accent_color: String
+    background_color: String
     create_date: date
     error_color: String
     id: bigint
@@ -1421,6 +1504,7 @@ input THEME_insert_input {
 "order by max() on columns of table \"THEME\""
 input THEME_max_order_by {
     accent_color: order_by
+    background_color: order_by
     create_date: order_by
     error_color: order_by
     id: order_by
@@ -1437,6 +1521,7 @@ input THEME_max_order_by {
 "order by min() on columns of table \"THEME\""
 input THEME_min_order_by {
     accent_color: order_by
+    background_color: order_by
     create_date: order_by
     error_color: order_by
     id: order_by
@@ -1466,6 +1551,7 @@ input THEME_on_conflict {
 "ordering options when selecting data from \"THEME\""
 input THEME_order_by {
     accent_color: order_by
+    background_color: order_by
     create_date: order_by
     error_color: order_by
     id: order_by
@@ -1487,6 +1573,7 @@ input THEME_pk_columns_input {
 "input type for updating data in table \"THEME\""
 input THEME_set_input {
     accent_color: String
+    background_color: String
     create_date: date
     error_color: String
     id: bigint
@@ -1575,9 +1662,9 @@ input USER_bool_exp {
     _or: [USER_bool_exp]
     email: String_comparison_exp
     id: bigint_comparison_exp
-    password: String_comparison_exp
     projects: PROJECT_bool_exp
     themes: THEME_bool_exp
+    username: String_comparison_exp
 }
 
 "input type for incrementing integer column in table \"USER\""
@@ -1589,23 +1676,23 @@ input USER_inc_input {
 input USER_insert_input {
     email: String
     id: bigint
-    password: String
     projects: PROJECT_obj_rel_insert_input
     themes: THEME_obj_rel_insert_input
+    username: String
 }
 
 "order by max() on columns of table \"USER\""
 input USER_max_order_by {
     email: order_by
     id: order_by
-    password: order_by
+    username: order_by
 }
 
 "order by min() on columns of table \"USER\""
 input USER_min_order_by {
     email: order_by
     id: order_by
-    password: order_by
+    username: order_by
 }
 
 "input type for inserting object relation for remote table \"USER\""
@@ -1625,9 +1712,9 @@ input USER_on_conflict {
 input USER_order_by {
     email: order_by
     id: order_by
-    password: order_by
     projects: PROJECT_order_by
     themes: THEME_order_by
+    username: order_by
 }
 
 "primary key columns input for table: \"USER\""
@@ -1639,7 +1726,7 @@ input USER_pk_columns_input {
 input USER_set_input {
     email: String
     id: bigint
-    password: String
+    username: String
 }
 
 "order by stddev() on columns of table \"USER\""
@@ -1715,10 +1802,3 @@ input xml_comparison_exp {
     _neq: xml
     _nin: [xml!]
 }
-
-
-scalar bigint
-
-scalar date
-
-scalar xml

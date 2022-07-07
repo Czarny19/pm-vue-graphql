@@ -1,42 +1,49 @@
 <template>
-  <v-container>
-    <LoadingDialog :dialog="saving" :title="$t('project.saving')"/>
+  <v-container fluid>
+    <LoadingDialog :dialog="saving" :title="i18n('project.saving')"/>
 
-    <v-row>
-      <v-col cols="12" sm="12" md="8" lg="8" xl="8">
-        <ProjectForm :project-id="projectId" @saving="setSaving"/>
+    <v-row class="mt-2 ml-2 mr-2">
+      <v-col>
+        <TitleCard :title="i18n('project.project')" icon="fa-tablet"/>
       </v-col>
-      <v-col cols="12" sm="12" md="4" lg="4" xl="4">
-        <ProjectInfo/>
+    </v-row>
+
+    <v-row no-gutters>
+      <v-col>
+        <ProjectForm :project-id="projectId" @saving="setSaving"/>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
-<script>
-import LoadingDialog from "@/components/LoadingDialog";
-import ProjectForm from "@/views/project/components/ProjectForm";
-import ProjectInfo from "@/views/project/components/ProjectInfo";
+<script lang="ts">
+import Vue from "vue";
+import LoadingDialog from "@/components/dialog/LoadingDialog.vue";
+import ProjectForm from "@/views/project/components/ProjectForm.vue";
+import TitleCard from "@/components/card/TitleCard.vue";
 
-export default {
+export default Vue.extend({
   name: 'ProjectPage',
-  components: {ProjectInfo, ProjectForm, LoadingDialog},
+  components: {TitleCard, ProjectForm, LoadingDialog},
   data() {
     return {
       saving: false
     }
   },
   computed: {
-    projectId() {
-      return this.$route.params.projectId ? parseInt(this.$route.params.projectId) : null
+    projectId(): number {
+      return Number(this.$route.params.projectId)
     }
   },
   methods: {
-    setSaving(saving) {
+    i18n(key: string): string {
+      return this.$t(key).toString()
+    },
+    setSaving(saving: boolean): void {
       this.saving = saving
     }
   }
-}
+})
 </script>
 
 <style scoped>

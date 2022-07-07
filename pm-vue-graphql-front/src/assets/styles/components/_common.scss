@@ -1,0 +1,15 @@
+@import "../abstracts/variables";
+
+.card-loading {
+  padding-top: 200px;
+}
+
+.disable-events {
+  pointer-events: none
+}
+
+.error-chip {
+  background-color: $error;
+  border-radius: 40px;
+  color: white;
+}

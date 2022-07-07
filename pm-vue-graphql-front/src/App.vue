@@ -1,21 +1,22 @@
 <template>
   <v-app>
     <div id="app">
-      <AppBar v-if="$route.name !== 'Login'"/>
-      <router-view/>
-      <PageFooter/>
+      <AppBar/>
+      <v-main>
+        <router-view/>
+      </v-main>
     </div>
   </v-app>
 </template>
 
-<script>
-import AppBar from "@/components/AppBar";
-import PageFooter from "@/components/PageFooter";
+<script lang="ts">
+import Vue from "vue";
+import AppBar from "@/components/bar/AppBar.vue";
 
-export default {
+export default Vue.extend({
   name: 'App',
-  components: {PageFooter, AppBar}
-}
+  components: {AppBar}
+})
 </script>
 
 <style lang="scss">
