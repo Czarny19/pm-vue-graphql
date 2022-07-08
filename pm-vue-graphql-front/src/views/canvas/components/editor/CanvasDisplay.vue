@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import Widget from "@/views/canvas/widgets/Widget";
+import Widget from "@/views/canvas/components/editor/widgets/CanvasWidget.vue";
 
 export default {
   name: 'CanvasDisplay',

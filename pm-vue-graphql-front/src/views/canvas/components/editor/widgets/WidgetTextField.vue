@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import WidgetHelper from "@/views/canvas/widgets/WidgetHelper";
+import WidgetHelper from "@/views/canvas/components/editor/widgets/WidgetHelper";
 
 export default {
   name: 'WidgetTextField',

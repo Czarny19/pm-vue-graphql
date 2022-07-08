@@ -64,6 +64,13 @@
                     icon="fa-edit"
                     @click="openModifyProject(project.id)">
                 </IconButton>
+                <IconButton
+                    class="ml-6"
+                    :label="i18n('dashboard.editor')"
+                    color="secondary"
+                    icon="fa-pencil"
+                    @click="openCanvas(project.id)">
+                </IconButton>
               </v-col>
 
               <v-col class="text-end">
@@ -136,6 +143,9 @@ export default Vue.extend({
     },
     openModifyProject(id: string): void {
       this.$router.push({name: 'Project', params: {projectId: id}})
+    },
+    openCanvas(id: string): void {
+      this.$router.push({name: 'Canvas', params: {projectId: id}})
     },
     deleteProjectClicked(id: number): void {
       this.deleteId = id

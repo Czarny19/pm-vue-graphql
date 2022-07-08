@@ -13,11 +13,11 @@ const routes = [
     {name: 'Dashboard', path: '/dashboard', component: DashboardPage},
     {name: 'Canvas', path: '/project/canvas/:projectId', component: CanvasPage, beforeEnter: authGuard},
     {name: 'NewProject', path: '/project/new', component: ProjectPage, beforeEnter: authGuard},
-    {name: 'Project', path: '/project/:projectId', component: ProjectPage},
-    {name: 'NewTheme', path: '/theme/new', component: ThemePage},
-    {name: 'Theme', path: '/theme/:themeId', component: ThemePage},
-    {name: 'NewDataSource', path: '/data/new', component: DataSourcePage},
-    {name: 'DataSource', path: '/data/:dataSourceId', component: DataSourcePage},
+    {name: 'Project', path: '/project/:projectId', component: ProjectPage, beforeEnter: authGuard},
+    {name: 'NewTheme', path: '/theme/new', component: ThemePage, beforeEnter: authGuard},
+    {name: 'Theme', path: '/theme/:themeId', component: ThemePage, beforeEnter: authGuard},
+    {name: 'NewDataSource', path: '/data/new', component: DataSourcePage, beforeEnter: authGuard},
+    {name: 'DataSource', path: '/data/:dataSourceId', component: DataSourcePage, beforeEnter: authGuard},
     {path: '*', redirect: '/dashboard'}
 ]
 

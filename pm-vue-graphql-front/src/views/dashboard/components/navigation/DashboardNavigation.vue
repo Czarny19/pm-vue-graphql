@@ -13,9 +13,13 @@
 
     <v-divider></v-divider>
 
+    <div class="primary text-start pa-3 pl-6">
+      {{ i18n('dashboard.dashboard') }}
+    </div>
+
     <v-list nav>
       <v-list-item-group v-model="currentTab" color="accent">
-        <v-list-item v-for="item in items" :key="item.title" link class="pl-6 pr-6">
+        <v-list-item v-for="item in navItems" :key="item.title" link class="pl-6 pr-6">
           <v-list-item-icon>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-icon>
@@ -26,12 +30,29 @@
         </v-list-item>
       </v-list-item-group>
     </v-list>
+
+    <div class="primary text-start pa-3 pl-6">
+      {{ i18n('dashboard.editor') }}
+    </div>
+
+    <v-list>
+      <v-list-item-group color="accent">
+        <v-list-item v-for="project in projects" :key="project.title" link class="pl-6 pr-6">
+          <v-list-item-content>
+            <v-list-item-title class="text-body-1 text-start" @click="openCanvas(project.id)">
+              {{ project.name }}
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list-item-group>
+    </v-list>
   </v-navigation-drawer>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import {CURRENT_USER} from "@/graphql/queries/user";
+import {GET_USER_PROJECTS} from "@/graphql/queries/project";
 
 export default Vue.extend({
   name: 'DashboardNavigation',
@@ -41,22 +62,47 @@ export default Vue.extend({
   data() {
     return {
       currentTab: 0,
-      currentUser: {},
-      items: [
-        {title: this.$t("dashboard.projects"), icon: 'fa-tablet'},
-        {title: this.$t("dashboard.themes"), icon: 'fa-palette'},
-        {title: this.$t("dashboard.dataSources"), icon: 'fa-database'}
+      currentUser: {id: -1},
+      projects: [],
+      navItems: [
+        {title: this.$t('dashboard.projects'), icon: 'fa-tablet'},
+        {title: this.$t('dashboard.themes'), icon: 'fa-palette'},
+        {title: this.$t('dashboard.dataSources'), icon: 'fa-database'}
       ],
     }
   },
   apollo: {
     currentUser: {
       query: CURRENT_USER
-    }
+    },
+    PROJECT: {
+      query: GET_USER_PROJECTS,
+      fetchPolicy: 'network-only',
+      variables(): { userId: number } {
+        return {
+          userId: this.currentUser.id
+        }
+      },
+      skip(): boolean {
+        return !this.currentUser
+      },
+      result({data}): void {
+        this.loading = false
+        this.projects = data.PROJECT
+      },
+    },
   },
   watch: {
     currentTab(): void {
       this.$emit('tabchange', this.currentTab)
+    }
+  },
+  methods: {
+    i18n(key: string): string {
+      return this.$t(key).toString()
+    },
+    openCanvas(id: string): void {
+      this.$router.push({name: 'Canvas', params: {projectId: id}})
     }
   },
   async beforeMount() {

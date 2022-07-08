@@ -1,6 +1,6 @@
 <template>
   <div class="canvas__editor--toolbox">
-    <div class="canvas__editor--toolbox-title text-left">
+    <div class="canvas__editor--toolbox-title text-start">
       <v-icon small class="pr-4 pb-1">fa-toolbox</v-icon>
       {{ $t('canvas.components') }}
     </div>

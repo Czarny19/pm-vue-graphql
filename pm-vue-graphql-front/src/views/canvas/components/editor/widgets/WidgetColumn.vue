@@ -8,18 +8,18 @@
       @click.prevent>
 
     <template v-for="(child) in widget.children" >
-      <Widget :widget="child" :key="child.name" @setActive="setActive"/>
+      <CanvasWidget :widget="child" :key="child.name" @setActive="setActive"/>
     </template>
 
   </v-col>
 </template>
 
 <script>
-import WidgetHelper from "@/views/canvas/widgets/WidgetHelper";
+import WidgetHelper from "@/views/canvas/components/editor/widgets/WidgetHelper";
 
 export default {
   name: 'WidgetColumn',
-  components: {Widget : () => import( "@/views/canvas/widgets/Widget")},
+  components: {CanvasWidget : () => import( "@/views/canvas/components/editor/widgets/CanvasWidget")},
   mixins: [WidgetHelper],
   data() {
     return {

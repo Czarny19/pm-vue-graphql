@@ -1,5 +1,5 @@
 <template>
-  <v-btn class="pa-6" min-width="160" :color="color" @click="click">
+  <v-btn class="pa-5" min-width="160" :color="color" @click="click">
     {{ label }}
     <v-icon small class="pl-6">{{ icon }}</v-icon>
   </v-btn>

@@ -1,29 +1,29 @@
 <template>
   <div class="canvas__editor--toolbox canvas__editor--toolbox--right">
-    <div class="canvas__editor--toolbox-title text-left">
+    <div class="canvas__editor--toolbox-title text-start">
       <v-icon small class="pr-4 pb-1">fa-sliders-h</v-icon>
       {{ $t('canvas.properties') }}
     </div>
 
     <div>
       <v-container fluid class="pa-4">
-        <v-row class="text-left" v-if="widget">
+        <v-row class="text-start" v-if="widget">
           <v-col class="ma-auto pa-2" cols="4">
             <div class="canvas__editor--id-label">{{ $t('prop.id') }}:</div>
           </v-col>
           <v-col class="pa-2 canvas__editor--id-text-field">
-            <v-text-field outlined flat single-line hide-details v-model="widget.id" height="30"></v-text-field>
+            <v-text-field outlined flat single-line hide-details v-model="currentWidget.id" height="30"></v-text-field>
           </v-col>
         </v-row>
 
         <v-row>
           <v-expansion-panels class="pa-1" multiple>
             <v-expansion-panel class="canvas__editor--expansion-panel" v-for="(group) in groups" :key="group.id">
-              <v-expansion-panel-header class="primary text-left pt-0 pb-0 pl-4 pr-4" expand-icon="fa-angle-down">
+              <v-expansion-panel-header class="primary text-start pt-0 pb-0 pl-4 pr-4" expand-icon="fa-angle-down">
                 {{ mapIdToLabel(group.id) }}
               </v-expansion-panel-header>
 
-              <v-expansion-panel-content class="pt-1 text-left">
+              <v-expansion-panel-content class="pt-1 text-start">
                 <template v-for="(prop) in group.props">
                   <PropertyString
                       :key="prop.id"
@@ -42,13 +42,18 @@
 </template>
 
 <script>
-import PropertyString from "@/views/canvas/properties/PropertyString";
+import PropertyString from "@/views/canvas/components/editor/properties/PropertyString";
 
 export default {
   name: 'CanvasProperties',
   components: {PropertyString},
   props: {
     widget: Object
+  },
+  data() {
+    return {
+      currentWidget: {}
+    }
   },
   computed: {
     id() {
@@ -105,6 +110,9 @@ export default {
           return id
       }
     }
+  },
+  async beforeMount() {
+    this.currentWidget = this.widget
   }
 }
 </script>

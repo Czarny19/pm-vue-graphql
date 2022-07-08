@@ -16,6 +16,7 @@ export type DataSource = {
 
 export type Theme = {
     id: number;
+    name: string;
     colors: Colors;
 }
 

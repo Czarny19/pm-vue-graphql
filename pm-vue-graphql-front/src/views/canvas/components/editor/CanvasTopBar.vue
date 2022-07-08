@@ -24,7 +24,7 @@ export default {
       this.$router.back()
     },
     save() {
-
+      console.log('save')
     }
   }
 }

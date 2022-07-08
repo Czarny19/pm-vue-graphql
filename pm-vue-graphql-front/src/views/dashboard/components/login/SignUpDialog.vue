@@ -1,11 +1,5 @@
 <template>
   <v-dialog persistent v-model="isOpen" max-width="800">
-    <template v-slot:activator="{ on, attrs }">
-      <div v-bind="attrs" v-on="on">
-        <slot name="activator"/>
-      </div>
-    </template>
-
     <v-card v-if="loading" color="primary">
       <v-card-text>
         <v-progress-circular class="ml-auto mr-auto card-loading" indeterminate size="50"/>
@@ -14,6 +8,7 @@
 
     <v-card v-else>
       <v-card-title class="text-start">{{ i18n('user.accountDetails') }}</v-card-title>
+
       <v-card-text class="text-start pt-2 pb-6">
         <div class="pa-4">
           <v-icon color="success" large class="pr-6">fa-check</v-icon>
@@ -27,10 +22,9 @@
               class="pa-4"
               color="accent"
               v-model="userEmail"
-              readonly
               :label="i18n('user.email')"
               prepend-icon="fa-envelope"
-              required>
+              readonly>
           </v-text-field>
 
           <v-textarea
@@ -47,11 +41,10 @@
           </v-textarea>
         </v-form>
       </v-card-text>
-      <v-card-actions class="pa-4">
-        <v-btn class="ml-auto" color="success" min-width="140" @click="save">
-          {{ i18n('common.save') }}
-          <v-icon small class="pl-6">fa-save</v-icon>
-        </v-btn>
+
+      <v-card-actions class="pa-6">
+        <v-spacer></v-spacer>
+        <IconButton :label="i18n('common.save')" icon="fa-save" color="success" @click="save"/>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -61,9 +54,11 @@
 import Vue from "vue";
 import {GET_USER_BY_ID, UPDATE_USER_USERNAME} from "@/graphql/queries/user";
 import {apolloClient} from "@/main";
+import IconButton from "@/components/button/IconButton.vue";
 
 export default Vue.extend({
   name: 'SignUpDialog',
+  components: {IconButton},
   props: {
     dialog: Boolean,
     userId: Number
