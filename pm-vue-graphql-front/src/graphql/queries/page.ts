@@ -4,6 +4,14 @@ export const GET_PAGES_FOR_PROJECT = gql`query getAllUserProjects($projectId: bi
     PAGE(where: {project_id: {_eq: $projectId}}) {
         id
         name
+        modify_date
+    }
+}`
+
+export const GET_PAGE_BY_ID = gql`query getPageById($id: bigint!) {
+    PAGE(where: {id: {_eq: $id}}) {
+        id
+        name
         definition
         modify_date
     }

@@ -2,7 +2,8 @@
   "widgets": [
     {
       "id": "",
-      "title": "Page",
+      "type": "Page",
+      "title": "Strona",
       "icon": "fa-th",
       "children": [],
       "props": [
@@ -13,8 +14,9 @@
     },
     {
       "id": "",
-      "title": "Container",
-      "icon": "fa-arrows-alt-h",
+      "type": "Container",
+      "title": "Kontener",
+      "icon": "fa-table",
       "children": [],
       "propGroups": [
         {
@@ -126,7 +128,7 @@
             },
             {
               "id": "height",
-              "value": "100px",
+              "value": "",
               "type": "CSS",
               "dataType": "String"
             }
@@ -136,8 +138,9 @@
     },
     {
       "id": "",
-      "title": "Row",
-      "icon": "fa-arrows-alt-v",
+      "type": "Row",
+      "title": "Wiersz",
+      "icon": "fa-table-columns fa-rotate-270",
       "children": [],
       "props": [
         {
@@ -180,8 +183,9 @@
     },
     {
       "id": "",
-      "title": "Column",
-      "icon": "fa-arrows-alt-h",
+      "type": "Column",
+      "title": "Kolumna",
+      "icon": "fa-table-columns",
       "children": [],
       "props": [
         {
@@ -224,7 +228,8 @@
     },
     {
       "id": "",
-      "title": "Button",
+      "type": "Button",
+      "title": "Przycisk",
       "icon": "fa-caret-square-right",
       "children": [],
       "props": [
@@ -236,7 +241,8 @@
     },
     {
       "id": "",
-      "title": "Text",
+      "type": "Text",
+      "title": "Tekst",
       "icon": "fa-quote-right",
       "children": [],
       "props": [
@@ -248,7 +254,8 @@
     },
     {
       "id": "",
-      "title": "Text-Field",
+      "type": "Text-Field",
+      "title": "Pole tekstowe",
       "icon": "fa-keyboard",
       "children": [],
       "props": [

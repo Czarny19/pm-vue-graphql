@@ -19,7 +19,7 @@
 <script lang="ts">
 import Vue from "vue";
 import LoadingDialog from "@/components/dialog/LoadingDialog.vue";
-import ProjectForm from "@/views/project/components/ProjectForm.vue";
+import ProjectForm from "@/views/project/component/ProjectForm.vue";
 import TitleCard from "@/components/card/TitleCard.vue";
 
 export default Vue.extend({

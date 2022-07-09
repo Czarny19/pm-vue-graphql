@@ -6,7 +6,7 @@ import createAuth0Client, {
     LogoutOptions,
     PopupConfigOptions,
     PopupLoginOptions
-} from '@auth0/auth0-spa-js';
+} from "@auth0/auth0-spa-js";
 
 export declare interface Auth0PluginOptions {
     domain: string;

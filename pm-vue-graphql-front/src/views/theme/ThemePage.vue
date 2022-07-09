@@ -19,7 +19,7 @@
 <script lang="ts">
 import Vue from "vue";
 import LoadingDialog from "@/components/dialog/LoadingDialog.vue";
-import ThemeForm from "@/views/theme/components/ThemeForm.vue";
+import ThemeForm from "@/views/theme/component/ThemeForm.vue";
 import TitleCard from "@/components/card/TitleCard.vue";
 
 export default Vue.extend({

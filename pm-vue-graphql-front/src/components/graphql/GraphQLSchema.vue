@@ -37,7 +37,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import {SchemaItem} from '@/plugins/types';
+import {SchemaItem} from "@/plugins/types";
 import CardSectionTitle from "@/components/card/CardSectionTitle.vue";
 
 export default Vue.extend({

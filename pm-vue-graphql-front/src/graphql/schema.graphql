@@ -120,7 +120,7 @@ type PAGE {
     definition(
         "JSON select path"
         path: String
-    ): json
+    ): jsonb
     id: bigint!
     modify_date: date!
     name: String!
@@ -728,8 +728,18 @@ type mutation_root {
     ): DATA_SOURCE
     "update data of the table: \"PAGE\""
     update_PAGE(
+        "append existing jsonb value of filtered columns with new jsonb value"
+        _append: PAGE_append_input,
+        "delete the field or element with specified path (for JSON arrays, negative integers count from the end)"
+        _delete_at_path: PAGE_delete_at_path_input,
+        "delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array"
+        _delete_elem: PAGE_delete_elem_input,
+        "delete key/value pair or string element. key/value pairs are matched based on their key value"
+        _delete_key: PAGE_delete_key_input,
         "increments the integer columns with given value of the filtered values"
         _inc: PAGE_inc_input,
+        "prepend existing jsonb value of filtered columns with new jsonb value"
+        _prepend: PAGE_prepend_input,
         "sets the columns of the filtered rows to the given values"
         _set: PAGE_set_input,
         "filter the rows which have to be updated"
@@ -737,8 +747,18 @@ type mutation_root {
     ): PAGE_mutation_response
     "update single row of the table: \"PAGE\""
     update_PAGE_by_pk(
+        "append existing jsonb value of filtered columns with new jsonb value"
+        _append: PAGE_append_input,
+        "delete the field or element with specified path (for JSON arrays, negative integers count from the end)"
+        _delete_at_path: PAGE_delete_at_path_input,
+        "delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array"
+        _delete_elem: PAGE_delete_elem_input,
+        "delete key/value pair or string element. key/value pairs are matched based on their key value"
+        _delete_key: PAGE_delete_key_input,
         "increments the integer columns with given value of the filtered values"
         _inc: PAGE_inc_input,
+        "prepend existing jsonb value of filtered columns with new jsonb value"
+        _prepend: PAGE_prepend_input,
         "sets the columns of the filtered rows to the given values"
         _set: PAGE_set_input,
         pk_columns: PAGE_pk_columns_input!
@@ -1322,7 +1342,7 @@ scalar bigint
 
 scalar date
 
-scalar json
+scalar jsonb
 
 scalar xml
 
@@ -1498,6 +1518,11 @@ input PAGE_aggregate_order_by {
     variance: PAGE_variance_order_by
 }
 
+"append existing jsonb value of filtered columns with new jsonb value"
+input PAGE_append_input {
+    definition: jsonb
+}
+
 "input type for inserting array relation for remote table \"PAGE\""
 input PAGE_arr_rel_insert_input {
     data: [PAGE_insert_input!]!
@@ -1515,11 +1540,26 @@ input PAGE_bool_exp {
     _and: [PAGE_bool_exp]
     _not: PAGE_bool_exp
     _or: [PAGE_bool_exp]
-    definition: json_comparison_exp
+    definition: jsonb_comparison_exp
     id: bigint_comparison_exp
     modify_date: date_comparison_exp
     name: String_comparison_exp
     project_id: bigint_comparison_exp
+}
+
+"delete the field or element with specified path (for JSON arrays, negative integers count from the end)"
+input PAGE_delete_at_path_input {
+    definition: [String]
+}
+
+"delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array"
+input PAGE_delete_elem_input {
+    definition: Int
+}
+
+"delete key/value pair or string element. key/value pairs are matched based on their key value"
+input PAGE_delete_key_input {
+    definition: String
 }
 
 "input type for incrementing integer column in table \"PAGE\""
@@ -1530,7 +1570,7 @@ input PAGE_inc_input {
 
 "input type for inserting data into table \"PAGE\""
 input PAGE_insert_input {
-    definition: json
+    definition: jsonb
     id: bigint
     modify_date: date
     name: String
@@ -1580,9 +1620,14 @@ input PAGE_pk_columns_input {
     id: bigint!
 }
 
+"prepend existing jsonb value of filtered columns with new jsonb value"
+input PAGE_prepend_input {
+    definition: jsonb
+}
+
 "input type for updating data in table \"PAGE\""
 input PAGE_set_input {
-    definition: json
+    definition: jsonb
     id: bigint
     modify_date: date
     name: String
@@ -2202,17 +2247,27 @@ input date_comparison_exp {
     _nin: [date!]
 }
 
-"expression to compare columns of type json. All fields are combined with logical 'AND'."
-input json_comparison_exp {
-    _eq: json
-    _gt: json
-    _gte: json
-    _in: [json!]
+"expression to compare columns of type jsonb. All fields are combined with logical 'AND'."
+input jsonb_comparison_exp {
+    "is the column contained in the given json value"
+    _contained_in: jsonb
+    "does the column contain the given json value at the top level"
+    _contains: jsonb
+    _eq: jsonb
+    _gt: jsonb
+    _gte: jsonb
+    "does the string exist as a top-level key in the column"
+    _has_key: String
+    "do all of these strings exist as top-level keys in the column"
+    _has_keys_all: [String!]
+    "do any of these strings exist as top-level keys in the column"
+    _has_keys_any: [String!]
+    _in: [jsonb!]
     _is_null: Boolean
-    _lt: json
-    _lte: json
-    _neq: json
-    _nin: [json!]
+    _lt: jsonb
+    _lte: jsonb
+    _neq: jsonb
+    _nin: [jsonb!]
 }
 
 "expression to compare columns of type xml. All fields are combined with logical 'AND'."

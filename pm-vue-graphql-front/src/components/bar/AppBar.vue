@@ -13,7 +13,7 @@
         <template v-slot:activator="{ on, attrs }">
           <v-btn v-bind="attrs" v-on="on">
             {{ i18n('user.user') }}
-            <v-icon class="ml-4">fa-user-circle</v-icon>
+            <v-icon class="ml-4" small>fa-user-circle</v-icon>
           </v-btn>
         </template>
         <v-list class="pa-4">

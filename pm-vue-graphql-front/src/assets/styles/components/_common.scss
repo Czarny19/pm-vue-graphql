@@ -13,3 +13,8 @@
   border-radius: 40px;
   color: white;
 }
+
+.overflow-elipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

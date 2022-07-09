@@ -8,33 +8,14 @@
         @openeditor="openEditor">
     </CanvasMenu>
 
-    <template v-else>
-      <CanvasTopBar :project="project"/>
-
-      <v-container fluid class="pa-0">
-        <v-row no-gutters>
-          <v-col cols="2">
-            <CanvasWidgets/>
-          </v-col>
-          <v-col cols="8">
-            <CanvasDisplay :current-page="currentPage" @setActive="setActive"/>
-          </v-col>
-          <v-col cols="2">
-            <CanvasProperties :widget="activeWidget"/>
-          </v-col>
-        </v-row>
-      </v-container>
-    </template>
+    <CanvasEditor v-else :project="project" :page-id="pageId" @closeeditor="closeEditor"/>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import CanvasTopBar from "@/views/canvas/components/editor/CanvasTopBar.vue";
-import CanvasWidgets from "@/views/canvas/components/editor/CanvasWidgets.vue";
-import CanvasDisplay from "@/views/canvas/components/editor/CanvasDisplay.vue";
-import CanvasProperties from "@/views/canvas/components/editor/CanvasProperties.vue";
-import CanvasMenu from "@/views/canvas/components/menu/CanvasMenu.vue";
+import CanvasMenu from "@/views/canvas/component/menu/CanvasMenu.vue";
+import CanvasEditor from "@/views/canvas/component/editor/CanvasEditor.vue";
 import {CURRENT_USER} from "@/graphql/queries/user";
 import {GET_PROJECT_BY_ID} from "@/graphql/queries/project";
 import {GET_THEME_BY_ID} from "@/graphql/queries/theme";
@@ -42,31 +23,24 @@ import {GET_DATA_SOURCE_BY_ID} from "@/graphql/queries/data_source";
 
 export default Vue.extend({
   name: 'CanvasPage',
-  components: {CanvasMenu, CanvasProperties, CanvasDisplay, CanvasWidgets, CanvasTopBar},
+  components: {CanvasEditor, CanvasMenu},
   data() {
     return {
+      projectId: -1,
+      pageId: -1,
       project: {},
       theme: {},
-      datasource: {},
-      activeWidget: {},
-      pageId: -1
-    }
-  },
-  computed: {
-    currentPage() {
-      return {
-        id: 'el0',
-        title: 'Page',
-        children: []
-      }
+      datasource: {}
     }
   },
   methods: {
-    setActive(widget: any) {
-      this.activeWidget = widget
+    openEditor(pageId: string): void {
+      this.$router.push({name: 'Canvas', params: {projectId: this.projectId.toString(), pageId: pageId}})
+      this.pageId = Number(pageId)
     },
-    openEditor(pageId: number): void {
-      this.pageId = pageId
+    closeEditor(): void {
+      this.$router.back()
+      this.pageId = -1
     }
   },
   apollo: {
@@ -75,15 +49,15 @@ export default Vue.extend({
     },
     PROJECT: {
       query: GET_PROJECT_BY_ID,
-      variables() {
+      variables(): { id: number } {
         return {
-          id: this.$route.params.projectId
+          id: this.projectId
         }
       },
-      skip() {
+      skip(): boolean {
         return !this.currentUser
       },
-      result({data}) {
+      result({data}): void {
         this.project = data.PROJECT[0]
       },
     },
@@ -117,6 +91,10 @@ export default Vue.extend({
         this.datasource = data.DATA_SOURCE[0]
       }
     }
+  },
+  beforeMount() {
+    this.projectId = Number(this.$route.params.projectId)
+    this.pageId = this.$route.params.pageId ? Number(this.$route.params.pageId) : -1
   }
 })
 </script>

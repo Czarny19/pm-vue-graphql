@@ -31,3 +31,7 @@ export type Colors = {
     text_color_2: string;
     background_color: string;
 }
+
+export type AppWidget = {
+    id: number;
+}

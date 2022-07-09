@@ -11,7 +11,7 @@ Vue.use(VueRouter)
 
 const routes = [
     {name: 'Dashboard', path: '/dashboard', component: DashboardPage},
-    {name: 'Canvas', path: '/project/canvas/:projectId', component: CanvasPage, beforeEnter: authGuard},
+    {name: 'Canvas', path: '/project/canvas/project=:projectId&page=:pageId?', component: CanvasPage, beforeEnter: authGuard},
     {name: 'NewProject', path: '/project/new', component: ProjectPage, beforeEnter: authGuard},
     {name: 'Project', path: '/project/:projectId', component: ProjectPage, beforeEnter: authGuard},
     {name: 'NewTheme', path: '/theme/new', component: ThemePage, beforeEnter: authGuard},

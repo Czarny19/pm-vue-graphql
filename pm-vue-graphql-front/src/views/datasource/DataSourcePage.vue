@@ -18,7 +18,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import DataSourceForm from "@/views/datasource/components/DataSourceForm.vue";
+import DataSourceForm from "@/views/datasource/component/DataSourceForm.vue";
 import LoadingDialog from "@/components/dialog/LoadingDialog.vue";
 import TitleCard from "@/components/card/TitleCard.vue";
 
