@@ -27,8 +27,10 @@
 // @ts-nocheck
 
 import Vue from "vue";
-import {AppWidget, AppWidgetProp} from "@/plugins/types";
 import AppSnackbar from "@/components/snackbar/AppSnackbar.vue";
+import {AppWidget, AppWidgetProp} from "@/plugins/types";
+import {getCssProps} from "./canvas-widget";
+
 
 export default Vue.extend({
   name: 'CanvasWidgetContainer',
@@ -39,34 +41,17 @@ export default Vue.extend({
   },
   data() {
     return {
-      container: {children: []},
+      container: {children: [], allowedChildren: []},
       errSnackbar: false,
       errSnackbarMsg: ''
     }
   },
   computed: {
-    themeColors(): string [] {
-      return ['primary_color', 'secondary_color', 'accent_color', 'info_color',
-        'success_color', 'error_color', 'text_color_1', 'text_color_2', 'background_color']
-    },
-    groups(): [] {
-      return this.widget ? (this.widget as AppWidget).propGroups : []
-    },
-    cssProps(): { [x: string]: string; }[] {
-      let props: AppWidgetProp[] = []
-
-      this.groups.forEach((group: { props: AppWidgetProp }) => props = props.concat(group.props))
-
-      return props.map((prop: AppWidgetProp) => {
-        if (prop.type === 'Color' && this.themeColors.includes(prop.value)) {
-          return {[prop.id]: this.theme[prop.value]}
-        }
-
-        return {[prop.id]: prop.value + (prop.unit ?? '')}
-      })
-    },
     appWidget(): AppWidget {
       return this.widget as AppWidget
+    },
+    cssProps(): ({ [p: string]: string })[]{
+      return getCssProps(this.appWidget, this.theme)
     }
   },
   methods: {
@@ -78,11 +63,11 @@ export default Vue.extend({
         const widget = JSON.parse(dataTransfer!.getData('widget'));
         const allowedChildren = this.container.allowedChildren;
 
-        if (allowedChildren && !allowedChildren.includes(widget.title)) {
+        if (allowedChildren && !(allowedChildren as string[]).includes(widget.label)) {
           const msg = this.$t('canvas.unsupportedElementMsg').toString()
 
           this.errSnackbar = true
-          this.errSnackbarMsg = msg + this.widget.title + ': ' + allowedChildren
+          this.errSnackbarMsg = msg + this.widget.label + ': ' + allowedChildren
           return
         }
 

@@ -1,14 +1,13 @@
 <template>
   <div>
-    <div class="text-start text-body-2 secondary pa-4" @click="setActive(appWidget)">
+    <div class="text-start text-body-2 secondary pa-4">
       {{ widget.id }}
     </div>
 
     <div
-        class="canvas__editor--element pa-4"
+        class="pa-4"
         :style="{'background-color': theme.background_color}"
         @drop.self="onDrop"
-        @click.self="setActive(appWidget)"
         @dragover.prevent
         @dragenter.prevent
         @click.prevent>

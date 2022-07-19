@@ -10,9 +10,9 @@
           "props": [
             {
               "id": "border-style",
-              "value": "",
+              "value": "none",
               "label": "Styl",
-              "type": "TODO"
+              "type": "Border"
             },
             {
               "id": "border-width",

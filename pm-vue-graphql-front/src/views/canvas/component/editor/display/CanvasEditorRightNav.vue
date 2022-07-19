@@ -35,10 +35,18 @@
                   <PropertyString :key="prop.id" v-if="prop.type === 'String'" :prop="prop"/>
                   <PropertySize :key="prop.id" v-else-if="prop.type === 'Size'" :prop="prop"/>
                   <PropertyColor :key="prop.id" v-else-if="prop.type === 'Color'" :prop="prop" :theme="theme"/>
+                  <PropertyBorder :key="prop.id" v-else-if="prop.type === 'Border'" :prop="prop"/>
                 </template>
               </v-expansion-panel-content>
             </v-expansion-panel>
           </v-expansion-panels>
+        </v-row>
+
+        <v-row class="pa-1 pt-4">
+          <v-btn color="error" block @click="deleteComponent">
+            {{ i18n('canvas.deleteComponent') }}
+            <v-icon small class="pl-6">fa-trash-can</v-icon>
+          </v-btn>
         </v-row>
       </v-container>
     </div>
@@ -50,10 +58,11 @@ import Vue from "vue";
 import PropertyString from "@/views/canvas/component/editor/property/PropertyString.vue";
 import PropertySize from "@/views/canvas/component/editor/property/PropertySize.vue";
 import PropertyColor from "@/views/canvas/component/editor/property/PropertyColor.vue";
+import PropertyBorder from "@/views/canvas/component/editor/property/PropertyBorder.vue";
 
 export default Vue.extend({
   name: 'CanvasEditorRightNav',
-  components: {PropertyColor, PropertySize, PropertyString},
+  components: {PropertyBorder, PropertyColor, PropertySize, PropertyString},
   props: {
     widget: Object,
     theme: Object
@@ -72,13 +81,19 @@ export default Vue.extend({
     }
   },
   watch: {
-    widget(): void {
-      this.currentWidget = this.widget
+    widget: {
+      handler() {
+        this.currentWidget = this.widget
+      },
+      deep: true
     }
   },
   methods: {
     i18n(key: string): string {
       return this.$t(key).toString()
+    },
+    deleteComponent(): void {
+      this.$emit('delete')
     }
   }
 })

@@ -32,7 +32,7 @@
           </CanvasEditorDisplay>
         </v-col>
         <v-col v-if="rightNavShown" cols="2" class="text-end">
-          <CanvasEditorRightNav :widget="activeWidget" :theme="theme"/>
+          <CanvasEditorRightNav :widget="activeWidget" :theme="theme" @delete="removeWidget(page.definition)"/>
         </v-col>
       </v-row>
     </v-container>
@@ -144,6 +144,16 @@ export default Vue.extend({
       const leftCols = this.leftNavShown ? 3 : 0
       const rightCols = this.rightNavShown ? 2 : 0
       this.editorCols = 12 - leftCols - rightCols
+    },
+    removeWidget(parent: { children: [] }): void {
+      parent.children.forEach((child, index) => {
+        if (child == this.activeWidget) {
+          parent.children.splice(index, 1)
+          return
+        }
+
+        this.removeWidget(child)
+      })
     }
   },
   apollo: {

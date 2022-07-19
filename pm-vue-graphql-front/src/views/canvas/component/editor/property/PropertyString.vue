@@ -11,8 +11,10 @@
   </v-container>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from "vue";
+
+export default Vue.extend({
   name: 'PropertyString',
   props: {
     prop: Object
@@ -25,7 +27,7 @@ export default {
   async beforeMount() {
     this.currentProp = this.prop
   }
-}
+})
 </script>
 
 <style scoped>

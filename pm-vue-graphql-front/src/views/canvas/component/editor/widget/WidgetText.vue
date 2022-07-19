@@ -4,43 +4,24 @@
 
 <script lang="ts">
 import Vue from "vue";
-import {AppWidget, AppWidgetProp} from "@/plugins/types";
+import {AppWidget} from "@/plugins/types";
+import {getArgsProps, getCssProps} from "@/views/canvas/component/editor/widget/canvas-widget";
 
 export default Vue.extend({
   name: 'WidgetText',
   props: {
-    widget: Object
+    widget: Object,
+    theme: Object
   },
   computed: {
-    propGroups(): [] {
-      return this.widget ? (this.widget as AppWidget).propGroups : []
-    },
-    cssProps(): { [x: string]: string; }[] {
-      let cssProps: AppWidgetProp[] = []
-
-      this.propGroups
-          .filter((group: { type: string }) => group.type === 'css')
-          .forEach((group: { props: AppWidgetProp }) => cssProps = cssProps.concat(group.props))
-
-      return cssProps.map((prop: AppWidgetProp) => {
-        return {[prop.id]: prop.value}
-      })
-    },
-    argsProps(): { [k: string]: string } {
-      let argsProps: AppWidgetProp[] = []
-
-      this.propGroups
-          .filter((group: { type: string }) => group.type === 'args')
-          .forEach((group: { props: AppWidgetProp }) => argsProps = argsProps.concat(group.props))
-
-      let argsObject: { [k: string]: string } = {}
-
-      argsProps.forEach((prop: AppWidgetProp) => argsObject[prop.id] = prop.value)
-
-      return argsObject
-    },
     appWidget(): AppWidget {
       return this.widget as AppWidget
+    },
+    cssProps(): ({ [p: string]: string })[] {
+      return getCssProps(this.appWidget, this.theme)
+    },
+    argsProps(): { [k: string]: string } {
+      return getArgsProps(this.appWidget)
     }
   },
   methods: {

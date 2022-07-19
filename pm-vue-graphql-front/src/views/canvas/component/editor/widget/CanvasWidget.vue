@@ -1,9 +1,9 @@
 <template>
   <CanvasWidgetContainer v-if="widget.type === 'Container'" :widget="widget" :theme="theme" @activewidget="setActive"/>
-  <CanvasWidgetRow v-else-if="widget.type === 'Row'" :widget="widget" @activewidget="setActive"/>
-  <CanvasWidgetColumn v-else-if="widget.type === 'Column'" :widget="widget" @activewidget="setActive"/>
-  <WidgetText v-else-if="widget.type === 'Text'" :widget="widget" @activewidget="setActive"/>
-  <WidgetTextField v-else-if="widget.type === 'Text-Field'" :widget="widget" @activewidget="setActive"/>
+  <CanvasWidgetRow v-else-if="widget.type === 'Row'" :widget="widget" :theme="theme" @activewidget="setActive"/>
+  <CanvasWidgetColumn v-else-if="widget.type === 'Column'" :widget="widget" :theme="theme" @activewidget="setActive"/>
+  <WidgetText v-else-if="widget.type === 'Text'" :widget="widget" :theme="theme" @activewidget="setActive"/>
+  <WidgetTextField v-else-if="widget.type === 'Text-Field'" :widget="widget" :theme="theme" @activewidget="setActive"/>
 </template>
 
 <script lang="ts">

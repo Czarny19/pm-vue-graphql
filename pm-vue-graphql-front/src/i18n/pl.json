@@ -147,6 +147,7 @@
     "saving": "Zapisywanie ekranu...",
     "hide": "Ukryj",
     "show": "Pokaż",
-    "unsupportedElementMsg": "Niedozwolony zagnieżdżony komponent. Dozwolone komponenty dla "
+    "unsupportedElementMsg": "Niedozwolony zagnieżdżony komponent. Dozwolone komponenty dla ",
+    "deleteComponent": "Usuń komponent"
   }
 }

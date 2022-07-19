@@ -11,12 +11,11 @@
     }
 
     &--element {
-      border: 2px black solid;
       min-height: 20px;
     }
 
     &--element:hover {
-      border: 2px red solid;
+      border: 2px darkred solid !important;
     }
 
     &--row {
