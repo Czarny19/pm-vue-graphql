@@ -39,9 +39,9 @@
             <ThemePreview :colors="colors(index)"/>
           </v-tooltip>
 
-          <v-divider></v-divider>
+          <v-divider class="ml-4 mr-4"></v-divider>
 
-          <v-container fluid class="pa-0 pt-4">
+          <v-container fluid class="pa-4">
             <v-row no-gutters>
               <v-col cols="6" class="text-start">
                 <IconButton
@@ -86,7 +86,7 @@ import IconButton from "@/components/button/IconButton.vue";
 import ThemePreview from "@/components/theme/ThemePreview.vue";
 import InfoDialog from "@/components/dialog/InfoDialog.vue";
 import {CURRENT_USER} from "@/graphql/queries/user";
-import {DELETE_THEME, GET_USER_THEMES_QUERY} from "@/graphql/queries/theme";
+import {DELETE_THEME, GET_USER_THEMES} from "@/graphql/queries/theme";
 import {GET_PROJECTS_WITH_THEME} from "@/graphql/queries/project";
 import {Colors} from "@/plugins/types";
 
@@ -156,7 +156,7 @@ export default Vue.extend({
       query: CURRENT_USER
     },
     THEME: {
-      query: GET_USER_THEMES_QUERY,
+      query: GET_USER_THEMES,
       fetchPolicy: 'network-only',
       variables(): { userId: number } {
         return {

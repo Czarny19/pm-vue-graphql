@@ -1,136 +1,152 @@
 {
   "widgets": [
     {
-      "id": "",
-      "type": "Page",
-      "title": "Strona",
-      "icon": "fa-th",
-      "children": [],
-      "props": [
+      "type": "Common",
+      "propGroups": [
         {
-          "title": "Page"
+          "id": "border",
+          "label": "Obramowanie",
+          "type": "css",
+          "props": [
+            {
+              "id": "border-style",
+              "value": "",
+              "label": "Styl",
+              "type": "TODO"
+            },
+            {
+              "id": "border-width",
+              "value": "0",
+              "unit": "px",
+              "label": "Szerokość",
+              "type": "Size"
+            },
+            {
+              "id": "border-color",
+              "value": "",
+              "label": "Kolor",
+              "type": "Color"
+            }
+          ]
+        },
+        {
+          "id": "padding",
+          "label": "Padding",
+          "type": "css",
+          "props": [
+            {
+              "id": "padding-top",
+              "value": "0",
+              "unit": "px",
+              "label": "Góra",
+              "type": "Size"
+            },
+            {
+              "id": "padding-bottom",
+              "value": "0",
+              "unit": "px",
+              "label": "Dół",
+              "type": "Size"
+            },
+            {
+              "id": "padding-left",
+              "value": "0",
+              "unit": "px",
+              "label": "Lewy",
+              "type": "Size"
+            },
+            {
+              "id": "padding-right",
+              "value": "0",
+              "unit": "px",
+              "label": "Prawy",
+              "type": "Size"
+            }
+          ]
+        },
+        {
+          "id": "margin",
+          "label": "Margines",
+          "type": "css",
+          "props": [
+            {
+              "id": "margin-top",
+              "value": "auto",
+              "unit": "auto",
+              "label": "Góra",
+              "type": "Size"
+            },
+            {
+              "id": "margin-bottom",
+              "value": "auto",
+              "unit": "auto",
+              "label": "Dół",
+              "type": "Size"
+            },
+            {
+              "id": "margin-left",
+              "value": "auto",
+              "unit": "auto",
+              "label": "Lewy",
+              "type": "Size"
+            },
+            {
+              "id": "margin-right",
+              "value": "auto",
+              "unit": "auto",
+              "label": "Prawy",
+              "type": "Size"
+            }
+          ]
         }
       ]
     },
     {
       "id": "",
+      "type": "Page",
+      "label": "Strona",
+      "icon": "fa-th",
+      "children": []
+    },
+    {
+      "id": "",
       "type": "Container",
-      "title": "Kontener",
+      "label": "Kontener",
       "icon": "fa-table",
       "children": [],
+      "allowedChildren": ["Wiersz"],
       "propGroups": [
         {
           "id": "colors",
+          "label": "Kolor",
+          "type": "css",
           "props": [
             {
               "id": "background-color",
-              "value": "#FFFFFF",
-              "type": "CSS",
-              "dataType": "String"
-            }
-          ]
-        },
-        {
-          "id": "border",
-          "props": [
-            {
-              "id": "border-top",
-              "value": "auto",
-              "type": "CSS",
-              "dataType": "String"
-            },
-            {
-              "id": "border-bottom",
-              "value": "auto",
-              "type": "CSS",
-              "dataType": "String"
-            },
-            {
-              "id": "border-left",
-              "value": "auto",
-              "type": "CSS",
-              "dataType": "String"
-            },
-            {
-              "id": "border-right",
-              "value": "auto",
-              "type": "CSS",
-              "dataType": "String"
-            }
-          ]
-        },
-        {
-          "id": "paddings",
-          "props": [
-            {
-              "id": "padding-top",
-              "value": "auto",
-              "type": "CSS",
-              "dataType": "String"
-            },
-            {
-              "id": "padding-bottom",
-              "value": "auto",
-              "type": "CSS",
-              "dataType": "String"
-            },
-            {
-              "id": "padding-left",
-              "value": "auto",
-              "type": "CSS",
-              "dataType": "String"
-            },
-            {
-              "id": "padding-right",
-              "value": "auto",
-              "type": "CSS",
-              "dataType": "String"
-            }
-          ]
-        },
-        {
-          "id": "margins",
-          "props": [
-            {
-              "id": "margin-top",
-              "value": "auto",
-              "type": "CSS",
-              "dataType": "String"
-            },
-            {
-              "id": "margin-bottom",
-              "value": "auto",
-              "type": "CSS",
-              "dataType": "String"
-            },
-            {
-              "id": "margin-left",
-              "value": "auto",
-              "type": "CSS",
-              "dataType": "String"
-            },
-            {
-              "id": "margin-right",
-              "value": "auto",
-              "type": "CSS",
-              "dataType": "String"
+              "value": "background_color",
+              "label": "Tło",
+              "type": "Color"
             }
           ]
         },
         {
           "id": "dimensions",
+          "label": "Wymiary",
+          "type": "css",
           "props": [
             {
               "id": "min-height",
-              "value": "100px",
-              "type": "CSS",
-              "dataType": "String"
+              "value": "100",
+              "unit": "px",
+              "label": "Min. wysokość",
+              "type": "Size"
             },
             {
               "id": "height",
               "value": "",
-              "type": "CSS",
-              "dataType": "String"
+              "unit": "px",
+              "label": "Wysokość",
+              "type": "Size"
             }
           ]
         }
@@ -139,131 +155,70 @@
     {
       "id": "",
       "type": "Row",
-      "title": "Wiersz",
+      "label": "Wiersz",
       "icon": "fa-table-columns fa-rotate-270",
       "children": [],
-      "props": [
-        {
-          "id": "background-color",
-          "value": "#FFFFFF",
-          "type": "CSS",
-          "dataType": "String"
-        },
-        {
-          "id": "padding-top",
-          "value": "auto",
-          "type": "CSS",
-          "dataType": "String"
-        },
-        {
-          "id": "padding-bottom",
-          "value": "auto",
-          "type": "CSS",
-          "dataType": "String"
-        },
-        {
-          "id": "padding-left",
-          "value": "auto",
-          "type": "CSS",
-          "dataType": "String"
-        },
-        {
-          "id": "padding-right",
-          "value": "auto",
-          "type": "CSS",
-          "dataType": "String"
-        },
-        {
-          "id": "min-height",
-          "value": "100px",
-          "type": "CSS",
-          "dataType": "String"
-        }
-      ]
+      "allowedChildren": ["Kolumna"],
+      "propGroups": []
     },
     {
       "id": "",
       "type": "Column",
-      "title": "Kolumna",
+      "label": "Kolumna",
       "icon": "fa-table-columns",
       "children": [],
-      "props": [
-        {
-          "id": "background-color",
-          "value": "#FFFFFF",
-          "type": "CSS",
-          "dataType": "String"
-        },
-        {
-          "id": "padding-top",
-          "value": "auto",
-          "type": "CSS",
-          "dataType": "String"
-        },
-        {
-          "id": "padding-bottom",
-          "value": "auto",
-          "type": "CSS",
-          "dataType": "String"
-        },
-        {
-          "id": "padding-left",
-          "value": "auto",
-          "type": "CSS",
-          "dataType": "String"
-        },
-        {
-          "id": "padding-right",
-          "value": "auto",
-          "type": "CSS",
-          "dataType": "String"
-        },
-        {
-          "id": "min-height",
-          "value": "100px",
-          "type": "CSS",
-          "dataType": "String"
-        }
-      ]
+      "propGroups": []
     },
     {
       "id": "",
       "type": "Button",
-      "title": "Przycisk",
+      "label": "Przycisk",
       "icon": "fa-caret-square-right",
       "children": [],
-      "props": [
-        {
-          "title": "Page",
-          "background-color": "#FFFFFF"
-        }
-      ]
+      "propGroups": []
     },
     {
       "id": "",
       "type": "Text",
-      "title": "Tekst",
+      "label": "Tekst",
       "icon": "fa-quote-right",
       "children": [],
-      "props": [
+      "propGroups": [
         {
-          "title": "Page",
-          "background-color": "#FFFFFF"
+          "id": "main",
+          "label": "Właściwości",
+          "type": "args",
+          "props": [
+            {
+              "id": "text",
+              "value": "",
+              "label": "Tekst",
+              "type": "String"
+            }
+          ]
+        },
+        {
+          "id": "colors",
+          "label": "Kolor",
+          "type": "css",
+          "props": [
+            {
+              "id": "background-color",
+              "value": "background_color",
+              "label": "Tło",
+              "type": "Color"
+            }
+          ]
         }
       ]
     },
     {
       "id": "",
       "type": "Text-Field",
-      "title": "Pole tekstowe",
+      "label": "Pole tekstowe",
       "icon": "fa-keyboard",
       "children": [],
-      "props": [
-        {
-          "title": "Page",
-          "background-color": "#FFFFFF"
-        }
-      ]
+      "propGroups": []
     }
   ]
 }

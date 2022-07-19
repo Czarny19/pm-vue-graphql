@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="full-height">
     <CanvasMenu
         v-if="pageId === -1"
         :project="project"
@@ -8,7 +8,7 @@
         @openeditor="openEditor">
     </CanvasMenu>
 
-    <CanvasEditor v-else :project="project" :page-id="pageId" @closeeditor="closeEditor"/>
+    <CanvasEditor v-else :project="project" :theme="theme" :page-id="pageId" @closeeditor="closeEditor"/>
   </div>
 </template>
 

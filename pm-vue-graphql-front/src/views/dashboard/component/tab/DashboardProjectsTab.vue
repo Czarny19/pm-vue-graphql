@@ -105,7 +105,7 @@ import DashboardTabNoData from "@/views/dashboard/component/tab/DashboardTabNoDa
 import IconButton from "@/components/button/IconButton.vue";
 import {DELETE_PROJECT, GET_USER_PROJECTS} from "@/graphql/queries/project";
 import {CURRENT_USER} from "@/graphql/queries/user";
-import {GET_USER_THEMES_QUERY} from "@/graphql/queries/theme";
+import {GET_USER_THEMES} from "@/graphql/queries/theme";
 import InfoDialog from "@/components/dialog/InfoDialog.vue";
 
 export default Vue.extend({
@@ -192,7 +192,7 @@ export default Vue.extend({
       },
     },
     THEME: {
-      query: GET_USER_THEMES_QUERY,
+      query: GET_USER_THEMES,
       fetchPolicy: 'network-only',
       variables(): { userId: number } {
         return {

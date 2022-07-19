@@ -1,10 +1,10 @@
 <template>
-  <v-navigation-drawer permanent clipped right height="90vh" width="100%" color="secondary">
+  <v-navigation-drawer permanent clipped right height="100%" width="100%" color="secondary">
     <v-container fluid class="primary pa-0">
       <v-row no-gutters>
         <v-col class="pa-1">
           <v-btn text block class="text-body-2 disable-events" @click.prevent>
-            {{ i18n('canvas.property') }}
+            {{ i18n('canvas.design') }}
           </v-btn>
         </v-col>
       </v-row>
@@ -15,29 +15,26 @@
     <div>
       <v-container fluid class="pa-4">
         <v-row class="text-start" v-if="widget">
-          <v-col class="ma-auto pa-2" cols="4">
-            <div class="canvas__editor--id-label">{{ $t('prop.id') }}:</div>
+          <v-col class="mt-auto" cols="3">
+            <div class="text-body-1">ID:</div>
           </v-col>
-          <v-col class="pa-2 canvas__editor--id-text-field">
-            <v-text-field outlined flat single-line hide-details v-model="currentWidget.id" height="30"></v-text-field>
+          <v-col>
+            <v-text-field color="accent" flat single-line dense hide-details v-model="currentWidget.id"/>
           </v-col>
         </v-row>
 
         <v-row>
           <v-expansion-panels class="pa-1" multiple>
-            <v-expansion-panel  v-for="(group) in groups" :key="group.id">
+            <v-expansion-panel v-for="(group) in groups" :key="group.id">
               <v-expansion-panel-header class="primary text-start pt-0 pb-0 pl-4 pr-4" expand-icon="fa-angle-down">
-                {{ mapIdToLabel(group.id) }}
+                {{ group.label }}
               </v-expansion-panel-header>
 
               <v-expansion-panel-content class="pt-1 text-start">
                 <template v-for="(prop) in group.props">
-                  <PropertyString
-                      :key="prop.id"
-                      v-if="prop.dataType === 'String'"
-                      :prop="prop"
-                      :label="mapIdToLabel(prop.id)">
-                  </PropertyString>
+                  <PropertyString :key="prop.id" v-if="prop.type === 'String'" :prop="prop"/>
+                  <PropertySize :key="prop.id" v-else-if="prop.type === 'Size'" :prop="prop"/>
+                  <PropertyColor :key="prop.id" v-else-if="prop.type === 'Color'" :prop="prop" :theme="theme"/>
                 </template>
               </v-expansion-panel-content>
             </v-expansion-panel>
@@ -51,12 +48,15 @@
 <script lang="ts">
 import Vue from "vue";
 import PropertyString from "@/views/canvas/component/editor/property/PropertyString.vue";
+import PropertySize from "@/views/canvas/component/editor/property/PropertySize.vue";
+import PropertyColor from "@/views/canvas/component/editor/property/PropertyColor.vue";
 
 export default Vue.extend({
   name: 'CanvasEditorRightNav',
-  components: {PropertyString},
+  components: {PropertyColor, PropertySize, PropertyString},
   props: {
-    widget: Object
+    widget: Object,
+    theme: Object
   },
   data() {
     return {
@@ -79,52 +79,6 @@ export default Vue.extend({
   methods: {
     i18n(key: string): string {
       return this.$t(key).toString()
-    },
-    mapIdToLabel(id) {
-      switch (id) {
-        case 'colors':
-          return this.$t('prop.colors')
-        case 'paddings':
-          return this.$t('prop.paddings')
-        case 'margins':
-          return this.$t('prop.margins')
-        case 'dimensions':
-          return this.$t('prop.dimensions')
-        case 'background-color' :
-          return this.$t('prop.bgColor')
-        case 'padding-top':
-          return this.$t('prop.pdTop')
-        case 'padding-bottom':
-          return this.$t('prop.pdBot')
-        case 'padding-left':
-          return this.$t('prop.pdLeft')
-        case 'padding-right':
-          return this.$t('prop.pdRight')
-        case 'height':
-          return this.$t('prop.height')
-        case 'min-height':
-          return this.$t('prop.minHeigth')
-        case 'margin-top':
-          return this.$t('prop.mrTop')
-        case 'margin-bottom':
-          return this.$t('prop.mrBot')
-        case 'margin-left':
-          return this.$t('prop.mrLeft')
-        case 'margin-right':
-          return this.$t('prop.mrRight')
-        case 'border':
-          return this.$t('prop.border')
-        case 'border-top':
-          return this.$t('prop.borderTop')
-        case 'border-bottom':
-          return this.$t('prop.borderBot')
-        case 'border-left':
-          return this.$t('prop.borderLeft')
-        case 'border-right':
-          return this.$t('prop.borderRight')
-        default:
-          return id
-      }
     }
   }
 })

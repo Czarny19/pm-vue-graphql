@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 200px">
+  <div class="card-loading">
     <v-progress-circular indeterminate color="accent" size="50" class="ml-auto mr-auto"/>
   </div>
 </template>

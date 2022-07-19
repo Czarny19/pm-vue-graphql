@@ -1,24 +1,21 @@
 <template>
-  <div>
-    <v-container class="pa-0 pt-2 pb-2">
-      <v-row>
-        <v-col class="ma-auto pl-0" cols="4">
-          <div class="canvas__editor--prop-label">{{ label }}:</div>
-        </v-col>
-        <v-col class="pa-2 canvas__editor--prop-text-field">
-          <v-text-field outlined flat single-line hide-details v-model="currentProp.value" height="30"></v-text-field>
-        </v-col>
-      </v-row>
-    </v-container>
-  </div>
+  <v-container class="pa-0 pt-2 pb-2">
+    <v-row>
+      <v-col class="ma-auto pl-0 pr-0" cols="3">
+        <div class="text-body-2">{{ prop.label }}:</div>
+      </v-col>
+      <v-col class="ml-1">
+        <v-text-field color="accent" flat single-line dense hide-details v-model="currentProp.value"/>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
 export default {
   name: 'PropertyString',
   props: {
-    prop: Object,
-    label: String
+    prop: Object
   },
   data() {
     return {

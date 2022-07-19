@@ -1,10 +1,10 @@
 <template>
-  <v-navigation-drawer permanent clipped height="90vh" width="100%" color="secondary">
+  <v-navigation-drawer permanent clipped height="100%" width="100%" color="secondary">
     <v-container fluid class="primary pa-0">
       <v-row no-gutters>
         <v-col class="pa-1">
           <v-btn text block class="text-body-2" :style="{'opacity': navTab === 0 ? '1.0' : '0.3'}" @click="setTab(0)">
-            {{ i18n('canvas.component') }}
+            {{ i18n('canvas.components') }}
           </v-btn>
         </v-col>
         <v-col class="pa-1">
@@ -25,13 +25,13 @@
           draggable="true"
           @dragstart="startDrag(widget, $event)">
 
-        <v-container>
+        <v-container v-if="widget.type !== 'Page'">
           <v-row>
             <v-col class="pa-1 ma-auto" cols="3">
               <v-icon>{{ widget.icon }}</v-icon>
             </v-col>
 
-            <v-col class="pa-2 ma-auto text-start" cols="8">{{ widget.title }}</v-col>
+            <v-col class="pa-2 ma-auto text-start" cols="8">{{ widget.label }}</v-col>
           </v-row>
         </v-container>
       </v-card>
@@ -56,7 +56,7 @@
 
         <template v-slot:label="{ item }">
           <div class="text-start text-body-2 pl-2 overflow-elipsis" @click="setActiveWidget(item)">
-            {{ item.id }} ({{ item.title }})
+            {{ item.id }} ({{ item.label }})
           </div>
         </template>
 
@@ -83,7 +83,11 @@ export default Vue.extend({
   },
   computed: {
     widgets() {
-      return lib.widgets.filter((widget) => widget.title !== 'Page')
+      return lib.widgets.filter((widget) => widget.type !== 'Page' && widget.type !== 'Common')
+    },
+    commonProps() {
+      const common = JSON.parse(JSON.stringify(lib.widgets.filter((widget) => widget.type === 'Common')))[0]
+      return common.propGroups
     }
   },
   methods: {
@@ -98,17 +102,19 @@ export default Vue.extend({
 
       const dataTransfer = evt?.dataTransfer;
 
+      const widgetJSON = JSON.parse(JSON.stringify(widget))
+      widgetJSON.propGroups.push(...this.commonProps)
+
       if (dataTransfer != null) {
         // eslint-disable-next-line
         dataTransfer!.dropEffect = 'move'
         // eslint-disable-next-line
         dataTransfer!.effectAllowed = 'move'
         // eslint-disable-next-line
-        dataTransfer!.setData('widget', JSON.stringify(widget))
+        dataTransfer!.setData('widget', JSON.stringify(widgetJSON))
       }
     },
     setActiveWidget(widget: AppWidget): void {
-      console.log(widget)
       this.$emit('activewidget', widget)
     }
   }

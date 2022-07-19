@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 
-export const GET_USER_DATA_SOURCES = gql`query getAllUserDataSources($userId: bigint!) {
+export const GET_USER_DATA_SOURCES = gql`query getUserDataSources($userId: bigint!) {
     DATA_SOURCE(where: {user_id: {_eq: $userId}}) {
         id
         name
@@ -38,7 +38,7 @@ export const ADD_DATA_SOURCE_FOR_USER = gql`mutation addDataSourceForUser(
     }
 }`
 
-export const UPDATE_DATA_SOURCE_BY_ID = gql`mutation updateDataSourceForId(
+export const UPDATE_DATA_SOURCE_BY_ID = gql`mutation updateDataSourceById(
     $id: bigint!,
     $name: String!,
     $address: String!,

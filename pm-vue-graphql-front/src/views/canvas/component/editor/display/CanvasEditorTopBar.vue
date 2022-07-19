@@ -17,6 +17,7 @@
     </IconButton>
 
     <IconButton
+        v-if="rejectVisible"
         class="mr-4"
         :label="i18n('canvas.rejectChanges')"
         icon="fa-trash-can"
@@ -50,7 +51,8 @@ export default Vue.extend({
   components: {IconButton},
   props: {
     projectName: String,
-    pageName: String
+    pageName: String,
+    rejectVisible: Boolean
   },
   methods: {
     i18n(key: string): string {
@@ -60,11 +62,10 @@ export default Vue.extend({
       this.$emit('closeeditor')
     },
     save(): void {
-      // TODO
-      console.log('save')
+      this.$emit('save')
     },
     rejectChanges(): void {
-      console.log('reject')
+      this.$emit('reject')
     },
     importPage(): void {
       console.log('import')

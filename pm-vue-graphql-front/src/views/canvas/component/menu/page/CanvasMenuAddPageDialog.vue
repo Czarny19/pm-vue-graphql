@@ -77,8 +77,7 @@ export default Vue.extend({
         this.isOpen = false
         this.$emit('refresh')
         this.$emit('close')
-      }).catch((e) => {
-        console.log(e)
+      }).catch(() => {
         this.isOpen = false
         this.$emit('close')
       })

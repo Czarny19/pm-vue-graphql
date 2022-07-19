@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 
-export const GET_USER_THEMES_QUERY = gql`query getAllUserThemes($userId: bigint!) {
+export const GET_USER_THEMES = gql`query getUserThemes($userId: bigint!) {
     THEME(where: {user_id: {_eq: $userId}}) {
         id
         name

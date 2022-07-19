@@ -10,7 +10,7 @@
     <DeleteConfirmationDialog :dialog="deleteDialog" @confirm="deletePage" @cancel="cancelDeletePage"/>
 
     <v-container fluid class="pa-4">
-      <TitleCard :title="i18n('canvas.page')" icon="fa-file"/>
+      <TitleCard :title="i18n('canvas.pages')" icon="fa-file"/>
 
       <v-card class="mt-4" v-if="loading" color="primary">
         <LoadingCircular/>

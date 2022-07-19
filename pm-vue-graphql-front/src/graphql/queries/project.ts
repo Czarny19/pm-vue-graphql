@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 
-export const GET_USER_PROJECTS = gql`query getAllUserProjects($userId: bigint!) {
+export const GET_USER_PROJECTS = gql`query getUserProjects($userId: bigint!) {
     PROJECT(where: {user_id: {_eq: $userId}}) {
         id
         name
@@ -59,7 +59,7 @@ export const ADD_PROJECT_FOR_USER = gql`mutation addProjectForUser(
     }
 }`
 
-export const UPDATE_PROJECT_BY_ID = gql`mutation updateThemeForId(
+export const UPDATE_PROJECT_BY_ID = gql`mutation updateProjectById(
     $id: bigint!,
     $name: String!,
     $description: String!,

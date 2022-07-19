@@ -123,7 +123,7 @@ import ColorReadOnlyList from "@/components/theme/ColorReadOnlyList.vue";
 import GraphQLConnectionTest from "@/components/graphql/GraphQLConnectionTest.vue";
 import {ADD_PROJECT_FOR_USER, GET_PROJECT_BY_ID, UPDATE_PROJECT_BY_ID} from "@/graphql/queries/project";
 import {CURRENT_USER} from "@/graphql/queries/user";
-import {GET_USER_THEMES_QUERY} from "@/graphql/queries/theme";
+import {GET_USER_THEMES} from "@/graphql/queries/theme";
 import {GET_USER_DATA_SOURCES} from "@/graphql/queries/data_source";
 import {DataSource, Theme} from "@/plugins/types";
 import {cryptoKey} from "@/main";
@@ -271,7 +271,7 @@ export default Vue.extend({
       }
     },
     THEME: {
-      query: GET_USER_THEMES_QUERY,
+      query: GET_USER_THEMES,
       fetchPolicy: 'network-only',
       variables(): { userId: number } {
         return {

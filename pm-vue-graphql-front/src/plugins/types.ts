@@ -34,4 +34,15 @@ export type Colors = {
 
 export type AppWidget = {
     id: number;
+    type: string;
+    children: [];
+    propGroups: [];
+}
+
+export type AppWidgetProp = {
+    id: string;
+    value: string;
+    unit?: string;
+    type: string;
+    dataType: string;
 }
