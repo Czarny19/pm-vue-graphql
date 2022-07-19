@@ -7,10 +7,12 @@
     <CanvasEditorTopBar
         :project-name="project.name"
         :page-name="page.name"
+        :page-definition="page.definition"
         :reject-visible="changesMade"
         @closeeditor="closeEditor"
         @save="save"
-        @reject="setRejectOpen">
+        @reject="setRejectOpen"
+        @import="importPage">
     </CanvasEditorTopBar>
 
     <LoadingCircular v-if="loading"/>
@@ -154,6 +156,9 @@ export default Vue.extend({
 
         this.removeWidget(child)
       })
+    },
+    importPage(importPage: JSON): void {
+      (this.page as { definition: JSON }).definition = importPage
     }
   },
   apollo: {
