@@ -148,6 +148,8 @@
     "hide": "Ukryj",
     "show": "Pokaż",
     "unsupportedElementMsg": "Niedozwolony zagnieżdżony komponent. Dozwolone komponenty dla ",
-    "deleteComponent": "Usuń komponent"
+    "deleteComponent": "Usuń komponent",
+    "preview": "Podgląd",
+    "closePreview": "Zamknij podgląd"
   }
 }

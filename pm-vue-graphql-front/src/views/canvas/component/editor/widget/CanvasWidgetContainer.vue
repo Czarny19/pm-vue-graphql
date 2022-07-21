@@ -6,12 +6,9 @@
       @click.self="setActive(appWidget)"
       @dragover.prevent
       @dragenter.prevent
-      @click.prevent
-      :style="cssProps">
+      @click.prevent>
 
-    <div class="mb-2 secondary text-body-2 text-start pa-2" @click="setActive(appWidget)">
-      {{ widget.id }} :: {{ widget.type }}
-    </div>
+    <CanvasWidgetHeader :widget="widget" @activewidget="setActive" @move="move"/>
 
     <template v-for="(child) in widget.children">
       <CanvasWidget class="ma-3" :widget="child" :key="child.name" @activewidget="setActive"/>
@@ -28,17 +25,17 @@
 
 import Vue from "vue";
 import AppSnackbar from "@/components/snackbar/AppSnackbar.vue";
+import CanvasWidgetHeader from "@/views/canvas/component/editor/widget/CanvasWidgetHeader.vue";
 import {AppWidget, AppWidgetProp} from "@/plugins/types";
-import {getCssProps} from "./canvas-widget";
-
 
 export default Vue.extend({
   name: 'CanvasWidgetContainer',
-  components: {AppSnackbar, CanvasWidget: () => import( "@/views/canvas/component/editor/widget/CanvasWidget.vue")},
-  props: {
-    widget: Object,
-    theme: Object
+  components: {
+    CanvasWidgetHeader,
+    AppSnackbar,
+    CanvasWidget: () => import( "@/views/canvas/component/editor/widget/CanvasWidget.vue"),
   },
+  props: {widget: Object},
   data() {
     return {
       container: {children: [], allowedChildren: []},
@@ -49,9 +46,6 @@ export default Vue.extend({
   computed: {
     appWidget(): AppWidget {
       return this.widget as AppWidget
-    },
-    cssProps(): ({ [p: string]: string })[]{
-      return getCssProps(this.appWidget, this.theme)
     }
   },
   methods: {
@@ -76,6 +70,9 @@ export default Vue.extend({
     },
     setActive(widget: AppWidget): void {
       this.$emit('activewidget', widget)
+    },
+    move(up: boolean): void {
+      this.$emit('move', up)
     }
   },
   beforeMount() {

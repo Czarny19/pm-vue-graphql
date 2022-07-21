@@ -11,6 +11,24 @@
     <v-spacer></v-spacer>
 
     <IconButton
+        v-if="previewOpen"
+        class="mr-4"
+        :label="i18n('canvas.closePreview')"
+        icon="fa-eye"
+        color="error"
+        @click="switchPreview">
+    </IconButton>
+
+    <IconButton
+        v-else
+        class="mr-4"
+        :label="i18n('canvas.preview')"
+        icon="fa-eye"
+        color="primary"
+        @click="switchPreview">
+    </IconButton>
+
+    <IconButton
         class="mr-4"
         :label="i18n('common.save')"
         icon="fa-save"
@@ -55,14 +73,18 @@ export default Vue.extend({
     projectName: String,
     pageName: String,
     pageDefinition: Object,
-    rejectVisible: Boolean
+    rejectVisible: Boolean,
+    previewOpen: Boolean
   },
   methods: {
     i18n(key: string): string {
       return this.$t(key).toString()
     },
-    closeEditor() {
+    closeEditor(): void {
       this.$emit('closeeditor')
+    },
+    switchPreview(): void {
+      this.$emit('swichpreview')
     },
     save(): void {
       this.$emit('save')

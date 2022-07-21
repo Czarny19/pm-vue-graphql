@@ -1,16 +1,13 @@
 <template>
   <v-text-field
-      class="canvas__editor--element"
-      :label="widget.id"
-      @click.self="setActive(appWidget)"
-      :style="cssProps">
+      :label="widget.id">
   </v-text-field>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import {AppWidget} from "@/plugins/types";
-import {getArgsProps, getCssProps} from "@/views/canvas/component/editor/widget/canvas-widget";
+import {getArgsProps, getCssProps} from "@/plugins/widget";
 
 export default Vue.extend({
   name: 'WidgetTextField',
@@ -27,11 +24,6 @@ export default Vue.extend({
     },
     argsProps(): { [k: string]: string } {
       return getArgsProps(this.appWidget)
-    }
-  },
-  methods: {
-    setActive(widget: AppWidget) {
-      this.$emit('activewidget', widget)
     }
   }
 })

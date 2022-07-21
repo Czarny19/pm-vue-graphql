@@ -17,7 +17,7 @@
       </v-card>
 
       <template v-else>
-        <v-card color="secondary" class="mt-3" @click="addPage">
+        <v-card color="primary" class="mt-3" @click="addPage">
           <v-container fluid class="pl-6 pr-6 pt-5 pb-5 text-start ma-auto">
             <v-icon class="mr-5">fa-circle-plus</v-icon>
             {{ i18n('canvas.addPage') }}

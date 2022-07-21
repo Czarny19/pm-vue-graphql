@@ -1,19 +1,18 @@
 <template>
   <div>
-    <div class="text-start text-body-2 secondary pa-4">
+    <div class="text-start text-body-1 secondary pa-4">
       {{ widget.id }}
     </div>
 
     <div
-        class="pa-4"
-        :style="{'background-color': theme.background_color}"
+        class="pa-4 accent"
         @drop.self="onDrop"
         @dragover.prevent
         @dragenter.prevent
         @click.prevent>
 
       <template v-for="(child) in widget.children">
-        <CanvasWidget :widget="child" :theme="theme" :key="child.name" @activewidget="setActive"/>
+        <CanvasWidget :widget="child" :key="child.name" @activewidget="setActive" @move="move"/>
       </template>
 
     </div>
@@ -27,21 +26,10 @@ import {AppWidget, AppWidgetProp} from "@/plugins/types";
 export default Vue.extend({
   name: 'CanvasWidgetPage',
   components: {CanvasWidget: () => import("@/views/canvas/component/editor/widget/CanvasWidget.vue")},
-  props: {
-    widget: Object,
-    theme: Object
-  },
+  props: {widget: Object},
   data() {
     return {
       page: {children: []}
-    }
-  },
-  computed: {
-    groups(): [] {
-      return this.widget ? (this.widget as AppWidget).propGroups : []
-    },
-    appWidget(): AppWidget {
-      return this.widget as AppWidget
     }
   },
   methods: {
@@ -56,6 +44,9 @@ export default Vue.extend({
     },
     setActive(widget: AppWidget) {
       this.$emit('activewidget', widget)
+    },
+    move(up: boolean): void {
+      this.$emit('move', up)
     }
   },
   beforeMount() {

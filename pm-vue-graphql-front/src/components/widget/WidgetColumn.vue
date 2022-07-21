@@ -1,14 +1,22 @@
 <template>
-  <div class="canvas__editor--element" :style="cssProps" @click.self="setActive(appWidget)">{{ argsProps.text }}</div>
+  <v-col :style="cssProps">
+    <template v-for="(child) in appWidget.children">
+      <BaseWidget :widget="child" :theme="theme" :key="child.name"/>
+    </template>
+  </v-col>
 </template>
 
 <script lang="ts">
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
+
 import Vue from "vue";
 import {AppWidget} from "@/plugins/types";
-import {getArgsProps, getCssProps} from "@/views/canvas/component/editor/widget/canvas-widget";
+import {getCssProps} from "@/plugins/widget";
 
 export default Vue.extend({
-  name: 'WidgetText',
+  name: 'WidgetColumn',
+  components: {BaseWidget: () => import("@/components/widget/BaseWidget.vue")},
   props: {
     widget: Object,
     theme: Object
@@ -19,16 +27,8 @@ export default Vue.extend({
     },
     cssProps(): ({ [p: string]: string })[] {
       return getCssProps(this.appWidget, this.theme)
-    },
-    argsProps(): { [k: string]: string } {
-      return getArgsProps(this.appWidget)
     }
   },
-  methods: {
-    setActive(widget: AppWidget) {
-      this.$emit('activewidget', widget)
-    }
-  }
 })
 </script>
 

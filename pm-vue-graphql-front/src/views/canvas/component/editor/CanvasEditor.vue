@@ -9,7 +9,9 @@
         :page-name="page.name"
         :page-definition="page.definition"
         :reject-visible="changesMade"
+        :preview-open="previewOpen"
         @closeeditor="closeEditor"
+        @swichpreview="switchPreview"
         @save="save"
         @reject="setRejectOpen"
         @import="importPage">
@@ -19,7 +21,7 @@
 
     <v-container v-else fluid class="pa-0">
       <v-row no-gutters>
-        <v-col v-if="leftNavShown" cols="3">
+        <v-col v-if="leftNavShown && !previewOpen" cols="3">
           <CanvasEditorLeftNav :page-definition="page.definition" @activewidget="setActiveWidget"/>
         </v-col>
         <v-col :cols="editorCols">
@@ -28,12 +30,14 @@
               :theme="theme"
               :left-nav-shown="leftNavShown"
               :right-nav-shown="rightNavShown"
+              :preview-open="previewOpen"
               @activewidget="setActiveWidget"
               @changeleftnav="changeLeftNavShown"
-              @changerightnav="changeRightNavShown">
+              @changerightnav="changeRightNavShown"
+              @move="(up) => moveWidget(up, page.definition)">
           </CanvasEditorDisplay>
         </v-col>
-        <v-col v-if="rightNavShown" cols="2" class="text-end">
+        <v-col v-if="rightNavShown && !previewOpen" cols="2" class="text-end">
           <CanvasEditorRightNav :widget="activeWidget" :theme="theme" @delete="removeWidget(page.definition)"/>
         </v-col>
       </v-row>
@@ -78,6 +82,7 @@ export default Vue.extend({
       changesMade: false,
       leftNavShown: true,
       rightNavShown: true,
+      previewOpen: false,
       editorCols: 7,
       page: {},
       activeWidget: {}
@@ -105,6 +110,10 @@ export default Vue.extend({
     },
     closeEditor(): void {
       this.$emit('closeeditor')
+    },
+    switchPreview(): void {
+      this.previewOpen = !this.previewOpen
+      this.calcDisplayCols()
     },
     save(): void {
       this.saving = true
@@ -143,6 +152,11 @@ export default Vue.extend({
       this.calcDisplayCols()
     },
     calcDisplayCols(): void {
+      if (this.previewOpen) {
+        this.editorCols = 12
+        return
+      }
+
       const leftCols = this.leftNavShown ? 3 : 0
       const rightCols = this.rightNavShown ? 2 : 0
       this.editorCols = 12 - leftCols - rightCols
@@ -152,6 +166,25 @@ export default Vue.extend({
         if (child == this.activeWidget) {
           parent.children.splice(index, 1)
           return
+        }
+
+        this.removeWidget(child)
+      })
+    },
+    moveWidget(up: boolean, parent: { children: [] }): void {
+      parent.children.forEach((child, index) => {
+        if (child == this.activeWidget) {
+          if (up && index != 0) {
+            parent.children.splice(index, 1)
+            parent.children.splice(index - 1, 0, child)
+            return
+          }
+
+          if (!up && index != parent.children.length - 1) {
+            parent.children.splice(index, 1)
+            parent.children.splice(index + 1, 0, child)
+            return
+          }
         }
 
         this.removeWidget(child)

@@ -1,9 +1,38 @@
 <template>
-  <CanvasWidgetContainer v-if="widget.type === 'Container'" :widget="widget" :theme="theme" @activewidget="setActive"/>
-  <CanvasWidgetRow v-else-if="widget.type === 'Row'" :widget="widget" :theme="theme" @activewidget="setActive"/>
-  <CanvasWidgetColumn v-else-if="widget.type === 'Column'" :widget="widget" :theme="theme" @activewidget="setActive"/>
-  <WidgetText v-else-if="widget.type === 'Text'" :widget="widget" :theme="theme" @activewidget="setActive"/>
-  <WidgetTextField v-else-if="widget.type === 'Text-Field'" :widget="widget" :theme="theme" @activewidget="setActive"/>
+  <CanvasWidgetContainer
+      v-if="widget.type === 'Container'"
+      :widget="widget"
+      @activewidget="setActive"
+      @move="move">
+  </CanvasWidgetContainer>
+
+  <CanvasWidgetRow
+      v-else-if="widget.type === 'Row'"
+      :widget="widget"
+      @activewidget="setActive"
+      @move="move">
+  </CanvasWidgetRow>
+
+  <CanvasWidgetColumn
+      v-else-if="widget.type === 'Column'"
+      :widget="widget"
+      @activewidget="setActive"
+      @move="move">
+  </CanvasWidgetColumn>
+
+  <CanvasWidgetText
+      v-else-if="widget.type === 'Text'"
+      :widget="widget"
+      @activewidget="setActive"
+      @move="move">
+  </CanvasWidgetText>
+
+  <CanvasWidgetTextField
+      v-else-if="widget.type === 'Text-Field'"
+      :widget="widget"
+      @activewidget="setActive"
+      @move="move">
+  </CanvasWidgetTextField>
 </template>
 
 <script lang="ts">
@@ -14,8 +43,8 @@ import Vue from "vue";
 import CanvasWidgetContainer from "@/views/canvas/component/editor/widget/CanvasWidgetContainer.vue";
 import CanvasWidgetRow from "@/views/canvas/component/editor/widget/CanvasWidgetRow.vue";
 import CanvasWidgetColumn from "@/views/canvas/component/editor/widget/CanvasWidgetColumn.vue";
-import WidgetText from "@/views/canvas/component/editor/widget/WidgetText.vue";
-import WidgetTextField from "@/views/canvas/component/editor/widget/WidgetTextField.vue";
+import CanvasWidgetText from "@/views/canvas/component/editor/widget/CanvasWidgetText.vue";
+import CanvasWidgetTextField from "@/views/canvas/component/editor/widget/CanvasWidgetTextField.vue";
 import {AppWidget} from "@/plugins/types";
 
 export default Vue.extend({
@@ -24,19 +53,20 @@ export default Vue.extend({
     CanvasWidgetContainer,
     CanvasWidgetRow,
     CanvasWidgetColumn,
-    WidgetTextField,
-    WidgetText,
+    CanvasWidgetTextField,
+    CanvasWidgetText,
   },
-  props: {
-    widget: Object,
-    theme: Object
-  },
+  props: {widget: Object},
   methods: {
     setActive(widget: AppWidget): void {
       this.$emit('activewidget', widget)
+    },
+    move(up: boolean): void {
+      this.$emit('move', up)
     }
-  },
+  }
 })
+
 </script>
 
 <style scoped>

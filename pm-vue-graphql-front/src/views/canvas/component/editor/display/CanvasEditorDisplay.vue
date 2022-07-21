@@ -1,5 +1,6 @@
 <template>
   <v-container fluid class="pa-0 canvas__editor--display">
+
     <v-container fluid class="primary pa-0">
       <v-row no-gutters>
         <v-col class="pa-1 text-start">
@@ -22,7 +23,9 @@
       <v-divider></v-divider>
     </v-container>
 
-    <CanvasWidgetPage :widget="pageDefinition" :theme="theme" @activewidget="setActive"/>
+    <WidgetPage v-if="previewOpen" :widget="pageDefinition" :theme="theme"/>
+    <CanvasWidgetPage v-else :widget="pageDefinition" @activewidget="setActive" @move="move"/>
+
   </v-container>
 </template>
 
@@ -30,15 +33,17 @@
 import Vue from "vue";
 import {AppWidget} from "@/plugins/types";
 import CanvasWidgetPage from "@/views/canvas/component/editor/widget/CanvasWidgetPage.vue";
+import WidgetPage from "@/components/widget/WidgetPage.vue";
 
 export default Vue.extend({
   name: 'CanvasEditorDisplay',
-  components: {CanvasWidgetPage},
+  components: {WidgetPage, CanvasWidgetPage},
   props: {
     pageDefinition: Object,
     theme: Object,
     leftNavShown: Boolean,
-    rightNavShown: Boolean
+    rightNavShown: Boolean,
+    previewOpen: Boolean
   },
   methods: {
     i18n(key: string): string {
@@ -52,6 +57,9 @@ export default Vue.extend({
     },
     changeRightNavShown(): void {
       this.$emit('changerightnav')
+    },
+    move(up: boolean): void {
+      this.$emit('move', up)
     }
   }
 })

@@ -14,7 +14,7 @@
 
     <div>
       <v-container fluid class="pa-4">
-        <v-row class="text-start" v-if="widget">
+        <v-row class="text-start" v-if="currentWidget">
           <v-col class="mt-auto" cols="3">
             <div class="text-body-1">ID:</div>
           </v-col>
@@ -60,6 +60,7 @@ import PropertySize from "@/views/canvas/component/editor/property/PropertySize.
 import PropertyColor from "@/views/canvas/component/editor/property/PropertyColor.vue";
 import PropertyBorder from "@/views/canvas/component/editor/property/PropertyBorder.vue";
 
+// tODO bug z propertiesami | Dodać przesuń do góry, w dół jakimś guzikiem | poprawić wyświetlanie | Dac na cały ekran
 export default Vue.extend({
   name: 'CanvasEditorRightNav',
   components: {PropertyBorder, PropertyColor, PropertySize, PropertyString},
@@ -69,15 +70,15 @@ export default Vue.extend({
   },
   data() {
     return {
-      currentWidget: {}
+      currentWidget: {id: '', propGroups: []}
     }
   },
   computed: {
     id() {
-      return this.widget ? this.widget.id : ''
+      return this.currentWidget ? this.currentWidget.id : ''
     },
     groups() {
-      return this.widget ? this.widget.propGroups : []
+      return this.currentWidget ? this.currentWidget.propGroups : []
     }
   },
   watch: {
