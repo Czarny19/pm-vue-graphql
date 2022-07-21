@@ -12,6 +12,10 @@
   pointer-events: none
 }
 
+.pointer {
+  cursor: pointer;
+}
+
 .error-chip {
   background-color: $error;
   border-radius: 40px;

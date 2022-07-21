@@ -150,6 +150,7 @@
     "unsupportedElementMsg": "Niedozwolony zagnieżdżony komponent. Dozwolone komponenty dla ",
     "deleteComponent": "Usuń komponent",
     "preview": "Podgląd",
-    "closePreview": "Zamknij podgląd"
+    "closePreview": "Zamknij podgląd",
+    "chooseComponent": "Wybierz jeden z komponentów aby wyświetlić jego właściwości"
   }
 }

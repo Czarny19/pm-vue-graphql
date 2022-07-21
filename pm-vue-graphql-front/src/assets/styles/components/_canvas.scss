@@ -11,11 +11,27 @@
     }
 
     &--element {
-      min-height: 20px;
+      border: 1px black solid !important;
     }
 
     &--element:hover {
-      border: 2px darkred solid !important;
+      border: 2px red solid !important;
+    }
+
+    &--container {
+      min-height: 240px;
+    }
+
+    &--row {
+      padding-bottom: 20px;
+    }
+
+    &--column {
+      min-height: 100px;
+    }
+
+    &--text {
+      min-height: 80px;
     }
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <v-row
-      class="canvas__editor--element"
+      class="canvas__editor--element canvas__editor--row"
       @drop.self="onDrop"
       @click.self="setActive(appWidget)"
       @dragover.prevent
@@ -10,7 +10,7 @@
     <CanvasWidgetHeader :widget="widget" @activewidget="setActive" @move="move"/>
 
     <template v-for="(child) in widget.children">
-      <CanvasWidget :widget="child" :key="child.name" @activewidget="setActive"/>
+      <CanvasWidget :widget="child" :key="child.name" @activewidget="setActive" @move="move"/>
     </template>
 
     <AppSnackbar :snackbar="errSnackbar" :text="errSnackbarMsg"/>

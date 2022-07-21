@@ -1,7 +1,7 @@
 <template>
   <v-container
       fluid
-      class="canvas__editor--element pa-0"
+      class="canvas__editor--element canvas__editor--container pa-0 mb-4"
       @drop.self="onDrop"
       @click.self="setActive(appWidget)"
       @dragover.prevent
@@ -11,7 +11,7 @@
     <CanvasWidgetHeader :widget="widget" @activewidget="setActive" @move="move"/>
 
     <template v-for="(child) in widget.children">
-      <CanvasWidget class="ma-3" :widget="child" :key="child.name" @activewidget="setActive"/>
+      <CanvasWidget class="ma-3" :widget="child" :key="child.name" @activewidget="setActive" @move="move"/>
     </template>
 
     <AppSnackbar :snackbar="errSnackbar" :text="errSnackbarMsg"/>

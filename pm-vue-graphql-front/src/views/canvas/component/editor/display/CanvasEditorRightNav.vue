@@ -48,6 +48,21 @@
         </v-btn>
       </v-row>
     </v-container>
+
+    <v-container v-else>
+      <v-row>
+        <v-col class="text-center mt-6">
+          <v-btn class="disable-events" fab x-large>
+            <v-icon x-large>fa-arrow-pointer</v-icon>
+          </v-btn>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col class="text-center mt-2 text-body-1">
+          {{ i18n('canvas.chooseComponent') }}
+        </v-col>
+      </v-row>
+    </v-container>
   </v-navigation-drawer>
 </template>
 
@@ -58,7 +73,6 @@ import PropertySize from "@/views/canvas/component/editor/property/PropertySize.
 import PropertyColor from "@/views/canvas/component/editor/property/PropertyColor.vue";
 import PropertyBorder from "@/views/canvas/component/editor/property/PropertyBorder.vue";
 
-// tODO poprawić wyświetlanie
 export default Vue.extend({
   name: 'CanvasEditorRightNav',
   components: {PropertyBorder, PropertyColor, PropertySize, PropertyString},
@@ -74,7 +88,7 @@ export default Vue.extend({
   },
   computed: {
     id() {
-      return this.currentWidget ? (this.currentWidget as {id: '', propGroups: []}).id : ''
+      return this.currentWidget ? (this.currentWidget as { id: '', propGroups: [] }).id : ''
     }
   },
   watch: {
@@ -82,7 +96,7 @@ export default Vue.extend({
       handler() {
         this.currentWidget = this.widget
         this.groups = []
-        this.groups = this.currentWidget ? (this.currentWidget as {id: '', propGroups: []}).propGroups : []
+        this.groups = this.currentWidget ? (this.currentWidget as { id: '', propGroups: [] }).propGroups : []
       },
       deep: true
     }

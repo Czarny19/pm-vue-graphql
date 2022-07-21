@@ -1,7 +1,7 @@
 <template>
-  <div class="canvas__editor--element">
+  <div class="canvas__editor--element canvas__editor--text mb-4" @click="setActive(appWidget)">
     <CanvasWidgetHeader :widget="widget" @activewidget="setActive" @move="move"/>
-    <div class="text-black" @click.self="setActive(appWidget)">{{ argsProps.text }}</div>
+    <div class="text-black">{{ argsProps.text }}</div>
   </div>
 </template>
 

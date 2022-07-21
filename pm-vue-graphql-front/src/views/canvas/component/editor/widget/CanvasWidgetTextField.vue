@@ -1,11 +1,10 @@
 <template>
-  <div class="canvas__editor--element">
+  <div class="canvas__editor--element mb-4" @click="setActive(appWidget)">
     <CanvasWidgetHeader :widget="widget" @activewidget="setActive" @move="move"/>
 
     <v-text-field
-        class="canvas__editor--element"
         :label="widget.id"
-        @click.self="setActive(appWidget)">
+        @click="setActive(appWidget)">
     </v-text-field>
   </div>
 </template>

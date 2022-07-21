@@ -39,10 +39,11 @@
 
     <template v-if="navTab === 1">
       <v-treeview
+          class="pointer"
           activatable
+          open-all
           dense
           item-text="title"
-          item-key="id"
           expand-icon="fa-caret-down"
           item-children="children"
           color="accent"
@@ -55,7 +56,13 @@
         </template>
 
         <template v-slot:label="{ item }">
-          <div class="text-start text-body-2 pl-2 overflow-elipsis" @click="setActiveWidget(item)">
+          <div v-if="item.type === 'Page'"
+               class="text-start text-body-2 pl-2 overflow-elipsis"
+               @click="setActiveWidget(item)">
+            {{ item.id }}
+          </div>
+
+          <div v-else class="text-start text-body-2 pl-2 overflow-elipsis" @click="setActiveWidget(item)">
             {{ item.id }} ({{ item.label }})
           </div>
         </template>

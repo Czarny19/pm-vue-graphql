@@ -1,5 +1,5 @@
 <template>
-  <div class="pa-4 accent" @drop.self="onDrop" @dragover.prevent @dragenter.prevent @click.prevent>
+  <div class="pa-2 accent" @drop.self="onDrop" @dragover.prevent @dragenter.prevent @click.prevent>
     <template v-for="(child) in widget.children">
       <CanvasWidget :widget="child" :key="child.name" @activewidget="setActive" @move="move"/>
     </template>

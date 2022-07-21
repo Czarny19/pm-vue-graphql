@@ -106,6 +106,11 @@ export default Vue.extend({
       return this.$t(key).toString()
     },
     setActiveWidget(widget: AppWidget): void {
+      if (widget.type === 'Page') {
+        (this.activeWidget as AppWidget | null) = null
+        return
+      }
+
       this.activeWidget = widget
     },
     closeEditor(): void {
@@ -187,7 +192,7 @@ export default Vue.extend({
           }
         }
 
-        this.removeWidget(child)
+        this.moveWidget(up, child)
       })
     },
     importPage(importPage: JSON): void {
