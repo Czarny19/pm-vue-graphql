@@ -1,21 +1,8 @@
 <template>
-  <div>
-    <div class="text-start text-body-1 secondary pa-4">
-      {{ widget.id }}
-    </div>
-
-    <div
-        class="pa-4 accent"
-        @drop.self="onDrop"
-        @dragover.prevent
-        @dragenter.prevent
-        @click.prevent>
-
-      <template v-for="(child) in widget.children">
-        <CanvasWidget :widget="child" :key="child.name" @activewidget="setActive" @move="move"/>
-      </template>
-
-    </div>
+  <div class="pa-4 accent" @drop.self="onDrop" @dragover.prevent @dragenter.prevent @click.prevent>
+    <template v-for="(child) in widget.children">
+      <CanvasWidget :widget="child" :key="child.name" @activewidget="setActive" @move="move"/>
+    </template>
   </div>
 </template>
 

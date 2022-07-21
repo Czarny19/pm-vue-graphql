@@ -1,7 +1,7 @@
 <template>
-  <v-container fluid class="pa-0 canvas__editor--display">
+  <v-container fluid class="pa-0 full-height">
 
-    <v-container fluid class="primary pa-0">
+    <v-container fluid class="primary pa-0" :style="{'height': '46px'}">
       <v-row no-gutters>
         <v-col class="pa-1 text-start">
           <v-btn text class="text-body-2" @click="changeLeftNavShown">
@@ -24,7 +24,7 @@
     </v-container>
 
     <WidgetPage v-if="previewOpen" :widget="pageDefinition" :theme="theme"/>
-    <CanvasWidgetPage v-else :widget="pageDefinition" @activewidget="setActive" @move="move"/>
+    <CanvasWidgetPage :style="{'height': `calc(100% - 46px)`}" v-else :widget="pageDefinition" @activewidget="setActive" @move="move"/>
 
   </v-container>
 </template>

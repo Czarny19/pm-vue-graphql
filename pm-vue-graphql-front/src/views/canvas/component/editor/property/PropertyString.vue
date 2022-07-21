@@ -24,6 +24,11 @@ export default Vue.extend({
       currentProp: {}
     }
   },
+  watch: {
+    prop() {
+      this.currentProp = this.prop
+    }
+  },
   async beforeMount() {
     this.currentProp = this.prop
   }

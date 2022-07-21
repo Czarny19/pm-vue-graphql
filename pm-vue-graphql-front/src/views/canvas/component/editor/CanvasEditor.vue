@@ -19,8 +19,8 @@
 
     <LoadingCircular v-if="loading"/>
 
-    <v-container v-else fluid class="pa-0">
-      <v-row no-gutters>
+    <v-container v-else fluid class="pa-0" :style="{'height': `calc(100% - 64px)`}">
+      <v-row class="fill-height" no-gutters>
         <v-col v-if="leftNavShown && !previewOpen" cols="3">
           <CanvasEditorLeftNav :page-definition="page.definition" @activewidget="setActiveWidget"/>
         </v-col>

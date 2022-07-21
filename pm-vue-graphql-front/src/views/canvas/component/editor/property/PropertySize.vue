@@ -58,6 +58,9 @@ export default Vue.extend({
       } else {
         prop.value = '0'
       }
+    },
+    prop() {
+      this.currentProp = this.prop
     }
   },
   async beforeMount() {

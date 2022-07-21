@@ -41,6 +41,11 @@ export default Vue.extend({
       currentProp: {}
     }
   },
+  watch: {
+    prop() {
+      this.currentProp = this.prop
+    }
+  },
   methods: {
     i18n(key: string): string {
       return this.$t(key).toString()

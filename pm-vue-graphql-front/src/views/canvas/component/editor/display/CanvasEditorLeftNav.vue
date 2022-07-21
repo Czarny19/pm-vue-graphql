@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer permanent clipped height="100%" width="100%" color="secondary">
+  <v-navigation-drawer permanent clipped width="100%" color="secondary">
     <v-container fluid class="primary pa-0">
       <v-row no-gutters>
         <v-col class="pa-1">

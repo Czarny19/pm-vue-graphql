@@ -116,6 +116,9 @@ export default Vue.extend({
     pickerColor() {
       const prop = (this.currentProp as { value: string })
       prop.value = this.pickerColor
+    },
+    prop() {
+      this.currentProp = this.prop
     }
   },
   async beforeMount() {

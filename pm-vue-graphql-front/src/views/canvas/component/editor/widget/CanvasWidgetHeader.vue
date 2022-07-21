@@ -5,12 +5,12 @@
         {{ appWidget.id }} :: {{ appWidget.type }}
       </v-col>
       <v-col class="text-end pr-4">
-        <v-btn fab x-small color="accent" class="mr-2" @click="move(false)">
-          <v-icon size="30" color="primary">fa-caret-down</v-icon>
+        <v-btn fab width="24" height="24" color="accent" @click="move(false)">
+          <v-icon size="24" color="primary">fa-caret-down</v-icon>
         </v-btn>
 
-        <v-btn fab x-small color="accent" class="ml-2" @click="move(true)">
-          <v-icon size="30" color="primary">fa-caret-up</v-icon>
+        <v-btn fab width="24" height="24" color="accent" class="ml-3" @click="move(true)">
+          <v-icon size="24" color="primary">fa-caret-up</v-icon>
         </v-btn>
       </v-col>
     </v-row>
