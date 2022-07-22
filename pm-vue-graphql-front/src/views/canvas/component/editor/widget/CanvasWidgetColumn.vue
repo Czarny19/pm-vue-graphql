@@ -1,6 +1,7 @@
 <template>
   <v-col
-      class="canvas__editor--element canvas__editor--column pa-0 ml-2 mr-2"
+      :cols="argsProps.cols ? Number(argsProps.cols) : ''"
+      class="canvas__editor--element canvas__editor--column pa-0"
       @drop.self="onDrop"
       @click.self="setActive(appWidget)"
       @dragover.prevent
@@ -23,6 +24,7 @@ import Vue from "vue";
 import AppSnackbar from "@/components/snackbar/AppSnackbar.vue";
 import CanvasWidgetHeader from "@/views/canvas/component/editor/widget/CanvasWidgetHeader.vue";
 import {AppWidget, AppWidgetProp} from "@/plugins/types";
+import {getArgsProps} from "@/plugins/widget";
 
 export default Vue.extend({
   name: 'CanvasWidgetColumn',
@@ -42,6 +44,9 @@ export default Vue.extend({
   computed: {
     appWidget(): AppWidget {
       return this.widget as AppWidget
+    },
+    argsProps(): { [k: string]: string } {
+      return getArgsProps(this.appWidget)
     }
   },
   methods: {

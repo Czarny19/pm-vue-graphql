@@ -151,6 +151,7 @@
     "deleteComponent": "Usuń komponent",
     "preview": "Podgląd",
     "closePreview": "Zamknij podgląd",
-    "chooseComponent": "Wybierz jeden z komponentów aby wyświetlić jego właściwości"
+    "chooseComponent": "Wybierz jeden z komponentów aby wyświetlić jego właściwości",
+    "componentName": "Nazwa"
   }
 }

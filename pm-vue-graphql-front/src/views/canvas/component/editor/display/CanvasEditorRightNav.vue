@@ -15,7 +15,7 @@
     <v-container v-if="currentWidget" fluid class="pa-4">
       <v-row class="text-start">
         <v-col class="mt-auto" cols="3">
-          <div class="text-body-1">ID:</div>
+          <div class="text-body-1">{{ i18n('canvas.componentName') }}:</div>
         </v-col>
         <v-col>
           <v-text-field color="accent" flat single-line dense hide-details v-model="currentWidget.id"/>
@@ -35,6 +35,7 @@
                 <PropertySize :key="prop.id" v-else-if="prop.type === 'Size'" :prop="prop"/>
                 <PropertyColor :key="prop.id" v-else-if="prop.type === 'Color'" :prop="prop" :theme="theme"/>
                 <PropertyBorder :key="prop.id" v-else-if="prop.type === 'Border'" :prop="prop"/>
+                <PropertyCols :key="prop.id" v-else-if="prop.type === 'Cols'" :prop="prop"/>
               </template>
             </v-expansion-panel-content>
           </v-expansion-panel>
@@ -72,10 +73,11 @@ import PropertyString from "@/views/canvas/component/editor/property/PropertyStr
 import PropertySize from "@/views/canvas/component/editor/property/PropertySize.vue";
 import PropertyColor from "@/views/canvas/component/editor/property/PropertyColor.vue";
 import PropertyBorder from "@/views/canvas/component/editor/property/PropertyBorder.vue";
+import PropertyCols from "@/views/canvas/component/editor/property/PropertyCols.vue";
 
 export default Vue.extend({
   name: 'CanvasEditorRightNav',
-  components: {PropertyBorder, PropertyColor, PropertySize, PropertyString},
+  components: {PropertyCols, PropertyBorder, PropertyColor, PropertySize, PropertyString},
   props: {
     widget: Object,
     theme: Object

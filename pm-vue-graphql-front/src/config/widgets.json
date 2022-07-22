@@ -147,6 +147,20 @@
               "unit": "px",
               "label": "Wysokość",
               "type": "Size"
+            },
+            {
+              "id": "min-width",
+              "value": "100",
+              "unit": "%",
+              "label": "Min. szerokość",
+              "type": "Size"
+            },
+            {
+              "id": "width",
+              "value": "",
+              "unit": "%",
+              "label": "Szerokość",
+              "type": "Size"
             }
           ]
         }
@@ -167,7 +181,22 @@
       "label": "Kolumna",
       "icon": "fa-table-columns",
       "children": [],
-      "propGroups": []
+      "allowedChildren": ["Przycisk", "Tekst", "Pole tekstowe"],
+      "propGroups": [
+        {
+          "id": "main",
+          "label": "Właściwości",
+          "type": "args",
+          "props": [
+            {
+              "id": "cols",
+              "value": "",
+              "label": "Wielkość",
+              "type": "Cols"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "",
@@ -202,6 +231,12 @@
           "label": "Kolor",
           "type": "css",
           "props": [
+            {
+              "id": "color",
+              "value": "text_color_1",
+              "label": "Kolor",
+              "type": "Color"
+            },
             {
               "id": "background-color",
               "value": "background_color",

@@ -1,5 +1,5 @@
 <template>
-  <v-col :style="cssProps">
+  <v-col :cols="argsProps.cols ? Number(argsProps.cols) : ''" :style="cssProps">
     <template v-for="(child) in appWidget.children">
       <BaseWidget :widget="child" :theme="theme" :key="child.name"/>
     </template>
@@ -12,7 +12,7 @@
 
 import Vue from "vue";
 import {AppWidget} from "@/plugins/types";
-import {getCssProps} from "@/plugins/widget";
+import {getArgsProps, getCssProps} from "@/plugins/widget";
 
 export default Vue.extend({
   name: 'WidgetColumn',
@@ -27,6 +27,9 @@ export default Vue.extend({
     },
     cssProps(): ({ [p: string]: string })[] {
       return getCssProps(this.appWidget, this.theme)
+    },
+    argsProps(): { [k: string]: string } {
+      return getArgsProps(this.appWidget)
     }
   },
 })

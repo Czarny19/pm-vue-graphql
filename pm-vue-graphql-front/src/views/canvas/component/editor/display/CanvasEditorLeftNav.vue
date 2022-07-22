@@ -105,8 +105,6 @@ export default Vue.extend({
       this.navTab = tabNum
     },
     startDrag(widget: { id: string }, evt?: DragEvent) {
-      widget.id = `el${this.widgetIndex++}`
-
       const dataTransfer = evt?.dataTransfer;
 
       const widgetJSON = JSON.parse(JSON.stringify(widget))
