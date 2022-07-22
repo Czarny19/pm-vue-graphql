@@ -106,6 +106,7 @@
       "type": "Page",
       "label": "Strona",
       "icon": "fa-th",
+      "datatable": "",
       "children": []
     },
     {

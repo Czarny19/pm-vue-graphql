@@ -41,7 +41,9 @@ export default Vue.extend({
       currentUser: {id: -1},
       projects: [],
       navItems: [
-        {title: this.$t('canvas.pages'), icon: 'fa-file'}
+        {title: this.$t('canvas.pages'), icon: 'fa-file'},
+        {title: this.$t('canvas.tables'), icon: 'fa-table'},
+        {title: this.$t('canvas.queries'), icon: 'fa-terminal'}
       ]
     }
   },
