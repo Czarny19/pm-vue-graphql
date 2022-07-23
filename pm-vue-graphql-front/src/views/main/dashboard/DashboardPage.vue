@@ -53,13 +53,13 @@
 
 <script lang="ts">
 import Vue from "vue";
-import DashboardNavigation from "@/views/dashboard/component/navigation/DashboardNavigation.vue";
-import DashboardNavCard from "@/views/dashboard/component/navigation/DashboardNavCard.vue";
-import DashboardProjectsTab from "@/views/dashboard/component/tab/DashboardProjectsTab.vue";
-import DashboardDataSourcesTab from "@/views/dashboard/component/tab/DashboardDataSourcesTab.vue";
-import DashboardThemesTab from "@/views/dashboard/component/tab/DashboardThemesTab.vue";
-import LoginDialog from "@/views/dashboard/component/login/LoginDialog.vue";
-import SignUpDialog from "@/views/dashboard/component/login/SignUpDialog.vue";
+import DashboardNavigation from "@/views/main/dashboard/component/navigation/DashboardNavigation.vue";
+import DashboardNavCard from "@/views/main/dashboard/component/navigation/DashboardNavCard.vue";
+import DashboardProjectsTab from "@/views/main/dashboard/component/tab/DashboardProjectsTab.vue";
+import DashboardDataSourcesTab from "@/views/main/dashboard/component/tab/DashboardDataSourcesTab.vue";
+import DashboardThemesTab from "@/views/main/dashboard/component/tab/DashboardThemesTab.vue";
+import LoginDialog from "@/views/main/dashboard/component/login/LoginDialog.vue";
+import SignUpDialog from "@/views/main/dashboard/component/login/SignUpDialog.vue";
 import {CURRENT_USER} from "@/graphql/queries/user";
 
 export default Vue.extend({

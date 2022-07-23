@@ -80,7 +80,7 @@ import Vue from "vue";
 import DeleteConfirmationDialog from "@/components/dialog/DeleteConfirmationDialog.vue";
 import TitleCard from "@/components/card/TitleCard.vue";
 import LoadingCircular from "@/components/loading/LoadingCircular.vue";
-import DashboardTabNoData from "@/views/dashboard/component/tab/DashboardTabNoData.vue";
+import DashboardTabNoData from "@/views/main/dashboard/component/tab/DashboardTabNoData.vue";
 import ColorReadOnlyList from "@/components/theme/ColorReadOnlyList.vue";
 import IconButton from "@/components/button/IconButton.vue";
 import ThemePreview from "@/components/theme/ThemePreview.vue";

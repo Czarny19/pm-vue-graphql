@@ -53,8 +53,7 @@ export const UPDATE_DATA_SOURCE_BY_ID = gql`mutation updateDataSourceById(
             id
         }
     }
-}
-`
+}`
 
 export const DELETE_DATA_SOURCE = gql`mutation deleteDataSource($id: bigint!) {
     delete_DATA_SOURCE(where: {id: {_eq: $id}}) {

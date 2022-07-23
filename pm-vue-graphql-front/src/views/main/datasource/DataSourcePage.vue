@@ -1,16 +1,16 @@
 <template>
   <v-container fluid>
-    <LoadingDialog :dialog="saving" :title="i18n('theme.saving')"/>
+    <LoadingDialog :dialog="saving" :title="i18n('datasource.saving')"/>
 
     <v-row class="mt-2 ml-2 mr-2">
       <v-col>
-        <TitleCard :title="i18n('theme.interfaceTheme')" icon="fa-palette"/>
+        <TitleCard :title="i18n('datasource.datasource')" icon="fa-database"/>
       </v-col>
     </v-row>
 
     <v-row no-gutters>
       <v-col>
-        <ThemeForm :theme-id="themeId" @saving="setSaving"/>
+        <DataSourceForm :data-source-id="dataSourceId" @saving="setSaving" @setschema="setSchema"/>
       </v-col>
     </v-row>
   </v-container>
@@ -18,21 +18,22 @@
 
 <script lang="ts">
 import Vue from "vue";
+import DataSourceForm from "@/views/main/datasource/component/DataSourceForm.vue";
 import LoadingDialog from "@/components/dialog/LoadingDialog.vue";
-import ThemeForm from "@/views/theme/component/ThemeForm.vue";
 import TitleCard from "@/components/card/TitleCard.vue";
 
 export default Vue.extend({
-  name: 'ThemePage',
-  components: {TitleCard, ThemeForm, LoadingDialog},
+  name: 'DataSourcePage',
+  components: {TitleCard, LoadingDialog, DataSourceForm},
   data() {
     return {
       saving: false,
+      schema: []
     }
   },
   computed: {
-    themeId(): number {
-      return Number(this.$route.params.themeId)
+    dataSourceId(): number {
+      return Number(this.$route.params.dataSourceId)
     }
   },
   methods: {
@@ -41,6 +42,9 @@ export default Vue.extend({
     },
     setSaving(saving: boolean): void {
       this.saving = saving
+    },
+    setSchema(schema: []) {
+      this.schema = schema
     }
   }
 })

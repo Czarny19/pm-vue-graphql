@@ -11,6 +11,8 @@ type DATA_SOURCE {
     "Data source address"
     address: String!
     create_date: date!
+    "An object relationship"
+    data_source_queries: QUERY
     "Id"
     id: bigint!
     name: String!
@@ -377,6 +379,144 @@ type PROJECT_variance_fields {
     user_id: Float
 }
 
+"columns and relationships of \"QUERY\""
+type QUERY {
+    data_source_id: bigint
+    distinct_on: String
+    fields: String
+    id: bigint!
+    limit: Int
+    modify_date: date
+    name: String!
+    offset: Int
+    order_by: String
+    table: String
+    where: String
+}
+
+"aggregated selection of \"QUERY\""
+type QUERY_aggregate {
+    aggregate: QUERY_aggregate_fields
+    nodes: [QUERY!]!
+}
+
+"aggregate fields of \"QUERY\""
+type QUERY_aggregate_fields {
+    avg: QUERY_avg_fields
+    count(columns: [QUERY_select_column!], distinct: Boolean): Int
+    max: QUERY_max_fields
+    min: QUERY_min_fields
+    stddev: QUERY_stddev_fields
+    stddev_pop: QUERY_stddev_pop_fields
+    stddev_samp: QUERY_stddev_samp_fields
+    sum: QUERY_sum_fields
+    var_pop: QUERY_var_pop_fields
+    var_samp: QUERY_var_samp_fields
+    variance: QUERY_variance_fields
+}
+
+"aggregate avg on columns"
+type QUERY_avg_fields {
+    data_source_id: Float
+    id: Float
+    limit: Float
+    offset: Float
+}
+
+"aggregate max on columns"
+type QUERY_max_fields {
+    data_source_id: bigint
+    distinct_on: String
+    fields: String
+    id: bigint
+    limit: Int
+    modify_date: date
+    name: String
+    offset: Int
+    order_by: String
+    table: String
+    where: String
+}
+
+"aggregate min on columns"
+type QUERY_min_fields {
+    data_source_id: bigint
+    distinct_on: String
+    fields: String
+    id: bigint
+    limit: Int
+    modify_date: date
+    name: String
+    offset: Int
+    order_by: String
+    table: String
+    where: String
+}
+
+"response of any mutation on the table \"QUERY\""
+type QUERY_mutation_response {
+    "number of affected rows by the mutation"
+    affected_rows: Int!
+    "data of the affected rows by the mutation"
+    returning: [QUERY!]!
+}
+
+"aggregate stddev on columns"
+type QUERY_stddev_fields {
+    data_source_id: Float
+    id: Float
+    limit: Float
+    offset: Float
+}
+
+"aggregate stddev_pop on columns"
+type QUERY_stddev_pop_fields {
+    data_source_id: Float
+    id: Float
+    limit: Float
+    offset: Float
+}
+
+"aggregate stddev_samp on columns"
+type QUERY_stddev_samp_fields {
+    data_source_id: Float
+    id: Float
+    limit: Float
+    offset: Float
+}
+
+"aggregate sum on columns"
+type QUERY_sum_fields {
+    data_source_id: bigint
+    id: bigint
+    limit: Int
+    offset: Int
+}
+
+"aggregate var_pop on columns"
+type QUERY_var_pop_fields {
+    data_source_id: Float
+    id: Float
+    limit: Float
+    offset: Float
+}
+
+"aggregate var_samp on columns"
+type QUERY_var_samp_fields {
+    data_source_id: Float
+    id: Float
+    limit: Float
+    offset: Float
+}
+
+"aggregate variance on columns"
+type QUERY_variance_fields {
+    data_source_id: Float
+    id: Float
+    limit: Float
+    offset: Float
+}
+
 "columns and relationships of \"THEME\""
 type THEME {
     accent_color: String!
@@ -625,6 +765,13 @@ type mutation_root {
     ): PROJECT_mutation_response
     "delete single row from the table: \"PROJECT\""
     delete_PROJECT_by_pk(id: bigint!): PROJECT
+    "delete data from the table: \"QUERY\""
+    delete_QUERY(
+        "filter the rows which have to be deleted"
+        where: QUERY_bool_exp!
+    ): QUERY_mutation_response
+    "delete single row from the table: \"QUERY\""
+    delete_QUERY_by_pk(id: bigint!): QUERY
     "delete data from the table: \"THEME\""
     delete_THEME(
         "filter the rows which have to be deleted"
@@ -681,6 +828,20 @@ type mutation_root {
         "on conflict condition"
         on_conflict: PROJECT_on_conflict
     ): PROJECT
+    "insert data into the table: \"QUERY\""
+    insert_QUERY(
+        "the rows to be inserted"
+        objects: [QUERY_insert_input!]!,
+        "on conflict condition"
+        on_conflict: QUERY_on_conflict
+    ): QUERY_mutation_response
+    "insert a single row into the table: \"QUERY\""
+    insert_QUERY_one(
+        "the row to be inserted"
+        object: QUERY_insert_input!,
+        "on conflict condition"
+        on_conflict: QUERY_on_conflict
+    ): QUERY
     "insert data into the table: \"THEME\""
     insert_THEME(
         "the rows to be inserted"
@@ -780,6 +941,23 @@ type mutation_root {
         _set: PROJECT_set_input,
         pk_columns: PROJECT_pk_columns_input!
     ): PROJECT
+    "update data of the table: \"QUERY\""
+    update_QUERY(
+        "increments the integer columns with given value of the filtered values"
+        _inc: QUERY_inc_input,
+        "sets the columns of the filtered rows to the given values"
+        _set: QUERY_set_input,
+        "filter the rows which have to be updated"
+        where: QUERY_bool_exp!
+    ): QUERY_mutation_response
+    "update single row of the table: \"QUERY\""
+    update_QUERY_by_pk(
+        "increments the integer columns with given value of the filtered values"
+        _inc: QUERY_inc_input,
+        "sets the columns of the filtered rows to the given values"
+        _set: QUERY_set_input,
+        pk_columns: QUERY_pk_columns_input!
+    ): QUERY
     "update data of the table: \"THEME\""
     update_THEME(
         "increments the integer columns with given value of the filtered values"
@@ -905,6 +1083,34 @@ type query_root {
     ): PROJECT_aggregate!
     "fetch data from the table: \"PROJECT\" using primary key columns"
     PROJECT_by_pk(id: bigint!): PROJECT
+    "fetch data from the table: \"QUERY\""
+    QUERY(
+        "distinct select on columns"
+        distinct_on: [QUERY_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [QUERY_order_by!],
+        "filter the rows returned"
+        where: QUERY_bool_exp
+    ): [QUERY!]!
+    "fetch aggregated fields from the table: \"QUERY\""
+    QUERY_aggregate(
+        "distinct select on columns"
+        distinct_on: [QUERY_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [QUERY_order_by!],
+        "filter the rows returned"
+        where: QUERY_bool_exp
+    ): QUERY_aggregate!
+    "fetch data from the table: \"QUERY\" using primary key columns"
+    QUERY_by_pk(id: bigint!): QUERY
     "fetch data from the table: \"THEME\""
     THEME(
         "distinct select on columns"
@@ -1052,6 +1258,34 @@ type subscription_root {
     ): PROJECT_aggregate!
     "fetch data from the table: \"PROJECT\" using primary key columns"
     PROJECT_by_pk(id: bigint!): PROJECT
+    "fetch data from the table: \"QUERY\""
+    QUERY(
+        "distinct select on columns"
+        distinct_on: [QUERY_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [QUERY_order_by!],
+        "filter the rows returned"
+        where: QUERY_bool_exp
+    ): [QUERY!]!
+    "fetch aggregated fields from the table: \"QUERY\""
+    QUERY_aggregate(
+        "distinct select on columns"
+        distinct_on: [QUERY_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [QUERY_order_by!],
+        "filter the rows returned"
+        where: QUERY_bool_exp
+    ): QUERY_aggregate!
+    "fetch data from the table: \"QUERY\" using primary key columns"
+    QUERY_by_pk(id: bigint!): QUERY
     "fetch data from the table: \"THEME\""
     THEME(
         "distinct select on columns"
@@ -1228,6 +1462,64 @@ enum PROJECT_update_column {
     user_id
 }
 
+"unique or primary key constraints on table \"QUERY\""
+enum QUERY_constraint {
+    "unique or primary key constraint"
+    QUERY_pkey
+}
+
+"select columns of table \"QUERY\""
+enum QUERY_select_column {
+    "column name"
+    data_source_id
+    "column name"
+    distinct_on
+    "column name"
+    fields
+    "column name"
+    id
+    "column name"
+    limit
+    "column name"
+    modify_date
+    "column name"
+    name
+    "column name"
+    offset
+    "column name"
+    order_by
+    "column name"
+    table
+    "column name"
+    where
+}
+
+"update columns of table \"QUERY\""
+enum QUERY_update_column {
+    "column name"
+    data_source_id
+    "column name"
+    distinct_on
+    "column name"
+    fields
+    "column name"
+    id
+    "column name"
+    limit
+    "column name"
+    modify_date
+    "column name"
+    name
+    "column name"
+    offset
+    "column name"
+    order_by
+    "column name"
+    table
+    "column name"
+    where
+}
+
 "unique or primary key constraints on table \"THEME\""
 enum THEME_constraint {
     "unique or primary key constraint"
@@ -1380,6 +1672,7 @@ input DATA_SOURCE_bool_exp {
     _or: [DATA_SOURCE_bool_exp]
     address: String_comparison_exp
     create_date: date_comparison_exp
+    data_source_queries: QUERY_bool_exp
     id: bigint_comparison_exp
     name: String_comparison_exp
     secret: String_comparison_exp
@@ -1396,6 +1689,7 @@ input DATA_SOURCE_inc_input {
 input DATA_SOURCE_insert_input {
     address: String
     create_date: date
+    data_source_queries: QUERY_obj_rel_insert_input
     id: bigint
     name: String
     secret: String
@@ -1439,6 +1733,7 @@ input DATA_SOURCE_on_conflict {
 input DATA_SOURCE_order_by {
     address: order_by
     create_date: order_by
+    data_source_queries: QUERY_order_by
     id: order_by
     name: order_by
     secret: order_by
@@ -1501,6 +1796,19 @@ input DATA_SOURCE_var_samp_order_by {
 input DATA_SOURCE_variance_order_by {
     id: order_by
     user_id: order_by
+}
+
+"expression to compare columns of type Int. All fields are combined with logical 'AND'."
+input Int_comparison_exp {
+    _eq: Int
+    _gt: Int
+    _gte: Int
+    _in: [Int!]
+    _is_null: Boolean
+    _lt: Int
+    _lte: Int
+    _neq: Int
+    _nin: [Int!]
 }
 
 "order by aggregate values of table \"PAGE\""
@@ -1867,6 +2175,210 @@ input PROJECT_variance_order_by {
     source_id: order_by
     theme_id: order_by
     user_id: order_by
+}
+
+"order by aggregate values of table \"QUERY\""
+input QUERY_aggregate_order_by {
+    avg: QUERY_avg_order_by
+    count: order_by
+    max: QUERY_max_order_by
+    min: QUERY_min_order_by
+    stddev: QUERY_stddev_order_by
+    stddev_pop: QUERY_stddev_pop_order_by
+    stddev_samp: QUERY_stddev_samp_order_by
+    sum: QUERY_sum_order_by
+    var_pop: QUERY_var_pop_order_by
+    var_samp: QUERY_var_samp_order_by
+    variance: QUERY_variance_order_by
+}
+
+"input type for inserting array relation for remote table \"QUERY\""
+input QUERY_arr_rel_insert_input {
+    data: [QUERY_insert_input!]!
+    on_conflict: QUERY_on_conflict
+}
+
+"order by avg() on columns of table \"QUERY\""
+input QUERY_avg_order_by {
+    data_source_id: order_by
+    id: order_by
+    limit: order_by
+    offset: order_by
+}
+
+"Boolean expression to filter rows from the table \"QUERY\". All fields are combined with a logical 'AND'."
+input QUERY_bool_exp {
+    _and: [QUERY_bool_exp]
+    _not: QUERY_bool_exp
+    _or: [QUERY_bool_exp]
+    data_source_id: bigint_comparison_exp
+    distinct_on: String_comparison_exp
+    fields: String_comparison_exp
+    id: bigint_comparison_exp
+    limit: Int_comparison_exp
+    modify_date: date_comparison_exp
+    name: String_comparison_exp
+    offset: Int_comparison_exp
+    order_by: String_comparison_exp
+    table: String_comparison_exp
+    where: String_comparison_exp
+}
+
+"input type for incrementing integer column in table \"QUERY\""
+input QUERY_inc_input {
+    data_source_id: bigint
+    id: bigint
+    limit: Int
+    offset: Int
+}
+
+"input type for inserting data into table \"QUERY\""
+input QUERY_insert_input {
+    data_source_id: bigint
+    distinct_on: String
+    fields: String
+    id: bigint
+    limit: Int
+    modify_date: date
+    name: String
+    offset: Int
+    order_by: String
+    table: String
+    where: String
+}
+
+"order by max() on columns of table \"QUERY\""
+input QUERY_max_order_by {
+    data_source_id: order_by
+    distinct_on: order_by
+    fields: order_by
+    id: order_by
+    limit: order_by
+    modify_date: order_by
+    name: order_by
+    offset: order_by
+    order_by: order_by
+    table: order_by
+    where: order_by
+}
+
+"order by min() on columns of table \"QUERY\""
+input QUERY_min_order_by {
+    data_source_id: order_by
+    distinct_on: order_by
+    fields: order_by
+    id: order_by
+    limit: order_by
+    modify_date: order_by
+    name: order_by
+    offset: order_by
+    order_by: order_by
+    table: order_by
+    where: order_by
+}
+
+"input type for inserting object relation for remote table \"QUERY\""
+input QUERY_obj_rel_insert_input {
+    data: QUERY_insert_input!
+    on_conflict: QUERY_on_conflict
+}
+
+"on conflict condition type for table \"QUERY\""
+input QUERY_on_conflict {
+    constraint: QUERY_constraint!
+    update_columns: [QUERY_update_column!]!
+    where: QUERY_bool_exp
+}
+
+"ordering options when selecting data from \"QUERY\""
+input QUERY_order_by {
+    data_source_id: order_by
+    distinct_on: order_by
+    fields: order_by
+    id: order_by
+    limit: order_by
+    modify_date: order_by
+    name: order_by
+    offset: order_by
+    order_by: order_by
+    table: order_by
+    where: order_by
+}
+
+"primary key columns input for table: \"QUERY\""
+input QUERY_pk_columns_input {
+    id: bigint!
+}
+
+"input type for updating data in table \"QUERY\""
+input QUERY_set_input {
+    data_source_id: bigint
+    distinct_on: String
+    fields: String
+    id: bigint
+    limit: Int
+    modify_date: date
+    name: String
+    offset: Int
+    order_by: String
+    table: String
+    where: String
+}
+
+"order by stddev() on columns of table \"QUERY\""
+input QUERY_stddev_order_by {
+    data_source_id: order_by
+    id: order_by
+    limit: order_by
+    offset: order_by
+}
+
+"order by stddev_pop() on columns of table \"QUERY\""
+input QUERY_stddev_pop_order_by {
+    data_source_id: order_by
+    id: order_by
+    limit: order_by
+    offset: order_by
+}
+
+"order by stddev_samp() on columns of table \"QUERY\""
+input QUERY_stddev_samp_order_by {
+    data_source_id: order_by
+    id: order_by
+    limit: order_by
+    offset: order_by
+}
+
+"order by sum() on columns of table \"QUERY\""
+input QUERY_sum_order_by {
+    data_source_id: order_by
+    id: order_by
+    limit: order_by
+    offset: order_by
+}
+
+"order by var_pop() on columns of table \"QUERY\""
+input QUERY_var_pop_order_by {
+    data_source_id: order_by
+    id: order_by
+    limit: order_by
+    offset: order_by
+}
+
+"order by var_samp() on columns of table \"QUERY\""
+input QUERY_var_samp_order_by {
+    data_source_id: order_by
+    id: order_by
+    limit: order_by
+    offset: order_by
+}
+
+"order by variance() on columns of table \"QUERY\""
+input QUERY_variance_order_by {
+    data_source_id: order_by
+    id: order_by
+    limit: order_by
+    offset: order_by
 }
 
 "expression to compare columns of type String. All fields are combined with logical 'AND'."

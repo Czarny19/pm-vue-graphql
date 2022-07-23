@@ -116,7 +116,7 @@
 <script lang="ts">
 import Vue from "vue";
 import LoadingCircular from "@/components/loading/LoadingCircular.vue";
-import ProjectInfo from "@/views/project/component/ProjectInfo.vue";
+import ProjectInfo from "@/views/main/project/component/ProjectInfo.vue";
 import CardSectionTitle from "@/components/card/CardSectionTitle.vue";
 import IconButton from "@/components/button/IconButton.vue";
 import ColorReadOnlyList from "@/components/theme/ColorReadOnlyList.vue";

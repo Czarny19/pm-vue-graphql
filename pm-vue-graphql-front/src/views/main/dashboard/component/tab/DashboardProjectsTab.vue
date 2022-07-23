@@ -69,7 +69,7 @@
                     :label="i18n('dashboard.editor')"
                     color="secondary"
                     icon="fa-pencil"
-                    @click="openCanvas(project.id)">
+                    @click="openApp(project.id)">
                 </IconButton>
               </v-col>
 
@@ -101,7 +101,7 @@ import Vue from "vue";
 import DeleteConfirmationDialog from "@/components/dialog/DeleteConfirmationDialog.vue";
 import TitleCard from "@/components/card/TitleCard.vue";
 import LoadingCircular from "@/components/loading/LoadingCircular.vue";
-import DashboardTabNoData from "@/views/dashboard/component/tab/DashboardTabNoData.vue";
+import DashboardTabNoData from "@/views/main/dashboard/component/tab/DashboardTabNoData.vue";
 import IconButton from "@/components/button/IconButton.vue";
 import {DELETE_PROJECT, GET_USER_PROJECTS} from "@/graphql/queries/project";
 import {CURRENT_USER} from "@/graphql/queries/user";
@@ -144,8 +144,8 @@ export default Vue.extend({
     openModifyProject(id: string): void {
       this.$router.push({name: 'Project', params: {projectId: id}})
     },
-    openCanvas(id: string): void {
-      this.$router.push({name: 'Canvas', params: {projectId: id}})
+    openApp(id: string): void {
+      this.$router.push({name: 'App', params: {projectId: id}})
     },
     deleteProjectClicked(id: number): void {
       this.deleteId = id

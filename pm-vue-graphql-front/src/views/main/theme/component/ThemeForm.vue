@@ -50,7 +50,7 @@
 <script lang="ts">
 import Vue from "vue";
 import ThemePreview from "@/components/theme/ThemePreview.vue";
-import ThemeFormColors from "@/views/theme/component/ThemeFormColors.vue";
+import ThemeFormColors from "@/views/main/theme/component/ThemeFormColors.vue";
 import LoadingCircular from "@/components/loading/LoadingCircular.vue";
 import CardSectionTitle from "@/components/card/CardSectionTitle.vue";
 import IconButton from "@/components/button/IconButton.vue";

@@ -82,16 +82,16 @@ import Vue from "vue";
 import DeleteConfirmationDialog from "@/components/dialog/DeleteConfirmationDialog.vue";
 import TitleCard from "@/components/card/TitleCard.vue";
 import LoadingCircular from "@/components/loading/LoadingCircular.vue";
-import DashboardTabNoData from "@/views/dashboard/component/tab/DashboardTabNoData.vue";
+import DashboardTabNoData from "@/views/main/dashboard/component/tab/DashboardTabNoData.vue";
 import IconButton from "@/components/button/IconButton.vue";
 import GraphQLConnectionTest from "@/components/graphql/GraphQLConnectionTest.vue";
+import InfoDialog from "@/components/dialog/InfoDialog.vue";
 import {DELETE_DATA_SOURCE, GET_USER_DATA_SOURCES} from "@/graphql/queries/data_source";
 import {CURRENT_USER} from "@/graphql/queries/user";
 import {GET_PROJECTS_WITH_DATA_SOURCE} from "@/graphql/queries/project";
 import {DataSource, SchemaItem} from "@/plugins/types";
 import {cryptoKey} from "@/main";
 import * as CryptoJS from "crypto-js";
-import InfoDialog from "@/components/dialog/InfoDialog.vue";
 
 export default Vue.extend({
   name: 'DashboardDataSourcesTab',

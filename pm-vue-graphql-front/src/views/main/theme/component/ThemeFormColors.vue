@@ -55,7 +55,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import ThemeColorField from "@/views/theme/component/ThemeColorField.vue";
+import ThemeColorField from "@/views/main/theme/component/ThemeColorField.vue";
 
 export default Vue.extend({
   name: 'ThemeFormColors',

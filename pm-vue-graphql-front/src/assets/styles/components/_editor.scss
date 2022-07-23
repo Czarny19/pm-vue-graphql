@@ -1,0 +1,35 @@
+@import "../abstracts/variables";
+
+.editor {
+  &--toolbox-widget {
+    cursor: grab;
+
+    :hover {
+      opacity: 0.5;
+    }
+  }
+
+  &--element {
+    border: 1px black solid !important;
+  }
+
+  &--element:hover {
+    border: 2px red solid !important;
+  }
+
+  &--container {
+    min-height: 240px;
+  }
+
+  &--row {
+    padding-bottom: 20px;
+  }
+
+  &--column {
+    min-height: 100px;
+  }
+
+  &--text {
+    min-height: 80px;
+  }
+}

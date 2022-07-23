@@ -39,7 +39,7 @@
       <v-list-item-group color="accent">
         <v-list-item v-for="project in projects" :key="project.title" link class="pl-6 pr-6">
           <v-list-item-content>
-            <v-list-item-title class="text-body-1 text-start" @click="openCanvas(project.id)">
+            <v-list-item-title class="text-body-1 text-start" @click="openApp(project.id)">
               {{ project.name }}
             </v-list-item-title>
           </v-list-item-content>
@@ -101,8 +101,8 @@ export default Vue.extend({
     i18n(key: string): string {
       return this.$t(key).toString()
     },
-    openCanvas(id: string): void {
-      this.$router.push({name: 'Canvas', params: {projectId: id}})
+    openApp(id: string): void {
+      this.$router.push({name: 'App', params: {projectId: id}})
     }
   },
   async beforeMount() {

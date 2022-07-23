@@ -88,13 +88,13 @@ import GraphQLConnectionTest from "@/components/graphql/GraphQLConnectionTest.vu
 import LoadingCircular from "@/components/loading/LoadingCircular.vue";
 import CardSectionTitle from "@/components/card/CardSectionTitle.vue";
 import IconButton from "@/components/button/IconButton.vue";
+import DataSourceInfo from "@/views/main/datasource/component/DataSourceInfo.vue";
+import GraphQLSchema from "@/components/graphql/GraphQLSchema.vue";
 import {ADD_DATA_SOURCE_FOR_USER, GET_DATA_SOURCE_BY_ID, UPDATE_DATA_SOURCE_BY_ID} from "@/graphql/queries/data_source";
 import {CURRENT_USER} from "@/graphql/queries/user";
 import {cryptoKey} from "@/main";
 import {SchemaItem} from "@/plugins/types";
 import * as CryptoJS from "crypto-js";
-import DataSourceInfo from "@/views/datasource/component/DataSourceInfo.vue";
-import GraphQLSchema from "@/components/graphql/GraphQLSchema.vue";
 
 export default Vue.extend({
   name: 'DataSourceForm',
