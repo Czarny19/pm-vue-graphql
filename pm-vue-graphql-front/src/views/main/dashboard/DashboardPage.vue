@@ -19,10 +19,10 @@
           </v-col>
           <v-col>
             <DashboardNavCard
-                :title="i18n('dashboard.addDataSource')"
-                :sub-title="i18n('dashboard.addDataSourceDesc')"
+                :title="i18n('dashboard.addDatasource')"
+                :sub-title="i18n('dashboard.addDatasourceDesc')"
                 icon="fa-database"
-                :on-click="addDataSource">
+                :on-click="addDatasource">
             </DashboardNavCard>
           </v-col>
           <v-col>
@@ -43,7 +43,7 @@
           <v-col>
             <DashboardProjectsTab v-if="currentTab === 0"/>
             <DashboardThemesTab v-else-if="currentTab === 1"/>
-            <DashboardDataSourcesTab v-else/>
+            <DashboardDatasourcesTab v-else/>
           </v-col>
         </v-row>
       </v-container>
@@ -56,7 +56,7 @@ import Vue from "vue";
 import DashboardNavigation from "@/views/main/dashboard/component/navigation/DashboardNavigation.vue";
 import DashboardNavCard from "@/views/main/dashboard/component/navigation/DashboardNavCard.vue";
 import DashboardProjectsTab from "@/views/main/dashboard/component/tab/DashboardProjectsTab.vue";
-import DashboardDataSourcesTab from "@/views/main/dashboard/component/tab/DashboardDataSourcesTab.vue";
+import DashboardDatasourcesTab from "@/views/main/dashboard/component/tab/DashboardDatasourcesTab.vue";
 import DashboardThemesTab from "@/views/main/dashboard/component/tab/DashboardThemesTab.vue";
 import LoginDialog from "@/views/main/dashboard/component/login/LoginDialog.vue";
 import SignUpDialog from "@/views/main/dashboard/component/login/SignUpDialog.vue";
@@ -68,7 +68,7 @@ export default Vue.extend({
     SignUpDialog,
     LoginDialog,
     DashboardThemesTab,
-    DashboardDataSourcesTab,
+    DashboardDatasourcesTab,
     DashboardProjectsTab,
     DashboardNavCard,
     DashboardNavigation
@@ -92,8 +92,8 @@ export default Vue.extend({
     addProject(): void {
       this.$router.push({name: 'NewProject'})
     },
-    addDataSource(): void {
-      this.$router.push({name: 'NewDataSource'})
+    addDatasource(): void {
+      this.$router.push({name: 'NewDatasource'})
     },
     addTheme(): void {
       this.$router.push({name: 'NewTheme'})

@@ -5,7 +5,7 @@ export type SchemaItem = {
     fields: { name: string; type: { ofType: { name: string } } }[];
 }
 
-export type DataSource = {
+export type Datasource = {
     id: number;
     name: string;
     address: string;
@@ -45,4 +45,16 @@ export type AppWidgetProp = {
     unit?: string;
     type: string;
     dataType: string;
+}
+
+export type Query = {
+    id: number;
+    name: string;
+    table: string;
+    modify_date: Date;
+    distinct_on: string;
+    limit: number;
+    order_by: string;
+    where: string;
+    fields: string;
 }

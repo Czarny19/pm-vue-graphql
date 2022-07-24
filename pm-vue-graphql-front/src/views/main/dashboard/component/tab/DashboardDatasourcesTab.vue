@@ -1,28 +1,28 @@
 <template>
   <div>
-    <DeleteConfirmationDialog :dialog="deleteDialog" @confirm="deleteDataSource" @cancel="cancelDeleteDataSource"/>
+    <DeleteConfirmationDialog :dialog="deleteDialog" @confirm="deleteDatasource" @cancel="cancelDeleteDatasource"/>
 
     <InfoDialog
         :dialog="warningDialog"
-        :title="i18n('dashboard.dataSourceDeleteWarning')"
-        :msg="i18n('dashboard.dataSourceProjectExists')"
+        :title="i18n('dashboard.datasourceDeleteWarning')"
+        :msg="i18n('dashboard.datasourceProjectExists')"
         @close="closeWarningDialog">
     </InfoDialog>
 
     <v-card class="mb-4" color="primary">
-      <TitleCard :title="i18n('dashboard.dataSources')" icon="fa-database"/>
+      <TitleCard :title="i18n('dashboard.datasources')" icon="fa-database"/>
     </v-card>
 
     <v-card color="primary">
       <LoadingCircular v-if="loading"/>
-      <DashboardTabNoData v-else-if="!dataSources.length && !loading" :msg="i18n('dashboard.noDataSources')"/>
+      <DashboardTabNoData v-else-if="!datasources.length && !loading" :msg="i18n('dashboard.noDatasources')"/>
     </v-card>
 
-    <v-container v-if="dataSources.length && !loading" fluid class="pa-0">
+    <v-container v-if="datasources.length && !loading" fluid class="pa-0">
       <v-row>
-        <v-col cols="12" sm="12" md="12" lg="6" xl="6" v-for="(dataSource, index) in dataSources" :key="dataSource.id">
+        <v-col cols="12" sm="12" md="12" lg="6" xl="6" v-for="(datasource, index) in datasources" :key="datasource.id">
           <v-card color="primary" class="fill-height">
-            <v-card-title class="secondary pl-6 pr-6 text-body-1">{{ dataSource.name }}</v-card-title>
+            <v-card-title class="secondary pl-6 pr-6 text-body-1">{{ datasource.name }}</v-card-title>
 
             <v-card-text class="text-body-2 text-start pa-2">
               <v-container fluid>
@@ -32,11 +32,11 @@
                   </v-col>
 
                   <v-col class="ma-auto" cols="9">
-                    {{ dataSource.address }}
+                    {{ datasource.address }}
                     <GraphQLConnectionTest
                         class="pa-0 pt-4"
-                        :address="dataSource.address"
-                        :secret="decryptSecret(dataSource.secret)"
+                        :address="datasource.address"
+                        :secret="decryptSecret(datasource.secret)"
                         :is-auto="true"
                         @setschema="schema => setSchema(schema, index)"
                         @error="setNotConnected(index)">
@@ -53,14 +53,14 @@
                   :label="i18n('common.modify')"
                   color="info"
                   icon="fa-edit"
-                  @click="openModifyDataSource(dataSource.id)">
+                  @click="openModifyDatasource(datasource.id)">
               </IconButton>
               <v-spacer></v-spacer>
               <IconButton
                   :label="i18n('common.delete')"
                   color="error"
                   icon="fa-trash-can"
-                  @click="deleteDataSourceClicked(dataSource.id)">
+                  @click="deleteDatasourceClicked(datasource.id)">
               </IconButton>
             </v-card-actions>
           </v-card>
@@ -69,8 +69,8 @@
     </v-container>
 
     <v-card class="pa-4 mt-4 text-end" color="primary">
-      <v-btn class="pa-5" min-width="300" color="success" @click="createDataSource">
-        {{ i18n('dashboard.addDataSource') }}
+      <v-btn class="pa-5" min-width="300" color="success" @click="createDatasource">
+        {{ i18n('dashboard.addDatasource') }}
         <v-icon small class="pl-6">fa-plus</v-icon>
       </v-btn>
     </v-card>
@@ -89,12 +89,12 @@ import InfoDialog from "@/components/dialog/InfoDialog.vue";
 import {DELETE_DATA_SOURCE, GET_USER_DATA_SOURCES} from "@/graphql/queries/data_source";
 import {CURRENT_USER} from "@/graphql/queries/user";
 import {GET_PROJECTS_WITH_DATA_SOURCE} from "@/graphql/queries/project";
-import {DataSource, SchemaItem} from "@/plugins/types";
+import {Datasource, SchemaItem} from "@/plugins/types";
 import {cryptoKey} from "@/main";
 import * as CryptoJS from "crypto-js";
 
 export default Vue.extend({
-  name: 'DashboardDataSourcesTab',
+  name: 'DashboardDatasourcesTab',
   components: {
     InfoDialog,
     IconButton,
@@ -111,28 +111,28 @@ export default Vue.extend({
       deleteDialog: false,
       deleteId: -1,
       currentUser: {id: -1},
-      dataSources: []
+      datasources: []
     }
   },
   methods: {
     i18n(key: string): string {
       return this.$t(key).toString()
     },
-    createDataSource(): void {
-      this.$router.push({name: 'NewDataSource'})
+    createDatasource(): void {
+      this.$router.push({name: 'NewDatasource'})
     },
-    openModifyDataSource(id: string): void {
-      this.$router.push({name: 'DataSource', params: {dataSourceId: id}})
+    openModifyDatasource(id: string): void {
+      this.$router.push({name: 'Datasource', params: {datasourceId: id}})
     },
-    deleteDataSourceClicked(id: number): void {
+    deleteDatasourceClicked(id: number): void {
       this.deleteId = id
       this.$apollo.queries.DATA_SOURCE.refresh()
     },
-    cancelDeleteDataSource(): void {
+    cancelDeleteDatasource(): void {
       this.deleteId = -1
       this.deleteDialog = false
     },
-    deleteDataSource(): void {
+    deleteDatasource(): void {
       this.deleteDialog = false
 
       this.$apollo.mutate({
@@ -151,21 +151,21 @@ export default Vue.extend({
       return CryptoJS.AES.decrypt(secret, cryptoKey).toString(CryptoJS.enc.Utf8)
     },
     setSchema(schema: SchemaItem[], index: number): void {
-      const datasourcesTmp = this.dataSources as DataSource[];
-      this.dataSources = [];
+      const datasourcesTmp = this.datasources as Datasource[];
+      this.datasources = [];
 
       datasourcesTmp[index].schema = schema;
       datasourcesTmp[index].isConnected = true;
 
-      this.dataSources = datasourcesTmp as [];
+      this.datasources = datasourcesTmp as [];
     },
     setNotConnected(index: number): void {
-      const datasourcesTmp = this.dataSources as DataSource[];
-      this.dataSources = [];
+      const datasourcesTmp = this.datasources as Datasource[];
+      this.datasources = [];
 
       datasourcesTmp[index].isConnected = false;
 
-      this.dataSources = datasourcesTmp as [];
+      this.datasources = datasourcesTmp as [];
     }
   },
   apollo: {
@@ -185,7 +185,7 @@ export default Vue.extend({
       },
       result({data}): void {
         this.loading = false
-        this.dataSources = data.DATA_SOURCE
+        this.datasources = data.DATA_SOURCE
       }
     },
     PROJECT: {

@@ -43,7 +43,7 @@
                 </v-col>
 
                 <v-col>
-                  <div class="text-body-2">{{ i18n('dashboard.dataSource') }}:</div>
+                  <div class="text-body-2">{{ i18n('dashboard.datasource') }}:</div>
                   <div v-if="project.project_data_source" class="text-body-1 font-weight-bold">
                     {{ project.project_data_source.name }}
                   </div>

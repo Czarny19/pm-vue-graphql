@@ -60,15 +60,15 @@
                 <ColorReadOnlyList v-if="themeSet" :theme="theme"/>
               </v-card-text>
 
-              <CardSectionTitle :title="i18n('project.dataSource')"/>
+              <CardSectionTitle :title="i18n('project.datasource')"/>
 
               <v-card-text class="pt-4 pb-0">
                 <v-select
                     class="pa-4"
                     color="accent"
-                    v-model="dataSourceId"
-                    :items="dataSources"
-                    :label="i18n('project.dataSource')"
+                    v-model="datasourceId"
+                    :items="datasources"
+                    :label="i18n('project.datasource')"
                     required
                     append-icon="fa-chevron-down"
                     append-outer-icon="fa-times"
@@ -82,14 +82,14 @@
                 </v-select>
               </v-card-text>
 
-              <template v-if="dataSourceSet">
+              <template v-if="datasourceSet">
                 <div class="text-start pl-8 pr-8">
-                  {{ i18n('datasource.address') }}: <i>{{ dataSourceAddress }}</i>
+                  {{ i18n('datasource.address') }}: <i>{{ datasourceAddress }}</i>
                 </div>
                 <GraphQLConnectionTest
                     class="pl-8 pt-6 pb-4"
-                    :address="dataSourceAddress"
-                    :secret="dataSourceSecret"
+                    :address="datasourceAddress"
+                    :secret="datasourceSecret"
                     :is-auto="true">
                 </GraphQLConnectionTest>
               </template>
@@ -125,7 +125,7 @@ import {ADD_PROJECT_FOR_USER, GET_PROJECT_BY_ID, UPDATE_PROJECT_BY_ID} from "@/g
 import {CURRENT_USER} from "@/graphql/queries/user";
 import {GET_USER_THEMES} from "@/graphql/queries/theme";
 import {GET_USER_DATA_SOURCES} from "@/graphql/queries/data_source";
-import {DataSource, Theme} from "@/plugins/types";
+import {Datasource, Theme} from "@/plugins/types";
 import {cryptoKey} from "@/main";
 import * as CryptoJS from "crypto-js";
 
@@ -145,11 +145,11 @@ export default Vue.extend({
       theme: {},
       themeSet: false,
       themeId: null,
-      dataSources: [],
-      dataSourceId: null,
-      dataSourceSet: false,
-      dataSourceAddress: '',
-      dataSourceSecret: '',
+      datasources: [],
+      datasourceId: null,
+      datasourceSet: false,
+      datasourceAddress: '',
+      datasourceSecret: '',
       valid: false,
       nameRules: [
         (v: string) => !!v || this.$t('project.nameRequired'),
@@ -188,17 +188,17 @@ export default Vue.extend({
       this.themeSet = false
       this.themeId = null
     },
-    setDataSource(): void {
-      const dataSource: DataSource = this.dataSources.filter((ds: DataSource) => ds.id === Number(this.dataSourceId))[0]
-      this.dataSourceAddress = dataSource.address
-      this.dataSourceSecret = CryptoJS.AES.decrypt(dataSource.secret ?? '', cryptoKey).toString(CryptoJS.enc.Utf8)
-      this.dataSourceSet = true
+    setDatasource(): void {
+      const datasource: Datasource = this.datasources.filter((ds: Datasource) => ds.id === Number(this.datasourceId))[0]
+      this.datasourceAddress = datasource.address
+      this.datasourceSecret = CryptoJS.AES.decrypt(datasource.secret ?? '', cryptoKey).toString(CryptoJS.enc.Utf8)
+      this.datasourceSet = true
     },
     clearDatasource(): void {
-      this.dataSourceId = null
-      this.dataSourceSet = false
-      this.dataSourceAddress = ''
-      this.dataSourceSecret = ''
+      this.datasourceId = null
+      this.datasourceSet = false
+      this.datasourceAddress = ''
+      this.datasourceSecret = ''
     },
     updateProject(): void {
       this.$apollo.mutate({
@@ -208,7 +208,7 @@ export default Vue.extend({
           name: this.projectName,
           description: this.description,
           themeId: this.themeId,
-          dataSourceId: this.dataSourceId
+          datasourceId: this.datasourceId
         }
       }).then(() => {
         this.$emit('saving', false)
@@ -225,7 +225,7 @@ export default Vue.extend({
           name: this.projectName,
           description: this.description,
           themeId: this.themeId,
-          dataSourceId: this.dataSourceId
+          datasourceId: this.datasourceId
         }
       }).then(() => {
         this.$emit('saving', false)
@@ -241,9 +241,9 @@ export default Vue.extend({
         this.setTheme()
       }
     },
-    dataSourceId() {
-      if (this.dataSourceId && this.dataSources.length > 0) {
-        this.setDataSource()
+    datasourceId() {
+      if (this.datasourceId && this.datasources.length > 0) {
+        this.setDatasource()
       }
     }
   },
@@ -266,7 +266,7 @@ export default Vue.extend({
         this.projectName = data.PROJECT[0].name
         this.description = data.PROJECT[0].description
         this.themeId = data.PROJECT[0].theme_id
-        this.dataSourceId = data.PROJECT[0].source_id
+        this.datasourceId = data.PROJECT[0].source_id
         this.loading = false
       }
     },
@@ -301,10 +301,10 @@ export default Vue.extend({
         return !this.currentUser
       },
       result({data}): void {
-        this.dataSources = data.DATA_SOURCE
+        this.datasources = data.DATA_SOURCE
 
-        if (this.dataSourceId && this.dataSources.length > 0) {
-          this.setDataSource()
+        if (this.datasourceId && this.datasources.length > 0) {
+          this.setDatasource()
         }
       }
     }

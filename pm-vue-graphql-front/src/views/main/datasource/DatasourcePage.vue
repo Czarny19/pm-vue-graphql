@@ -10,7 +10,7 @@
 
     <v-row no-gutters>
       <v-col>
-        <DataSourceForm :data-source-id="dataSourceId" @saving="setSaving" @setschema="setSchema"/>
+        <DatasourceForm :data-source-id="datasourceId" @saving="setSaving" @setschema="setSchema"/>
       </v-col>
     </v-row>
   </v-container>
@@ -18,13 +18,13 @@
 
 <script lang="ts">
 import Vue from "vue";
-import DataSourceForm from "@/views/main/datasource/component/DataSourceForm.vue";
+import DatasourceForm from "@/views/main/datasource/component/DatasourceForm.vue";
 import LoadingDialog from "@/components/dialog/LoadingDialog.vue";
 import TitleCard from "@/components/card/TitleCard.vue";
 
 export default Vue.extend({
-  name: 'DataSourcePage',
-  components: {TitleCard, LoadingDialog, DataSourceForm},
+  name: 'DatasourcePage',
+  components: {TitleCard, LoadingDialog, DatasourceForm},
   data() {
     return {
       saving: false,
@@ -32,8 +32,8 @@ export default Vue.extend({
     }
   },
   computed: {
-    dataSourceId(): number {
-      return Number(this.$route.params.dataSourceId)
+    datasourceId(): number {
+      return Number(this.$route.params.datasourceId)
     }
   },
   methods: {

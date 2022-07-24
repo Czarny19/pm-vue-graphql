@@ -76,7 +76,7 @@
       </v-col>
 
       <v-col cols="12" sm="12" md="12" lg="3" xl="3" class="pa-2">
-        <DataSourceInfo/>
+        <DatasourceInfo/>
       </v-col>
     </v-row>
   </v-container>
@@ -88,7 +88,7 @@ import GraphQLConnectionTest from "@/components/graphql/GraphQLConnectionTest.vu
 import LoadingCircular from "@/components/loading/LoadingCircular.vue";
 import CardSectionTitle from "@/components/card/CardSectionTitle.vue";
 import IconButton from "@/components/button/IconButton.vue";
-import DataSourceInfo from "@/views/main/datasource/component/DataSourceInfo.vue";
+import DatasourceInfo from "@/views/main/datasource/component/DatasourceInfo.vue";
 import GraphQLSchema from "@/components/graphql/GraphQLSchema.vue";
 import {ADD_DATA_SOURCE_FOR_USER, GET_DATA_SOURCE_BY_ID, UPDATE_DATA_SOURCE_BY_ID} from "@/graphql/queries/data_source";
 import {CURRENT_USER} from "@/graphql/queries/user";
@@ -97,10 +97,10 @@ import {SchemaItem} from "@/plugins/types";
 import * as CryptoJS from "crypto-js";
 
 export default Vue.extend({
-  name: 'DataSourceForm',
-  components: {GraphQLSchema, DataSourceInfo, IconButton, CardSectionTitle, LoadingCircular, GraphQLConnectionTest},
+  name: 'DatasourceForm',
+  components: {GraphQLSchema, DatasourceInfo, IconButton, CardSectionTitle, LoadingCircular, GraphQLConnectionTest},
   props: {
-    dataSourceId: Number,
+    datasourceId: Number,
   },
   data() {
     return {
@@ -129,7 +129,7 @@ export default Vue.extend({
 
       if (this.valid) {
         this.$emit('saving', true)
-        this.dataSourceId ? this.updateDataSource() : this.createDataSource()
+        this.datasourceId ? this.updateDatasource() : this.createDatasource()
       }
     },
     cancel(): void {
@@ -143,13 +143,13 @@ export default Vue.extend({
       this.schema = []
       this.$emit('setschema', this.schema)
     },
-    updateDataSource(): void {
+    updateDatasource(): void {
       const encrypted = CryptoJS.AES.encrypt(this.secret, cryptoKey).toString();
 
       this.$apollo.mutate({
         mutation: UPDATE_DATA_SOURCE_BY_ID,
         variables: {
-          id: this.dataSourceId,
+          id: this.datasourceId,
           name: this.datasourceName,
           address: this.address,
           secret: encrypted
@@ -161,7 +161,7 @@ export default Vue.extend({
         this.$emit('saving', false)
       })
     },
-    createDataSource(): void {
+    createDatasource(): void {
       const encrypted = CryptoJS.AES.encrypt(this.secret, cryptoKey).toString();
 
       this.$apollo.mutate({
@@ -189,11 +189,11 @@ export default Vue.extend({
       fetchPolicy: 'network-only',
       variables(): { id: number } {
         return {
-          id: this.dataSourceId
+          id: this.datasourceId
         }
       },
       skip(): boolean {
-        return !this.dataSourceId
+        return !this.datasourceId
       },
       result({data}): void {
         this.datasourceName = data.DATA_SOURCE[0].name
@@ -204,7 +204,7 @@ export default Vue.extend({
     }
   },
   beforeMount() {
-    if (!this.dataSourceId) {
+    if (!this.datasourceId) {
       this.loading = false
     }
   }

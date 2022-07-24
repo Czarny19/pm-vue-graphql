@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 
-export const GET_USER_DATA_SOURCES = gql`query getUserDataSources($userId: bigint!) {
+export const GET_USER_DATA_SOURCES = gql`query getUserDatasources($userId: bigint!) {
     DATA_SOURCE(where: {user_id: {_eq: $userId}}) {
         id
         name
@@ -10,7 +10,7 @@ export const GET_USER_DATA_SOURCES = gql`query getUserDataSources($userId: bigin
     }
 }`
 
-export const GET_DATA_SOURCE_BY_ID = gql`query getDataSourceById($id: bigint!) {
+export const GET_DATA_SOURCE_BY_ID = gql`query getDatasourceById($id: bigint!) {
     DATA_SOURCE(where: {id: {_eq: $id}}) {
         id
         name
@@ -20,7 +20,7 @@ export const GET_DATA_SOURCE_BY_ID = gql`query getDataSourceById($id: bigint!) {
     }
 }`
 
-export const ADD_DATA_SOURCE_FOR_USER = gql`mutation addDataSourceForUser(
+export const ADD_DATA_SOURCE_FOR_USER = gql`mutation addDatasourceForUser(
     $userId: bigint!,
     $name: String!,
     $address: String!,
@@ -38,7 +38,7 @@ export const ADD_DATA_SOURCE_FOR_USER = gql`mutation addDataSourceForUser(
     }
 }`
 
-export const UPDATE_DATA_SOURCE_BY_ID = gql`mutation updateDataSourceById(
+export const UPDATE_DATA_SOURCE_BY_ID = gql`mutation updateDatasourceById(
     $id: bigint!,
     $name: String!,
     $address: String!,
@@ -55,7 +55,7 @@ export const UPDATE_DATA_SOURCE_BY_ID = gql`mutation updateDataSourceById(
     }
 }`
 
-export const DELETE_DATA_SOURCE = gql`mutation deleteDataSource($id: bigint!) {
+export const DELETE_DATA_SOURCE = gql`mutation deleteDatasource($id: bigint!) {
     delete_DATA_SOURCE(where: {id: {_eq: $id}}) {
         returning {
             id

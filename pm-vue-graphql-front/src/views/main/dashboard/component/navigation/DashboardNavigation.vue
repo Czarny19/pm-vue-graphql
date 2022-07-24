@@ -35,11 +35,11 @@
       {{ i18n('dashboard.editor') }}
     </div>
 
-    <v-list>
+    <v-list class="pa-2">
       <v-list-item-group color="accent">
-        <v-list-item v-for="project in projects" :key="project.title" link class="pl-6 pr-6">
+        <v-list-item v-for="project in projects" :key="project.title" link class="pl-5" @click="openApp(project.id)">
           <v-list-item-content>
-            <v-list-item-title class="text-body-1 text-start" @click="openApp(project.id)">
+            <v-list-item-title class="text-body-1 text-start">
               {{ project.name }}
             </v-list-item-title>
           </v-list-item-content>
@@ -67,7 +67,7 @@ export default Vue.extend({
       navItems: [
         {title: this.$t('dashboard.projects'), icon: 'fa-tablet'},
         {title: this.$t('dashboard.themes'), icon: 'fa-palette'},
-        {title: this.$t('dashboard.dataSources'), icon: 'fa-database'}
+        {title: this.$t('dashboard.datasources'), icon: 'fa-database'}
       ],
     }
   },

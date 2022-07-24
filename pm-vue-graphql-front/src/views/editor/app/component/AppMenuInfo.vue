@@ -38,7 +38,7 @@
               class="pa-4"
               color="accent"
               :value="datasourceName"
-              :label="i18n('project.dataSource')"
+              :label="i18n('project.datasource')"
               prepend-icon="fa-database"
               readonly>
           </v-text-field>

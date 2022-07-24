@@ -388,7 +388,6 @@ type QUERY {
     limit: Int
     modify_date: date!
     name: String!
-    offset: Int
     order_by: String
     table: String
     where: String
@@ -420,7 +419,6 @@ type QUERY_avg_fields {
     data_source_id: Float
     id: Float
     limit: Float
-    offset: Float
 }
 
 "aggregate max on columns"
@@ -432,7 +430,6 @@ type QUERY_max_fields {
     limit: Int
     modify_date: date
     name: String
-    offset: Int
     order_by: String
     table: String
     where: String
@@ -447,7 +444,6 @@ type QUERY_min_fields {
     limit: Int
     modify_date: date
     name: String
-    offset: Int
     order_by: String
     table: String
     where: String
@@ -466,7 +462,6 @@ type QUERY_stddev_fields {
     data_source_id: Float
     id: Float
     limit: Float
-    offset: Float
 }
 
 "aggregate stddev_pop on columns"
@@ -474,7 +469,6 @@ type QUERY_stddev_pop_fields {
     data_source_id: Float
     id: Float
     limit: Float
-    offset: Float
 }
 
 "aggregate stddev_samp on columns"
@@ -482,7 +476,6 @@ type QUERY_stddev_samp_fields {
     data_source_id: Float
     id: Float
     limit: Float
-    offset: Float
 }
 
 "aggregate sum on columns"
@@ -490,7 +483,6 @@ type QUERY_sum_fields {
     data_source_id: bigint
     id: bigint
     limit: Int
-    offset: Int
 }
 
 "aggregate var_pop on columns"
@@ -498,7 +490,6 @@ type QUERY_var_pop_fields {
     data_source_id: Float
     id: Float
     limit: Float
-    offset: Float
 }
 
 "aggregate var_samp on columns"
@@ -506,7 +497,6 @@ type QUERY_var_samp_fields {
     data_source_id: Float
     id: Float
     limit: Float
-    offset: Float
 }
 
 "aggregate variance on columns"
@@ -514,7 +504,6 @@ type QUERY_variance_fields {
     data_source_id: Float
     id: Float
     limit: Float
-    offset: Float
 }
 
 "columns and relationships of \"THEME\""
@@ -1487,8 +1476,6 @@ enum QUERY_select_column {
     "column name"
     name
     "column name"
-    offset
-    "column name"
     order_by
     "column name"
     table
@@ -1512,8 +1499,6 @@ enum QUERY_update_column {
     modify_date
     "column name"
     name
-    "column name"
-    offset
     "column name"
     order_by
     "column name"
@@ -2205,7 +2190,6 @@ input QUERY_avg_order_by {
     data_source_id: order_by
     id: order_by
     limit: order_by
-    offset: order_by
 }
 
 "Boolean expression to filter rows from the table \"QUERY\". All fields are combined with a logical 'AND'."
@@ -2220,7 +2204,6 @@ input QUERY_bool_exp {
     limit: Int_comparison_exp
     modify_date: date_comparison_exp
     name: String_comparison_exp
-    offset: Int_comparison_exp
     order_by: String_comparison_exp
     table: String_comparison_exp
     where: String_comparison_exp
@@ -2231,7 +2214,6 @@ input QUERY_inc_input {
     data_source_id: bigint
     id: bigint
     limit: Int
-    offset: Int
 }
 
 "input type for inserting data into table \"QUERY\""
@@ -2243,7 +2225,6 @@ input QUERY_insert_input {
     limit: Int
     modify_date: date
     name: String
-    offset: Int
     order_by: String
     table: String
     where: String
@@ -2258,7 +2239,6 @@ input QUERY_max_order_by {
     limit: order_by
     modify_date: order_by
     name: order_by
-    offset: order_by
     order_by: order_by
     table: order_by
     where: order_by
@@ -2273,7 +2253,6 @@ input QUERY_min_order_by {
     limit: order_by
     modify_date: order_by
     name: order_by
-    offset: order_by
     order_by: order_by
     table: order_by
     where: order_by
@@ -2301,7 +2280,6 @@ input QUERY_order_by {
     limit: order_by
     modify_date: order_by
     name: order_by
-    offset: order_by
     order_by: order_by
     table: order_by
     where: order_by
@@ -2321,7 +2299,6 @@ input QUERY_set_input {
     limit: Int
     modify_date: date
     name: String
-    offset: Int
     order_by: String
     table: String
     where: String
@@ -2332,7 +2309,6 @@ input QUERY_stddev_order_by {
     data_source_id: order_by
     id: order_by
     limit: order_by
-    offset: order_by
 }
 
 "order by stddev_pop() on columns of table \"QUERY\""
@@ -2340,7 +2316,6 @@ input QUERY_stddev_pop_order_by {
     data_source_id: order_by
     id: order_by
     limit: order_by
-    offset: order_by
 }
 
 "order by stddev_samp() on columns of table \"QUERY\""
@@ -2348,7 +2323,6 @@ input QUERY_stddev_samp_order_by {
     data_source_id: order_by
     id: order_by
     limit: order_by
-    offset: order_by
 }
 
 "order by sum() on columns of table \"QUERY\""
@@ -2356,7 +2330,6 @@ input QUERY_sum_order_by {
     data_source_id: order_by
     id: order_by
     limit: order_by
-    offset: order_by
 }
 
 "order by var_pop() on columns of table \"QUERY\""
@@ -2364,7 +2337,6 @@ input QUERY_var_pop_order_by {
     data_source_id: order_by
     id: order_by
     limit: order_by
-    offset: order_by
 }
 
 "order by var_samp() on columns of table \"QUERY\""
@@ -2372,7 +2344,6 @@ input QUERY_var_samp_order_by {
     data_source_id: order_by
     id: order_by
     limit: order_by
-    offset: order_by
 }
 
 "order by variance() on columns of table \"QUERY\""
@@ -2380,7 +2351,6 @@ input QUERY_variance_order_by {
     data_source_id: order_by
     id: order_by
     limit: order_by
-    offset: order_by
 }
 
 "expression to compare columns of type String. All fields are combined with logical 'AND'."

@@ -28,7 +28,7 @@
 import Vue from "vue";
 
 export default Vue.extend({
-  name: 'DataSourceInfo',
+  name: 'DatasourceInfo',
   methods: {
     i18n(key: string): string {
       return this.$t(key).toString()

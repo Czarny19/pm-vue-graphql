@@ -138,7 +138,7 @@ export default Vue.extend({
       this.$apollo.queries.QUERY.refetch()
     },
     openQuery(id: number): void {
-      this.$router.push({name: 'Query', params: {queryId: id.toString()}})
+      this.$router.push({name: 'Query', params: {datasourceId: this.datasource.id.toString(), queryId: id.toString()}})
     },
     deleteQueryClicked(id: number): void {
       this.deleteId = id
@@ -184,7 +184,7 @@ export default Vue.extend({
         this.loading = false
       }
     }
-  },
+  }
 })
 </script>
 
