@@ -39,6 +39,7 @@
 import Vue from "vue";
 import {SchemaItem} from "@/plugins/types";
 import CardSectionTitle from "@/components/card/CardSectionTitle.vue";
+import {cleanSchema} from "@/plugins/schema";
 
 export default Vue.extend({
   name: 'GraphQLSchema',
@@ -47,45 +48,14 @@ export default Vue.extend({
     schema: Array,
   },
   computed: {
-    ignoredObjects(): string [] {
-      return [
-        '_aggregate', '_aggregate_fields', '_avg_fields', '_max_fields', '_min_fields', '_mutation_response',
-        '_stddev_fields', '_stddev_pop_fields', '_stddev_samp_fields', '_sum_fields', '_var_pop_fields',
-        '_var_samp_fields', '_variance_fields', '__Directive', '__EnumValue', '__Field', '__InputValue',
-        '_Schema', '__Type', 'mutation_root', 'query_root', 'subscription_root'
-      ]
-    },
     fieldHeaders(): { text: string; value: string }[] {
       return [
         {text: this.$t('datasource.fieldName').toString(), value: 'name'},
         {text: this.$t('datasource.fieldType').toString(), value: 'type.ofType.name'}
       ]
     },
-    cleanSchema(): SchemaItem [] {
-      const cleanSchema: SchemaItem [] = [];
-
-      this.schema.forEach(item => {
-        const schemaItem = (item as SchemaItem)
-
-        const isObject = schemaItem.kind === 'OBJECT';
-        const hasFields = schemaItem.fields;
-        const nameNotIgnored = this.ignoredObjects.filter(ignored => schemaItem.name.endsWith(ignored)).length == 0
-
-        if (isObject && hasFields && nameNotIgnored) {
-          schemaItem.fields.forEach(field => {
-            if (field.type && !field.type.ofType) {
-              field.type.ofType = {name: 'nullable'}
-            }
-
-            const typeName = field.type.ofType.name
-            field.type.ofType.name = typeName.charAt(0).toUpperCase() + typeName.slice(1);
-          })
-
-          cleanSchema.push(schemaItem)
-        }
-      })
-
-      return cleanSchema;
+    displaySchema(): SchemaItem [] {
+      return cleanSchema(this.schema as SchemaItem [])
     }
   },
   methods: {

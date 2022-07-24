@@ -1,20 +1,35 @@
 <template>
   <v-dialog persistent v-model="isOpen" max-width="800">
     <v-card>
-      <v-card-title class="text-start">{{ i18n('editor.addPage') }}</v-card-title>
+      <v-card-title class="text-start">{{ i18n('editor.addQuery') }}</v-card-title>
 
       <v-card-text class="text-start pt-2 pb-2">
         <v-form v-model="valid" ref="form" @submit.prevent="save">
           <v-text-field
               class="pa-4"
               color="accent"
-              v-model="pageName"
-              :label="i18n('editor.pageName')"
-              :counter="30"
-              :rules="pageNameRules"
+              v-model="queryName"
+              :label="i18n('editor.queryName')"
+              :counter="50"
+              :rules="queryNameRules"
               prepend-icon="fa-tag"
               required>
           </v-text-field>
+
+          <v-select
+              class="pa-4"
+              color="accent"
+              item-color="accent"
+              v-model="queryTable"
+              :items="tables"
+              :label="i18n('editor.tableName')"
+              :rules="queryTableRules"
+              required
+              append-icon="fa-chevron-down"
+              prepend-icon="fa-table"
+              item-text="name"
+              item-value="id">
+          </v-select>
         </v-form>
       </v-card-text>
 
@@ -30,24 +45,29 @@
 <script lang="ts">
 import Vue from "vue";
 import IconButton from "@/components/button/IconButton.vue";
-import {ADD_PAGE_FOR_PROJECT} from "@/graphql/queries/page";
+import {ADD_QUERY} from "@/graphql/queries/query";
 
 export default Vue.extend({
-  name: 'AppAddPageDialog',
+  name: 'AppAddQueryDialog',
   components: {IconButton},
   props: {
     dialog: Boolean,
-    projectId: Number
+    datasourceId: Number,
+    tables: Array
   },
   data() {
     return {
       isOpen: false,
       valid: false,
-      pageName: '',
-      pageNameRules: [
-        (v: string) => !!v || this.$t('editor.pageNameRequired'),
-        (v: string) => (v && v.length <= 30) || this.$t('editor.pageNameTooLong'),
+      queryName: '',
+      queryTable: '',
+      queryNameRules: [
+        (v: string) => !!v || this.$t('editor.queryNameRequired'),
+        (v: string) => (v && v.length <= 50) || this.$t('editor.queryNameTooLong'),
       ],
+      queryTableRules: [
+        (v: string) => !!v || this.$t('editor.tableRequired')
+      ]
     }
   },
   watch: {
@@ -63,23 +83,26 @@ export default Vue.extend({
       (this.$refs.form as Vue & { validate: () => boolean }).validate()
 
       if (this.valid) {
-        this.addPage()
+        this.addQuery()
       }
     },
-    addPage(): void {
+    addQuery(): void {
       this.$apollo.mutate({
-        mutation: ADD_PAGE_FOR_PROJECT,
+        mutation: ADD_QUERY,
         variables: {
-          projectId: this.projectId,
-          name: this.pageName,
+          datasourceId: this.datasourceId,
+          name: this.queryName,
+          table: this.queryTable,
         }
       }).then(async () => {
-        this.pageName = ''
+        this.queryName = ''
+        this.queryTable = ''
         this.isOpen = false
         this.$emit('refresh')
         this.$emit('close')
       }).catch(() => {
-        this.pageName = ''
+        this.queryName = ''
+        this.queryTable = ''
         this.isOpen = false
         this.$emit('close')
       })

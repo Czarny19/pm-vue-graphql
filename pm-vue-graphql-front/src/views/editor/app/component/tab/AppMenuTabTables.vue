@@ -1,39 +1,51 @@
 <template>
   <v-container fluid class="pa-4">
-    <TitleCard :title="i18n('editor.tables')" icon="fa-table"/>
+    <template v-if="datasourceSet">
+      <TitleCard :title="i18n('editor.tables')" icon="fa-table"/>
 
-    <v-card class="mt-4 mb-4 pl-3" color="primary">
-      <GraphQLConnectionTest
-          :address="datasource.address"
-          :secret="secretDecoded"
-          :is-auto="true"
-          @setschema="setSchema"
-          @error="clearSchema">
-      </GraphQLConnectionTest>
-    </v-card>
+      <v-card class="mt-4 mb-4 pl-3" color="primary">
+        <GraphQLConnectionTest
+            :address="datasource.address"
+            :secret="secretDecoded"
+            :is-auto="true"
+            @setschema="setSchema"
+            @error="clearSchema">
+        </GraphQLConnectionTest>
+      </v-card>
 
-    <v-expansion-panels>
-      <v-expansion-panel v-for="schemaItem in cleanSchema" :key="schemaItem.name">
+      <v-expansion-panels>
+        <v-expansion-panel v-for="schemaItem in displaySchema" :key="schemaItem.name">
 
-        <v-expansion-panel-header class="secondary text-start text-body-2" expand-icon="fa-angle-down" ripple>
-          {{ schemaItem.name }}
-        </v-expansion-panel-header>
+          <v-expansion-panel-header class="secondary text-start text-body-2" expand-icon="fa-angle-down" ripple>
+            {{ schemaItem.name }}
+          </v-expansion-panel-header>
 
-        <v-expansion-panel-content class="pt-4">
-          <div class="text-start text-body-2 pa-2 pb-4">{{ schemaItem.description }}</div>
+          <v-expansion-panel-content class="pt-4">
+            <div class="text-start text-body-2 pa-2 pb-4">{{ schemaItem.description }}</div>
 
-          <v-data-table
-              :headers="fieldHeaders"
-              :items="schemaItem.fields"
-              hide-default-footer
-              dense
-              disable-sort
-              class="elevation-0">
-          </v-data-table>
-        </v-expansion-panel-content>
+            <v-data-table
+                :headers="fieldHeaders"
+                :items="schemaItem.fields"
+                hide-default-footer
+                dense
+                disable-sort
+                class="elevation-0">
+            </v-data-table>
+          </v-expansion-panel-content>
 
-      </v-expansion-panel>
-    </v-expansion-panels>
+        </v-expansion-panel>
+      </v-expansion-panels>
+    </template>
+
+    <template v-else>
+      <TitleCard :title="i18n('editor.tables')" icon="fa-table"/>
+
+      <v-card class="mt-4 mb-4 pa-6" color="primary">
+        <v-icon class="pa-6" size="60" color="error">fa-database</v-icon>
+        <div class="pa-6 text-h5">{{ i18n('editor.noDatasource') }}</div>
+      </v-card>
+    </template>
+
   </v-container>
 </template>
 
@@ -41,6 +53,7 @@
 import Vue from "vue";
 import TitleCard from "@/components/card/TitleCard.vue";
 import GraphQLConnectionTest from "@/components/graphql/GraphQLConnectionTest.vue";
+import {cleanSchema} from "@/plugins/schema";
 import {cryptoKey} from "@/main";
 import {SchemaItem} from "@/plugins/types";
 import * as CryptoJS from "crypto-js";
@@ -55,16 +68,11 @@ export default Vue.extend({
     }
   },
   computed: {
-    secretDecoded(): string {
-      return this.datasource ? CryptoJS.AES.decrypt(this.datasource.secret, cryptoKey).toString(CryptoJS.enc.Utf8) : ''
+    datasourceSet(): boolean {
+      return Object.keys(this.datasource).length !== 0
     },
-    ignoredObjects(): string [] {
-      return [
-        '_aggregate', '_aggregate_fields', '_avg_fields', '_max_fields', '_min_fields', '_mutation_response',
-        '_stddev_fields', '_stddev_pop_fields', '_stddev_samp_fields', '_sum_fields', '_var_pop_fields',
-        '_var_samp_fields', '_variance_fields', '__Directive', '__EnumValue', '__Field', '__InputValue',
-        '_Schema', '__Type', 'mutation_root', 'query_root', 'subscription_root'
-      ]
+    secretDecoded(): string {
+      return CryptoJS.AES.decrypt(this.datasource.secret, cryptoKey).toString(CryptoJS.enc.Utf8)
     },
     fieldHeaders(): { text: string; value: string }[] {
       return [
@@ -72,31 +80,8 @@ export default Vue.extend({
         {text: this.$t('datasource.fieldType').toString(), value: 'type.ofType.name'}
       ]
     },
-    cleanSchema(): SchemaItem [] {
-      const cleanSchema: SchemaItem [] = [];
-
-      this.schema.forEach(item => {
-        const schemaItem = (item as SchemaItem)
-
-        const isObject = schemaItem.kind === 'OBJECT';
-        const hasFields = schemaItem.fields;
-        const nameNotIgnored = this.ignoredObjects.filter(ignored => schemaItem.name.endsWith(ignored)).length == 0
-
-        if (isObject && hasFields && nameNotIgnored) {
-          schemaItem.fields.forEach(field => {
-            if (field.type && !field.type.ofType) {
-              field.type.ofType = {name: 'nullable'}
-            }
-
-            const typeName = field.type.ofType.name
-            field.type.ofType.name = typeName.charAt(0).toUpperCase() + typeName.slice(1);
-          })
-
-          cleanSchema.push(schemaItem)
-        }
-      })
-
-      return cleanSchema;
+    displaySchema(): SchemaItem [] {
+      return cleanSchema(this.schema)
     }
   },
   methods: {

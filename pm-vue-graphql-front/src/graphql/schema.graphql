@@ -386,7 +386,7 @@ type QUERY {
     fields: String
     id: bigint!
     limit: Int
-    modify_date: date
+    modify_date: date!
     name: String!
     offset: Int
     order_by: String
@@ -1464,6 +1464,8 @@ enum PROJECT_update_column {
 
 "unique or primary key constraints on table \"QUERY\""
 enum QUERY_constraint {
+    "unique or primary key constraint"
+    QUERY_id_key
     "unique or primary key constraint"
     QUERY_pkey
 }

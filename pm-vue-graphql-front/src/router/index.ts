@@ -26,7 +26,6 @@ const routes = [
         component: GuiEditorPage,
         beforeEnter: authGuard
     },
-    {name: 'NewQuery', path: '/editor/query/new', component: QueryPage, beforeEnter: authGuard},
     {name: 'Query', path: '/editor/query/:queryId', component: QueryPage, beforeEnter: authGuard},
     {path: '*', redirect: '/main/dashboard'}
 ]

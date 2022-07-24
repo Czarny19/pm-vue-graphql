@@ -1,14 +1,16 @@
 <template>
-  <div class="fill-height background">
+  <div class="fill-height">
     <AppMenuNavigation @tabchange="changeTab"/>
 
-    <AppMenuInfo :project="project" :theme-name="theme.name" :datasource-name="datasource.name"/>
+    <div class="pa-4">
+      <AppMenuInfo :project="project" :theme-name="theme.name" :datasource-name="datasource.name"/>
+    </div>
 
     <v-divider></v-divider>
 
     <AppMenuTabPages v-if="currentTab === 0" :project-id="project.id" @openeditor="openGuiEditor"/>
     <AppMenuTabTables v-else-if="currentTab === 1" :datasource="datasource"/>
-    <AppMenuTabQueries v-else-if="currentTab === 2" :datasource-id="datasource.id"/>
+    <AppMenuTabQueries v-else-if="currentTab === 2" :datasource="datasource"/>
   </div>
 </template>
 

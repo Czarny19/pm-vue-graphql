@@ -23,28 +23,8 @@ export const GET_QUERY_BY_ID = gql`query geQueryById($id: bigint!) {
     }
 }`
 
-export const ADD_QUERY = gql`mutation addQuery(
-    $datasourceId: bigint!,
-    $name: String!,
-    $table: String!,
-    $distinct_on: String,
-    $limit: Int,
-    $offset: Int,
-    $orderBy: String,
-    $where: String,
-    $fields: String
-) {
-    insert_QUERY(objects: {
-        data_source_id: $datasourceId,
-        name: $name,
-        table: $table,
-        distinct_on: $distinct_on,
-        limit: $limit,
-        offset: $offset,
-        order_by: $orderBy,
-        where: $where,
-        fields: $fields,
-    }) {
+export const ADD_QUERY = gql`mutation addQuery($datasourceId: bigint!,$name: String!,$table: String!) {
+    insert_QUERY(objects: {data_source_id: $datasourceId,name: $name,table: $table}) {
         returning {
             id
         }
