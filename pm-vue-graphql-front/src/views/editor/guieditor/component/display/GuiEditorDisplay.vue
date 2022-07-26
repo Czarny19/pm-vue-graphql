@@ -6,7 +6,7 @@
         <v-col class="pa-1 text-start">
           <v-btn text class="text-body-2" @click="changeLeftNavShown">
             <v-icon v-if="leftNavShown" class="pr-2">fa-caret-left</v-icon>
-            {{ leftNavShown ? i18n('editor.hide') : i18n('editor.show') }}
+            {{ leftNavShown ? i18n('common.hide') : i18n('common.show') }}
             <v-icon v-if="!leftNavShown" class="pl-2">fa-caret-right</v-icon>
           </v-btn>
         </v-col>
@@ -14,7 +14,7 @@
         <v-col class="pa-1 text-end">
           <v-btn text class="text-body-2" @click="changeRightNavShown">
             <v-icon v-if="!rightNavShown" class="pr-2">fa-caret-left</v-icon>
-            {{ rightNavShown ? i18n('editor.hide') : i18n('editor.show') }}
+            {{ rightNavShown ? i18n('common.hide') : i18n('common.show') }}
             <v-icon v-if="rightNavShown" class="pl-2">fa-caret-right</v-icon>
           </v-btn>
         </v-col>

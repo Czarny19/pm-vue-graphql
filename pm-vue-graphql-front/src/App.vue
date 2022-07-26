@@ -17,6 +17,8 @@ export default Vue.extend({
   name: 'App',
   components: {AppBar}
 })
+
+// TODO daty modyfikacji do poprawki | Cofanie w edytorach
 </script>
 
 <style lang="scss">

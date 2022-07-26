@@ -52,9 +52,32 @@ export type Query = {
     name: string;
     table: string;
     modify_date: Date;
-    distinct_on: string;
     limit: number;
     order_by: string;
     where: string;
     fields: string;
+    variables: QueryVariable [] | null;
+}
+
+export type QueryVariable = {
+    name: string;
+    type: string;
+    value: string;
+}
+
+export type QueryWhereGroup = {
+    parts: QueryWherePart [];
+    isAnd: boolean;
+}
+
+export type QueryWherePart = {
+    field: string;
+    operator: string;
+    prop: string;
+    isAnd: boolean;
+}
+
+export type QueryOrderBy = {
+    field: string;
+    isAsc: boolean;
 }
