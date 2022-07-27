@@ -56,7 +56,7 @@ export type Query = {
     order_by: string;
     where: string;
     fields: string;
-    variables: QueryVariable [] | null;
+    variables: QueryVariable [] | undefined;
 }
 
 export type QueryVariable = {
@@ -65,15 +65,10 @@ export type QueryVariable = {
     value: string;
 }
 
-export type QueryWhereGroup = {
-    parts: QueryWherePart [];
-    isAnd: boolean;
-}
-
 export type QueryWherePart = {
     field: string;
     operator: string;
-    prop: string;
+    variable: string;
     isAnd: boolean;
 }
 

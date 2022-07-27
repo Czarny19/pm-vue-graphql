@@ -18,7 +18,7 @@ export default Vue.extend({
   components: {AppBar}
 })
 
-// TODO daty modyfikacji do poprawki | Cofanie w edytorach
+// TODO daty modyfikacji do poprawki | Cofanie w edytorach | Zapis, wczytanie, odrzuć zapytanie |  Nullable w typach pól | relacje
 </script>
 
 <style lang="scss">

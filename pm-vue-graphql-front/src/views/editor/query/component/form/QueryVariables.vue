@@ -43,8 +43,8 @@
 
           <v-col cols="1"></v-col>
 
-          <v-col cols="1" class="text-end">
-            <v-btn block color="error" @click="deleteVariable(variable)">
+          <v-col cols="1" class="text-center">
+            <v-btn fab small color="error" @click="deleteVariable(variable)">
               <v-icon>fa-times</v-icon>
             </v-btn>
           </v-col>

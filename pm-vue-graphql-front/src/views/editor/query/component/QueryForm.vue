@@ -35,7 +35,7 @@
               <QueryOrderByBuilder
                   v-if="!sortHidden"
                   :query="currentQuery"
-                  :fields="currentTableFields">
+                  :field-names="currentTableFields">
               </QueryOrderByBuilder>
 
               <CardSectionTitle
@@ -45,8 +45,7 @@
                   :is-hidden="propsHidden"
                   @showhideclick="propsHidden = !propsHidden">
               </CardSectionTitle>
-              <QueryVariables v-if="!propsHidden" :query="currentQuery">
-              </QueryVariables>
+              <QueryVariables v-if="!propsHidden" :query="currentQuery"/>
 
               <CardSectionTitle
                   class="mt-2"
@@ -55,10 +54,7 @@
                   :is-hidden="whereHidden"
                   @showhideclick="whereHidden = !whereHidden">
               </CardSectionTitle>
-              <QueryWhereBuilder
-                  v-if="!whereHidden"
-                  :fields="currentQuery.fields">
-              </QueryWhereBuilder>
+              <QueryWhereBuilder v-if="!whereHidden" :query="currentQuery" :fields="currentTable.fields"/>
 
             </v-form>
           </template>
@@ -70,7 +66,7 @@
             :table="currentQuery.table"
             :fields="currentQuery.fields"
             :graphql-query="graphQLQuery"
-            :graphql-variables="graphQLVariablesPreview"
+            :graphql-variables="currentQuery.variables"
             :datasource-address="datasourceAddress"
             :datasource-secret="datasourceSecret">
         </QueryPreview>
@@ -126,7 +122,15 @@ export default Vue.extend({
   computed: {
     graphQLQuery(): string {
       const query = (this.currentQuery as Query)
-      return generateQuery(query.name, query.table, query.fields, query.order_by, query.limit)
+      return generateQuery(
+          query.name,
+          query.table,
+          query.fields,
+          query.where,
+          query.order_by,
+          query.limit,
+          query.variables
+      )
     },
     graphQLVariablesPreview(): string {
       const query = (this.currentQuery as Query)
@@ -207,7 +211,7 @@ export default Vue.extend({
       handler() {
         this.currentQuery = this.query
 
-        if ((this.currentQuery as Query).variables == null) {
+        if ((this.currentQuery as Query).variables == undefined) {
           (this.currentQuery as Query).variables = []
         }
       },
@@ -217,7 +221,7 @@ export default Vue.extend({
   beforeMount() {
     this.currentQuery = this.query
 
-    if ((this.currentQuery as Query).variables == null) {
+    if ((this.currentQuery as Query).variables == undefined) {
       (this.currentQuery as Query).variables = []
     }
   }

@@ -9,7 +9,7 @@
                 color="accent"
                 item-color="accent"
                 v-model="orderBy.field"
-                :items="fields"
+                :items="fieldNames"
                 :label="i18n('editor.field')"
                 required
                 append-icon="fa-chevron-down">
@@ -28,8 +28,8 @@
 
           <v-col cols="1"></v-col>
 
-          <v-col cols="1" class="text-end">
-            <v-btn block color="error" @click="deleteOrderBy(orderBy)">
+          <v-col cols="1" class="text-center">
+            <v-btn fab small color="error" @click="deleteOrderBy(orderBy)">
               <v-icon>fa-times</v-icon>
             </v-btn>
           </v-col>
@@ -53,7 +53,7 @@ export default Vue.extend({
   name: 'QueryOrderByBuilder',
   props: {
     query: Object,
-    fields: Array
+    fieldNames: Array
   },
   data() {
     return {

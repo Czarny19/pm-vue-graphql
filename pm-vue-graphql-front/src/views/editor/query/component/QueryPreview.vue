@@ -45,6 +45,8 @@ import {HttpLink} from "apollo-link-http";
 import {InMemoryCache} from "apollo-cache-inmemory";
 import gql from "graphql-tag";
 import CardSectionTitle from "@/components/card/CardSectionTitle.vue";
+import {generateVariablesPreview} from "@/plugins/query";
+import {QueryVariable} from "@/plugins/types";
 
 export default Vue.extend({
   name: 'QueryPreview',
@@ -53,7 +55,7 @@ export default Vue.extend({
     table: String,
     fields: String,
     graphqlQuery: String,
-    graphqlVariables: String,
+    graphqlVariables: Array,
     datasourceAddress: String,
     datasourceSecret: String
   },
@@ -68,8 +70,13 @@ export default Vue.extend({
     displayQuery(): string {
       return this.graphqlQuery?.replaceAll('\n', '<br>').replaceAll('\t', '&emsp;')
     },
+    graphQLVariablesPreview(): string {
+      return generateVariablesPreview((this.graphqlVariables as QueryVariable[]) ?? [])
+    },
     displayVariables(): string {
-      return this.graphqlVariables?.replaceAll('\n', '<br>').replaceAll('\t', '&emsp;')
+      return this.graphQLVariablesPreview
+          ?.replaceAll('\n', '<br>')
+          .replaceAll('\t', '&emsp;')
     },
     headers(): { 'authorization': string, 'content-type': string, 'x-hasura-admin-secret': string } {
       const headers = {'authorization': '', 'content-type': '', 'x-hasura-admin-secret': ''}
@@ -105,8 +112,17 @@ export default Vue.extend({
         resolvers: {}
       })
 
+      const variables = (this.graphqlVariables as QueryVariable[])
+      const variablesMap: { [key: string]: string } = {}
+
+      variables.forEach((variable) => variablesMap[variable.name] = variable.value)
+
       try {
-        await client.query({query: gql`${this.graphqlQuery}`, fetchPolicy: 'network-only'}).then(response => {
+        await client.query({
+          query: gql`${this.graphqlQuery}`,
+          variables: variablesMap,
+          fetchPolicy: 'network-only'
+        }).then(response => {
           this.queryData = response.data[this.table]
         }).catch(err => {
           this.isSuccessful = false
@@ -122,12 +138,7 @@ export default Vue.extend({
         }
       }
     }
-  },
-  // watch: {
-  //   graphqlQuery() {
-  //     this.runQuery()
-  //   }
-  // }
+  }
 })
 </script>
 

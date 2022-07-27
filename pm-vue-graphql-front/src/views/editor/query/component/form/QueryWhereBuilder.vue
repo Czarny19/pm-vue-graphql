@@ -1,79 +1,71 @@
 <template>
   <v-card-text class="pa-3 pt-0 pb-6">
     <div class="elevation-6 pt-6 pb-2">
-      <v-container class="pa-2 pl-4 pr-4">
-        <v-row v-for="(whereGroup, index) in whereGroups" :key="index">
-          <v-col cols="12">
-            <v-card color="primary" class="pa-2">
-              <v-container fluid>
-                <v-row v-for="(wherePart, index) in whereGroup.parts" :key="index">
-                  <v-col cols="auto">
-                    <v-select
-                        class="pa-0"
-                        color="accent"
-                        item-color="accent"
-                        v-model="wherePart.field"
-                        :items="fields.split(',')"
-                        :label="i18n('editor.field')"
-                        required
-                        append-icon="fa-chevron-down">
-                    </v-select>
-                  </v-col>
+      <v-container fluid>
+        <v-row v-for="(wherePart, index) in whereParts" :key="index">
+          <v-col v-if="index !== 0" cols="1">
+            <v-btn fab small v-if="wherePart.isAnd" @click="setPartIsAnd(wherePart)" color="info">
+              {{ i18n('editor.and') }}
+            </v-btn>
 
-                  <v-col cols="auto">
-                    <v-select
-                        class="pa-0"
-                        color="accent"
-                        item-color="accent"
-                        v-model="wherePart.operator"
-                        :items="operators"
-                        :label="i18n('editor.operation')"
-                        required
-                        append-icon="fa-chevron-down">
-                    </v-select>
-                  </v-col>
-
-                  <v-col>
-                    <v-text-field
-                        class="pa-0"
-                        color="accent"
-                        v-model="wherePart.prop"
-                        :label="i18n('editor.prop')"
-                        :counter="50"
-                        prepend-icon="fa-tag"
-                        required>
-                    </v-text-field>
-                  </v-col>
-
-                  <v-col v-if="index + 1 !== whereGroup.parts.length" cols="auto">
-                    <v-btn v-if="wherePart.isAnd" @click="setPartIsAnd(wherePart)">{{ i18n('editor.and') }}</v-btn>
-                    <v-btn v-else @click="setPartIsAnd(wherePart)">{{ i18n('editor.or') }}</v-btn>
-                  </v-col>
-                </v-row>
-
-                <v-row>
-                  <v-col class="text-start">
-                    <v-btn @click="addWherePart(whereGroup)">{{ i18n('editor.addWherePart') }}</v-btn>
-                  </v-col>
-                  <v-col class="text-end">
-                    <v-btn @click="deleteGroup(whereGroup)" color="error">
-                      <v-icon>fa-times</v-icon>
-                    </v-btn>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-card>
+            <v-btn fab small v-else @click="setPartIsAnd(wherePart)" color="info">
+              {{ i18n('editor.or') }}
+            </v-btn>
           </v-col>
 
-          <v-col v-if="index + 1 !== whereGroups.length" cols="auto">
-            <v-btn v-if="whereGroup.isAnd" @click="setGroupIsAnd(whereGroup)">{{ i18n('editor.and') }}</v-btn>
-            <v-btn v-else @click="setGroupIsAnd(whereGroup)">{{ i18n('editor.or') }}</v-btn>
+          <v-col v-else cols="1"></v-col>
+
+          <v-col cols="3">
+            <v-select
+                class="pa-0"
+                color="accent"
+                item-color="accent"
+                v-model="wherePart.field"
+                :items="fieldNames"
+                :label="i18n('editor.field')"
+                required
+                append-icon="fa-chevron-down">
+            </v-select>
+          </v-col>
+
+          <v-col cols="2">
+            <v-select
+                v-if="wherePart.field"
+                class="pa-0"
+                color="accent"
+                item-color="accent"
+                v-model="wherePart.operator"
+                :items="operators(wherePart)"
+                :label="i18n('editor.operation')"
+                required
+                append-icon="fa-chevron-down">
+            </v-select>
+          </v-col>
+
+          <v-col cols="5">
+            <v-select
+                v-if="wherePart.operator"
+                class="pa-0"
+                color="accent"
+                item-color="accent"
+                v-model="wherePart.variable"
+                :items="variables(wherePart)"
+                :label="i18n('editor.variable')"
+                required
+                append-icon="fa-chevron-down">
+            </v-select>
+          </v-col>
+
+          <v-col cols="1" class="text-center">
+            <v-btn fab small @click="deletePart(wherePart)" color="error">
+              <v-icon>fa-times</v-icon>
+            </v-btn>
           </v-col>
         </v-row>
 
         <v-row>
           <v-col class="text-start">
-            <v-btn @click="addWhereGroup">{{ i18n('editor.addWhereGroup') }}</v-btn>
+            <v-btn @click="addWherePart" color="success">{{ i18n('editor.addWherePart') }}</v-btn>
           </v-col>
         </v-row>
       </v-container>
@@ -83,47 +75,83 @@
 
 <script lang="ts">
 import Vue from "vue";
-import {QueryWhereGroup, QueryWherePart} from "@/plugins/types";
+import {Query, QueryWherePart} from "@/plugins/types";
+import {generateWhere, numberOperators, stringOperators} from "@/plugins/query";
 
 export default Vue.extend({
   name: 'QueryWhereBuilder',
   props: {
-    fields: String,
+    query: Object,
+    fields: Array
   },
   data() {
     return {
-      whereGroups: []
+      currentQuery: {},
+      whereParts: []
     }
   },
   computed: {
-    operators(): string [] {
-      return ['=', '>', '>=']
+    fieldNames(): string[] {
+      return (this.fields as [{ name: string }]).map((field) => field.name)
     }
   },
   methods: {
     i18n(key: string): string {
       return this.$t(key).toString()
     },
-    addWhereGroup(): void {
-      (this.whereGroups as QueryWhereGroup []).push({parts: [], isAnd: true})
+    operators(wherePart: QueryWherePart): string [] {
+      const field = (this.fields as [{ name: string, type: { ofType: { name: string } } }])
+          .filter((field) => field.name === wherePart.field)[0];
+
+      const type = (field as { type: { ofType: { name: string } } }).type.ofType.name
+
+      if (type === 'String') {
+        return stringOperators
+      }
+
+      return numberOperators
     },
-    addWherePart(whereGroup: QueryWhereGroup): void {
-      const newPart = {field: '', operator: '', prop: '', isAnd: true}
-      whereGroup.parts.push(newPart)
+    variables(wherePart: QueryWherePart): string [] {
+      const field = (this.fields as [{ name: string, type: { ofType: { name: string } } }])
+          .filter((field) => field.name === wherePart.field)[0];
+
+      const type = (field as { type: { ofType: { name: string } } }).type.ofType.name
+
+      console.log(type)
+
+      return (this.currentQuery as Query).variables
+          ?.filter((variable) => variable.type === type)
+          .map((variable) => variable.name) ?? []
     },
-    setGroupIsAnd(whereGroup: QueryWhereGroup): void {
-      whereGroup.isAnd = !whereGroup.isAnd
-    },
-    deleteGroup(whereGroup: QueryWhereGroup): void {
-      this.whereGroups.forEach((group, index) => {
-        if (group == whereGroup) {
-          this.whereGroups.splice(index, 1)
-        }
-      })
+    addWherePart(): void {
+      const newPart = {field: '', operator: '', variable: '', isAnd: true};
+      (this.whereParts as QueryWherePart[]).push(newPart)
     },
     setPartIsAnd(wherePart: QueryWherePart): void {
       wherePart.isAnd = !wherePart.isAnd
+    },
+    deletePart(wherePart: QueryWherePart): void {
+      this.whereParts.forEach((part, index) => {
+        if (part == wherePart) {
+          this.whereParts.splice(index, 1)
+        }
+      })
     }
+  },
+  watch: {
+    query() {
+      this.currentQuery = this.query
+    },
+    whereParts: {
+      handler() {
+        const parts = (this.whereParts as QueryWherePart[]);
+        (this.currentQuery as Query).where = generateWhere(parts)
+      },
+      deep: true
+    }
+  },
+  beforeMount() {
+    this.currentQuery = this.query
   }
 })
 </script>
