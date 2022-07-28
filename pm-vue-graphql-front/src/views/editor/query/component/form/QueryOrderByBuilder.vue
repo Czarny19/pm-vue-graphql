@@ -48,6 +48,7 @@
 <script lang="ts">
 import Vue from "vue";
 import {Query, QueryOrderBy} from "@/plugins/types";
+import {mapOrderByStringToObject} from "@/plugins/query";
 
 export default Vue.extend({
   name: 'QueryOrderByBuilder',
@@ -85,20 +86,17 @@ export default Vue.extend({
     }
   },
   watch: {
-    query() {
-      this.currentQuery = this.query
-    },
     orderByFields: {
       handler() {
         const query = (this.currentQuery as Query)
-        const orderBy = this.orderByList.map(orderBy => `${orderBy.field}: ${orderBy.isAsc ? 'asc' : 'desc'}`)
-        query.order_by = orderBy.join(', ')
+        query.order_by = this.orderByList.map(orderBy => (JSON.stringify(orderBy))).join(';')
       },
       deep: true
     }
   },
   beforeMount() {
-    this.currentQuery = this.query
+    (this.orderByFields as QueryOrderBy[]) = mapOrderByStringToObject((this.query as Query).order_by ?? '')
+    this.currentQuery = this.query;
   }
 })
 </script>

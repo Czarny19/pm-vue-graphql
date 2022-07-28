@@ -1,8 +1,15 @@
 <template>
   <v-card-text class="pa-3 pt-0 pb-6">
-    <div class="elevation-6">
+    <div class="elevation-6 text-start pb-4">
+      <v-btn v-if="!allFieldsSelected" class="ma-4" color="info" @click="selectAllFields">
+        {{ i18n('editor.selectAll') }}
+      </v-btn>
+
+      <v-btn v-else class="ma-4" color="error" @click="selectAllFields">
+        {{ i18n('editor.unselectAll') }}
+      </v-btn>
+
       <v-data-table
-          dense
           disable-sort
           v-model="selectedFields"
           :headers="fieldHeaders"
@@ -11,26 +18,8 @@
           hide-default-footer
           item-key="name"
           show-select
-          class="elevation-0">
-
-        <template v-slot:[`header.data-table-select`]>
-          <v-checkbox
-              color="accent"
-              on-icon="fa-check"
-              off-icon="fa-times"
-              :value="allFieldsSelected"
-              @change="selectAllFields">
-          </v-checkbox>
-        </template>
-
-        <template v-slot:[`item.data-table-select`]="{ isSelected, select }">
-          <v-checkbox
-              color="accent"
-              on-icon="fa-check"
-              off-icon="fa-times"
-              :value="isSelected"
-              @change="select"/>
-        </template>
+          class="elevation-0 ml-4 mr-4 pointer"
+          @click:row="selectField">
       </v-data-table>
     </div>
   </v-card-text>
@@ -38,7 +27,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import {Query} from "@/plugins/types";
+import {Query, QueryField} from "@/plugins/types";
 
 export default Vue.extend({
   name: 'QueryFields',
@@ -70,26 +59,46 @@ export default Vue.extend({
       this.allFieldsSelected = !this.allFieldsSelected
 
       if (this.allFieldsSelected) {
-        (this.selectedFields as { name: string, type: { ofType: { name: string } } }[]) = this.currentTable?.fields
+        (this.selectedFields as QueryField []) = this.currentTable?.fields
         return
       }
 
       this.selectedFields = []
+    },
+    selectField(selectedField: QueryField): void {
+      for (const field of (this.selectedFields as QueryField[])) {
+        const index = (this.selectedFields as QueryField[]).indexOf(field);
+
+        if (field.name == selectedField.name) {
+          this.selectedFields.splice(index, 1)
+          return
+        }
+      }
+
+      (this.selectedFields as QueryField[]).push(selectedField)
     }
   },
   watch: {
-    query() {
-      this.currentQuery = this.query
-    },
     selectedFields() {
       const query = (this.currentQuery as Query)
       this.allFieldsSelected = this.selectedFields.length === this.currentTable.fields.length
-      query.fields = this.selectedFields.map((field) => (field as { name: string }).name).join(',')
+      query.fields = this.selectedFields
+          .map((field) => (field as { name: string }).name)
+          .join(',')
+          .replaceAll(' ', '')
     }
   },
   beforeMount() {
-    this.currentQuery = this.query
-  }
+    this.currentQuery = this.query;
+
+    (this.currentTable?.fields as QueryField[]).forEach((tbField) => {
+      (this.query as Query).fields.replaceAll(' ', '').split(',').forEach((qrField) => {
+        if (tbField.name === qrField) {
+          (this.selectedFields as QueryField[]).push(tbField)
+        }
+      })
+    })
+  },
 })
 </script>
 

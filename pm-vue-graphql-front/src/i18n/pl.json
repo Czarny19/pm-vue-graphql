@@ -153,6 +153,8 @@
     "variable": "Zmienna",
     "variables": "Zmienne",
     "fields": "Pola",
+    "selectAll": "Zaznacz wszystkie",
+    "unselectAll": "Odznacz wszystkie",
     "restrictions": "Ograniczenia",
     "and": "i",
     "or": "lub",

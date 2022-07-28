@@ -27,11 +27,10 @@ export const ADD_PAGE_FOR_PROJECT = gql`mutation addPageForProject($projectId: b
 
 export const UPDATE_PAGE_DEFINITION_BY_ID = gql`mutation updatePageDefinitionById(
     $id: bigint!,
-    $definition: jsonb!
+    $definition: jsonb!,
+    $modifyDate: date!,
 ) {
-    update_PAGE(where: {id: {_eq: $id}},_set: {
-        definition: $definition,
-    }) {
+    update_PAGE(where: {id: {_eq: $id}},_set: {definition: $definition,modify_date: $modifyDate}) {
         returning {
             id
         }

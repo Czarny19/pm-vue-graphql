@@ -2,7 +2,7 @@
   <div class="full-height">
     <LoadingDialog :dialog="saving" :title="i18n('editor.saving')"/>
 
-    <GuiEditorRejectChanges :dialog="reject" @cancel="cancelRejectChanges" @confirm="rejectChanges"/>
+    <RejectChangesDialog :dialog="reject" @cancel="cancelRejectChanges" @confirm="rejectChanges"/>
 
     <GuiEditorTopBar
         :project-name="project.name"
@@ -53,7 +53,7 @@ import GuiEditorTopBar from "@/views/editor/guieditor/component/display/GuiEdito
 import GuiEditorLeftNav from "@/views/editor/guieditor/component/display/GuiEditorLeftNav.vue";
 import GuiEditorDisplay from "@/views/editor/guieditor/component/display/GuiEditorDisplay.vue";
 import GuiEditorRightNav from "@/views/editor/guieditor/component/display/GuiEditorRightNav.vue";
-import GuiEditorRejectChanges from "@/views/editor/guieditor/component/display/GuiEditorRejectChanges.vue";
+import RejectChangesDialog from "@/components/dialog/RejectChangesDialog.vue";
 import {GET_PAGE_BY_ID, UPDATE_PAGE_DEFINITION_BY_ID} from "@/graphql/queries/page";
 import {CURRENT_USER} from "@/graphql/queries/user";
 import {GET_PROJECT_BY_ID} from "@/graphql/queries/project";
@@ -69,7 +69,7 @@ export default Vue.extend({
     GuiEditorLeftNav,
     GuiEditorDisplay,
     GuiEditorRightNav,
-    GuiEditorRejectChanges
+    RejectChangesDialog
   },
   data() {
     return {
@@ -81,6 +81,7 @@ export default Vue.extend({
       leftNavShown: true,
       rightNavShown: true,
       previewOpen: false,
+      isClosing: false,
       projectId: -1,
       pageId: -1,
       project: {},
@@ -115,9 +116,6 @@ export default Vue.extend({
 
       this.activeWidget = widget
     },
-    closeEditor(): void {
-      this.$router.back()
-    },
     switchPreview(): void {
       this.previewOpen = !this.previewOpen
       this.calcDisplayCols()
@@ -129,17 +127,28 @@ export default Vue.extend({
         mutation: UPDATE_PAGE_DEFINITION_BY_ID,
         variables: {
           id: this.pageId,
-          definition: (this.page as { definition: string }).definition
+          definition: (this.page as { definition: string }).definition,
+          modifyDate: new Date()
         }
       }).then(() => {
         this.changesMade = false
         this.saving = false
       })
     },
+    closeEditor(): void {
+      if (this.changesMade) {
+        this.isClosing = true
+        this.setRejectOpen()
+        return
+      }
+
+      this.$router.back()
+    },
     setRejectOpen(): void {
       this.reject = true
     },
     cancelRejectChanges(): void {
+      this.isClosing = false
       this.reject = false
     },
     rejectChanges(): void {
@@ -147,6 +156,11 @@ export default Vue.extend({
       this.pageInitialized = false
       this.changesMade = false
       this.loading = true
+
+      if (this.isClosing) {
+        this.$router.back()
+        return
+      }
 
       this.$apollo.queries.PAGE.refetch()
     },
@@ -207,6 +221,7 @@ export default Vue.extend({
     },
     PROJECT: {
       query: GET_PROJECT_BY_ID,
+      fetchPolicy: 'no-cache',
       variables(): { id: number } {
         return {
           id: this.projectId

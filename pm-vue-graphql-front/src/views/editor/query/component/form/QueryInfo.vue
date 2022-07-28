@@ -70,11 +70,6 @@ export default Vue.extend({
       return this.$t(key).toString()
     }
   },
-  watch: {
-    query() {
-      this.currentQuery = this.query
-    }
-  },
   beforeMount() {
     this.currentQuery = this.query
   }

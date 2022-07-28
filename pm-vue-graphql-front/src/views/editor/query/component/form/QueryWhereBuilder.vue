@@ -75,8 +75,8 @@
 
 <script lang="ts">
 import Vue from "vue";
-import {Query, QueryWherePart} from "@/plugins/types";
-import {generateWhere, numberOperators, stringOperators} from "@/plugins/query";
+import {Query, QueryField, QueryWherePart} from "@/plugins/types";
+import {mapVariablesStringToObject, mapWhereStringToObject, numberOperators, stringOperators} from "@/plugins/query";
 
 export default Vue.extend({
   name: 'QueryWhereBuilder',
@@ -100,10 +100,8 @@ export default Vue.extend({
       return this.$t(key).toString()
     },
     operators(wherePart: QueryWherePart): string [] {
-      const field = (this.fields as [{ name: string, type: { ofType: { name: string } } }])
-          .filter((field) => field.name === wherePart.field)[0];
-
-      const type = (field as { type: { ofType: { name: string } } }).type.ofType.name
+      const field = (this.fields as QueryField []).filter((field) => field.name === wherePart.field)[0];
+      const type = field.type.ofType.name
 
       if (type === 'String') {
         return stringOperators
@@ -112,16 +110,11 @@ export default Vue.extend({
       return numberOperators
     },
     variables(wherePart: QueryWherePart): string [] {
-      const field = (this.fields as [{ name: string, type: { ofType: { name: string } } }])
-          .filter((field) => field.name === wherePart.field)[0];
+      const field = (this.fields as QueryField []).filter((field) => field.name === wherePart.field)[0];
+      const type = field.type.ofType.name
+      const variables = mapVariablesStringToObject((this.query as Query).variables ?? '')
 
-      const type = (field as { type: { ofType: { name: string } } }).type.ofType.name
-
-      console.log(type)
-
-      return (this.currentQuery as Query).variables
-          ?.filter((variable) => variable.type === type)
-          .map((variable) => variable.name) ?? []
+      return variables?.filter((variable) => variable.type === type).map((variable) => variable.name) ?? []
     },
     addWherePart(): void {
       const newPart = {field: '', operator: '', variable: '', isAnd: true};
@@ -139,18 +132,22 @@ export default Vue.extend({
     }
   },
   watch: {
-    query() {
-      this.currentQuery = this.query
+    query: {
+      handler() {
+        this.currentQuery = this.query
+      },
+      deep: true
     },
     whereParts: {
       handler() {
-        const parts = (this.whereParts as QueryWherePart[]);
-        (this.currentQuery as Query).where = generateWhere(parts)
+        const query = (this.currentQuery as Query)
+        query.where = this.whereParts.map(wherePart => (JSON.stringify(wherePart))).join(';')
       },
       deep: true
     }
   },
   beforeMount() {
+    (this.whereParts as QueryWherePart[]) = mapWhereStringToObject((this.query as Query).where ?? '')
     this.currentQuery = this.query
   }
 })

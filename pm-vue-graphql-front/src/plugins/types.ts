@@ -56,7 +56,20 @@ export type Query = {
     order_by: string;
     where: string;
     fields: string;
-    variables: QueryVariable [] | undefined;
+    variables: string;
+}
+
+export type QueryField = {
+    name: string;
+    type: QueryFieldOfType;
+}
+
+type QueryFieldOfType = {
+    ofType: QueryFieldOfTypeName;
+}
+
+type QueryFieldOfTypeName = {
+    name: string;
 }
 
 export type QueryVariable = {

@@ -16,7 +16,7 @@
 import Vue from "vue";
 
 export default Vue.extend({
-  name: 'GuiEditorRejectChanges',
+  name: 'RejectChangesDialog',
   props: {
     dialog: Boolean
   },

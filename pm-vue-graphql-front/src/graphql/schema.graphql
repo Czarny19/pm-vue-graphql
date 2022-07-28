@@ -493,8 +493,7 @@ type QUERY {
     name: String!
     order_by: String
     table: String
-    "An object relationship"
-    variables: VARIABLE
+    variables: String
     where: String
 }
 
@@ -536,6 +535,7 @@ type QUERY_max_fields {
     name: String
     order_by: String
     table: String
+    variables: String
     where: String
 }
 
@@ -549,6 +549,7 @@ type QUERY_min_fields {
     name: String
     order_by: String
     table: String
+    variables: String
     where: String
 }
 
@@ -1907,6 +1908,8 @@ enum QUERY_select_column {
     "column name"
     table
     "column name"
+    variables
+    "column name"
     where
 }
 
@@ -1928,6 +1931,8 @@ enum QUERY_update_column {
     order_by
     "column name"
     table
+    "column name"
+    variables
     "column name"
     where
 }
@@ -2814,7 +2819,7 @@ input QUERY_bool_exp {
     name: String_comparison_exp
     order_by: String_comparison_exp
     table: String_comparison_exp
-    variables: VARIABLE_bool_exp
+    variables: String_comparison_exp
     where: String_comparison_exp
 }
 
@@ -2835,7 +2840,7 @@ input QUERY_insert_input {
     name: String
     order_by: String
     table: String
-    variables: VARIABLE_obj_rel_insert_input
+    variables: String
     where: String
 }
 
@@ -2849,6 +2854,7 @@ input QUERY_max_order_by {
     name: order_by
     order_by: order_by
     table: order_by
+    variables: order_by
     where: order_by
 }
 
@@ -2862,6 +2868,7 @@ input QUERY_min_order_by {
     name: order_by
     order_by: order_by
     table: order_by
+    variables: order_by
     where: order_by
 }
 
@@ -2888,7 +2895,7 @@ input QUERY_order_by {
     name: order_by
     order_by: order_by
     table: order_by
-    variables: VARIABLE_order_by
+    variables: order_by
     where: order_by
 }
 
@@ -2907,6 +2914,7 @@ input QUERY_set_input {
     name: String
     order_by: String
     table: String
+    variables: String
     where: String
 }
 

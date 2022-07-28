@@ -1,4 +1,4 @@
-import {QueryVariable, QueryWherePart} from "@/plugins/types";
+import {QueryOrderBy, QueryVariable, QueryWherePart} from "@/plugins/types";
 
 export const operatorTypes = new Map<string, string>([['=', '_eq'], ['!=', '_neq'], ['>', '_gt'],
     ['>=', '_gte'], ['<', '_lt'], ['<=', '_lte'], ['=null', '_is_null'], ['%', '_like'], ['!%', '_nlike']])
@@ -8,7 +8,7 @@ export const numberOperators = ['=', '!=', '>', '>=', '<', '<=', '=null']
 export const stringOperators = ['=', '!=', '%', '!%', '=null']
 
 export const generateQuery = (queryName: string, tableName: string, fields?: string, where?: string, orderBy?: string,
-                              limit?: number, variables?: QueryVariable[]) => {
+                              limit?: number, variables?: string) => {
 
     if (tableName == null || tableName.length == 0) {
         return '';
@@ -22,10 +22,14 @@ export const generateQuery = (queryName: string, tableName: string, fields?: str
         query += '('
     }
 
-    variables?.forEach((variable, index) => {
+    const varsList = mapVariablesStringToObject(variables ?? '')
+    const orderByList = mapOrderByStringToObject(orderBy ?? '')
+    const whereList = mapWhereStringToObject(where ?? '')
+
+    varsList?.forEach((variable, index) => {
         query += `$${variable.name}: ${variable.type}`
 
-        if (index + 1 !== variables?.length) {
+        if (index + 1 !== varsList?.length) {
             query += ', '
         } else {
             query += ') '
@@ -34,55 +38,45 @@ export const generateQuery = (queryName: string, tableName: string, fields?: str
 
     query += `{\n\t${tableName} `
 
+    if (limit != null || (orderBy != undefined && orderBy.length > 0) || (where != undefined && where.length > 0)) {
+        query += '('
+    }
+
     if (limit != null) {
-        query += `(limit: ${limit}`
+        query += `limit: ${limit}`
     }
 
-    if (orderBy != null) {
-        if (query.includes('(')) {
-            query += `, order_by: {${orderBy}`
-        } else {
-            query += `(order_by: {${orderBy}`
+    if (orderBy != undefined && orderBy.length > 0) {
+        if (query.includes('limit:')) {
+            query += ', '
         }
+
+        query += 'order_by: {'
     }
 
-    if (where != null) {
-        if (query.includes('(')) {
-            query += `, where: ${where}`
+    orderByList?.forEach((orderBy, index) => {
+        query += `${orderBy.field}: ${orderBy.isAsc ? 'asc' : 'desc'}`
+
+        if (index + 1 !== orderByList?.length) {
+            query += ', '
         } else {
-            query += `(where: ${where}`
+            query += '}'
         }
+    })
+
+    if (where != undefined && where.length > 0) {
+        if (query.includes('limit:') || query.includes('order_by:')) {
+            query += ', '
+        }
+
+        query += `where: ${generateWhere(whereList)}`
     }
 
-    if (query.includes('(')) {
+    if (limit != null || (orderBy != undefined && orderBy.length > 0) || (where != undefined && where.length > 0)) {
         query += ') '
     }
 
     query += `{\n\t\t${fields?.split(',').join('\n\t\t')}\n\t}\n}`
-
-    return query
-}
-
-export const generateVariablesPreview = (variables: QueryVariable []) => {
-    let query = '{\n'
-
-    variables.forEach((variable, index) => {
-        query += `\t"${variable.name}": `
-
-        if (variable.type === 'String') {
-            query += `"${variable.value}"`
-        } else {
-            query += `${variable.value}`
-        }
-
-        if (index + 1 === variables.length) {
-            query += '\n'
-        } else {
-            query += ',\n'
-        }
-    })
-
-    query += '}'
 
     return query
 }
@@ -121,4 +115,66 @@ export const generateWhere = (parts: QueryWherePart[]) => {
     }
 
     return where
+}
+
+export const generateVariablesPreview = (variables: string) => {
+    const vars = mapVariablesStringToObject(variables)
+
+    let query = '{\n'
+
+    vars?.forEach((variable, index) => {
+        query += `\t"${variable.name}": `
+
+        if (variable.type === 'String') {
+            query += `"${variable.value}"`
+        } else {
+            query += `${variable.value}`
+        }
+
+        if (index + 1 === vars.length) {
+            query += '\n'
+        } else {
+            query += ',\n'
+        }
+    })
+
+    query += '}'
+
+    return query
+}
+
+export const mapOrderByStringToObject = (values: string) => {
+    const objectParts: QueryOrderBy[] = [];
+
+    if (values.length) {
+        values.replaceAll(' ', '')
+            .split(';')
+            .forEach((value) => objectParts.push(JSON.parse(value)));
+    }
+
+    return objectParts
+}
+
+export const mapVariablesStringToObject = (values: string) => {
+    const objectParts: QueryVariable[] = [];
+
+    if (values.length) {
+        values.replaceAll(' ', '')
+            .split(';')
+            .forEach((value) => objectParts.push(JSON.parse(value)));
+    }
+
+    return objectParts
+}
+
+export const mapWhereStringToObject = (values: string) => {
+    const objectParts: QueryWherePart[] = [];
+
+    if (values.length) {
+        values.replaceAll(' ', '')
+            .split(';')
+            .forEach((value) => objectParts.push(JSON.parse(value)));
+    }
+
+    return objectParts
 }

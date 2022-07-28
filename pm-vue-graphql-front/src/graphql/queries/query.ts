@@ -18,11 +18,7 @@ export const GET_QUERY_BY_ID = gql`query geQueryById($id: bigint!) {
         order_by
         where
         fields
-        variables {
-            name
-            type
-            value
-        }
+        variables
     }
 }`
 
@@ -41,7 +37,9 @@ export const UPDATE_QUERY_BY_ID = gql`mutation updateQueryById(
     $limit: Int,
     $orderBy: String,
     $where: String,
-    $fields: String
+    $fields: String,
+    $variables: String,
+    $modifyDate: date!
 ) {
     update_QUERY(where: {id: {_eq: $id}},_set: {
         name: $name,
@@ -50,6 +48,8 @@ export const UPDATE_QUERY_BY_ID = gql`mutation updateQueryById(
         order_by: $orderBy,
         where: $where,
         fields: $fields,
+        variables: $variables,
+        modify_date: $modifyDate,
     }) {
         returning {
             id

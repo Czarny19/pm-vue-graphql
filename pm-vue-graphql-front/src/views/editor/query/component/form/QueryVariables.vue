@@ -63,19 +63,18 @@
 <script lang="ts">
 import Vue from "vue";
 import {Query, QueryVariable} from "@/plugins/types";
+import {mapVariablesStringToObject} from "@/plugins/query";
 
 export default Vue.extend({
   name: 'QueryVariables',
   props: {query: Object},
   data() {
     return {
-      currentQuery: {}
+      currentQuery: {},
+      variables: []
     }
   },
   computed: {
-    variables(): QueryVariable [] {
-      return (this.currentQuery as Query).variables ?? []
-    },
     variableTypes(): { type: string; display: string } [] {
       return [
         {type: 'String', display: this.$t('editor.variableString').toString()},
@@ -89,7 +88,7 @@ export default Vue.extend({
       return this.$t(key).toString()
     },
     addVariable(): void {
-      this.variables.push({name: '', type: '', value: ''})
+      (this.variables as QueryVariable[]).push({name: '', type: '', value: ''})
     },
     deleteVariable(queryVariable: QueryVariable): void {
       this.variables.forEach((variable, index) => {
@@ -103,11 +102,16 @@ export default Vue.extend({
     }
   },
   watch: {
-    query() {
-      this.currentQuery = this.query
+    variables: {
+      handler() {
+        const query = (this.currentQuery as Query)
+        query.variables = this.variables.map(orderBy => (JSON.stringify(orderBy))).join(';')
+      },
+      deep: true
     }
   },
   beforeMount() {
+    (this.variables as QueryVariable[]) = mapVariablesStringToObject((this.query as Query).variables ?? '')
     this.currentQuery = this.query
   }
 })

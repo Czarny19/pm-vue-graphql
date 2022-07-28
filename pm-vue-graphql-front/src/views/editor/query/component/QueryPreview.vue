@@ -39,14 +39,13 @@
 
 <script lang="ts">
 import Vue from "vue";
+import CardSectionTitle from "@/components/card/CardSectionTitle.vue";
 import ApolloClient from "apollo-client";
+import gql from "graphql-tag";
 import {typeDefs} from "@/graphql/typedefs";
 import {HttpLink} from "apollo-link-http";
 import {InMemoryCache} from "apollo-cache-inmemory";
-import gql from "graphql-tag";
-import CardSectionTitle from "@/components/card/CardSectionTitle.vue";
-import {generateVariablesPreview} from "@/plugins/query";
-import {QueryVariable} from "@/plugins/types";
+import {generateVariablesPreview, mapVariablesStringToObject} from "@/plugins/query";
 
 export default Vue.extend({
   name: 'QueryPreview',
@@ -55,7 +54,7 @@ export default Vue.extend({
     table: String,
     fields: String,
     graphqlQuery: String,
-    graphqlVariables: Array,
+    graphqlVariables: String,
     datasourceAddress: String,
     datasourceSecret: String
   },
@@ -71,7 +70,7 @@ export default Vue.extend({
       return this.graphqlQuery?.replaceAll('\n', '<br>').replaceAll('\t', '&emsp;')
     },
     graphQLVariablesPreview(): string {
-      return generateVariablesPreview((this.graphqlVariables as QueryVariable[]) ?? [])
+      return generateVariablesPreview((this.graphqlVariables as string) ?? '')
     },
     displayVariables(): string {
       return this.graphQLVariablesPreview
@@ -112,7 +111,7 @@ export default Vue.extend({
         resolvers: {}
       })
 
-      const variables = (this.graphqlVariables as QueryVariable[])
+      const variables = mapVariablesStringToObject(this.graphqlVariables) ?? []
       const variablesMap: { [key: string]: string } = {}
 
       variables.forEach((variable) => variablesMap[variable.name] = variable.value)
