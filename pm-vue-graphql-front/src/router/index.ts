@@ -22,7 +22,7 @@ const routes = [
     {name: 'App', path: '/editor/app/:projectId', component: AppPage, beforeEnter: authGuard},
     {
         name: 'GuiEditor',
-        path: '/editor/gui/project=:projectId&page=:pageId',
+        path: '/editor/gui/project=:projectId&page=:pageId&datasource=:datasourceId',
         component: GuiEditorPage,
         beforeEnter: authGuard
     },

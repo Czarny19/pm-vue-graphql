@@ -33,6 +33,13 @@
       @activewidget="setActive"
       @move="move">
   </GuiEditorWidgetTextField>
+
+  <GuiEditorWidgetTable
+      v-else-if="widget.type === 'Table'"
+      :widget="widget"
+      @activewidget="setActive"
+      @move="move">
+  </GuiEditorWidgetTable>
 </template>
 
 <script lang="ts">
@@ -45,11 +52,13 @@ import GuiEditorWidgetRow from "@/views/editor/guieditor/component/widget/GuiEdi
 import GuiEditorWidgetColumn from "@/views/editor/guieditor/component/widget/GuiEditorWidgetColumn.vue";
 import GuiEditorWidgetText from "@/views/editor/guieditor/component/widget/GuiEditorWidgetText.vue";
 import GuiEditorWidgetTextField from "@/views/editor/guieditor/component/widget/GuiEditorWidgetTextField.vue";
+import GuiEditorWidgetTable from "@/views/editor/guieditor/component/widget/GuiEditorWidgetTable.vue";
 import {AppWidget} from "@/plugins/types";
 
 export default Vue.extend({
   name: 'GuiEditorWidget',
   components: {
+    GuiEditorWidgetTable,
     GuiEditorWidgetContainer,
     GuiEditorWidgetRow,
     GuiEditorWidgetColumn,

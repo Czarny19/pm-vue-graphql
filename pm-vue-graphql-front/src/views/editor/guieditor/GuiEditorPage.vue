@@ -31,6 +31,8 @@
               :left-nav-shown="leftNavShown"
               :right-nav-shown="rightNavShown"
               :preview-open="previewOpen"
+              :datasource="datasource"
+              :datasource-secret="datasourceSecret"
               @activewidget="setActiveWidget"
               @changeleftnav="changeLeftNavShown"
               @changerightnav="changeRightNavShown"
@@ -38,7 +40,12 @@
           </GuiEditorDisplay>
         </v-col>
         <v-col v-if="rightNavShown && !previewOpen" cols="2" class="text-end">
-          <GuiEditorRightNav :widget="activeWidget" :theme="theme" @delete="removeWidget(page.definition)"/>
+          <GuiEditorRightNav
+              :widget="activeWidget"
+              :theme="theme"
+              :queries="queries"
+              @delete="removeWidget(page.definition)">
+          </GuiEditorRightNav>
         </v-col>
       </v-row>
     </v-container>
@@ -58,7 +65,11 @@ import {GET_PAGE_BY_ID, UPDATE_PAGE_DEFINITION_BY_ID} from "@/graphql/queries/pa
 import {CURRENT_USER} from "@/graphql/queries/user";
 import {GET_PROJECT_BY_ID} from "@/graphql/queries/project";
 import {GET_THEME_BY_ID} from "@/graphql/queries/theme";
+import {GET_QUERIES_BY_DATASOURCE_ID} from "@/graphql/queries/query";
+import {GET_DATA_SOURCE_BY_ID} from "@/graphql/queries/data_source";
 import {AppWidget} from "@/plugins/types";
+import * as CryptoJS from "crypto-js";
+import {cryptoKey} from "@/main";
 
 export default Vue.extend({
   name: 'GuiEditorPage',
@@ -84,11 +95,15 @@ export default Vue.extend({
       isClosing: false,
       projectId: -1,
       pageId: -1,
+      datasourceId: -1,
       project: {},
       theme: {},
       page: {},
       editorCols: 7,
-      activeWidget: {}
+      activeWidget: {},
+      datasource: {secret: ''},
+      datasourceSecret: '',
+      queries: []
     }
   },
   watch: {
@@ -264,11 +279,44 @@ export default Vue.extend({
         this.page = data.PAGE[0]
         this.loading = false
       }
+    },
+    DATA_SOURCE: {
+      query: GET_DATA_SOURCE_BY_ID,
+      fetchPolicy: 'network-only',
+      variables(): { id: number } {
+        return {
+          id: this.datasourceId
+        }
+      },
+      skip(): boolean {
+        return !this.datasourceId
+      },
+      result({data}): void {
+        this.datasource = data.DATA_SOURCE[0]
+        this.datasourceSecret = CryptoJS.AES.decrypt(data.DATA_SOURCE[0].secret, cryptoKey).toString(CryptoJS.enc.Utf8)
+        this.loadingDatasource = false
+      }
+    },
+    QUERY: {
+      query: GET_QUERIES_BY_DATASOURCE_ID,
+      fetchPolicy: 'network-only',
+      variables(): { datasourceId: number } {
+        return {
+          datasourceId: this.datasourceId
+        }
+      },
+      skip(): boolean {
+        return !this.datasourceId
+      },
+      result({data}): void {
+        this.queries = data.QUERY
+      }
     }
   },
   beforeMount() {
     this.projectId = Number(this.$route.params.projectId)
     this.pageId = Number(this.$route.params.pageId)
+    this.datasourceId = Number(this.$route.params.datasourceId)
   }
 })
 </script>

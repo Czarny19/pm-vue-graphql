@@ -182,7 +182,7 @@
       "label": "Kolumna",
       "icon": "fa-table-columns",
       "children": [],
-      "allowedChildren": ["Przycisk", "Tekst", "Pole tekstowe"],
+      "allowedChildren": ["Przycisk", "Tekst", "Pole tekstowe", "Tabela"],
       "propGroups": [
         {
           "id": "main",
@@ -255,6 +255,28 @@
       "icon": "fa-keyboard",
       "children": [],
       "propGroups": []
+    },
+    {
+      "id": "",
+      "type": "Table",
+      "label": "Tabela",
+      "icon": "fa-table-cells",
+      "children": [],
+      "propGroups": [
+        {
+          "id": "main",
+          "label": "Właściwości",
+          "type": "args",
+          "props": [
+            {
+              "id": "queryId",
+              "value": "",
+              "label": "Zapytanie",
+              "type": "Query"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

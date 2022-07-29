@@ -4,6 +4,13 @@
   <WidgetColumn v-else-if="widget.type === 'Column'" :widget="widget" :theme="theme"/>
   <WidgetText v-else-if="widget.type === 'Text'" :widget="widget" :theme="theme"/>
   <WidgetTextField v-else-if="widget.type === 'Text-Field'" :widget="widget" :theme="theme"/>
+  <WidgetTable
+      v-else-if="widget.type === 'Table'"
+      :widget="widget"
+      :theme="theme"
+      :datasource="datasource"
+      :datasource-secret="datasourceSecret">
+  </WidgetTable>
 </template>
 
 <script lang="ts">
@@ -16,10 +23,12 @@ import WidgetRow from "@/components/widget/WidgetRow.vue";
 import WidgetColumn from "@/components/widget/WidgetColumn.vue";
 import WidgetText from "@/components/widget/WidgetText.vue";
 import WidgetTextField from "@/components/widget/WidgetTextField.vue";
+import WidgetTable from "@/components/widget/WidgetTable.vue";
 
 export default Vue.extend({
   name: 'BaseWidget',
   components: {
+    WidgetTable,
     WidgetTextField,
     WidgetText,
     WidgetColumn,
@@ -28,7 +37,9 @@ export default Vue.extend({
   },
   props: {
     widget: Object,
-    theme: Object
+    theme: Object,
+    datasource: Object,
+    datasourceSecret: String
   }
 })
 </script>

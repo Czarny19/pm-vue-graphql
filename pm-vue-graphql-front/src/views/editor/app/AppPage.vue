@@ -43,7 +43,14 @@ export default Vue.extend({
       this.currentTab = tab
     },
     openGuiEditor(pageId: string): void {
-      this.$router.push({name: 'GuiEditor', params: {projectId: this.projectId.toString(), pageId: pageId}})
+      this.$router.push({
+        name: 'GuiEditor',
+        params: {
+          projectId: this.projectId.toString(),
+          pageId: pageId,
+          datasourceId: (this.project as { source_id: string }).source_id
+        }
+      })
     }
   },
   apollo: {

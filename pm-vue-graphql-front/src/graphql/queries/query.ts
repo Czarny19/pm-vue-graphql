@@ -22,6 +22,13 @@ export const GET_QUERY_BY_ID = gql`query geQueryById($id: bigint!) {
     }
 }`
 
+export const GET_QUERIES_BY_DATASOURCE_ID = gql`query geQueryById($datasourceId: bigint!) {
+    QUERY(where: {data_source_id: {_eq: $datasourceId}}) {
+        id
+        name
+    }
+}`
+
 export const ADD_QUERY = gql`mutation addQuery($datasourceId: bigint!,$name: String!,$table: String!) {
     insert_QUERY(objects: {data_source_id: $datasourceId,name: $name,table: $table}) {
         returning {

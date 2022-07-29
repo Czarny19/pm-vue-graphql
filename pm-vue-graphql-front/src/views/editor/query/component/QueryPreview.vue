@@ -19,7 +19,7 @@
         <div class="text-black" v-html="displayVariables"></div>
       </div>
 
-      <v-btn block color="success" class="mt-6" @click="runQuery">{{ i18n('editor.runQuery') }}</v-btn>
+      <v-btn block color="success" class="mt-6" @click="run">{{ i18n('editor.runQuery') }}</v-btn>
 
       <div class="text-h6 pb-2 pt-4">
         {{ i18n('editor.data') }}
@@ -40,12 +40,7 @@
 <script lang="ts">
 import Vue from "vue";
 import CardSectionTitle from "@/components/card/CardSectionTitle.vue";
-import ApolloClient from "apollo-client";
-import gql from "graphql-tag";
-import {typeDefs} from "@/graphql/typedefs";
-import {HttpLink} from "apollo-link-http";
-import {InMemoryCache} from "apollo-cache-inmemory";
-import {generateVariablesPreview, mapVariablesStringToObject} from "@/plugins/query";
+import {generateVariablesPreview, runQuery} from "@/plugins/query";
 
 export default Vue.extend({
   name: 'QueryPreview',
@@ -77,14 +72,6 @@ export default Vue.extend({
           ?.replaceAll('\n', '<br>')
           .replaceAll('\t', '&emsp;')
     },
-    headers(): { 'authorization': string, 'content-type': string, 'x-hasura-admin-secret': string } {
-      const headers = {'authorization': '', 'content-type': '', 'x-hasura-admin-secret': ''}
-      const token = window.localStorage.getItem('apollo-token')
-      if (token) headers.authorization = `Bearer ${token}`
-      headers['content-type'] = 'application/json'
-      headers['x-hasura-admin-secret'] = this.datasourceSecret
-      return headers
-    },
     tableHeaders(): { text: string; value: string }[] {
       const headers: { text: string; value: string }[] = []
 
@@ -99,43 +86,18 @@ export default Vue.extend({
     i18n(key: string): string {
       return this.$t(key).toString()
     },
-    async runQuery(): Promise<void> {
-      this.isSuccessful = true
+    async run(): Promise<void> {
+      const result = await runQuery(
+          this.datasourceAddress,
+          this.graphqlQuery,
+          this.table,
+          this.datasourceSecret,
+          this.graphqlVariables
+      )
 
-      const linkOptions = {uri: this.datasourceAddress, headers: this.headers}
-
-      const client = new ApolloClient({
-        typeDefs: typeDefs,
-        link: new HttpLink(linkOptions),
-        cache: new InMemoryCache({addTypename: true}),
-        resolvers: {}
-      })
-
-      const variables = mapVariablesStringToObject(this.graphqlVariables) ?? []
-      const variablesMap: { [key: string]: string } = {}
-
-      variables.forEach((variable) => variablesMap[variable.name] = variable.value)
-
-      try {
-        await client.query({
-          query: gql`${this.graphqlQuery}`,
-          variables: variablesMap,
-          fetchPolicy: 'network-only'
-        }).then(response => {
-          this.queryData = response.data[this.table]
-        }).catch(err => {
-          this.isSuccessful = false
-          this.queryError = err
-        })
-      } catch (e) {
-        this.isSuccessful = false
-
-        if (typeof e === "string") {
-          this.queryError = e
-        } else if (e instanceof Error) {
-          this.queryError = e.message
-        }
-      }
+      this.isSuccessful = result.isSuccessful;
+      (this.queryData as unknown[]) = result.data;
+      this.queryError = result.error;
     }
   }
 })

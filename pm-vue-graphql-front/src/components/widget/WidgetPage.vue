@@ -6,7 +6,13 @@
 
     <div class="pa-4" :style="{'background-color': theme.background_color}">
       <template v-for="(child) in widget.children">
-        <BaseWidget :widget="child" :theme="theme" :key="child.name"/>
+        <BaseWidget
+            :widget="child"
+            :theme="theme"
+            :datasource="datasource"
+            :datasource-secret="datasourceSecret"
+            :key="child.name">
+        </BaseWidget>
       </template>
     </div>
   </div>
@@ -20,7 +26,9 @@ export default Vue.extend({
   components: {BaseWidget: () => import("@/components/widget/BaseWidget.vue")},
   props: {
     widget: Object,
-    theme: Object
+    theme: Object,
+    datasource: Object,
+    datasourceSecret: String
   }
 })
 </script>

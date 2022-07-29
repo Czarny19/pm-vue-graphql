@@ -36,6 +36,12 @@
                 <GuiEditorPropertyColor :key="prop.id" v-else-if="prop.type === 'Color'" :prop="prop" :theme="theme"/>
                 <GuiEditorPropertyBorder :key="prop.id" v-else-if="prop.type === 'Border'" :prop="prop"/>
                 <GuiEditorPropertyCols :key="prop.id" v-else-if="prop.type === 'Cols'" :prop="prop"/>
+                <GuiEditorPropertyQuery
+                    :key="prop.id"
+                    v-else-if="prop.type === 'Query'"
+                    :prop="prop"
+                    :queries="queries">
+                </GuiEditorPropertyQuery>
               </template>
             </v-expansion-panel-content>
           </v-expansion-panel>
@@ -74,10 +80,12 @@ import GuiEditorPropertySize from "@/views/editor/guieditor/component/property/G
 import GuiEditorPropertyColor from "@/views/editor/guieditor/component/property/GuiEditorPropertyColor.vue";
 import GuiEditorPropertyBorder from "@/views/editor/guieditor/component/property/GuiEditorPropertyBorder.vue";
 import GuiEditorPropertyCols from "@/views/editor/guieditor/component/property/GuiEditorPropertyCols.vue";
+import GuiEditorPropertyQuery from "@/views/editor/guieditor/component/property/GuiEditorPropertyQuery.vue";
 
 export default Vue.extend({
   name: 'GuiEditorRightNav',
   components: {
+    GuiEditorPropertyQuery,
     GuiEditorPropertyString,
     GuiEditorPropertySize,
     GuiEditorPropertyColor,
@@ -86,7 +94,8 @@ export default Vue.extend({
   },
   props: {
     widget: Object,
-    theme: Object
+    theme: Object,
+    queries: Array,
   },
   data() {
     return {

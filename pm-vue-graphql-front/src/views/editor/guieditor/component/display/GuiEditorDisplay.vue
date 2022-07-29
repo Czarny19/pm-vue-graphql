@@ -23,7 +23,14 @@
       <v-divider></v-divider>
     </v-container>
 
-    <WidgetPage v-if="previewOpen" :widget="pageDefinition" :theme="theme"/>
+    <WidgetPage
+        v-if="previewOpen"
+        :widget="pageDefinition"
+        :theme="theme"
+        :datasource="datasource"
+        :datasource-secret="datasourceSecret">
+    </WidgetPage>
+
     <GuiEditorWidgetPage
         v-else
         :style="{'height': `calc(100% - 46px)`}"
@@ -49,7 +56,9 @@ export default Vue.extend({
     theme: Object,
     leftNavShown: Boolean,
     rightNavShown: Boolean,
-    previewOpen: Boolean
+    previewOpen: Boolean,
+    datasource: Object,
+    datasourceSecret: String
   },
   methods: {
     i18n(key: string): string {

@@ -1,4 +1,9 @@
 import {QueryOrderBy, QueryVariable, QueryWherePart} from "@/plugins/types";
+import ApolloClient from "apollo-client";
+import {typeDefs} from "@/graphql/typedefs";
+import {HttpLink} from "apollo-link-http";
+import {InMemoryCache} from "apollo-cache-inmemory";
+import gql from "graphql-tag";
 
 export const operatorTypes = new Map<string, string>([['=', '_eq'], ['!=', '_neq'], ['>', '_gt'],
     ['>=', '_gte'], ['<', '_lt'], ['<=', '_lte'], ['=null', '_is_null'], ['%', '_like'], ['!%', '_nlike']])
@@ -6,6 +11,60 @@ export const operatorTypes = new Map<string, string>([['=', '_eq'], ['!=', '_neq
 export const numberOperators = ['=', '!=', '>', '>=', '<', '<=', '=null']
 
 export const stringOperators = ['=', '!=', '%', '!%', '=null']
+
+export const runQuery = async (datasourceAddress: string, graphqlQuery: string, table: string,
+                               datasourceSecret?: string, graphqlVariables?: string) => {
+
+    let isSuccessful = true
+    let queryData: unknown[] = []
+    let queryError = ''
+
+    const linkOptions = {uri: datasourceAddress, headers: queryHeaders(datasourceSecret)}
+
+    const client = new ApolloClient({
+        typeDefs: typeDefs,
+        link: new HttpLink(linkOptions),
+        cache: new InMemoryCache({addTypename: true}),
+        resolvers: {}
+    })
+
+    const variables = mapVariablesStringToObject(graphqlVariables ?? '') ?? []
+    const variablesMap: { [key: string]: string } = {}
+
+    variables.forEach((variable) => variablesMap[variable.name] = variable.value)
+
+    try {
+        await client.query({
+            query: gql`${graphqlQuery}`,
+            variables: variablesMap,
+            fetchPolicy: 'network-only'
+        }).then(response => {
+            queryData = response.data[table]
+        }).catch(err => {
+            isSuccessful = false
+            queryError = err
+        })
+    } catch (e) {
+        isSuccessful = false
+
+        if (typeof e === "string") {
+            queryError = e
+        } else if (e instanceof Error) {
+            queryError = e.message
+        }
+    }
+
+    return {isSuccessful: isSuccessful, data: queryData, error: queryError}
+}
+
+export const queryHeaders = (datasourceSecret?: string) => {
+    const headers = {'authorization': '', 'content-type': '', 'x-hasura-admin-secret': ''}
+    const token = window.localStorage.getItem('apollo-token')
+    if (token) headers.authorization = `Bearer ${token}`
+    headers['content-type'] = 'application/json'
+    headers['x-hasura-admin-secret'] = datasourceSecret ?? ''
+    return headers
+}
 
 export const generateQuery = (queryName: string, tableName: string, fields?: string, where?: string, orderBy?: string,
                               limit?: number, variables?: string) => {
