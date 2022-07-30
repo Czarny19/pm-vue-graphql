@@ -32,7 +32,6 @@
               :right-nav-shown="rightNavShown"
               :preview-open="previewOpen"
               :datasource="datasource"
-              :datasource-secret="datasourceSecret"
               @activewidget="setActiveWidget"
               @changeleftnav="changeLeftNavShown"
               @changerightnav="changeRightNavShown"
@@ -101,8 +100,7 @@ export default Vue.extend({
       page: {},
       editorCols: 7,
       activeWidget: {},
-      datasource: {secret: ''},
-      datasourceSecret: '',
+      datasource: {},
       queries: []
     }
   },
@@ -282,7 +280,7 @@ export default Vue.extend({
     },
     DATA_SOURCE: {
       query: GET_DATA_SOURCE_BY_ID,
-      fetchPolicy: 'network-only',
+      fetchPolicy: 'no-cache',
       variables(): { id: number } {
         return {
           id: this.datasourceId
@@ -293,7 +291,7 @@ export default Vue.extend({
       },
       result({data}): void {
         this.datasource = data.DATA_SOURCE[0]
-        this.datasourceSecret = CryptoJS.AES.decrypt(data.DATA_SOURCE[0].secret, cryptoKey).toString(CryptoJS.enc.Utf8)
+        this.datasource.secret = CryptoJS.AES.decrypt(data.DATA_SOURCE[0].secret, cryptoKey).toString(CryptoJS.enc.Utf8)
         this.loadingDatasource = false
       }
     },

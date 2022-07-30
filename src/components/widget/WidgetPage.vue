@@ -10,7 +10,6 @@
             :widget="child"
             :theme="theme"
             :datasource="datasource"
-            :datasource-secret="datasourceSecret"
             :key="child.name">
         </BaseWidget>
       </template>
@@ -27,8 +26,7 @@ export default Vue.extend({
   props: {
     widget: Object,
     theme: Object,
-    datasource: Object,
-    datasourceSecret: String
+    datasource: Object
   }
 })
 </script>

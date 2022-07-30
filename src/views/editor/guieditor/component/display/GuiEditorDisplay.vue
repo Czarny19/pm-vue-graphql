@@ -28,8 +28,7 @@
         class="fill-height"
         :widget="pageDefinition"
         :theme="theme"
-        :datasource="datasource"
-        :datasource-secret="datasourceSecret">
+        :datasource="datasource">
     </WidgetPage>
 
     <GuiEditorWidgetPage
@@ -58,8 +57,7 @@ export default Vue.extend({
     leftNavShown: Boolean,
     rightNavShown: Boolean,
     previewOpen: Boolean,
-    datasource: Object,
-    datasourceSecret: String
+    datasource: Object
   },
   methods: {
     i18n(key: string): string {

@@ -1,34 +1,10 @@
 <template>
-  <WidgetContainer
-      v-if="widget.type === 'Container'"
-      :widget="widget"
-      :theme="theme"
-      :datasource="datasource"
-      :datasource-secret="datasourceSecret">
-  </WidgetContainer>
-  <WidgetRow
-      v-else-if="widget.type === 'Row'"
-      :widget="widget"
-      :theme="theme"
-      :datasource="datasource"
-      :datasource-secret="datasourceSecret">
-  </WidgetRow>
-  <WidgetColumn
-      v-else-if="widget.type === 'Column'"
-      :widget="widget"
-      :theme="theme"
-      :datasource="datasource"
-      :datasource-secret="datasourceSecret">
-  </WidgetColumn>
+  <WidgetContainer v-if="widget.type === 'Container'" :widget="widget" :theme="theme" :datasource="datasource"/>
+  <WidgetRow v-else-if="widget.type === 'Row'" :widget="widget" :theme="theme" :datasource="datasource"/>
+  <WidgetColumn v-else-if="widget.type === 'Column'" :widget="widget" :theme="theme" :datasource="datasource"/>
   <WidgetText v-else-if="widget.type === 'Text'" :widget="widget" :theme="theme"/>
   <WidgetTextField v-else-if="widget.type === 'Text-Field'" :widget="widget" :theme="theme"/>
-  <WidgetTable
-      v-else-if="widget.type === 'Table'"
-      :widget="widget"
-      :theme="theme"
-      :datasource="datasource"
-      :datasource-secret="datasourceSecret">
-  </WidgetTable>
+  <WidgetTable v-else-if="widget.type === 'Table'" :widget="widget" :theme="theme" :datasource="datasource"/>
 </template>
 
 <script lang="ts">
@@ -56,8 +32,7 @@ export default Vue.extend({
   props: {
     widget: Object,
     theme: Object,
-    datasource: Object,
-    datasourceSecret: String
+    datasource: Object
   }
 })
 </script>
