@@ -18,6 +18,13 @@
       <DashboardTabNoData v-else-if="!datasources.length && !loading" :msg="i18n('dashboard.noDatasources')"/>
     </v-card>
 
+    <v-card color="primary" class="mt-3 mb-4" @click="createDatasource">
+      <v-container fluid class="pl-6 pr-6 pt-5 pb-5 text-start ma-auto">
+        <v-icon class="mr-5">fa-circle-plus</v-icon>
+        {{ i18n('dashboard.addDatasource') }}
+      </v-container>
+    </v-card>
+
     <v-container v-if="datasources.length && !loading" fluid class="pa-0">
       <v-row>
         <v-col cols="12" sm="12" md="12" lg="6" xl="6" v-for="(datasource, index) in datasources" :key="datasource.id">
@@ -67,13 +74,6 @@
         </v-col>
       </v-row>
     </v-container>
-
-    <v-card class="pa-4 mt-4 text-end" color="primary">
-      <v-btn class="pa-5" min-width="300" color="success" @click="createDatasource">
-        {{ i18n('dashboard.addDatasource') }}
-        <v-icon small class="pl-6">fa-plus</v-icon>
-      </v-btn>
-    </v-card>
   </div>
 </template>
 

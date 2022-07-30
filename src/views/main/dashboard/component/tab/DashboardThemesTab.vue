@@ -18,6 +18,13 @@
       <DashboardTabNoData v-else-if="!themes.length && !loading" :msg="i18n('dashboard.noThemes')"/>
     </v-card>
 
+    <v-card color="primary" class="mt-3 mb-4" @click="createTheme">
+      <v-container fluid class="pl-6 pr-6 pt-5 pb-5 text-start ma-auto">
+        <v-icon class="mr-5">fa-circle-plus</v-icon>
+        {{ i18n('dashboard.addTheme') }}
+      </v-container>
+    </v-card>
+
     <v-expansion-panels v-if="themes.length && !loading">
       <v-expansion-panel v-for="(theme, index) in themes" :key="theme.id">
         <v-expansion-panel-header class="text-start text-body-1" expand-icon="fa-angle-down" color="secondary">
@@ -65,13 +72,6 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
-
-    <v-card class="pa-4 mt-4 text-end" color="primary">
-      <v-btn class="pa-5" min-width="300" color="success" @click="createTheme">
-        {{ i18n('dashboard.addTheme') }}
-        <v-icon small class="pl-6">fa-plus</v-icon>
-      </v-btn>
-    </v-card>
   </div>
 </template>
 

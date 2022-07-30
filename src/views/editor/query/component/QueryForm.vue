@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
-    <v-row no-gutters>
-      <v-col cols="12" sm="12" md="8" lg="8" xl="8" class="pa-2">
+    <v-row no-gutters style="max-height: 50%">
+      <v-col cols="12" class="pa-4">
         <v-card color="primary" class="pa-2 pb-6">
           <LoadingCircular v-if="loading"/>
 
@@ -57,9 +57,13 @@
           </template>
         </v-card>
       </v-col>
+    </v-row>
 
-      <v-col cols="12" sm="12" md="4" lg="4" xl="4" class="pa-2">
-        <QueryPreview :query="query" :datasource-address="datasourceAddress" :datasource-secret="datasourceSecret"/>
+    <v-row no-gutters>
+      <v-col class="pa-4">
+        <v-card color="primary" class="pa-2 pb-6">
+          <QueryPreview :query="query" :datasource="datasource"/>
+        </v-card>
       </v-col>
     </v-row>
   </v-container>
@@ -76,13 +80,6 @@ import QueryInfo from "@/views/editor/query/component/form/QueryInfo.vue";
 import QueryFields from "@/views/editor/query/component/form/QueryFields.vue";
 import QueryVariables from "@/views/editor/query/component/form/QueryVariables.vue";
 import {Query, SchemaItem} from "@/lib/types";
-import {
-  generateGraphQLQuery,
-  generateVariablesPreview,
-  mapModelStringToQueryOrderByArray,
-  mapModelStringToQueryVariableArray,
-  mapModelStringToQueryWhereArray
-} from "@/lib/query";
 
 export default Vue.extend({
   name: 'QueryForm',
@@ -98,10 +95,8 @@ export default Vue.extend({
   },
   props: {
     query: Object,
-    datasourceAddress: String,
-    datasourceSecret: String,
+    datasource: Object,
     tables: Array,
-    tablesNames: Array,
     loading: Boolean
   },
   data() {
@@ -115,31 +110,6 @@ export default Vue.extend({
     }
   },
   computed: {
-    graphQLQuery(): string {
-      const query = (this.currentQuery as Query)
-
-      if (!query.name) {
-        return ''
-      }
-
-      const where = mapModelStringToQueryWhereArray(query.where ?? '')
-      const orderBy = mapModelStringToQueryOrderByArray(query.order_by ?? '')
-      const vars = mapModelStringToQueryVariableArray(query.variables ?? '')
-
-      return generateGraphQLQuery(
-          query.name,
-          query.table,
-          query.fields,
-          where,
-          orderBy,
-          query.limit,
-          vars
-      )
-    },
-    graphQLVariablesPreview(): string {
-      const query = (this.currentQuery as Query)
-      return generateVariablesPreview(query.variables ?? [])
-    },
     currentTable(): SchemaItem {
       return (this.tables as SchemaItem[]).filter(table => table.name === (this.currentQuery as Query).table)[0]
     },
@@ -152,6 +122,9 @@ export default Vue.extend({
     },
     fieldsVisible(): boolean {
       return (this.currentQuery as Query).table.length > 0
+    },
+    tablesNames(): string [] {
+      return (this.tables as { name: string }[])?.map((table) => table.name)
     }
   },
   methods: {

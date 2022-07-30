@@ -25,6 +25,8 @@ import AppMenuTabPages from "@/views/editor/app/component/tab/AppMenuTabPages.vu
 import AppMenuInfo from "@/views/editor/app/component/AppMenuInfo.vue";
 import AppMenuTabTables from "@/views/editor/app/component/tab/AppMenuTabTables.vue";
 import AppMenuTabQueries from "@/views/editor/app/component/tab/AppMenuTabQueries.vue";
+import * as CryptoJS from "crypto-js";
+import {cryptoKey} from "@/main";
 
 export default Vue.extend({
   name: 'AppPage',
@@ -88,7 +90,7 @@ export default Vue.extend({
     },
     DATA_SOURCE: {
       query: GET_DATA_SOURCE_BY_ID,
-      fetchPolicy: 'network-only',
+      fetchPolicy: 'no-cache',
       variables(): { id: number } {
         return {
           id: this.project.source_id
@@ -99,6 +101,7 @@ export default Vue.extend({
       },
       result({data}): void {
         this.datasource = data.DATA_SOURCE[0]
+        this.datasource.secret = CryptoJS.AES.decrypt(data.DATA_SOURCE[0].secret, cryptoKey).toString(CryptoJS.enc.Utf8)
       }
     }
   },

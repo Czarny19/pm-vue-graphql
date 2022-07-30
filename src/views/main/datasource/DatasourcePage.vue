@@ -10,7 +10,7 @@
 
     <v-row no-gutters>
       <v-col>
-        <DatasourceForm :data-source-id="datasourceId" @saving="setSaving" @setschema="setSchema"/>
+        <DatasourceForm :datasource-id="datasourceId" @saving="setSaving" @setschema="setSchema"/>
       </v-col>
     </v-row>
   </v-container>

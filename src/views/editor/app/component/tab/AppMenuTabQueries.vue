@@ -22,7 +22,7 @@
           <v-card class="mt-4 mb-4 pl-3" color="primary">
             <GraphQLConnectionTest
                 :address="datasource.address"
-                :secret="secretDecoded"
+                :secret="datasource.secret"
                 :is-auto="true"
                 @setschema="setSchema"
                 @error="clearSchema">
@@ -87,8 +87,6 @@ import IconButton from "@/components/button/IconButton.vue";
 import AppAddQueryDialog from "@/views/editor/app/component/AppAddQueryDialog.vue";
 import GraphQLConnectionTest from "@/components/graphql/GraphQLConnectionTest.vue";
 import {DELETE_QUERY, GET_DATA_SOURCE_QUERIES} from "@/graphql/queries/query";
-import {cryptoKey} from "@/main";
-import * as CryptoJS from "crypto-js";
 import {SchemaItem} from "@/lib/types";
 import {cleanSchema} from "@/lib/schema";
 
@@ -116,9 +114,6 @@ export default Vue.extend({
   computed: {
     datasourceSet(): boolean {
       return Object.keys(this.datasource).length !== 0
-    },
-    secretDecoded(): string {
-      return CryptoJS.AES.decrypt(this.datasource.secret, cryptoKey).toString(CryptoJS.enc.Utf8)
     },
     tables(): string [] {
       return cleanSchema(this.schema).map(table => table.name)

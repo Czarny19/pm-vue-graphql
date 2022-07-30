@@ -14,9 +14,7 @@
 
     <QueryForm
         :query="query"
-        :datasource-address="datasource.address"
-        :datasource-secret="secretDecoded"
-        :tables-names="tablesNames"
+        :datasource="datasource"
         :tables="tables"
         :loading="loading || loadingDatasource">
     </QueryForm>
@@ -25,7 +23,7 @@
         class="d-none"
         v-if="!loadingDatasource"
         :address="datasource.address"
-        :secret="secretDecoded"
+        :secret="datasource.secret"
         :is-auto="true"
         @setschema="setSchema"
         @error="clearSchema">

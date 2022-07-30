@@ -7,15 +7,19 @@ import Vue from "vue";
 import {GET_QUERY_BY_ID} from "@/graphql/queries/query";
 import {AppWidget, Query} from "@/lib/types";
 import {getArgsProps, getCssProps} from "@/lib/widget";
-import {generateQuery, runQuery} from "@/lib/query";
+import {
+  generateGraphQLQuery,
+  mapModelStringToQueryOrderByArray, mapModelStringToQueryVariableArray,
+  mapModelStringToQueryWhereArray,
+  runQuery
+} from "@/lib/query";
 
 export default Vue.extend({
   name: 'WidgetTable',
   props: {
     widget: Object,
     theme: Object,
-    datasource: Object,
-    datasourceSecret: String
+    datasource: Object
   },
   data() {
     return {
@@ -35,20 +39,29 @@ export default Vue.extend({
     },
     graphQLQuery(): string {
       const query = (this.query as Query)
-      return generateQuery(
+
+      if (!query.name) {
+        return ''
+      }
+
+      const where = mapModelStringToQueryWhereArray(query.where ?? '')
+      const orderBy = mapModelStringToQueryOrderByArray(query.order_by ?? '')
+      const vars = mapModelStringToQueryVariableArray(query.variables ?? '')
+
+      return generateGraphQLQuery(
           query.name,
           query.table,
           query.fields,
-          query.where,
-          query.order_by,
+          where,
+          orderBy,
           query.limit,
-          query.variables
+          vars
       )
     },
     tableHeaders(): { text: string; value: string }[] {
       const headers: { text: string; value: string }[] = [];
 
-      (this.query as Query).fields?.split(',').forEach((field) => {
+      (this.query as Query).fields?.split(';').forEach((field) => {
         headers.push({text: field, value: field})
       })
 
@@ -70,13 +83,11 @@ export default Vue.extend({
       result({data}): void {
         this.query = data.QUERY[0]
 
-        console.log(this.datasource)
-
         runQuery(
             this.datasource.address,
             this.graphQLQuery,
             (this.query as Query).table,
-            this.datasourceSecret,
+            this.datasource.secret,
             (this.query as Query).variables
         ).then((result) => {
           (this.queryData as unknown[]) = result.data;

@@ -1,54 +1,63 @@
 <template>
-  <v-card class="pt-6" color="primary">
-    <CardSectionTitle :title="i18n('editor.preview')"/>
+  <v-container fluid class="pa-0">
+    <v-row>
+      <v-col cols="12" xl="6" lg="6" md="12" sm="12">
+        <v-card-text class="text-start pa-4">
+          <div class="text-h6 pb-2">
+            {{ i18n('editor.query') }}
+          </div>
 
-    <v-card-text class="text-start pa-4">
-      <div class="text-h6 pb-2">
-        {{ i18n('editor.query') }}
-      </div>
+          <div class="accent pa-4">
+            <div class="text-black text-body-2" v-html="previewQuery"></div>
+          </div>
 
-      <div class="accent pa-4">
-        <div class="text-black" v-html="displayQuery"></div>
-      </div>
+          <div class="text-h6 pb-2 pt-4">
+            {{ i18n('editor.variables') }}
+          </div>
 
-      <div class="text-h6 pb-2 pt-4">
-        {{ i18n('editor.variables') }}
-      </div>
+          <div class="accent pa-4">
+            <div class="text-black" v-html="graphQLVariablesPreview"></div>
+          </div>
+        </v-card-text>
+      </v-col>
 
-      <div class="accent pa-4">
-        <div class="text-black" v-html="displayVariables"></div>
-      </div>
+      <v-col cols="12" xl="6" lg="6" md="12" sm="12">
+        <v-card-text class="text-start pa-4">
+          <div class="text-h6 pb-2">
+            {{ i18n('editor.data') }}
+          </div>
 
-      <v-btn block color="success" class="mt-6" @click="run">{{ i18n('editor.runQuery') }}</v-btn>
+          <v-btn block color="success" @click="run">{{ i18n('editor.runQuery') }}</v-btn>
 
-      <div class="text-h6 pb-2 pt-4">
-        {{ i18n('editor.data') }}
-      </div>
+          <div v-if="isSuccessful" class="accent pa-4 mt-4">
+            <pre class="text-black">{{ JSON.stringify(queryData, null, 2) }}</pre>
+          </div>
 
-      <v-data-table
-          v-if="isSuccessful"
-          hide-default-footer
-          :headers="tableHeaders"
-          :items="queryData">
-      </v-data-table>
-
-      <div v-else class="text-error text-body-1">{{ queryError }}</div>
-    </v-card-text>
-  </v-card>
+          <div v-else class="text-error text-body-1">{{ queryError }}</div>
+        </v-card-text>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import CardSectionTitle from "@/components/card/CardSectionTitle.vue";
-import {generateVariablesPreview, runQuery} from "@/lib/query";
+import {
+  generateGraphQLPreviewQuery,
+  generateGraphQLPreviewVariables,
+  generateGraphQLQuery,
+  mapModelStringToQueryOrderByArray,
+  mapModelStringToQueryVariableArray,
+  mapModelStringToQueryWhereArray,
+  runQuery
+} from "@/lib/query";
+import {Query} from "@/lib/types";
 
 export default Vue.extend({
   name: 'QueryPreview',
-  components: {CardSectionTitle},
   props: {
     query: Object,
-    datasourceAddress: String,
-    datasourceSecret: String
+    datasource: Object
   },
   data() {
     return {
@@ -58,21 +67,56 @@ export default Vue.extend({
     }
   },
   computed: {
-    displayQuery(): string {
-      return this.graphqlQuery?.replaceAll('\n', '<br>').replaceAll('\t', '&emsp;')
+    graphQLQuery(): string {
+      const query = (this.query as Query)
+
+      if (!query.name) {
+        return ''
+      }
+
+      const where = mapModelStringToQueryWhereArray(query.where ?? '')
+      const orderBy = mapModelStringToQueryOrderByArray(query.order_by ?? '')
+      const vars = mapModelStringToQueryVariableArray(query.variables ?? '')
+
+      return generateGraphQLQuery(
+          query.name,
+          query.table,
+          query.fields,
+          where,
+          orderBy,
+          query.limit,
+          vars
+      )
+    },
+    previewQuery(): string {
+      const query = (this.query as Query)
+
+      if (!query.name) {
+        return ''
+      }
+
+      const where = mapModelStringToQueryWhereArray(query.where ?? '')
+      const orderBy = mapModelStringToQueryOrderByArray(query.order_by ?? '')
+      const vars = mapModelStringToQueryVariableArray(query.variables ?? '')
+
+      return generateGraphQLPreviewQuery(
+          query.name,
+          query.table,
+          query.fields,
+          where,
+          orderBy,
+          query.limit,
+          vars
+      )
     },
     graphQLVariablesPreview(): string {
-      return generateVariablesPreview((this.graphqlVariables as string) ?? '')
-    },
-    displayVariables(): string {
-      return this.graphQLVariablesPreview
-          ?.replaceAll('\n', '<br>')
-          .replaceAll('\t', '&emsp;')
+      const vars = mapModelStringToQueryVariableArray(this.query.variables ?? '')
+      return generateGraphQLPreviewVariables(vars)
     },
     tableHeaders(): { text: string; value: string }[] {
-      const headers: { text: string; value: string }[] = []
+      const headers: { text: string; value: string }[] = [];
 
-      this.fields?.split(',').forEach((field) => {
+      (this.query.fields as string)?.split(';').forEach((field) => {
         headers.push({text: field, value: field})
       })
 
@@ -85,11 +129,11 @@ export default Vue.extend({
     },
     async run(): Promise<void> {
       const result = await runQuery(
-          this.datasourceAddress,
-          this.graphqlQuery,
-          this.table,
-          this.datasourceSecret,
-          this.graphqlVariables
+          this.datasource.address,
+          this.graphQLQuery,
+          this.query.table,
+          this.datasource.secret,
+          this.query.variables
       )
 
       this.isSuccessful = result.isSuccessful;

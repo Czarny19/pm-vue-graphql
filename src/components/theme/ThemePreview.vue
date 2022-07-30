@@ -34,12 +34,12 @@
 
     <div class="theme__preview--message text-start" :style="{'background-color': colors['success_color']}">
       <v-icon class="pr-4">fa-check-circle</v-icon>
-      {{ i18n('theme.success') }}
+      {{ i18n('theme.success_color') }}
     </div>
 
     <div class="theme__preview--message text-start" :style="{'background-color': colors['error_color']}">
       <v-icon class="pr-4">fa-times-circle</v-icon>
-      {{ i18n('theme.error') }}
+      {{ i18n('theme.error_color') }}
     </div>
 
     <v-btn class="theme__preview--add" fab bottom absolute right :color="colors['secondary_color']">
@@ -47,7 +47,7 @@
     </v-btn>
 
     <v-footer absolute :color="colors['accent_color']">
-      <div class="text-center">{{ i18n('theme.accent') }}</div>
+      <div class="text-center">{{ i18n('theme.accent_color') }}</div>
     </v-footer>
   </v-card>
 </template>

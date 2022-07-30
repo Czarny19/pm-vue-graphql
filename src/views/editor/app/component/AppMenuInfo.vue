@@ -4,6 +4,7 @@
       <v-row>
         <v-col>
           <v-text-field
+              dense
               class="pa-4"
               color="accent"
               :value="project.name"
@@ -13,6 +14,7 @@
           </v-text-field>
 
           <v-textarea
+              dense
               class="pa-4"
               color="accent"
               :value="project.description"
@@ -26,6 +28,7 @@
 
         <v-col>
           <v-text-field
+              dense
               class="pa-4"
               color="accent"
               :value="themeName"
@@ -35,6 +38,7 @@
           </v-text-field>
 
           <v-text-field
+              dense
               class="pa-4"
               color="accent"
               :value="datasourceName"

@@ -11,7 +11,7 @@
     <CardSectionTitle class="mt-4" :title="i18n('datasource.schema')"/>
 
     <v-expansion-panels class="pa-3">
-      <v-expansion-panel v-for="schemaItem in cleanSchema" :key="schemaItem.name">
+      <v-expansion-panel v-for="schemaItem in displaySchema" :key="schemaItem.name">
 
         <v-expansion-panel-header class="primary text-start text-body-2" expand-icon="fa-angle-down" ripple>
           {{ schemaItem.name }}

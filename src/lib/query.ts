@@ -124,7 +124,7 @@ export const generateGraphQLQuery = (queryName: string, table: string, fields: s
 
     if (limitSet || orderBySet || whereSet) query += ') '
 
-    query += `{\n\t\t${fields?.split(',').join('\n\t\t')}\n\t}\n}`
+    query += `{\n\t\t${fields?.split(';').join('\n\t\t')}\n\t}\n}`
 
     return query
 }
@@ -142,7 +142,7 @@ export const generateGraphQLQuery = (queryName: string, table: string, fields: s
  * @returns A html preview representation of a graphQL query.
  **/
 export const generateGraphQLPreviewQuery = (queryName: string, table: string, fields: string, where?: QueryWhere[],
-                                     orderBy?: QueryOrderBy[], limit?: number, vars?: QueryVariable[]): string => {
+                                            orderBy?: QueryOrderBy[], limit?: number, vars?: QueryVariable[]): string => {
     if (!table.length) {
         return '';
     }
@@ -156,67 +156,77 @@ export const generateGraphQLPreviewQuery = (queryName: string, table: string, fi
         .replaceAll(/[^a-zA-Z ]/g, '')
         .replaceAll(' ', '')
 
-    let query = `<p style="color:brown">query</p> <p style="color:red">${cleanName} </p>`
+    let query = `<span style="color:brown">query</span> <span style="color:red">${cleanName} </span>`
 
     if (varsSet) query += '('
 
     vars?.forEach((el, index) => {
-        query += `$${el.name}: ${el.type}`
+        query += `<span style="color:green">$${el.name}</span>: <span style="color:darkgoldenrod">${el.type}</span>`
         query += index + 1 !== vars?.length ? ', ' : ') '
     })
 
-    query += `{<br/>&emsp;${table} `
+    query += `{<br/>&emsp;<span style="color:royalblue">${table}</span> `
 
     if (limitSet || orderBySet || whereSet) query += '('
 
-    if (limitSet) query += `limit: ${limit}`
+    if (limitSet) {
+        query += `<br/>&emsp;&emsp;<span style="color:purple">limit</span>: `
+        query += `<span style="color:royalblue">${limit}</span>`
+    }
 
     if (orderBySet) {
-        if (query.includes('limit:')) query += ', '
-        query += 'order_by: {'
+        if (limitSet) query += ', '
+        query += '<br/>&emsp;&emsp;<span style="color:purple">order_by</span>: {'
     }
 
     orderBy?.forEach((el, index) => {
-        query += `${el.field}: ${el.isAsc ? 'asc' : 'desc'}`
+        query += `<span style="color:purple">${el.field}</span>: `
+        query += `<span style="color:royalblue">${el.isAsc ? 'asc' : 'desc'}</span>`
         query += index + 1 !== orderBy?.length ? ', ' : '}'
     })
 
     if (whereSet) {
         if (limitSet || orderBySet) query += ', '
-        query += `where: ${generateGraphQLWhere(where)}`
+        query += `<br/>&emsp;&emsp;<span style="color:purple">where</span>: `
+        query += generateGraphQLPreviewWhere(where)
     }
 
     if (limitSet || orderBySet || whereSet) query += ') '
 
-    query += `{\n\t\t${fields?.split(',').join('\n\t\t')}\n\t}\n}`
+    query += `{<br/>&emsp;&emsp;&emsp;`
+    query += `<span style="color:royalblue">${fields?.split(';').join('<br/>&emsp;&emsp;&emsp;')}</span>`
+    query += `<br/>&emsp;}<br/>}`
 
     return query
 }
 
-export const generateVariablesPreview = (variables: string) => {
-    const vars = mapModelStringToQueryVariableArray(variables)
-
-    let query = '{\n'
+/**
+ * Generates a preview version of a graphQL query variables.
+ * @param vars Variables to be used with the query (list of order by condition parts {@link QueryOrderBy})
+ * @returns A html preview representation of a graphQL query variables.
+ **/
+export const generateGraphQLPreviewVariables = (vars?: QueryVariable[]) => {
+    let variables = '{<br/>'
 
     vars?.forEach((variable, index) => {
-        query += `\t"${variable.name}": `
+        variables += `<span style="color:green">"${variable.name}"</span>: `
 
         if (variable.type === 'String') {
-            query += `"${variable.value}"`
+            variables += `<span style="color:deeppink">"${variable.value}"</span>`
         } else {
-            query += `${variable.value}`
+            variables += `<span style="color:royalblue">${variable.value}</span>`
         }
 
         if (index + 1 === vars.length) {
-            query += '\n'
+            variables += '<br/>'
         } else {
-            query += ',\n'
+            variables += ',<br/>'
         }
     })
 
-    query += '}'
+    variables += '}'
 
-    return query
+    return variables
 }
 
 export const mapModelStringToQueryOrderByArray = (values: string): QueryOrderBy[] => {
@@ -288,7 +298,43 @@ const generateGraphQLWhere = (where: QueryWhere[]) => {
             }
         }
 
-        graphQLWhere += `{${part.field} : {${operatorTypes.get(part.operator)}: $${part.variable}}}`
+        graphQLWhere += `{${part.field}: {${operatorTypes.get(part.operator)}: $${part.variable}}}`
+    })
+
+    for (let _i = 0; _i < differentOperationsCount; _i++) {
+        graphQLWhere += ']}'
+    }
+
+    return graphQLWhere
+}
+
+const generateGraphQLPreviewWhere = (where: QueryWhere[]) => {
+    let graphQLWhere = ''
+    let currentIsAnd: boolean | null = null
+    let differentOperationsCount = 0;
+
+    where.forEach((part, index) => {
+        if (currentIsAnd != null) graphQLWhere += ', '
+
+        if (where.length !== index + 1) {
+            const nextPart = where[index + 1]
+
+            if (nextPart.isAnd && (currentIsAnd == null || !currentIsAnd)) {
+                differentOperationsCount++;
+                currentIsAnd = true
+                graphQLWhere += '{<span style="color:purple">_and</span>: ['
+            }
+
+            if (!nextPart.isAnd && (currentIsAnd == null || currentIsAnd)) {
+                differentOperationsCount++;
+                currentIsAnd = false
+                graphQLWhere += '{<span style="color:purple">_or</span>: ['
+            }
+        }
+
+        graphQLWhere += `{<span style="color:purple">${part.field}</span>: `
+        graphQLWhere += `<span style="color:purple">{${operatorTypes.get(part.operator)}</span>: `
+        graphQLWhere += `<span style="color:green">$${part.variable}</span>}}`
     })
 
     for (let _i = 0; _i < differentOperationsCount; _i++) {

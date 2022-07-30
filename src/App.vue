@@ -2,7 +2,7 @@
   <v-app>
     <div id="app">
       <AppBar/>
-      <v-main class="v-main">
+      <v-main>
         <router-view/>
       </v-main>
     </div>

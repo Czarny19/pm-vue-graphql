@@ -6,7 +6,7 @@
       <v-card class="mt-4 mb-4 pl-3" color="primary">
         <GraphQLConnectionTest
             :address="datasource.address"
-            :secret="secretDecoded"
+            :secret="datasource.secret"
             :is-auto="true"
             @setschema="setSchema"
             @error="clearSchema">
@@ -54,9 +54,7 @@ import Vue from "vue";
 import TitleCard from "@/components/card/TitleCard.vue";
 import GraphQLConnectionTest from "@/components/graphql/GraphQLConnectionTest.vue";
 import {cleanSchema} from "@/lib/schema";
-import {cryptoKey} from "@/main";
 import {SchemaItem} from "@/lib/types";
-import * as CryptoJS from "crypto-js";
 
 export default Vue.extend({
   name: 'AppMenuTabTables',
@@ -70,9 +68,6 @@ export default Vue.extend({
   computed: {
     datasourceSet(): boolean {
       return Object.keys(this.datasource).length !== 0
-    },
-    secretDecoded(): string {
-      return CryptoJS.AES.decrypt(this.datasource.secret, cryptoKey).toString(CryptoJS.enc.Utf8)
     },
     fieldHeaders(): { text: string; value: string }[] {
       return [

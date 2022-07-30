@@ -3,7 +3,7 @@
     <v-avatar color="accent" class="mr-6" size="40">
       <v-icon color="primary" size="24">fa-pencil-ruler</v-icon>
     </v-avatar>
-    <v-toolbar-title class="text-h5" style="cursor: pointer" @click="openDashboard">
+    <v-toolbar-title class="text-h5 pointer" @click="openDashboard">
       {{ i18n('title') }}
     </v-toolbar-title>
     <v-spacer></v-spacer>
