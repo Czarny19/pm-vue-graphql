@@ -1,9 +1,9 @@
 <template>
   <v-dialog v-model="isOpen" width="360">
     <template v-slot:activator="{ on, attrs }">
-      <v-col :cols="cols.cols" :sm="cols.sm" :md="cols.md" :lg="cols.lg" :xl="cols.xl" class="pt-4 pb-4">
-        <v-btn class="pl-2 pr-2 pt-6 pb-6" :color="color" width="100%" v-bind="attrs" v-on="on">
-          <v-card color="primary" class="pa-1 mr-auto">{{ label }}: {{ color }}</v-card>
+      <v-col :cols="cols.cols" :sm="cols.sm" :md="cols.md" :lg="cols.lg" :xl="cols.xl" class="pa-3">
+        <v-btn block class="pa-2" :color="color" v-bind="attrs" v-on="on">
+          <v-card flat color="primary" class="pa-1 mr-auto">{{ label }}: {{ color }}</v-card>
         </v-btn>
       </v-col>
     </template>
@@ -56,9 +56,6 @@ export default Vue.extend({
     }
   },
   methods: {
-    i18n(key: string): string {
-      return this.$t(key).toString()
-    },
     close(): void {
       this.isOpen = false
     }

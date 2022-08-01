@@ -1,33 +1,25 @@
 <template>
   <v-container fluid>
-    <LoadingDialog :dialog="saving" :title="i18n('theme.saving')"/>
-
-    <v-row class="mt-2 ml-2 mr-2">
-      <v-col>
-        <TitleCard :title="i18n('theme.interfaceTheme')" icon="fa-palette"/>
-      </v-col>
-    </v-row>
-
-    <v-row no-gutters>
-      <v-col>
-        <ThemeForm :theme-id="themeId" @saving="setSaving"/>
-      </v-col>
-    </v-row>
+    <TitleCard class="ma-1 mb-2" :title="i18n('theme.interfaceTheme')" icon="fa-palette"/>
+    <ThemeForm :loading="loading" :theme="theme" :user-id="currentUser.id"/>
   </v-container>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import LoadingDialog from "@/components/dialog/LoadingDialog.vue";
 import ThemeForm from "@/views/main/theme/component/ThemeForm.vue";
 import TitleCard from "@/components/card/TitleCard.vue";
+import {CURRENT_USER} from "@/graphql/queries/user";
+import {GET_THEME_BY_ID} from "@/graphql/queries/theme";
 
 export default Vue.extend({
   name: 'ThemePage',
-  components: {TitleCard, ThemeForm, LoadingDialog},
+  components: {TitleCard, ThemeForm},
   data() {
     return {
-      saving: false,
+      loading: true,
+      currentUser: {id: -1},
+      theme: {}
     }
   },
   computed: {
@@ -35,12 +27,30 @@ export default Vue.extend({
       return Number(this.$route.params.themeId)
     }
   },
-  methods: {
-    i18n(key: string): string {
-      return this.$t(key).toString()
+  apollo: {
+    currentUser: {
+      query: CURRENT_USER
     },
-    setSaving(saving: boolean): void {
-      this.saving = saving
+    THEME: {
+      query: GET_THEME_BY_ID,
+      fetchPolicy: 'network-only',
+      variables(): { id: number } {
+        return {
+          id: this.themeId
+        }
+      },
+      skip(): boolean {
+        return !this.themeId
+      },
+      result({data}): void {
+        this.loading = false
+        this.theme = data.THEME[0]
+      }
+    }
+  },
+  beforeMount() {
+    if (!this.themeId) {
+      this.loading = false
     }
   }
 })
