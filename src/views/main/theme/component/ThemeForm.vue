@@ -85,15 +85,13 @@ export default Vue.extend({
         'text_color_2': '#2D2D2DFF',
         'background_color': '#FFFFFFFF'
       },
-    }
-  },
-  computed: {
-    nameRules() {
-      return [
+      nameRules: [
         (v: string) => !!v || this.$t('theme.nameRequired'),
         (v: string) => (v && v.length <= 30) || this.$t('theme.nameTooLong'),
       ]
-    },
+    }
+  },
+  computed: {
     themeTyped(): Theme {
       return (this.themeData as Theme)
     }
@@ -132,8 +130,7 @@ export default Vue.extend({
       }).then(() => {
         this.saving = false
         this.$router.back()
-      }).catch((err) => {
-        console.log(err)
+      }).catch(() => {
         this.saving = false
       })
     },
@@ -156,7 +153,8 @@ export default Vue.extend({
       }).then(() => {
         this.saving = false
         this.$router.back()
-      }).catch(() => {
+      }).catch((err) => {
+        console.log(err)
         this.saving = false
       })
     }

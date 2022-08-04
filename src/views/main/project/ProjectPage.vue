@@ -1,46 +1,111 @@
 <template>
   <v-container fluid>
-    <LoadingDialog :dialog="saving" :title="i18n('project.saving')"/>
-
-    <v-row class="mt-2 ml-2 mr-2">
-      <v-col>
-        <TitleCard :title="i18n('project.project')" icon="fa-tablet"/>
-      </v-col>
-    </v-row>
-
-    <v-row no-gutters>
-      <v-col>
-        <ProjectForm :project-id="projectId" @saving="setSaving"/>
-      </v-col>
-    </v-row>
+    <TitleCard class="ma-1 mb-2" :title="i18n('project.project')" icon="fa-tablet"/>
+    <ProjectForm
+        :loading="loading"
+        :project="project"
+        :datasources="datasources"
+        :themes="themes"
+        :user-id="currentUser.id">
+    </ProjectForm>
   </v-container>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import LoadingDialog from "@/components/dialog/LoadingDialog.vue";
 import ProjectForm from "@/views/main/project/component/ProjectForm.vue";
 import TitleCard from "@/components/card/TitleCard.vue";
+import {CURRENT_USER} from "@/graphql/queries/user";
+import {GET_PROJECT_BY_ID} from "@/graphql/queries/project";
+import {GET_THEME_LIST_BY_USER_ID} from "@/graphql/queries/theme";
+import {GET_DATA_SOURCE_LIST_BY_USER_ID} from "@/graphql/queries/datasource";
+import * as CryptoJS from "crypto-js";
+import {cryptoKey} from "@/main";
+import { Datasource } from "@/lib/types";
 
 export default Vue.extend({
   name: 'ProjectPage',
-  components: {TitleCard, ProjectForm, LoadingDialog},
+  components: {TitleCard, ProjectForm},
   data() {
     return {
-      saving: false
+      loadingProject: true,
+      loadingThemes: true,
+      loadingDatasources: true,
+      currentUser: {id: -1},
+      project: {},
+      themes: [],
+      datasources: []
     }
   },
   computed: {
     projectId(): number {
       return Number(this.$route.params.projectId)
+    },
+    loading(): boolean {
+      return this.loadingProject || this.loadingThemes || this.loadingDatasources
     }
   },
-  methods: {
-    i18n(key: string): string {
-      return this.$t(key).toString()
+  apollo: {
+    currentUser: {
+      query: CURRENT_USER
     },
-    setSaving(saving: boolean): void {
-      this.saving = saving
+    PROJECT: {
+      query: GET_PROJECT_BY_ID,
+      fetchPolicy: 'network-only',
+      variables(): { id: number } {
+        return {
+          id: this.projectId
+        }
+      },
+      skip(): boolean {
+        return !this.projectId
+      },
+      result({data}): void {
+        this.project = data.PROJECT[0]
+        this.loadingProject = false
+      }
+    },
+    THEME: {
+      query: GET_THEME_LIST_BY_USER_ID,
+      fetchPolicy: 'network-only',
+      variables(): { userId: number } {
+        return {
+          userId: this.currentUser.id
+        }
+      },
+      skip(): boolean {
+        return !this.currentUser
+      },
+      result({data}): void {
+        this.themes = data.THEME
+        this.loadingThemes = false
+      }
+    },
+    DATA_SOURCE: {
+      query: GET_DATA_SOURCE_LIST_BY_USER_ID,
+      fetchPolicy: 'no-cache',
+      variables(): { userId: number } {
+        return {
+          userId: this.currentUser.id
+        }
+      },
+      skip(): boolean {
+        return !this.currentUser
+      },
+      result({data}): void {
+        this.datasources = data.DATA_SOURCE
+
+        this.datasources.forEach((ds: Datasource) => {
+          ds.secret = CryptoJS.AES.decrypt(ds.secret ?? '', cryptoKey).toString(CryptoJS.enc.Utf8)
+        })
+
+        this.loadingDatasources = false
+      }
+    }
+  },
+  beforeMount() {
+    if (!this.projectId) {
+      this.loadingProject = false
     }
   }
 })
