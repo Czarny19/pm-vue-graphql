@@ -4,11 +4,11 @@
 
     <v-row no-gutters>
       <v-col cols="12" sm="12" md="12" lg="7" xl="7" class="pb-3">
-        <v-card color="primary" class="pt-2 ma-1 fill-height">
+        <v-card color="primary" class="pt-2 pb-1 ma-1 fill-height">
           <LoadingCircular v-if="loading"/>
 
           <template v-else>
-            <CardSectionTitle :title="i18n('theme.theme')"/>
+            <CardSectionTitle class="mt-1" :title="i18n('theme.theme')"/>
 
             <v-form class="pl-2 pr-2 pt-2" v-model="valid" ref="form" @submit.prevent="submit">
               <v-card-text>
