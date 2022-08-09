@@ -1,8 +1,8 @@
 <template>
-  <v-card-text>
-    <v-icon class="pa-6" size="60">fa-folder-open</v-icon>
-    <div class="pa-6 text-h5">{{ msg }}</div>
-  </v-card-text>
+  <v-card color="secondary" class="pa-3 text-start">
+    <v-icon class="pa-3">fa-folder-open</v-icon>
+    <span class="pa-2 text-body-1">{{ msg }}</span>
+  </v-card>
 </template>
 
 <script lang="ts">

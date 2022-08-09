@@ -5,45 +5,32 @@
     <SignUpDialog :dialog="signUpOpen" :user-id="userId"/>
 
     <template v-if="$auth.isAuthenticated">
-      <DashboardNavigation :tab="currentTab" @tabchange="setTab"/>
-
-      <v-container fluid class="pa-4">
-        <v-row>
-          <v-col>
-            <DashboardNavCard
-                :title="i18n('dashboard.addProject')"
-                :sub-title="i18n('dashboard.addProjectDesc')"
-                icon="fa-tablet"
-                :on-click="addProject">
-            </DashboardNavCard>
-          </v-col>
-          <v-col>
-            <DashboardNavCard
-                :title="i18n('dashboard.addDatasource')"
-                :sub-title="i18n('dashboard.addDatasourceDesc')"
-                icon="fa-database"
-                :on-click="addDatasource">
-            </DashboardNavCard>
-          </v-col>
-          <v-col>
-            <DashboardNavCard
-                :title="i18n('dashboard.addTheme')"
-                :sub-title="i18n('dashboard.addThemeDesc')"
-                icon="fa-palette"
-                :on-click="addTheme">
-            </DashboardNavCard>
-          </v-col>
-        </v-row>
-      </v-container>
+      <DashboardNavigation :tab="currentTab" :projects="projects" :user="currentUser" @tabchange="setTab"/>
+      <DashboardShortcuts/>
 
       <v-divider></v-divider>
 
-      <v-container fluid class="pa-4">
+      <v-container fluid class="pa-3">
         <v-row>
           <v-col>
-            <DashboardProjectsTab v-if="currentTab === 0"/>
-            <DashboardThemesTab v-else-if="currentTab === 1"/>
-            <DashboardDatasourcesTab v-else/>
+            <DashboardProjectsTab
+                v-if="currentTab === 0"
+                :loading="loadingProjects || loadingThemes"
+                :projects="projects"
+                :themes="themes">
+            </DashboardProjectsTab>
+
+            <DashboardThemesTab
+                v-else-if="currentTab === 1"
+                :loading="loadingThemes"
+                :themes="themes">
+            </DashboardThemesTab>
+
+            <DashboardDatasourcesTab
+                v-else
+                :loading="loadingDatasources"
+                :datasources="datasources">
+            </DashboardDatasourcesTab>
           </v-col>
         </v-row>
       </v-container>
@@ -54,23 +41,29 @@
 <script lang="ts">
 import Vue from "vue";
 import DashboardNavigation from "@/views/main/dashboard/component/navigation/DashboardNavigation.vue";
-import DashboardNavCard from "@/views/main/dashboard/component/navigation/DashboardNavCard.vue";
-import DashboardProjectsTab from "@/views/main/dashboard/component/tab/DashboardProjectsTab.vue";
-import DashboardDatasourcesTab from "@/views/main/dashboard/component/tab/DashboardDatasourcesTab.vue";
-import DashboardThemesTab from "@/views/main/dashboard/component/tab/DashboardThemesTab.vue";
-import LoginDialog from "@/views/main/dashboard/component/login/LoginDialog.vue";
-import SignUpDialog from "@/views/main/dashboard/component/login/SignUpDialog.vue";
+import DashboardShortcuts from "@/views/main/dashboard/component/navigation/DashboardShortcuts.vue";
+import DashboardProjectsTab from "@/views/main/dashboard/component/project/DashboardProjectsTab.vue";
+import DashboardDatasourcesTab from "@/views/main/dashboard/component/datasource/DashboardDatasourcesTab.vue";
+import DashboardThemesTab from "@/views/main/dashboard/component/theme/DashboardThemesTab.vue";
+import LoginDialog from "@/components/login/LoginDialog.vue";
+import SignUpDialog from "@/components/login/SignUpDialog.vue";
 import {CURRENT_USER} from "@/graphql/queries/user";
+import {GET_PROJECT_LIST_BY_USER_ID} from "@/graphql/queries/project";
+import {GET_THEME_LIST_BY_USER_ID} from "@/graphql/queries/theme";
+import {GET_DATA_SOURCE_LIST_BY_USER_ID} from "@/graphql/queries/datasource";
+import {Datasource} from "@/lib/types";
+import * as CryptoJS from "crypto-js";
+import {cryptoKey} from "@/main";
 
 export default Vue.extend({
   name: 'DashboardPage',
   components: {
+    DashboardShortcuts,
     SignUpDialog,
     LoginDialog,
     DashboardThemesTab,
     DashboardDatasourcesTab,
     DashboardProjectsTab,
-    DashboardNavCard,
     DashboardNavigation
   },
   data() {
@@ -79,24 +72,18 @@ export default Vue.extend({
       signUpOpen: false,
       userId: -1,
       currentUser: {},
+      loadingProjects: true,
+      loadingThemes: true,
+      loadingDatasources: true,
+      projects: [],
+      themes: [],
+      datasources: []
     }
   },
   methods: {
-    i18n(key: string): string {
-      return this.$t(key).toString()
-    },
     setTab(tab: number): void {
       this.currentTab = tab
       this.$cookies.set('pmvg_dashtab', tab)
-    },
-    addProject(): void {
-      this.$router.push({name: 'NewProject'})
-    },
-    addDatasource(): void {
-      this.$router.push({name: 'NewDatasource'})
-    },
-    addTheme(): void {
-      this.$router.push({name: 'NewTheme'})
     },
     openSignUp(id: number): void {
       this.userId = id
@@ -106,7 +93,60 @@ export default Vue.extend({
   apollo: {
     currentUser: {
       query: CURRENT_USER
-    }
+    },
+    PROJECT: {
+      query: GET_PROJECT_LIST_BY_USER_ID,
+      fetchPolicy: 'network-only',
+      variables(): { userId: number } {
+        return {
+          userId: this.currentUser.id
+        }
+      },
+      skip(): boolean {
+        return !this.currentUser
+      },
+      result({data}): void {
+        this.projects = data.PROJECT
+        this.loadingProjects = false
+      },
+    },
+    THEME: {
+      query: GET_THEME_LIST_BY_USER_ID,
+      fetchPolicy: 'network-only',
+      variables(): { userId: number } {
+        return {
+          userId: this.currentUser.id
+        }
+      },
+      skip(): boolean {
+        return !this.currentUser
+      },
+      result({data}): void {
+        this.themes = data.THEME
+        this.loadingThemes = false
+      }
+    },
+    DATA_SOURCE: {
+      query: GET_DATA_SOURCE_LIST_BY_USER_ID,
+      fetchPolicy: 'no-cache',
+      variables(): { userId: number } {
+        return {
+          userId: this.currentUser.id
+        }
+      },
+      skip(): boolean {
+        return !this.currentUser
+      },
+      result({data}): void {
+        this.datasources = data.DATA_SOURCE
+
+        this.datasources.forEach((ds: Datasource) => {
+          ds.secret = CryptoJS.AES.decrypt(ds.secret ?? '', cryptoKey).toString(CryptoJS.enc.Utf8)
+        })
+
+        this.loadingDatasources = false
+      }
+    },
   },
   async beforeMount() {
     this.currentTab = Number(this.$cookies.get('pmvg_dashtab'))
