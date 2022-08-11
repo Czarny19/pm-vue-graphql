@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 
-export const GET_PAGES_FOR_PROJECT = gql`query getPagesForProject($projectId: bigint!) {
+export const GET_PAGE_LIST_BY_PROJECT_ID = gql`query getPageListByProjectId($projectId: bigint!) {
     PAGE(where: {project_id: {_eq: $projectId}}) {
         id
         name
@@ -17,7 +17,7 @@ export const GET_PAGE_BY_ID = gql`query getPageById($id: bigint!) {
     }
 }`
 
-export const ADD_PAGE_FOR_PROJECT = gql`mutation addPageForProject($projectId: bigint!, $name: String!) {
+export const ADD_PAGE = gql`mutation addPage($projectId: bigint!, $name: String!) {
     insert_PAGE(objects: {project_id: $projectId,name: $name}){
         returning {
             id
@@ -25,7 +25,7 @@ export const ADD_PAGE_FOR_PROJECT = gql`mutation addPageForProject($projectId: b
     }
 }`
 
-export const UPDATE_PAGE_DEFINITION_BY_ID = gql`mutation updatePageDefinitionById(
+export const UPDATE_PAGE_DEFINITION = gql`mutation updatePageDefinition(
     $id: bigint!,
     $definition: jsonb!,
     $modifyDate: date!,

@@ -6,8 +6,8 @@ import ProjectPage from "@/views/main/project/ProjectPage.vue";
 import ThemePage from "@/views/main/theme/ThemePage.vue";
 import DatasourcePage from "@/views/main/datasource/DatasourcePage.vue";
 import QueryPage from "@/views/editor/query/QueryPage.vue";
-import {authGuard} from "@/plugins/auth_guard";
 import GuiEditorPage from "@/views/editor/guieditor/GuiEditorPage.vue";
+import {authGuard} from "@/plugins/auth_guard";
 
 Vue.use(VueRouter)
 

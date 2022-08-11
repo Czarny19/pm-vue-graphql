@@ -1,35 +1,32 @@
 <template>
   <v-container fluid class="pa-0">
+    <v-card-title class="secondary ml-1 mr-1 mt-1 pt-2 pb-2 elevation-2 rounded">
+      {{ i18n('editor.query') }}
+      <IconButton class="ml-8" :label="i18n('editor.runQuery')" color="success" icon="fa-play" @click="run"/>
+    </v-card-title>
+
     <v-row>
       <v-col cols="12" xl="6" lg="6" md="12" sm="12">
-        <v-card-text class="text-start pa-4">
-          <div class="text-h6 pb-2">
-            {{ i18n('editor.query') }}
-          </div>
+        <v-card-text class="text-start pa-3">
+          <div class="text-h6 pb-4">{{ i18n('editor.query') }}</div>
 
-          <div class="accent pa-4">
+          <div class="accent pa-3">
             <div class="text-black text-body-2" v-html="previewQuery"></div>
           </div>
 
-          <div class="text-h6 pb-2 pt-4">
-            {{ i18n('editor.variables') }}
-          </div>
+          <div class="text-h6 pb-4 pt-6">{{ i18n('editor.variables') }}</div>
 
-          <div class="accent pa-4">
+          <div class="accent pa-3">
             <div class="text-black" v-html="graphQLVariablesPreview"></div>
           </div>
         </v-card-text>
       </v-col>
 
       <v-col cols="12" xl="6" lg="6" md="12" sm="12">
-        <v-card-text class="text-start pa-4">
-          <div class="text-h6 pb-2">
-            {{ i18n('editor.data') }}
-          </div>
+        <v-card-text class="text-start pa-3">
+          <div class="text-h6 pb-4">{{ i18n('editor.response') }}</div>
 
-          <v-btn block color="success" @click="run">{{ i18n('editor.runQuery') }}</v-btn>
-
-          <div v-if="isSuccessful" class="accent pa-4 mt-4">
+          <div v-if="isSuccessful" class="accent pa-3">
             <pre class="text-black">{{ JSON.stringify(queryData, null, 2) }}</pre>
           </div>
 
@@ -42,6 +39,8 @@
 
 <script lang="ts">
 import Vue from "vue";
+import IconButton from "@/components/button/IconButton.vue";
+import {Query} from "@/lib/types";
 import {
   generateGraphQLPreviewQuery,
   generateGraphQLPreviewVariables,
@@ -51,10 +50,10 @@ import {
   mapModelStringToQueryWhereArray,
   runQuery
 } from "@/lib/query";
-import {Query} from "@/lib/types";
 
 export default Vue.extend({
   name: 'QueryPreview',
+  components: {IconButton},
   props: {
     query: Object,
     datasource: Object
@@ -124,9 +123,6 @@ export default Vue.extend({
     }
   },
   methods: {
-    i18n(key: string): string {
-      return this.$t(key).toString()
-    },
     async run(): Promise<void> {
       const result = await runQuery(
           this.datasource.address,

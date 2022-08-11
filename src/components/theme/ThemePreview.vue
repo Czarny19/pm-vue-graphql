@@ -59,11 +59,6 @@ export default Vue.extend({
   name: 'ThemePreview',
   props: {
     colors: Object
-  },
-  methods: {
-    i18n(key: string): string {
-      return this.$t(key).toString()
-    }
   }
 })
 </script>

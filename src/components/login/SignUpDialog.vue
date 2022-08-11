@@ -10,16 +10,16 @@
       <v-card-title class="text-start">{{ i18n('user.accountDetails') }}</v-card-title>
 
       <v-card-text class="text-start pt-2 pb-6">
-        <div class="pa-4">
+        <div class="pa-2">
           <v-icon color="success" large class="pr-6">fa-check</v-icon>
           {{ i18n('user.accountCreatedInfo') }}
         </div>
 
-        <v-divider></v-divider>
+        <v-divider class="mt-2 mb-2"></v-divider>
 
         <v-form v-model="valid" ref="form" @submit.prevent="save">
           <v-text-field
-              class="pa-4"
+              class="pl-2 pr-2"
               color="accent"
               v-model="userEmail"
               :label="i18n('user.email')"
@@ -28,7 +28,7 @@
           </v-text-field>
 
           <v-textarea
-              class="pa-4"
+              class="pl-2 pr-2"
               color="accent"
               v-model="userUsername"
               :label="i18n('user.username')"
@@ -52,9 +52,9 @@
 
 <script lang="ts">
 import Vue from "vue";
+import IconButton from "@/components/button/IconButton.vue";
 import {GET_USER_BY_ID, UPDATE_USER_USERNAME} from "@/graphql/queries/user";
 import {apolloClient} from "@/main";
-import IconButton from "@/components/button/IconButton.vue";
 
 export default Vue.extend({
   name: 'SignUpDialog',
@@ -82,9 +82,6 @@ export default Vue.extend({
     }
   },
   methods: {
-    i18n(key: string): string {
-      return this.$t(key).toString()
-    },
     save(): void {
       (this.$refs.form as Vue & { validate: () => boolean }).validate()
 

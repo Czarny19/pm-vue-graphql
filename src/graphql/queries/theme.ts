@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 
-export const GET_USER_THEMES = gql`query getUserThemes($userId: bigint!) {
+export const GET_THEME_LIST_BY_USER_ID = gql`query getThemeListByUserId($userId: bigint!) {
     THEME(where: {user_id: {_eq: $userId}}) {
         id
         name
@@ -18,6 +18,7 @@ export const GET_USER_THEMES = gql`query getUserThemes($userId: bigint!) {
 
 export const GET_THEME_BY_ID = gql`query geThemeById($id: bigint!) {
     THEME(where: {id: {_eq: $id}}) {
+        id
         name
         primary_color
         secondary_color
@@ -31,8 +32,8 @@ export const GET_THEME_BY_ID = gql`query geThemeById($id: bigint!) {
     }
 }`
 
-export const ADD_THEME_FOR_USER = gql`mutation addThemeForUser(
-    $user_id: bigint!,
+export const ADD_THEME = gql`mutation addTheme(
+    $userId: bigint!,
     $name: String!,
     $primary: String!,
     $secondary: String!,
@@ -46,7 +47,7 @@ export const ADD_THEME_FOR_USER = gql`mutation addThemeForUser(
 ) {
     insert_THEME(objects: {
         name: $name,
-        user_id: $user_id,
+        user_id: $userId,
         primary_color: $primary,
         secondary_color: $secondary,
         accent_color: $accent,
@@ -63,7 +64,7 @@ export const ADD_THEME_FOR_USER = gql`mutation addThemeForUser(
     }
 }`
 
-export const UPDATE_THEME_BY_ID = gql`mutation updateThemeForId(
+export const UPDATE_THEME = gql`mutation updateTheme(
     $id: bigint!,
     $name: String!,
     $primary: String!,

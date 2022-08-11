@@ -1,11 +1,11 @@
 <template>
-  <v-navigation-drawer permanent app clipped width="340" color="secondary">
+  <v-navigation-drawer permanent app clipped color="primary">
     <v-list-item class="pl-6 pr-6 pt-2 pb-2 primary">
       <v-list-item-content>
-        <v-list-item-title class="text-h6 text-start mb-2">
+        <v-list-item-title class="text-body-1 text-start mb-2">
           {{ currentUser.username }}
         </v-list-item-title>
-        <v-list-item-subtitle class="text-body-1 text-start">
+        <v-list-item-subtitle class="text-body-2 text-start">
           {{ currentUser.email }}
         </v-list-item-subtitle>
       </v-list-item-content>
@@ -13,15 +13,15 @@
 
     <v-divider></v-divider>
 
-    <v-list nav>
+    <v-list nav color="primary">
       <v-list-item-group v-model="currentTab" color="accent">
-        <v-list-item v-for="item in navItems" :key="item.title" link class="pl-6 pr-6">
-          <v-list-item-icon>
+        <v-list-item v-for="item in navItems" :key="item.title" link class="pl-4 pr-4">
+          <v-list-item-icon class="pa-0 ma-auto">
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-item-icon>
 
-          <v-list-item-content>
-            <v-list-item-title class="text-body-1 text-start">{{ item.title }}</v-list-item-title>
+          <v-list-item-content class="pl-4 pr-4 pt-2 pb-2">
+            <v-list-item-title class="text-body-2 text-start">{{ item.title }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list-item-group>
@@ -39,22 +39,21 @@ export default Vue.extend({
     return {
       currentTab: 0,
       currentUser: {id: -1},
-      projects: [],
-      navItems: [
-        {title: this.$t('editor.pages'), icon: 'fa-file'},
-        {title: this.$t('editor.tables'), icon: 'fa-table'},
-        {title: this.$t('editor.queries'), icon: 'fa-terminal'}
+      projects: []
+    }
+  },
+  computed: {
+    navItems(): { title: string, icon: string }[] {
+      return [
+        {title: this.$t('editor.pages').toString(), icon: 'fa-file-pen'},
+        {title: this.$t('editor.tables').toString(), icon: 'fa-table'},
+        {title: this.$t('editor.queries').toString(), icon: 'fa-terminal'}
       ]
     }
   },
   watch: {
     currentTab(): void {
       this.$emit('tabchange', this.currentTab)
-    }
-  },
-  methods: {
-    i18n(key: string): string {
-      return this.$t(key).toString()
     }
   },
   apollo: {

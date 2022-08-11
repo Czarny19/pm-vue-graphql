@@ -53,4 +53,12 @@ Vue.use(Auth0, {domain: auth0Domain, clientId: auth0CientId, onRedirectCallback:
 export const i18n = new VueI18n({locale: defaultLocale, messages, fallbackLocale: defaultLocale})
 export const cryptoKey = 'jXn2r5u8x/A?D(G+KbPeShVkYp3s6v9y'
 
+Vue.mixin({
+    methods: {
+        i18n(key: string): string {
+            return this.$t(key).toString()
+        }
+    }
+})
+
 new Vue({router, apolloProvider, i18n, vuetify, render: h => h(App)}).$mount('#app')

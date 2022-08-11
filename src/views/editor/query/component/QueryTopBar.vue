@@ -1,10 +1,10 @@
 <template>
-  <v-toolbar color="secondary">
-    <v-btn fab small color="accent" class="mr-4" @click="closeEditor">
-      <v-icon color="primary">fa-arrow-left</v-icon>
+  <v-toolbar dense height="60" color="secondary">
+    <v-btn fab x-small color="accent" class="mr-4" @click="closeEditor">
+      <v-icon small color="primary">fa-arrow-left</v-icon>
     </v-btn>
 
-    <div class="text-body-1">
+    <div class="text-body-2">
       {{ i18n('editor.titleQuery') }}: {{ query.name }}
     </div>
 
@@ -40,9 +40,6 @@ export default Vue.extend({
     rejectVisible: Boolean
   },
   methods: {
-    i18n(key: string): string {
-      return this.$t(key).toString()
-    },
     closeEditor(): void {
       this.$emit('closeeditor')
     },

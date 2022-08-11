@@ -52,8 +52,7 @@ import {GET_PROJECT_LIST_BY_USER_ID} from "@/graphql/queries/project";
 import {GET_THEME_LIST_BY_USER_ID} from "@/graphql/queries/theme";
 import {GET_DATA_SOURCE_LIST_BY_USER_ID} from "@/graphql/queries/datasource";
 import {Datasource} from "@/lib/types";
-import * as CryptoJS from "crypto-js";
-import {cryptoKey} from "@/main";
+import {decodeDatasourceSecret} from "@/lib/schema";
 
 export default Vue.extend({
   name: 'DashboardPage',
@@ -139,11 +138,7 @@ export default Vue.extend({
       },
       result({data}): void {
         this.datasources = data.DATA_SOURCE
-
-        this.datasources.forEach((ds: Datasource) => {
-          ds.secret = CryptoJS.AES.decrypt(ds.secret ?? '', cryptoKey).toString(CryptoJS.enc.Utf8)
-        })
-
+        this.datasources.forEach((ds: Datasource) => ds.secret = decodeDatasourceSecret(ds.secret ?? ''))
         this.loadingDatasources = false
       }
     },

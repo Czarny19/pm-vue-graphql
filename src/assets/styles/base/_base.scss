@@ -10,3 +10,11 @@
 .v-main {
   height: 100%;
 }
+
+.v-expansion-panel-content .v-expansion-panel-content__wrap {
+  padding: 0 !important;
+}
+
+.v-tooltip__content {
+  opacity: 1 !important;
+}

@@ -6,7 +6,7 @@
       <v-card-text class="text-start pt-2 pb-2">
         <v-form v-model="valid" ref="form" @submit.prevent="save">
           <v-text-field
-              class="pa-4"
+              class="pa-2"
               color="accent"
               v-model="pageName"
               :label="i18n('editor.pageName')"
@@ -30,7 +30,7 @@
 <script lang="ts">
 import Vue from "vue";
 import IconButton from "@/components/button/IconButton.vue";
-import {ADD_PAGE_FOR_PROJECT} from "@/graphql/queries/page";
+import {ADD_PAGE} from "@/graphql/queries/page";
 
 export default Vue.extend({
   name: 'AppAddPageDialog',
@@ -50,15 +50,7 @@ export default Vue.extend({
       ],
     }
   },
-  watch: {
-    dialog(): void {
-      this.isOpen = this.dialog
-    }
-  },
   methods: {
-    i18n(key: string): string {
-      return this.$t(key).toString()
-    },
     save(): void {
       (this.$refs.form as Vue & { validate: () => boolean }).validate()
 
@@ -68,7 +60,7 @@ export default Vue.extend({
     },
     addPage(): void {
       this.$apollo.mutate({
-        mutation: ADD_PAGE_FOR_PROJECT,
+        mutation: ADD_PAGE,
         variables: {
           projectId: this.projectId,
           name: this.pageName,
@@ -87,7 +79,12 @@ export default Vue.extend({
     close() {
       this.$emit('close')
     }
-  }
+  },
+  watch: {
+    dialog(): void {
+      this.isOpen = this.dialog
+    }
+  },
 })
 </script>
 

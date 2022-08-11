@@ -37,9 +37,6 @@ export default Vue.extend({
     }
   },
   methods: {
-    i18n(key: string): string {
-      return this.$t(key).toString()
-    },
     close() {
       this.$emit('close')
     }

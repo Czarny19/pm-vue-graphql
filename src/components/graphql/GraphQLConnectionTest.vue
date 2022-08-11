@@ -1,18 +1,18 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <v-row class="text-start">
-      <v-col class="text-body-1 ma-auto">
-        <v-icon :color="connectionStatusColor" class="pr-4">fa-circle</v-icon>
+      <v-col class="text-body-2 text-start mt-auto mb-auto" cols="auto">
+        <v-icon :color="connectionStatusColor" size="24" class="pr-4 mb-1">fa-circle</v-icon>
         {{ i18n('datasource.connectionStatus') }}: {{ connectionStatusDesc }}
       </v-col>
-      <v-col v-if="!isAuto" class="text-end pr-2">
-        <v-btn class="pa-6" color="info" @click="checkConnection" :disabled="!address">
+      <v-col v-if="!isAuto" class="text-end pr-2" cols="auto">
+        <v-btn small class="pa-4" color="info" @click="checkConnection" :disabled="!address">
           {{ i18n('datasource.checkConnection') }}
         </v-btn>
       </v-col>
     </v-row>
 
-    <v-row v-if="errorMsg" no-gutters class="text-start ml-0 pl-0">
+    <v-row v-if="errorMsg" no-gutters class="text-start ml-0 pl-0 pt-4">
       <div class="text-body-2 mt-2 mb-2 pl-4 pr-4 pb-2 pt-2 error-chip">{{ errorMsg }}</div>
     </v-row>
   </v-container>
@@ -20,11 +20,8 @@
 
 <script lang="ts">
 import Vue from "vue";
-import ApolloClient from "apollo-client";
-import {HttpLink} from "apollo-link-http";
-import {InMemoryCache} from "apollo-cache-inmemory";
-import {GET_SCHEMA} from "@/graphql/queries/schema";
-import {typeDefs} from "@/graphql/typedefs";
+import {getCleanGraphQLSchema} from "@/lib/schema";
+import {SchemaItem} from "@/lib/types";
 
 export default Vue.extend({
   name: 'GraphQLConnectionTest',
@@ -38,48 +35,36 @@ export default Vue.extend({
       connectionStatusDesc: '',
       connectionStatusColor: '',
       errorMsg: '',
-      schema: null
-    }
-  },
-  computed: {
-    headers(): { 'authorization': string, 'content-type': string, 'x-hasura-admin-secret': string } {
-      const headers = {'authorization': '', 'content-type': '', 'x-hasura-admin-secret': ''}
-      const token = window.localStorage.getItem('apollo-token')
-      if (token) headers.authorization = `Bearer ${token}`
-      headers['content-type'] = 'application/json'
-      headers['x-hasura-admin-secret'] = this.secret
-      return headers
+      schema: []
     }
   },
   methods: {
-    i18n(key: string): string {
-      return this.$t(key).toString()
-    },
     async checkConnection(): Promise<void> {
-      const linkOptions = {uri: this.address, headers: this.headers}
+      const result = await getCleanGraphQLSchema(this.address, this.secret);
+      (this.schema as SchemaItem[]) = result.schema;
+      this.errorMsg = result.errorMsg.toString()
 
-      const client = new ApolloClient({
-        typeDefs: typeDefs,
-        link: new HttpLink(linkOptions),
-        cache: new InMemoryCache({addTypename: true}),
-        resolvers: {}
-      })
-
-      await client.query({query: GET_SCHEMA, fetchPolicy: 'network-only'}).then(response => {
-        this.schema = response.data.__schema.types
-        this.connectionStatusColor = 'success'
-        this.connectionStatusDesc = this.$t('datasource.statusSuccess').toString()
-        this.errorMsg = ''
-
-        this.$emit('setschema', this.schema)
-      }).catch(err => {
-        this.schema = null
+      if (this.errorMsg.length) {
         this.connectionStatusColor = 'error'
         this.connectionStatusDesc = this.$t('datasource.statusError').toString()
-        this.errorMsg = err
-
         this.$emit('error')
-      })
+        return
+      } else {
+        this.connectionStatusColor = 'success'
+        this.connectionStatusDesc = this.$t('datasource.statusSuccess').toString()
+        this.$emit('setschema', this.schema)
+      }
+    }
+  },
+  watch: {
+    address() {
+      this.connectionStatusDesc = this.$t('datasource.statusNone').toString()
+      this.connectionStatusColor = 'grey'
+      this.errorMsg = ''
+
+      if (this.isAuto) {
+        this.checkConnection();
+      }
     }
   },
   async beforeMount() {

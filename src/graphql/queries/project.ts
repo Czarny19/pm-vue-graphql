@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 
-export const GET_USER_PROJECTS = gql`query getUserProjects($userId: bigint!) {
+export const GET_PROJECT_LIST_BY_USER_ID = gql`query getProjectListByUserId($userId: bigint!) {
     PROJECT(where: {user_id: {_eq: $userId}}) {
         id
         name
@@ -25,19 +25,19 @@ export const GET_PROJECT_BY_ID = gql`query getProjectById($id: bigint!) {
     }
 }`
 
-export const GET_PROJECTS_WITH_THEME = gql`query getProjectsWithTheme($id: bigint!) {
+export const GET_PROJECT_LIST_BY_THEME_ID = gql`query getProjectListByThemeId($id: bigint!) {
     PROJECT(where: {theme_id: {_eq: $id}}) {
         id
     }
 }`
 
-export const GET_PROJECTS_WITH_DATA_SOURCE = gql`query getProjectsWithDataSources($id: bigint!) {
+export const GET_PROJECT_LIST_BY_DATA_SOURCE_ID = gql`query getProjectListByDatasourceId($id: bigint!) {
     PROJECT(where: {source_id: {_eq: $id}}) {
         id
     }
 }`
 
-export const ADD_PROJECT_FOR_USER = gql`mutation addProjectForUser(
+export const ADD_PROJECT = gql`mutation addProject(
     $userId: bigint!,
     $name: String!,
     $description: String!,
@@ -46,7 +46,7 @@ export const ADD_PROJECT_FOR_USER = gql`mutation addProjectForUser(
 ) {
     insert_PROJECT(objects: {
         description: $description,
-        name: $name, 
+        name: $name,
         definition: "",
         user_id: $userId,
         theme_id: $themeId
@@ -59,7 +59,7 @@ export const ADD_PROJECT_FOR_USER = gql`mutation addProjectForUser(
     }
 }`
 
-export const UPDATE_PROJECT_BY_ID = gql`mutation updateProjectById(
+export const UPDATE_PROJECT = gql`mutation updateProject(
     $id: bigint!,
     $name: String!,
     $description: String!,

@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 
-export const GET_DATA_SOURCE_QUERIES = gql`query getDataSourceQueries($datasourceId: bigint!) {
+export const GET_QUERY_LIST_BY_DATA_SOURCE_ID = gql`query getQueryListByDatasourceId($datasourceId: bigint!) {
     QUERY(where: {data_source_id: {_eq: $datasourceId}}) {
         id
         name
@@ -22,13 +22,6 @@ export const GET_QUERY_BY_ID = gql`query geQueryById($id: bigint!) {
     }
 }`
 
-export const GET_QUERIES_BY_DATASOURCE_ID = gql`query geQueryById($datasourceId: bigint!) {
-    QUERY(where: {data_source_id: {_eq: $datasourceId}}) {
-        id
-        name
-    }
-}`
-
 export const ADD_QUERY = gql`mutation addQuery($datasourceId: bigint!,$name: String!,$table: String!) {
     insert_QUERY(objects: {data_source_id: $datasourceId,name: $name,table: $table}) {
         returning {
@@ -37,7 +30,7 @@ export const ADD_QUERY = gql`mutation addQuery($datasourceId: bigint!,$name: Str
     }
 }`
 
-export const UPDATE_QUERY_BY_ID = gql`mutation updateQueryById(
+export const UPDATE_QUERY = gql`mutation updateQuery(
     $id: bigint!,
     $name: String!,
     $table: String!,

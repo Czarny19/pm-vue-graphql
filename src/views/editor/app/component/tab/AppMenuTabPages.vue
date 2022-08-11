@@ -9,49 +9,40 @@
 
     <DeleteConfirmationDialog :dialog="deleteDialog" @confirm="deletePage" @cancel="cancelDeletePage"/>
 
-    <v-container fluid class="pa-4">
+    <v-container fluid class="pa-3">
       <TitleCard :title="i18n('editor.pages')" icon="fa-file"/>
+      <AddItemCard v-if="!loading" :label="i18n('editor.addPage')" @add="addPage"/>
 
-      <v-card class="mt-4" v-if="loading" color="primary">
-        <LoadingCircular/>
-      </v-card>
+      <LoadingCircular v-if="loading"/>
 
-      <template v-else>
-        <v-card color="primary" class="mt-3" @click="addPage">
-          <v-container fluid class="pl-6 pr-6 pt-5 pb-5 text-start ma-auto">
-            <v-icon class="mr-5">fa-circle-plus</v-icon>
-            {{ i18n('editor.addPage') }}
-          </v-container>
-        </v-card>
+      <v-card v-else color="secondary" v-for="page in pages" :key="page.id">
+        <v-container fluid class="pl-6 pr-6">
+          <v-row no-gutters>
+            <v-col class="text-start ma-auto text-body-1">
+              {{ page.name }}
+            </v-col>
 
-        <v-card color="secondary" v-for="page in pages" :key="page.id" class="mt-3">
-          <v-container fluid class="pl-6 pr-6">
-            <v-row no-gutters>
-              <v-col class="text-start ma-auto">
-                {{ page.name }}
-              </v-col>
-              <v-col class="text-start ma-auto">
+            <v-col class="text-end">
+              <span class="text-body-2 text--secondary pr-6">
                 {{ i18n('editor.modifyDate') }}: {{ page.modify_date }}
-              </v-col>
-              <v-col class="text-end">
-                <IconButton
-                    :label="i18n('common.edit')"
-                    icon="fa-edit"
-                    color="info"
-                    @click="openEditor(page.id)">
-                </IconButton>
-                <IconButton
-                    class="ml-6"
-                    :label="i18n('common.delete')"
-                    icon="fa-trash-can"
-                    color="error"
-                    @click="deletePageClicked(page.id)">
-                </IconButton>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card>
-      </template>
+              </span>
+              <IconButton
+                  :label="i18n('common.edit')"
+                  icon="fa-edit"
+                  color="info"
+                  @click="openEditor(page.id)">
+              </IconButton>
+              <IconButton
+                  class="ml-6"
+                  :label="i18n('common.delete')"
+                  icon="fa-trash-can"
+                  color="error"
+                  @click="deletePageClicked(page.id)">
+              </IconButton>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-card>
     </v-container>
   </div>
 </template>
@@ -61,15 +52,17 @@ import Vue from "vue";
 import LoadingCircular from "@/components/loading/LoadingCircular.vue";
 import TitleCard from "@/components/card/TitleCard.vue";
 import IconButton from "@/components/button/IconButton.vue";
-import AppAddPageDialog from "@/views/editor/app/component/AppAddPageDialog.vue";
+import AppAddPageDialog from "@/views/editor/app/component/dialog/AppAddPageDialog.vue";
+import AddItemCard from "@/components/card/AddItemCard.vue";
 import DeleteConfirmationDialog from "@/components/dialog/DeleteConfirmationDialog.vue";
-import {DELETE_PAGE, GET_PAGES_FOR_PROJECT} from "@/graphql/queries/page";
+import {DELETE_PAGE, GET_PAGE_LIST_BY_PROJECT_ID} from "@/graphql/queries/page";
 
 export default Vue.extend({
   name: 'AppMenuTabPages',
-  components: {DeleteConfirmationDialog, AppAddPageDialog, IconButton, TitleCard, LoadingCircular},
+  components: {AddItemCard, DeleteConfirmationDialog, AppAddPageDialog, IconButton, TitleCard, LoadingCircular},
   props: {
-    projectId: Number
+    projectId: Number,
+    datasourceId: Number
   },
   data() {
     return {
@@ -81,9 +74,6 @@ export default Vue.extend({
     }
   },
   methods: {
-    i18n(key: string): string {
-      return this.$t(key).toString()
-    },
     addPage(): void {
       this.addPageDialog = true
     },
@@ -94,7 +84,14 @@ export default Vue.extend({
       this.$apollo.queries.PAGE.refetch()
     },
     openEditor(id: number): void {
-      this.$emit('openeditor', id)
+      this.$router.push({
+        name: 'GuiEditor',
+        params: {
+          projectId: this.projectId.toString(),
+          pageId: id.toString(),
+          datasourceId: this.datasourceId.toString()
+        }
+      })
     },
     deletePageClicked(id: number): void {
       this.deleteId = id
@@ -107,20 +104,15 @@ export default Vue.extend({
     deletePage(): void {
       this.deleteDialog = false
 
-      this.$apollo.mutate({
-        mutation: DELETE_PAGE,
-        variables: {
-          id: this.deleteId
-        }
-      }).then(() => {
+      this.$apollo.mutate({mutation: DELETE_PAGE, variables: {id: this.deleteId}}).then(() => {
         this.$apollo.queries.PAGE.refetch()
       })
     }
   },
   apollo: {
     PAGE: {
-      query: GET_PAGES_FOR_PROJECT,
-      fetchPolicy: 'network-only',
+      query: GET_PAGE_LIST_BY_PROJECT_ID,
+      fetchPolicy: 'no-cache',
       variables(): { projectId: number } {
         return {
           projectId: this.projectId

@@ -1,9 +1,9 @@
 <template>
   <v-card-text class="pa-3 pt-0 pb-6">
-    <div class="elevation-6 pt-6 pb-2">
-      <v-container fluid>
+    <div class="elevation-6 pt-4">
+      <v-container fluid class="pa-4">
         <v-row v-for="(wherePart, index) in whereParts" :key="index">
-          <v-col v-if="index !== 0" cols="1">
+          <v-col v-if="index !== 0" cols="auto">
             <v-btn fab small v-if="wherePart.isAnd" @click="setPartIsAnd(wherePart)" color="info">
               {{ i18n('editor.and') }}
             </v-btn>
@@ -13,7 +13,9 @@
             </v-btn>
           </v-col>
 
-          <v-col v-else cols="1"></v-col>
+          <v-col v-else cols="auto">
+            <v-btn fab small color="transparent" disabled></v-btn>
+          </v-col>
 
           <v-col cols="3">
             <v-select
@@ -56,7 +58,9 @@
             </v-select>
           </v-col>
 
-          <v-col cols="1" class="text-center">
+          <v-spacer></v-spacer>
+
+          <v-col cols="1" class="text-end">
             <v-btn fab small @click="deletePart(wherePart)" color="error">
               <v-icon>fa-times</v-icon>
             </v-btn>
@@ -65,7 +69,7 @@
 
         <v-row>
           <v-col class="text-start">
-            <v-btn @click="addWherePart" color="success">{{ i18n('editor.addWherePart') }}</v-btn>
+            <IconButton :label="i18n('editor.addWherePart')" color="success" icon="fa-plus" @click="addWherePart"/>
           </v-col>
         </v-row>
       </v-container>
@@ -75,7 +79,8 @@
 
 <script lang="ts">
 import Vue from "vue";
-import {Query, QueryField, QueryWhere} from "@/lib/types";
+import IconButton from "@/components/button/IconButton.vue";
+import {Query, QueryWhere, SchemaItemField} from "@/lib/types";
 import {
   mapModelStringToQueryVariableArray,
   mapModelStringToQueryWhereArray,
@@ -85,6 +90,7 @@ import {
 
 export default Vue.extend({
   name: 'QueryWhereBuilder',
+  components: {IconButton},
   props: {
     query: Object,
     fields: Array
@@ -97,16 +103,13 @@ export default Vue.extend({
   },
   computed: {
     fieldNames(): string[] {
-      return (this.fields as [{ name: string }]).map((field) => field.name)
+      return (this.fields as SchemaItemField[]).map((field) => field.name)
     }
   },
   methods: {
-    i18n(key: string): string {
-      return this.$t(key).toString()
-    },
     operators(wherePart: QueryWhere): string [] {
-      const field = (this.fields as QueryField []).filter((field) => field.name === wherePart.field)[0];
-      const type = field.type.ofType.name
+      const field = (this.fields as SchemaItemField []).filter((field) => field.name === wherePart.field)[0];
+      const type = field.type
 
       if (type === 'String') {
         return stringOperators
@@ -115,8 +118,8 @@ export default Vue.extend({
       return numberOperators
     },
     variables(wherePart: QueryWhere): string [] {
-      const field = (this.fields as QueryField []).filter((field) => field.name === wherePart.field)[0];
-      const type = field.type.ofType.name
+      const field = (this.fields as SchemaItemField []).filter((field) => field.name === wherePart.field)[0];
+      const type = field.type
       const variables = mapModelStringToQueryVariableArray((this.query as Query).variables ?? '')
 
       return variables?.filter((variable) => variable.type === type).map((variable) => variable.name) ?? []

@@ -55,8 +55,7 @@ import IconButton from "@/components/button/IconButton.vue";
 import GraphQLSchema from "@/components/graphql/GraphQLSchema.vue";
 import {ADD_DATA_SOURCE, UPDATE_DATA_SOURCE} from "@/graphql/queries/datasource";
 import {Datasource, SchemaItem} from "@/lib/types";
-import {cryptoKey} from "@/main";
-import * as CryptoJS from "crypto-js";
+import {encodeDatasourceSecret} from "@/lib/schema";
 
 export default Vue.extend({
   name: 'DatasourceForm',
@@ -106,15 +105,13 @@ export default Vue.extend({
       this.schema = []
     },
     updateDatasource(): void {
-      const encrypted = CryptoJS.AES.encrypt(this.datasourceTyped.secret ?? '', cryptoKey).toString();
-
       this.$apollo.mutate({
         mutation: UPDATE_DATA_SOURCE,
         variables: {
           id: this.datasourceTyped.id,
           name: this.datasourceTyped.name,
           address: this.datasourceTyped.address,
-          secret: encrypted
+          secret: encodeDatasourceSecret(this.datasourceTyped.secret ?? '')
         }
       }).then(() => {
         this.saving = false
@@ -124,15 +121,13 @@ export default Vue.extend({
       })
     },
     createDatasource(): void {
-      const encrypted = CryptoJS.AES.encrypt(this.datasourceTyped.secret ?? '', cryptoKey).toString();
-
       this.$apollo.mutate({
         mutation: ADD_DATA_SOURCE,
         variables: {
           userId: this.userId,
           name: this.datasourceTyped.name,
           address: this.datasourceTyped.address,
-          secret: encrypted
+          secret: encodeDatasourceSecret(this.datasourceTyped.secret ?? '')
         }
       }).then(() => {
         this.saving = false

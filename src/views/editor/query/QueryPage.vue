@@ -12,22 +12,9 @@
         @closeeditor="closeEditor">
     </QueryTopBar>
 
-    <QueryForm
-        :query="query"
-        :datasource="datasource"
-        :tables="tables"
-        :loading="loading || loadingDatasource">
-    </QueryForm>
+    <LoadingCircular v-if="loadingQuery || loadingDatasource"/>
 
-    <GraphQLConnectionTest
-        class="d-none"
-        v-if="!loadingDatasource"
-        :address="datasource.address"
-        :secret="datasource.secret"
-        :is-auto="true"
-        @setschema="setSchema"
-        @error="clearSchema">
-    </GraphQLConnectionTest>
+    <QueryForm v-else :query="query" :datasource="datasource" :schema="schema"/>
   </div>
 </template>
 
@@ -36,37 +23,42 @@ import Vue from "vue";
 import LoadingDialog from "@/components/dialog/LoadingDialog.vue";
 import QueryTopBar from "@/views/editor/query/component/QueryTopBar.vue";
 import QueryForm from "@/views/editor/query/component/QueryForm.vue";
-import GraphQLConnectionTest from "@/components/graphql/GraphQLConnectionTest.vue";
 import RejectChangesDialog from "@/components/dialog/RejectChangesDialog.vue";
-import {GET_DATA_SOURCE_BY_ID} from "@/graphql/queries/data_source";
-import {GET_QUERY_BY_ID, UPDATE_QUERY_BY_ID} from "@/graphql/queries/query";
-import {cleanSchema} from "@/lib/schema";
-import {Query, SchemaItem} from "@/lib/types";
-import {cryptoKey} from "@/main";
-import * as CryptoJS from "crypto-js";
+import {GET_DATA_SOURCE_BY_ID} from "@/graphql/queries/datasource";
+import {GET_QUERY_BY_ID, UPDATE_QUERY} from "@/graphql/queries/query";
+import {decodeDatasourceSecret, getCleanGraphQLSchema} from "@/lib/schema";
+import {Datasource, Query, SchemaItem} from "@/lib/types";
+import LoadingCircular from "@/components/loading/LoadingCircular.vue";
 
 export default Vue.extend({
   name: 'QueryPage',
-  components: {LoadingDialog, RejectChangesDialog, GraphQLConnectionTest, QueryForm, QueryTopBar},
+  components: {LoadingCircular, LoadingDialog, RejectChangesDialog, QueryForm, QueryTopBar},
   data() {
     return {
-      loading: true,
+      loadingQuery: true,
       loadingDatasource: true,
       saving: false,
       reject: false,
       changesMade: false,
       queryInitialized: false,
       isClosing: false,
-      queryId: -1,
       query: {},
-      datasourceId: -1,
       datasource: {},
       schema: []
     }
   },
   computed: {
-    tables(): { name: string } [] {
-      return cleanSchema(this.schema)
+    queryId(): number {
+      return Number(this.$route.params.queryId)
+    },
+    datasourceId(): number {
+      return Number(this.$route.params.datasourceId)
+    },
+    datasourceTyped(): Datasource {
+      return this.datasource as Datasource
+    },
+    queryTyped(): Query {
+      return this.query as Query
     }
   },
   watch: {
@@ -83,23 +75,20 @@ export default Vue.extend({
     }
   },
   methods: {
-    i18n(key: string): string {
-      return this.$t(key).toString()
-    },
     save(): void {
       this.saving = true
 
       this.$apollo.mutate({
-        mutation: UPDATE_QUERY_BY_ID,
+        mutation: UPDATE_QUERY,
         variables: {
           id: this.queryId,
-          name: (this.query as Query).name,
-          table: (this.query as Query).table,
-          limit: (this.query as Query).limit,
-          fields: (this.query as Query).fields,
-          variables: (this.query as Query).variables,
-          orderBy: (this.query as Query).order_by,
-          where: (this.query as Query).where,
+          name: this.queryTyped.name,
+          table: this.queryTyped.table,
+          limit: this.queryTyped.limit,
+          fields: this.queryTyped.fields,
+          variables: this.queryTyped.variables,
+          orderBy: this.queryTyped.order_by,
+          where: this.queryTyped.where,
           modifyDate: new Date()
         }
       }).then(() => {
@@ -127,7 +116,7 @@ export default Vue.extend({
       this.reject = false
       this.queryInitialized = false
       this.changesMade = false;
-      this.loading = true
+      this.loadingQuery = true
 
       if (this.isClosing) {
         this.$router.back()
@@ -158,7 +147,7 @@ export default Vue.extend({
       result({data}): void {
         this.query = data.QUERY[0]
         this.changesMade = false
-        this.loading = false
+        this.loadingQuery = false
       }
     },
     DATA_SOURCE: {
@@ -172,16 +161,16 @@ export default Vue.extend({
       skip(): boolean {
         return !this.datasourceId
       },
-      result({data}): void {
+      async result({data}): Promise<void> {
         this.datasource = data.DATA_SOURCE[0]
-        this.datasource.secret = CryptoJS.AES.decrypt(data.DATA_SOURCE[0].secret, cryptoKey).toString(CryptoJS.enc.Utf8)
-        this.loadingDatasource = false
+        this.datasource.secret = decodeDatasourceSecret(data.DATA_SOURCE[0].secret)
+
+        await getCleanGraphQLSchema(this.datasourceTyped.address, this.datasourceTyped.secret).then((result) => {
+          this.schema = result.schema
+          this.loadingDatasource = false
+        })
       }
     }
-  },
-  beforeMount() {
-    this.queryId = Number(this.$route.params.queryId)
-    this.datasourceId = Number(this.$route.params.datasourceId)
   }
 })
 </script>

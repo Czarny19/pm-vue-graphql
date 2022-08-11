@@ -1,7 +1,7 @@
 <template>
   <v-card-text class="pa-3 pt-0 pb-6">
-    <div class="elevation-6 pt-6 pb-2">
-      <v-container class="pa-2 pl-4 pr-4">
+    <div class="elevation-6 pt-4">
+      <v-container fluid class="pa-4">
         <v-row v-for="(orderBy, index) in orderByList" :key="index">
           <v-col cols="8">
             <v-select
@@ -17,18 +17,26 @@
           </v-col>
 
           <v-col cols="2" class="text-start">
-            <v-btn v-if="orderBy.isAsc" block color="info" @click="setOrderByAsc(orderBy)">
-              {{ i18n('editor.sortAsc') }}
-            </v-btn>
+            <IconButton
+                v-if="orderBy.isAsc"
+                :label="i18n('editor.sortAsc')"
+                color="info"
+                icon="fa-arrow-up"
+                @click="setOrderByAsc(orderBy)">
+            </IconButton>
 
-            <v-btn v-else block color="info" @click="setOrderByAsc(orderBy)">
-              {{ i18n('editor.sortDesc') }}
-            </v-btn>
+            <IconButton
+                v-else
+                :label="i18n('editor.sortDesc')"
+                color="info"
+                icon="fa-arrow-down"
+                @click="setOrderByAsc(orderBy)">
+            </IconButton>
           </v-col>
 
-          <v-col cols="1"></v-col>
+          <v-spacer></v-spacer>
 
-          <v-col cols="1" class="text-center">
+          <v-col cols="1" class="text-end">
             <v-btn fab small color="error" @click="deleteOrderBy(orderBy)">
               <v-icon>fa-times</v-icon>
             </v-btn>
@@ -37,7 +45,7 @@
 
         <v-row>
           <v-col class="text-start">
-            <v-btn color="success" @click="addOrderBy()">{{ i18n('editor.addSort') }}</v-btn>
+            <IconButton :label="i18n('editor.addSort')" color="success" icon="fa-plus" @click="addOrderBy"/>
           </v-col>
         </v-row>
       </v-container>
@@ -47,11 +55,13 @@
 
 <script lang="ts">
 import Vue from "vue";
+import IconButton from "@/components/button/IconButton.vue";
 import {Query, QueryOrderBy} from "@/lib/types";
 import {mapModelStringToQueryOrderByArray} from "@/lib/query";
 
 export default Vue.extend({
   name: 'QueryOrderByBuilder',
+  components: {IconButton},
   props: {
     query: Object,
     fieldNames: Array
@@ -68,9 +78,6 @@ export default Vue.extend({
     }
   },
   methods: {
-    i18n(key: string): string {
-      return this.$t(key).toString()
-    },
     addOrderBy(): void {
       this.orderByList.push({field: '', isAsc: true})
     },

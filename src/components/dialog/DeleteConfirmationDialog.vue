@@ -31,9 +31,6 @@ export default Vue.extend({
     }
   },
   methods: {
-    i18n(key: string): string {
-      return this.$t(key).toString()
-    },
     confirm() {
       this.$emit('confirm')
     },

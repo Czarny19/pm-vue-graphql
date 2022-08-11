@@ -1,7 +1,7 @@
 <template>
   <v-card-text class="pa-3 pt-0 pb-6">
-    <div class="elevation-6 pt-6 pb-2">
-      <v-container class="pa-2 pl-4 pr-4">
+    <div class="elevation-6 pt-4">
+      <v-container fluid class="pa-4">
         <v-row v-for="(variable, index) in variables" :key="index">
           <v-col cols="4">
             <v-text-field
@@ -41,9 +41,9 @@
             </v-text-field>
           </v-col>
 
-          <v-col cols="1"></v-col>
+          <v-spacer></v-spacer>
 
-          <v-col cols="1" class="text-center">
+          <v-col cols="1" class="text-end">
             <v-btn fab small color="error" @click="deleteVariable(variable)">
               <v-icon>fa-times</v-icon>
             </v-btn>
@@ -52,7 +52,7 @@
 
         <v-row>
           <v-col class="text-start">
-            <v-btn color="success" @click="addVariable()">{{ i18n('editor.addVariable') }}</v-btn>
+            <IconButton :label="i18n('editor.addVariable')" color="success" icon="fa-plus" @click="addVariable"/>
           </v-col>
         </v-row>
       </v-container>
@@ -62,12 +62,16 @@
 
 <script lang="ts">
 import Vue from "vue";
+import IconButton from "@/components/button/IconButton.vue";
 import {Query, QueryVariable} from "@/lib/types";
 import {mapModelStringToQueryVariableArray} from "@/lib/query";
 
 export default Vue.extend({
   name: 'QueryVariables',
-  props: {query: Object},
+  components: {IconButton},
+  props: {
+    query: Object
+  },
   data() {
     return {
       currentQuery: {},
@@ -84,9 +88,6 @@ export default Vue.extend({
     }
   },
   methods: {
-    i18n(key: string): string {
-      return this.$t(key).toString()
-    },
     addVariable(): void {
       (this.variables as QueryVariable[]).push({name: '', type: '', value: ''})
     },

@@ -10,7 +10,8 @@
     "back": "Wróć",
     "edit": "Edytuj",
     "hide": "Ukryj",
-    "show": "Pokaż"
+    "show": "Pokaż",
+    "preview": "Podgląd"
   },
   "delete": {
     "title": "Czy na pewno chcesz usunąć wybrany element?",
@@ -36,10 +37,9 @@
     "datasource": "Źródło danych",
     "themes": "Motywy",
     "theme": "Motyw",
-    "themePreview": "Podgląd",
     "createDate": "Data utworzenia",
     "addProject": "Dodaj aplikację",
-    "addProjectDesc": "Zaprojektuj aplikację przy pomocy edytora",
+    "addProjectDesc": "Dodaj definicję nowej aplikację",
     "addDatasource": "Dodaj źródło danych",
     "addDatasourceDesc": "Połącz z API GraphQL",
     "noProjects": "Brak aplikacji",
@@ -63,12 +63,8 @@
     "nameRequired": "Nazwa jest wymagana",
     "nameTooLong": "Nazwa nie może być dłuższa niż 30 znaków",
     "descriptionRequired": "Opis jest wymagany",
-    "descriptionTooLong": "Opis nie może być dłuższy niż 200 znaków",
+    "descriptionTooLong": "Opis nie może być dłuższy niż 160 znaków",
     "saving": "Zapisywanie aplikacji...",
-    "projectInfo": "Po utworzeniu aplikacji, możliwe będzie jej zaprojekowanie przy pomocy edytora graficznego aplikacji.",
-    "configInfo": "Konfiguracja aplikacji",
-    "themeInfo": "Wybrany motyw zostanie przypisany do projektu. Projekt może mieć przypisany jedynie jeden motyw.",
-    "dbInfo": "Wybrane źródło danych będzie dostępne z poziomu edytora. Projekt może mieć przypisane jedynie jedno źródło danych.",
     "theme": "Motyw",
     "themeRequired": "Motyw jest wymagany",
     "datasource": "Źródło danych",
@@ -89,17 +85,16 @@
     "connectionStatus": "Status połączenia",
     "save": "Zapisz źródło danych",
     "saving": "Zapisywanie źródła danych",
-    "configInfo": "Konfiguracja źródła danych",
     "configInfoLine1": "Aby poprawnie skonfigurwować nowe źródło danych należy podać nazwę oraz adres punktu końcowego API GraphQL oraz opcjonalnie Sekret jeśli został skonfigurowany.",
     "configInfoLine2": "Po podaniu adresu należy przetestować połączenie ze źródłem danych przy pomocy przycisku 'Sprawdź połączenie'.",
-    "configInfoLine3": "Źródło danych można przypisać do projektu na ekranie konfiguracji projektu. Edycja zapytań jest możliwa z poziomu Edytora GraphQL",
+    "configInfoLine3": "Źródło danych można przypisać do projektu na ekranie konfiguracji projektu. Edycja zapytań jest możliwa z poziomu Edytora GraphQL.",
     "statusNone": "Brak",
     "statusSuccess": "Połączono",
     "statusError": "Błąd połączenia",
     "schema": "Schemat źródła danych",
     "noSchema": "Wprowadź dane połączenia i wybierz opcję 'Sprawdź połączenie' aby wyświetlić schemat źródła danych",
     "fieldName": "Nazwa pola",
-    "fieldDesc": "Opis pola",
+    "fieldIsNullable": "Dopuszczalne puste?",
     "fieldType": "Typ"
   },
   "theme": {
@@ -190,7 +185,7 @@
     "variableString": "Tekst",
     "variableInt": "Liczba całkowita",
     "variableFloat": "Liczba zmiennoprzecinkowa",
-    "data": "Dane",
+    "response": "Wynik zapytania",
     "runQuery": "Uruchom zapytanie"
   }
 }

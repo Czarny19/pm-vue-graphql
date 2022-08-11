@@ -1,14 +1,11 @@
 <template>
-  <div class="fill-height">
+  <div>
     <AppMenuNavigation @tabchange="changeTab"/>
-
-    <div class="pa-4">
-      <AppMenuInfo :project="project" :theme-name="theme.name" :datasource-name="datasource.name"/>
-    </div>
+    <AppMenuInfo :project="project" :theme-name="theme.name" :datasource-name="datasource.name"/>
 
     <v-divider></v-divider>
 
-    <AppMenuTabPages v-if="currentTab === 0" :project-id="project.id" @openeditor="openGuiEditor"/>
+    <AppMenuTabPages v-if="currentTab === 0" :project-id="project.id" :datasource-id="datasource.id"/>
     <AppMenuTabTables v-else-if="currentTab === 1" :datasource="datasource"/>
     <AppMenuTabQueries v-else-if="currentTab === 2" :datasource="datasource"/>
   </div>
@@ -16,17 +13,16 @@
 
 <script lang="ts">
 import Vue from "vue";
-import {CURRENT_USER} from "@/graphql/queries/user";
-import {GET_PROJECT_BY_ID} from "@/graphql/queries/project";
-import {GET_THEME_BY_ID} from "@/graphql/queries/theme";
-import {GET_DATA_SOURCE_BY_ID} from "@/graphql/queries/data_source";
 import AppMenuNavigation from "@/views/editor/app/component/AppMenuNavigation.vue";
 import AppMenuTabPages from "@/views/editor/app/component/tab/AppMenuTabPages.vue";
 import AppMenuInfo from "@/views/editor/app/component/AppMenuInfo.vue";
 import AppMenuTabTables from "@/views/editor/app/component/tab/AppMenuTabTables.vue";
 import AppMenuTabQueries from "@/views/editor/app/component/tab/AppMenuTabQueries.vue";
-import * as CryptoJS from "crypto-js";
-import {cryptoKey} from "@/main";
+import {CURRENT_USER} from "@/graphql/queries/user";
+import {GET_PROJECT_BY_ID} from "@/graphql/queries/project";
+import {GET_THEME_BY_ID} from "@/graphql/queries/theme";
+import {GET_DATA_SOURCE_BY_ID} from "@/graphql/queries/datasource";
+import {decodeDatasourceSecret} from "@/lib/schema";
 
 export default Vue.extend({
   name: 'AppPage',
@@ -34,25 +30,19 @@ export default Vue.extend({
   data() {
     return {
       currentTab: 0,
-      projectId: -1,
       project: {},
       theme: {},
       datasource: {}
     }
   },
+  computed: {
+    projectId(): number {
+      return Number(this.$route.params.projectId)
+    }
+  },
   methods: {
     changeTab(tab: number): void {
       this.currentTab = tab
-    },
-    openGuiEditor(pageId: string): void {
-      this.$router.push({
-        name: 'GuiEditor',
-        params: {
-          projectId: this.projectId.toString(),
-          pageId: pageId,
-          datasourceId: (this.project as { source_id: string }).source_id
-        }
-      })
     }
   },
   apollo: {
@@ -61,6 +51,7 @@ export default Vue.extend({
     },
     PROJECT: {
       query: GET_PROJECT_BY_ID,
+      fetchPolicy: 'no-cache',
       variables(): { id: number } {
         return {
           id: this.projectId
@@ -75,7 +66,7 @@ export default Vue.extend({
     },
     THEME: {
       query: GET_THEME_BY_ID,
-      fetchPolicy: 'network-only',
+      fetchPolicy: 'no-cache',
       variables(): { id: number } {
         return {
           id: this.project.theme_id
@@ -101,12 +92,9 @@ export default Vue.extend({
       },
       result({data}): void {
         this.datasource = data.DATA_SOURCE[0]
-        this.datasource.secret = CryptoJS.AES.decrypt(data.DATA_SOURCE[0].secret, cryptoKey).toString(CryptoJS.enc.Utf8)
+        this.datasource.secret = decodeDatasourceSecret(data.DATA_SOURCE[0].secret)
       }
     }
-  },
-  beforeMount() {
-    this.projectId = Number(this.$route.params.projectId)
   }
 })
 </script>

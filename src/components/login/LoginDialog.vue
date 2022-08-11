@@ -37,9 +37,6 @@ export default Vue.extend({
     }
   },
   methods: {
-    i18n(key: string): string {
-      return this.$t(key).toString()
-    },
     async login(): Promise<void> {
       this.loading = true
       await this.$auth.loginWithPopup()

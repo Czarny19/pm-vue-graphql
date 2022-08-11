@@ -1,50 +1,36 @@
 <template>
-  <v-card color="primary">
-    <v-container fluid>
+  <v-card class="pa-2 ma-3" color="secondary">
+    <v-container fluid class="pa-3">
       <v-row>
-        <v-col>
-          <v-text-field
-              dense
-              class="pa-4"
-              color="accent"
-              :value="project.name"
-              :label="i18n('project.name')"
-              prepend-icon="fa-tag"
-              readonly>
-          </v-text-field>
+        <v-col class="text-start" cols="auto">
+          <div class="text-h6 pb-2">
+            {{ project.name }}
+          </div>
 
-          <v-textarea
-              dense
-              class="pa-4"
-              color="accent"
-              :value="project.description"
-              :label="i18n('project.description')"
-              prepend-icon="fa-pen"
-              readonly
-              auto-grow
-              rows="1">
-          </v-textarea>
+          <div class="text-body-2 text--secondary">
+            {{ project.description }}
+          </div>
         </v-col>
 
-        <v-col>
-          <v-text-field
-              dense
-              class="pa-4"
-              color="accent"
-              :value="themeName"
-              :label="i18n('project.theme')"
-              prepend-icon="fa-palette"
-              readonly>
-          </v-text-field>
+        <v-spacer></v-spacer>
 
+        <v-col cols="auto" class="text-start">
           <v-text-field
-              dense
-              class="pa-4"
               color="accent"
-              :value="datasourceName"
-              :label="i18n('project.datasource')"
+              prepend-icon="fa-palette"
+              flat readonly
+              :label="i18n('project.theme')"
+              :value="themeName">
+          </v-text-field>
+        </v-col>
+
+        <v-col cols="auto" class="text-start">
+          <v-text-field
+              color="accent"
               prepend-icon="fa-database"
-              readonly>
+              flat readonly
+              :label="i18n('project.datasource')"
+              :value="datasourceName">
           </v-text-field>
         </v-col>
       </v-row>
@@ -61,11 +47,6 @@ export default Vue.extend({
     project: Object,
     themeName: String,
     datasourceName: String
-  },
-  methods: {
-    i18n(key: string): string {
-      return this.$t(key).toString()
-    }
   }
 })
 </script>

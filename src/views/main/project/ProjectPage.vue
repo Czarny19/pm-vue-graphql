@@ -19,9 +19,8 @@ import {CURRENT_USER} from "@/graphql/queries/user";
 import {GET_PROJECT_BY_ID} from "@/graphql/queries/project";
 import {GET_THEME_LIST_BY_USER_ID} from "@/graphql/queries/theme";
 import {GET_DATA_SOURCE_LIST_BY_USER_ID} from "@/graphql/queries/datasource";
-import * as CryptoJS from "crypto-js";
-import {cryptoKey} from "@/main";
-import { Datasource } from "@/lib/types";
+import {Datasource} from "@/lib/types";
+import {decodeDatasourceSecret} from "@/lib/schema";
 
 export default Vue.extend({
   name: 'ProjectPage',
@@ -94,11 +93,7 @@ export default Vue.extend({
       },
       result({data}): void {
         this.datasources = data.DATA_SOURCE
-
-        this.datasources.forEach((ds: Datasource) => {
-          ds.secret = CryptoJS.AES.decrypt(ds.secret ?? '', cryptoKey).toString(CryptoJS.enc.Utf8)
-        })
-
+        this.datasources.forEach((ds: Datasource) => ds.secret = decodeDatasourceSecret(ds.secret ?? ''))
         this.loadingDatasources = false
       }
     }

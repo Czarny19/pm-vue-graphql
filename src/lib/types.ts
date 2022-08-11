@@ -1,3 +1,11 @@
+export type AppProject = {
+    id: number;
+    name: string;
+    description: string;
+    theme_id: number | undefined;
+    source_id: number | undefined;
+}
+
 export type Datasource = {
     id: number;
     name: string;
@@ -11,7 +19,29 @@ export type SchemaItem = {
     kind: string;
     name: string;
     description: string;
-    fields: { name: string; type: { ofType: { name: string } } }[];
+    fields: SchemaItemField[];
+}
+
+export type SchemaItemField = {
+    name: string;
+    type: string;
+    isNullable: boolean;
+}
+
+export type SchemaConnectionHeaders = {
+    'authorization': string;
+    'content-type': string;
+    'x-hasura-admin-secret': string;
+}
+
+export type SchemaConnectionResult = {
+    schema: [];
+    errorMsg: string;
+}
+
+export type CleanSchemaConnectionResult = {
+    schema: SchemaItem[];
+    errorMsg: string;
 }
 
 export type Theme = {
@@ -57,19 +87,6 @@ export type Query = {
     where: string;
     fields: string;
     variables: string;
-}
-
-export type QueryField = {
-    name: string;
-    type: QueryFieldOfType;
-}
-
-type QueryFieldOfType = {
-    ofType: QueryFieldOfTypeName;
-}
-
-type QueryFieldOfTypeName = {
-    name: string;
 }
 
 export type QueryVariable = {

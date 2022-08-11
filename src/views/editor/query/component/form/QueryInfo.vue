@@ -1,8 +1,8 @@
 <template>
   <v-card-text class="pa-3 pt-0 pb-6">
-    <div class="elevation-6 pt-6">
+    <div class="elevation-6 pt-6 pl-2 pr-2">
       <v-text-field
-          class="pa-4"
+          class="pa-2"
           color="accent"
           v-model="currentQuery.name"
           :label="i18n('editor.queryName')"
@@ -13,7 +13,7 @@
       </v-text-field>
 
       <v-select
-          class="pa-4"
+          class="pa-2"
           color="accent"
           item-color="accent"
           v-model="currentQuery.table"
@@ -28,7 +28,7 @@
       </v-select>
 
       <v-text-field
-          class="pa-4"
+          class="pa-2"
           color="accent"
           type="number"
           v-model="currentQuery.limit"
@@ -63,11 +63,6 @@ export default Vue.extend({
         (v: string) => !!v || this.$t('editor.limitWrongFormat'),
         (v: number) => (v && v > 0) || this.$t('editor.limitTooSmall')
       ]
-    }
-  },
-  methods: {
-    i18n(key: string): string {
-      return this.$t(key).toString()
     }
   },
   beforeMount() {

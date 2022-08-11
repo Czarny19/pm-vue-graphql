@@ -1,66 +1,61 @@
 <template>
-  <v-container fluid>
-    <v-row no-gutters style="max-height: 50%">
-      <v-col cols="12" class="pa-4">
-        <v-card color="primary" class="pa-2 pb-6">
-          <LoadingCircular v-if="loading"/>
+  <v-container fluid class="pa-0 pb-3">
+    <v-row no-gutters>
+      <v-col cols="12" class="pa-3 pt-4">
+        <v-card color="primary" class="pt-2 pb-3">
+          <CardSectionTitle class="mt-1" :title="i18n('editor.query')"/>
+          <QueryInfo :query="query" :tables-names="tablesNames"/>
 
-          <template v-else>
-            <CardSectionTitle class="mt-4" :title="i18n('editor.query')"/>
-            <QueryInfo :query="query" :tables-names="tablesNames"/>
+          <CardSectionTitle
+              class="mt-2"
+              :title="i18n('editor.fields')"
+              show-hide-button
+              :is-hidden="fieldsHidden"
+              @showhideclick="fieldsHidden = !fieldsHidden">
+          </CardSectionTitle>
+          <QueryFields
+              v-if="fieldsVisible && !fieldsHidden"
+              :query="query"
+              :current-table="currentTable"
+              :tables-names="tablesNames">
+          </QueryFields>
 
-            <CardSectionTitle
-                class="mt-2"
-                :title="i18n('editor.fields')"
-                show-hide-button
-                :is-hidden="fieldsHidden"
-                @showhideclick="fieldsHidden = !fieldsHidden">
-            </CardSectionTitle>
-            <QueryFields
-                v-if="fieldsVisible && !fieldsHidden"
-                :query="query"
-                :current-table="currentTable"
-                :tables-names="tablesNames">
-            </QueryFields>
+          <CardSectionTitle
+              class="mt-2"
+              :title="i18n('editor.sorting')"
+              show-hide-button
+              :is-hidden="sortHidden"
+              @showhideclick="sortHidden = !sortHidden">
+          </CardSectionTitle>
+          <QueryOrderByBuilder
+              v-if="!sortHidden"
+              :query="query"
+              :field-names="currentTableFields">
+          </QueryOrderByBuilder>
 
-            <CardSectionTitle
-                class="mt-2"
-                :title="i18n('editor.sorting')"
-                show-hide-button
-                :is-hidden="sortHidden"
-                @showhideclick="sortHidden = !sortHidden">
-            </CardSectionTitle>
-            <QueryOrderByBuilder
-                v-if="!sortHidden"
-                :query="query"
-                :field-names="currentTableFields">
-            </QueryOrderByBuilder>
+          <CardSectionTitle
+              class="mt-2"
+              :title="i18n('editor.variables')"
+              show-hide-button
+              :is-hidden="propsHidden"
+              @showhideclick="propsHidden = !propsHidden">
+          </CardSectionTitle>
+          <QueryVariables v-if="!propsHidden" :query="query"/>
 
-            <CardSectionTitle
-                class="mt-2"
-                :title="i18n('editor.variables')"
-                show-hide-button
-                :is-hidden="propsHidden"
-                @showhideclick="propsHidden = !propsHidden">
-            </CardSectionTitle>
-            <QueryVariables v-if="!propsHidden" :query="query"/>
-
-            <CardSectionTitle
-                class="mt-2"
-                :title="i18n('editor.restrictions')"
-                show-hide-button
-                :is-hidden="whereHidden"
-                @showhideclick="whereHidden = !whereHidden">
-            </CardSectionTitle>
-            <QueryWhereBuilder v-if="!whereHidden" :query="query" :fields="currentTable.fields"/>
-
-          </template>
+          <CardSectionTitle
+              class="mt-2"
+              :title="i18n('editor.restrictions')"
+              show-hide-button
+              :is-hidden="whereHidden"
+              @showhideclick="whereHidden = !whereHidden">
+          </CardSectionTitle>
+          <QueryWhereBuilder v-if="!whereHidden" :query="query" :fields="currentTable.fields"/>
         </v-card>
       </v-col>
     </v-row>
 
     <v-row no-gutters>
-      <v-col class="pa-4">
+      <v-col class="pa-3 pt-1">
         <v-card color="primary" class="pa-2 pb-6">
           <QueryPreview :query="query" :datasource="datasource"/>
         </v-card>
@@ -71,7 +66,6 @@
 
 <script lang="ts">
 import Vue from "vue";
-import LoadingCircular from "@/components/loading/LoadingCircular.vue";
 import CardSectionTitle from "@/components/card/CardSectionTitle.vue";
 import QueryPreview from "@/views/editor/query/component/QueryPreview.vue";
 import QueryWhereBuilder from "@/views/editor/query/component/form/QueryWhereBuilder.vue";
@@ -90,19 +84,18 @@ export default Vue.extend({
     QueryOrderByBuilder,
     QueryWhereBuilder,
     QueryPreview,
-    CardSectionTitle,
-    LoadingCircular
+    CardSectionTitle
   },
   props: {
     query: Object,
     datasource: Object,
-    tables: Array,
-    loading: Boolean
+    schema: Array
   },
   data() {
     return {
-      valid: false,
       currentQuery: {},
+      currentSchema: {},
+      valid: false,
       fieldsHidden: true,
       sortHidden: true,
       propsHidden: true,
@@ -111,7 +104,7 @@ export default Vue.extend({
   },
   computed: {
     currentTable(): SchemaItem {
-      return (this.tables as SchemaItem[]).filter(table => table.name === (this.currentQuery as Query).table)[0]
+      return (this.schema as SchemaItem[]).filter(table => table.name === (this.currentQuery as Query).table)[0]
     },
     currentTableFields(): string [] {
       if (!this.currentTable) {
@@ -124,12 +117,7 @@ export default Vue.extend({
       return (this.currentQuery as Query).table.length > 0
     },
     tablesNames(): string [] {
-      return (this.tables as { name: string }[])?.map((table) => table.name)
-    }
-  },
-  methods: {
-    i18n(key: string): string {
-      return this.$t(key).toString()
+      return (this.schema as { name: string }[])?.map((table) => table.name)
     }
   },
   watch: {
@@ -138,10 +126,17 @@ export default Vue.extend({
         this.currentQuery = this.query
       },
       deep: true
+    },
+    schema: {
+      handler() {
+        this.currentSchema = this.schema
+      },
+      deep: true
     }
   },
   beforeMount() {
     this.currentQuery = this.query
+    this.currentSchema = this.schema
   }
 })
 </script>
