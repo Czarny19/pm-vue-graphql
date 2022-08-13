@@ -41,6 +41,7 @@
 </template>
 
 <script lang="ts">
+import {Query} from "@/lib/types";
 import Vue from "vue";
 
 export default Vue.extend({
@@ -60,9 +61,20 @@ export default Vue.extend({
         (v: string) => !!v || this.$t('editor.tableRequired')
       ],
       limitRules: [
-        (v: string) => !!v || this.$t('editor.limitWrongFormat'),
-        (v: number) => (v && v > 0) || this.$t('editor.limitTooSmall')
+        (v: number) => (!v || (v && v > 0)) || this.$t('editor.limitTooSmall')
       ]
+    }
+  },
+  watch: {
+    currentQuery: {
+      handler() {
+        const query = (this.currentQuery as Query)
+
+        if ((query.limit?.toString()) === '') {
+          query.limit = undefined
+        }
+      },
+      deep: true
     }
   },
   beforeMount() {

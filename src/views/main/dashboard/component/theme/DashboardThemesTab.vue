@@ -76,7 +76,7 @@ export default Vue.extend({
       this.deleteDialog = false
 
       this.$apollo.mutate({mutation: DELETE_THEME, variables: {id: this.deleteId}}).then(() => {
-        this.$apollo.queries.THEME.refetch()
+        this.$emit('refresh')
       })
     },
     closeWarningDialog(): void {

@@ -8,9 +8,15 @@ import gql from "graphql-tag";
 export const operatorTypes = new Map<string, string>([['=', '_eq'], ['!=', '_neq'], ['>', '_gt'],
     ['>=', '_gte'], ['<', '_lt'], ['<=', '_lte'], ['=null', '_is_null'], ['%', '_like'], ['!%', '_nlike']])
 
-export const numberOperators = ['=', '!=', '>', '>=', '<', '<=', '=null']
+export const numberOperators = ['=', '!=', '>', '>=', '=null', '<', '<=']
 
-export const stringOperators = ['=', '!=', '%', '!%', '=null']
+export const stringOperators = ['=', '!=', '>', '>=', '=null', '<', '<=', '%', '!%']
+
+export const boolOperators = ['=', '!=', '>', '>=', '=null', '<', '<=']
+
+export const dateOperators = ['=', '!=', '>', '>=', '=null', '<', '<=']
+
+export const timeOperators = ['=', '!=', '>', '>=', '=null', '<', '<=']
 
 /**
  * Runs a graphQL query on an existing table.
@@ -110,12 +116,9 @@ export const generateGraphQLQuery = (queryName: string, table: string, fields: s
     if (orderBySet) {
         if (query.includes('limit:')) query += ', '
         query += 'order_by: {'
+        query += generateGraphQLOrderBy([...orderBy ?? []], 1)
+        query += '}'
     }
-
-    orderBy?.forEach((el, index) => {
-        query += `${el.field}: ${el.isAsc ? 'asc' : 'desc'}`
-        query += index + 1 !== orderBy?.length ? ', ' : '}'
-    })
 
     if (whereSet) {
         if (limitSet || orderBySet) query += ', '
@@ -124,7 +127,9 @@ export const generateGraphQLQuery = (queryName: string, table: string, fields: s
 
     if (limitSet || orderBySet || whereSet) query += ') '
 
-    query += `{\n\t\t${fields?.split(';').join('\n\t\t')}\n\t}\n}`
+    query += `{`
+    query += generateGraphQLFields(fields?.split(';') ?? [], 1)
+    query += `\n\t}\n}`
 
     return query
 }
@@ -177,13 +182,9 @@ export const generateGraphQLPreviewQuery = (queryName: string, table: string, fi
     if (orderBySet) {
         if (limitSet) query += ', '
         query += '<br/>&emsp;&emsp;<span style="color:purple">order_by</span>: {'
+        query += generateGraphQLPreviewOrderBy([...orderBy ?? []], 1)
+        query += '}'
     }
-
-    orderBy?.forEach((el, index) => {
-        query += `<span style="color:purple">${el.field}</span>: `
-        query += `<span style="color:royalblue">${el.isAsc ? 'asc' : 'desc'}</span>`
-        query += index + 1 !== orderBy?.length ? ', ' : '}'
-    })
 
     if (whereSet) {
         if (limitSet || orderBySet) query += ', '
@@ -191,10 +192,10 @@ export const generateGraphQLPreviewQuery = (queryName: string, table: string, fi
         query += generateGraphQLPreviewWhere(where)
     }
 
-    if (limitSet || orderBySet || whereSet) query += ') '
+    if (limitSet || orderBySet || whereSet) query += '<br/>&emsp;) '
 
-    query += `{<br/>&emsp;&emsp;&emsp;`
-    query += `<span style="color:royalblue">${fields?.split(';').join('<br/>&emsp;&emsp;&emsp;')}</span>`
+    query += `{`
+    query += generateGraphQLPreviewFields(fields?.split(';') ?? [], 1)
     query += `<br/>&emsp;}<br/>}`
 
     return query
@@ -211,10 +212,20 @@ export const generateGraphQLPreviewVariables = (vars?: QueryVariable[]) => {
     vars?.forEach((variable, index) => {
         variables += `<span style="color:green">"${variable.name}"</span>: `
 
-        if (variable.type === 'String') {
-            variables += `<span style="color:deeppink">"${variable.value}"</span>`
-        } else {
-            variables += `<span style="color:royalblue">${variable.value}</span>`
+        switch (variable.type) {
+            case 'String':
+                variables += `<span style="color:deeppink">"${variable.value}"</span>`
+                break;
+            case 'Int':
+            case 'float8':
+                variables += `<span style="color:royalblue">${variable.value}</span>`
+                break
+            case 'Boolean':
+                variables += `<span style="color:goldenrod">${variable.value}</span>`
+                break;
+            default:
+                variables += `<span style="color:deeppink">"${variable.value}"</span>`
+                break;
         }
 
         if (index + 1 === vars.length) {
@@ -274,7 +285,7 @@ const createQueryHeaders = (datasourceSecret?: string) => {
     return headers
 }
 
-const generateGraphQLWhere = (where: QueryWhere[]) => {
+const generateGraphQLWhere = (where: QueryWhere[]): string => {
     let graphQLWhere = ''
     let currentIsAnd: boolean | null = null
     let differentOperationsCount = 0;
@@ -308,10 +319,12 @@ const generateGraphQLWhere = (where: QueryWhere[]) => {
     return graphQLWhere
 }
 
-const generateGraphQLPreviewWhere = (where: QueryWhere[]) => {
+const generateGraphQLPreviewWhere = (where: QueryWhere[]): string => {
     let graphQLWhere = ''
     let currentIsAnd: boolean | null = null
     let differentOperationsCount = 0;
+
+    where = where.filter((wherePart) => !wherePart.field.includes('.'))
 
     where.forEach((part, index) => {
         if (currentIsAnd != null) graphQLWhere += ', '
@@ -342,4 +355,156 @@ const generateGraphQLPreviewWhere = (where: QueryWhere[]) => {
     }
 
     return graphQLWhere
+}
+
+const generateGraphQLFields = (fields: string[], level: number) => {
+    let result = ''
+
+    if (!fields.length) {
+        return ''
+    }
+
+    let newRowIndent = '\n\t\t';
+
+    for (let i = 0; i < level; i++) {
+        newRowIndent += '\t'
+    }
+
+    fields.forEach((field) => {
+        if (!field.includes('.')) {
+            result += `${newRowIndent}${field}`
+        }
+    })
+
+    const relations = new Map<string, string[]>()
+
+    fields.forEach((field) => {
+        if (field.includes('.')) {
+            const relationName = field.substring(0, field.indexOf('.'))
+            const relationFields = relations.get(relationName) ?? []
+
+            relations.set(relationName, [...relationFields, field.substring(field.indexOf('.') + 1)])
+        }
+    })
+
+    relations.forEach((value: string[], key: string) => {
+        result += `${newRowIndent}${key} {`
+        result += generateGraphQLFields(value, level + 1)
+        result += `${newRowIndent}}`
+    })
+
+    return result
+}
+
+const generateGraphQLPreviewFields = (fields: string[], level: number) => {
+    let result = ''
+
+    if (!fields.length) {
+        return ''
+    }
+
+    let newRowIndent = '<br/>&emsp;&emsp;';
+
+    for (let i = 0; i < level; i++) {
+        newRowIndent += '&emsp;'
+    }
+
+    fields.forEach((field) => {
+        if (!field.includes('.')) {
+            result += `${newRowIndent}<span style="color:royalblue">${field}</span>`
+        }
+    })
+
+    const relations = new Map<string, string[]>()
+
+    fields.forEach((field) => {
+        if (field.includes('.')) {
+            const relationName = field.substring(0, field.indexOf('.'))
+            const relationFields = relations.get(relationName) ?? []
+
+            relations.set(relationName, [...relationFields, field.substring(field.indexOf('.') + 1)])
+        }
+    })
+
+    relations.forEach((value: string[], key: string) => {
+        result += `${newRowIndent}<span style="color:royalblue">${key}</span> {`
+        result += generateGraphQLPreviewFields(value, level + 1)
+        result += `${newRowIndent}}`
+    })
+
+    return result
+}
+
+const generateGraphQLOrderBy = (orderBy: QueryOrderBy[], level: number) => {
+    let result = ''
+
+    if (!orderBy.length) {
+        return ''
+    }
+
+    orderBy.forEach((order, index) => {
+        if (!order.field.includes('.')) {
+            result += `${order.field}: `
+            result += `${order.isAsc ? 'asc' : 'desc'}`
+            result += index !== orderBy?.length ? ', ' : ''
+        }
+    })
+
+    const relations = new Map<string, QueryOrderBy[]>()
+
+    orderBy.forEach((order) => {
+        if (order.field.includes('.')) {
+            const relationName = order.field.substring(0, order.field.indexOf('.'))
+            const relationFields = relations.get(relationName) ?? []
+
+            order.field = order.field.substring(order.field.indexOf('.') + 1)
+
+            relations.set(relationName, [...relationFields, order])
+        }
+    })
+
+    relations.forEach((value: QueryOrderBy[], key: string) => {
+        result += ` ${key}: {`
+        result += generateGraphQLOrderBy(value, level + 1)
+        result += `}`
+    })
+
+    return result
+}
+
+const generateGraphQLPreviewOrderBy = (orderBy: QueryOrderBy[], level: number) => {
+    let result = ''
+
+    if (!orderBy.length) {
+        return ''
+    }
+
+    orderBy.forEach((order, index) => {
+        if (!order.field.includes('.')) {
+            result += `<span style="color:purple">${order.field}</span>: `
+            result += `<span style="color:royalblue">${order.isAsc ? 'asc' : 'desc'}</span>`
+            result += index !== orderBy?.length ? ', ' : ''
+        }
+    })
+
+    const relations = new Map<string, QueryOrderBy[]>()
+
+    orderBy.forEach((order) => {
+        if (order.field.includes('.')) {
+            const relationName = order.field.substring(0, order.field.indexOf('.'))
+            const relationFields = relations.get(relationName) ?? []
+
+            order.field = order.field.substring(order.field.indexOf('.') + 1)
+
+            relations.set(relationName, [...relationFields, order])
+        }
+    })
+
+    relations.forEach((value: QueryOrderBy[], key: string) => {
+        result += ` <span style="color:royalblue">${key}</span>: {`
+        result += generateGraphQLPreviewOrderBy(value, level + 1)
+        result += `}`
+    })
+
+    return result
 }

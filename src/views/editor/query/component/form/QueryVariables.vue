@@ -31,8 +31,16 @@
           </v-col>
 
           <v-col cols="3">
+            <v-simple-checkbox
+                v-if="variable.type && variableType(variable) === 'checkbox'"
+                v-model="variable.value"
+                on-icon="fa-check"
+                off-icon="fa-times"
+                class="mt-2 text-start">
+            </v-simple-checkbox>
+
             <v-text-field
-                v-if="variable.type"
+                v-else-if="variable.type"
                 class="pa-0"
                 color="accent"
                 v-model="variable.value"
@@ -83,7 +91,10 @@ export default Vue.extend({
       return [
         {type: 'String', display: this.$t('editor.variableString').toString()},
         {type: 'Int', display: this.$t('editor.variableInt').toString()},
-        {type: 'float8', display: this.$t('editor.variableFloat').toString()}
+        {type: 'float8', display: this.$t('editor.variableFloat').toString()},
+        {type: 'Boolean', display: this.$t('editor.variableBoolean').toString()},
+        {type: 'date', display: this.$t('editor.variableDate').toString()},
+        {type: 'time', display: this.$t('editor.variableTime').toString()}
       ]
     }
   },
@@ -99,7 +110,21 @@ export default Vue.extend({
       })
     },
     variableType(queryVariable: QueryVariable): string {
-      return queryVariable.type === 'String' ? 'text' : 'number'
+      switch (queryVariable.type) {
+        case 'String':
+          return 'text';
+        case 'Int':
+        case 'float8':
+          return 'number';
+        case 'Boolean':
+          return 'checkbox';
+        case 'date':
+          return 'date';
+        case 'time':
+          return 'time';
+        default:
+          return 'text';
+      }
     }
   },
   watch: {

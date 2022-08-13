@@ -18,7 +18,7 @@ export default Vue.extend({
   components: {AppBar}
 })
 
-// TODO Nullable w typach pól | relacje
+// TODO  relacje
 
 // Runtime | walidacja danych | skomplikowany przypadek | celem nie jest prototyp tylko analiza zagadnienia | cech |
 // funkc jako eksperyment + ocena wartości | celem jest ekesperyment! nie aplikacja

@@ -12,7 +12,8 @@
       <v-data-table
           v-model="selectedFields"
           :headers="headers"
-          :items="currentTable?.fields"
+          :items="fields"
+          disable-pagination
           hide-default-footer
           disable-sort
           item-key="name"
@@ -43,8 +44,7 @@ export default Vue.extend({
   name: 'QueryFields',
   props: {
     query: Object,
-    currentTable: Object,
-    tablesNames: Array
+    fields: Array
   },
   data() {
     return {
@@ -54,6 +54,9 @@ export default Vue.extend({
     }
   },
   computed: {
+    fieldsTyped(): SchemaItemField[] {
+      return this.fields as SchemaItemField[]
+    },
     headers(): { text: string; value: string, width: string, align?: string }[] {
       return [
         {text: this.$t('datasource.fieldName').toString(), value: 'name', width: '50%'},
@@ -67,7 +70,7 @@ export default Vue.extend({
       this.allFieldsSelected = !this.allFieldsSelected
 
       if (this.allFieldsSelected) {
-        (this.selectedFields as SchemaItemField []) = this.currentTable?.fields
+        (this.selectedFields as SchemaItemField []) = this.fieldsTyped
         return
       }
 
@@ -89,7 +92,7 @@ export default Vue.extend({
   watch: {
     selectedFields() {
       const query = (this.currentQuery as Query)
-      this.allFieldsSelected = this.selectedFields.length === this.currentTable.fields.length
+      this.allFieldsSelected = this.selectedFields.length === this.fields.length
       query.fields = this.selectedFields
           .map((field) => (field as { name: string }).name)
           .join(';')
@@ -97,16 +100,20 @@ export default Vue.extend({
     }
   },
   beforeMount() {
-    this.currentQuery = this.query;
+    const query = this.query as Query
 
-    (this.currentTable?.fields as SchemaItemField[]).forEach((tbField) => {
-      (this.query as Query).fields.replaceAll(' ', '').split(';').forEach((qrField) => {
-        if (tbField.name === qrField) {
-          (this.selectedFields as SchemaItemField[]).push(tbField)
-        }
-      })
+    this.currentQuery = query;
+
+    this.fieldsTyped.forEach((tbField) => {
+      if (query.fields != null) {
+        query.fields.replaceAll(' ', '').split(';').forEach((qrField) => {
+          if (tbField.name === qrField) {
+            (this.selectedFields as SchemaItemField[]).push(tbField)
+          }
+        })
+      }
     })
-  },
+  }
 })
 </script>
 

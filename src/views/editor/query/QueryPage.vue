@@ -1,6 +1,6 @@
 <template>
   <div>
-    <LoadingDialog :dialog="saving" :title="i18n('editor.saving')"/>
+    <LoadingDialog :dialog="saving" :title="i18n('editor.savingQuery')"/>
 
     <RejectChangesDialog :dialog="reject" @cancel="cancelRejectChanges" @confirm="rejectChanges"/>
 
@@ -84,7 +84,7 @@ export default Vue.extend({
           id: this.queryId,
           name: this.queryTyped.name,
           table: this.queryTyped.table,
-          limit: this.queryTyped.limit,
+          limit: this.queryTyped.limit ?? -1,
           fields: this.queryTyped.fields,
           variables: this.queryTyped.variables,
           orderBy: this.queryTyped.order_by,
@@ -146,13 +146,18 @@ export default Vue.extend({
       },
       result({data}): void {
         this.query = data.QUERY[0]
+
+        if (this.query.limit === -1) {
+          this.query.limit = undefined
+        }
+
         this.changesMade = false
         this.loadingQuery = false
       }
     },
     DATA_SOURCE: {
       query: GET_DATA_SOURCE_BY_ID,
-      fetchPolicy: 'network-only',
+      fetchPolicy: 'no-cache',
       variables(): { id: number } {
         return {
           id: this.datasourceId

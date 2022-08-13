@@ -16,8 +16,7 @@
           <QueryFields
               v-if="fieldsVisible && !fieldsHidden"
               :query="query"
-              :current-table="currentTable"
-              :tables-names="tablesNames">
+              :fields="fields">
           </QueryFields>
 
           <CardSectionTitle
@@ -30,7 +29,7 @@
           <QueryOrderByBuilder
               v-if="!sortHidden"
               :query="query"
-              :field-names="currentTableFields">
+              :fields="fields">
           </QueryOrderByBuilder>
 
           <CardSectionTitle
@@ -49,7 +48,7 @@
               :is-hidden="whereHidden"
               @showhideclick="whereHidden = !whereHidden">
           </CardSectionTitle>
-          <QueryWhereBuilder v-if="!whereHidden" :query="query" :fields="currentTable.fields"/>
+          <QueryWhereBuilder v-if="!whereHidden" :query="query" :fields="fields"/>
         </v-card>
       </v-col>
     </v-row>
@@ -73,7 +72,8 @@ import QueryOrderByBuilder from "@/views/editor/query/component/form/QueryOrderB
 import QueryInfo from "@/views/editor/query/component/form/QueryInfo.vue";
 import QueryFields from "@/views/editor/query/component/form/QueryFields.vue";
 import QueryVariables from "@/views/editor/query/component/form/QueryVariables.vue";
-import {Query, SchemaItem} from "@/lib/types";
+import {Query, SchemaItem, SchemaItemField} from "@/lib/types";
+import {getAllTableFieldsWithRelations} from "@/lib/schema";
 
 export default Vue.extend({
   name: 'QueryForm',
@@ -103,15 +103,8 @@ export default Vue.extend({
     }
   },
   computed: {
-    currentTable(): SchemaItem {
-      return (this.schema as SchemaItem[]).filter(table => table.name === (this.currentQuery as Query).table)[0]
-    },
-    currentTableFields(): string [] {
-      if (!this.currentTable) {
-        return []
-      }
-
-      return this.currentTable.fields.map((field) => (field as { name: string }).name)
+    fields(): SchemaItemField[] {
+      return getAllTableFieldsWithRelations((this.currentQuery as Query).table, this.schema as SchemaItem[])
     },
     fieldsVisible(): boolean {
       return (this.currentQuery as Query).table.length > 0

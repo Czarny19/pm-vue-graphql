@@ -60,15 +60,14 @@ import GuiEditorLeftNav from "@/views/editor/guieditor/component/display/GuiEdit
 import GuiEditorDisplay from "@/views/editor/guieditor/component/display/GuiEditorDisplay.vue";
 import GuiEditorRightNav from "@/views/editor/guieditor/component/display/GuiEditorRightNav.vue";
 import RejectChangesDialog from "@/components/dialog/RejectChangesDialog.vue";
-import {GET_PAGE_BY_ID, UPDATE_PAGE_DEFINITION_BY_ID} from "@/graphql/queries/page";
+import {GET_PAGE_BY_ID, UPDATE_PAGE_DEFINITION} from "@/graphql/queries/page";
 import {CURRENT_USER} from "@/graphql/queries/user";
 import {GET_PROJECT_BY_ID} from "@/graphql/queries/project";
 import {GET_THEME_BY_ID} from "@/graphql/queries/theme";
-import {GET_QUERIES_BY_DATASOURCE_ID} from "@/graphql/queries/query";
-import {GET_DATA_SOURCE_BY_ID} from "@/graphql/queries/data_source";
+import {GET_QUERY_LIST_BY_DATA_SOURCE_ID} from "@/graphql/queries/query";
+import {GET_DATA_SOURCE_BY_ID} from "@/graphql/queries/datasource";
 import {AppWidget} from "@/lib/types";
-import * as CryptoJS from "crypto-js";
-import {cryptoKey} from "@/main";
+import {decodeDatasourceSecret} from "@/lib/schema";
 
 export default Vue.extend({
   name: 'GuiEditorPage',
@@ -137,7 +136,7 @@ export default Vue.extend({
       this.saving = true
 
       this.$apollo.mutate({
-        mutation: UPDATE_PAGE_DEFINITION_BY_ID,
+        mutation: UPDATE_PAGE_DEFINITION,
         variables: {
           id: this.pageId,
           definition: (this.page as { definition: string }).definition,
@@ -291,12 +290,12 @@ export default Vue.extend({
       },
       result({data}): void {
         this.datasource = data.DATA_SOURCE[0]
-        this.datasource.secret = CryptoJS.AES.decrypt(data.DATA_SOURCE[0].secret, cryptoKey).toString(CryptoJS.enc.Utf8)
+        this.datasource.secret = decodeDatasourceSecret(data.DATA_SOURCE[0].secret)
         this.loadingDatasource = false
       }
     },
     QUERY: {
-      query: GET_QUERIES_BY_DATASOURCE_ID,
+      query: GET_QUERY_LIST_BY_DATA_SOURCE_ID,
       fetchPolicy: 'network-only',
       variables(): { datasourceId: number } {
         return {

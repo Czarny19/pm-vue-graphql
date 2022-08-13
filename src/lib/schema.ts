@@ -5,6 +5,7 @@ import {InMemoryCache} from "apollo-cache-inmemory";
 import {GET_SCHEMA} from "@/graphql/queries/schema";
 import {cryptoKey} from "@/main";
 import * as Types from "@/lib/types";
+import {SchemaItem, SchemaItemField} from "@/lib/types";
 import * as CryptoJS from "crypto-js";
 
 /**
@@ -41,6 +42,28 @@ export const getGraphQLSchema = async (endpoint: string, secret?: string): Promi
     }).catch(err => {
         return {schema: [], errorMsg: err}
     })
+}
+
+/**
+ * Creates a full list of table fields inculing relationships (In form of [relation].fieldName).
+ * @param table The base table
+ * @param schema GraphQL schema
+ * @returns The list of all fields for the specified table {@link SchemaItemField}.
+ **/
+export const getAllTableFieldsWithRelations = (table: string, schema: SchemaItem[]): SchemaItemField[] => {
+    const fields: SchemaItemField[] = []
+    const schemaItems = (schema as SchemaItem[])
+    const tableFields = schemaItems?.filter((schemaItem) => schemaItem.name === table)[0].fields
+
+    tableFields?.forEach((field) => {
+        if (schemaItems.map((item) => item.name).includes(field.type)) {
+            getRelatedFields(field.name, fields, field, schema)
+        } else {
+            fields.push(field)
+        }
+    })
+
+    return fields
 }
 
 /**
@@ -88,18 +111,29 @@ const cleanSchema = (schema: unknown []): Types.SchemaItem [] => {
 
         if (isObject && hasFields && nameNotIgnored) {
             schemaItem.fields.forEach(field => {
-                const schemaField = (field as { name: string, type: { kind: string, name: string, ofType: { name: string } } })
+                const schemaField = (field as {
+                    name: string, type: {
+                        kind: string, name: string, ofType: { name: string, kind: string }
+                    }
+                })
 
-                let fieldType: string
+                let fieldType: string | null
                 let isNullable: boolean
 
                 switch (schemaField.type.kind) {
                     case 'OBJECT':
-                        fieldType = 'Object'
+                        fieldType = schemaField.type.name
                         isNullable = true
                         break;
                     case 'NON_NULL':
-                        fieldType = schemaField.type.ofType.name
+                        if (schemaField.type.ofType.kind === 'LIST') {
+                            fieldType = null
+                        } else if (schemaField.type.ofType.kind === 'OBJECT') {
+                            fieldType = schemaField.type.ofType.name.replaceAll('_aggregate', '')
+                        } else {
+                            fieldType = schemaField.type.ofType.name
+                        }
+
                         isNullable = false
                         break;
                     default:
@@ -108,7 +142,13 @@ const cleanSchema = (schema: unknown []): Types.SchemaItem [] => {
                         break;
                 }
 
-                cleanSchemaItemFields.push({name: schemaField.name, type: fieldType, isNullable: isNullable})
+                if (fieldType != null) {
+                    cleanSchemaItemFields.push({
+                        name: schemaField.name.replaceAll('_aggregate', ''),
+                        type: fieldType,
+                        isNullable: isNullable
+                    })
+                }
             })
 
             cleanSchema.push({
@@ -121,4 +161,16 @@ const cleanSchema = (schema: unknown []): Types.SchemaItem [] => {
     })
 
     return cleanSchema;
+}
+
+const getRelatedFields = (path: string, fields: SchemaItemField[], field: SchemaItemField, schema: SchemaItem[]) => {
+    schema.filter((item) => item.name === field.type)[0].fields.forEach((fld) => {
+        if (schema.map((item) => item.name).includes(fld.type)) {
+            getRelatedFields(`${path}.${fld.name}`, fields, fld, schema)
+        } else {
+            const relationshipField = fld
+            relationshipField.name = `${path.length ? path + '.' : ''}${fld.name}`
+            fields.push(relationshipField)
+        }
+    })
 }

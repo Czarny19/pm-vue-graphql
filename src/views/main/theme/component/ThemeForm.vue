@@ -153,8 +153,7 @@ export default Vue.extend({
       }).then(() => {
         this.saving = false
         this.$router.back()
-      }).catch((err) => {
-        console.log(err)
+      }).catch(() => {
         this.saving = false
       })
     }

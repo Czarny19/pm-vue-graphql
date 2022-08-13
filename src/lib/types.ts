@@ -82,7 +82,7 @@ export type Query = {
     name: string;
     table: string;
     modify_date: Date;
-    limit: number;
+    limit: number | undefined;
     order_by: string;
     where: string;
     fields: string;

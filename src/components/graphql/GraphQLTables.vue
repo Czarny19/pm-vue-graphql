@@ -10,6 +10,7 @@
         <v-data-table
             :headers="headers"
             :items="schemaItem.fields"
+            disable-pagination
             hide-default-footer
             dense
             disable-sort

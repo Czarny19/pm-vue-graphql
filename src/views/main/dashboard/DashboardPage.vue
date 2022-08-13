@@ -17,19 +17,22 @@
                 v-if="currentTab === 0"
                 :loading="loadingProjects || loadingThemes"
                 :projects="projects"
-                :themes="themes">
+                :themes="themes"
+                @refresh="refreshProjects">
             </DashboardProjectsTab>
 
             <DashboardThemesTab
                 v-else-if="currentTab === 1"
                 :loading="loadingThemes"
-                :themes="themes">
+                :themes="themes"
+                @refresh="refreshThemes">
             </DashboardThemesTab>
 
             <DashboardDatasourcesTab
                 v-else
                 :loading="loadingDatasources"
-                :datasources="datasources">
+                :datasources="datasources"
+                @refresh="refreshDatasources">
             </DashboardDatasourcesTab>
           </v-col>
         </v-row>
@@ -87,6 +90,15 @@ export default Vue.extend({
     openSignUp(id: number): void {
       this.userId = id
       this.signUpOpen = true
+    },
+    refreshProjects(): void {
+      this.$apollo.queries.PROJECT.refetch()
+    },
+    refreshThemes(): void {
+      this.$apollo.queries.THEME.refetch()
+    },
+    refreshDatasources(): void {
+      this.$apollo.queries.DATA_SOURCE.refetch()
     }
   },
   apollo: {

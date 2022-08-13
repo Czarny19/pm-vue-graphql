@@ -9,7 +9,7 @@
                 color="accent"
                 item-color="accent"
                 v-model="orderBy.field"
-                :items="fieldNames"
+                :items="fieldsNames"
                 :label="i18n('editor.field')"
                 required
                 append-icon="fa-chevron-down">
@@ -56,7 +56,7 @@
 <script lang="ts">
 import Vue from "vue";
 import IconButton from "@/components/button/IconButton.vue";
-import {Query, QueryOrderBy} from "@/lib/types";
+import {Query, QueryOrderBy, SchemaItemField} from "@/lib/types";
 import {mapModelStringToQueryOrderByArray} from "@/lib/query";
 
 export default Vue.extend({
@@ -64,7 +64,7 @@ export default Vue.extend({
   components: {IconButton},
   props: {
     query: Object,
-    fieldNames: Array
+    fields: Array
   },
   data() {
     return {
@@ -75,6 +75,9 @@ export default Vue.extend({
   computed: {
     orderByList(): QueryOrderBy [] {
       return this.orderByFields as QueryOrderBy []
+    },
+    fieldsNames(): string[] {
+      return (this.fields as SchemaItemField[]).map((field) => field.name)
     }
   },
   methods: {

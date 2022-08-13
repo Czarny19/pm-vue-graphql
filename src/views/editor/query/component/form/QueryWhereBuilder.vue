@@ -81,12 +81,7 @@
 import Vue from "vue";
 import IconButton from "@/components/button/IconButton.vue";
 import {Query, QueryWhere, SchemaItemField} from "@/lib/types";
-import {
-  mapModelStringToQueryVariableArray,
-  mapModelStringToQueryWhereArray,
-  numberOperators,
-  stringOperators
-} from "@/lib/query";
+import * as query from "@/lib/query";
 
 export default Vue.extend({
   name: 'QueryWhereBuilder',
@@ -103,24 +98,33 @@ export default Vue.extend({
   },
   computed: {
     fieldNames(): string[] {
-      return (this.fields as SchemaItemField[]).map((field) => field.name)
+      return (this.fields as SchemaItemField[]).map((field) => field.name).filter((field) => !field.includes('.'))
     }
   },
   methods: {
     operators(wherePart: QueryWhere): string [] {
       const field = (this.fields as SchemaItemField []).filter((field) => field.name === wherePart.field)[0];
-      const type = field.type
 
-      if (type === 'String') {
-        return stringOperators
+      switch (field.type) {
+        case 'String':
+          return query.stringOperators;
+        case 'Int':
+        case 'float8':
+          return query.numberOperators;
+        case 'Boolean':
+          return query.boolOperators;
+        case 'date':
+          return query.dateOperators;
+        case 'time':
+          return query.timeOperators;
+        default:
+          return query.stringOperators;
       }
-
-      return numberOperators
     },
     variables(wherePart: QueryWhere): string [] {
       const field = (this.fields as SchemaItemField []).filter((field) => field.name === wherePart.field)[0];
       const type = field.type
-      const variables = mapModelStringToQueryVariableArray((this.query as Query).variables ?? '')
+      const variables = query.mapModelStringToQueryVariableArray((this.query as Query).variables ?? '')
 
       return variables?.filter((variable) => variable.type === type).map((variable) => variable.name) ?? []
     },
@@ -155,7 +159,7 @@ export default Vue.extend({
     }
   },
   beforeMount() {
-    (this.whereParts as QueryWhere[]) = mapModelStringToQueryWhereArray((this.query as Query).where ?? '')
+    (this.whereParts as QueryWhere[]) = query.mapModelStringToQueryWhereArray((this.query as Query).where ?? '')
     this.currentQuery = this.query
   }
 })
