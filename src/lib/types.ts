@@ -112,3 +112,21 @@ export type QueryResult = {
     data: unknown[];
     error?: string;
 }
+
+export type QueryObject = {
+    field: string;
+    type: string;
+    variable: string;
+}
+
+export type Mutation = {
+    id: number;
+    name: string;
+    table: string;
+    type: string;
+    modify_date: Date;
+    where: string;
+    fields: string;
+    objects: string;
+    variables: string;
+}

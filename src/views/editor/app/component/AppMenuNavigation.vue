@@ -47,7 +47,8 @@ export default Vue.extend({
       return [
         {title: this.$t('editor.pages').toString(), icon: 'fa-file-pen'},
         {title: this.$t('editor.tables').toString(), icon: 'fa-table'},
-        {title: this.$t('editor.queries').toString(), icon: 'fa-terminal'}
+        {title: this.$t('editor.queries').toString(), icon: 'fa-terminal'},
+        {title: this.$t('editor.mutations').toString(), icon: 'fa-bolt'}
       ]
     }
   },

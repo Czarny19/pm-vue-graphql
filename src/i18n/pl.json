@@ -127,6 +127,7 @@
   "editor": {
     "title": "Edytor aplikacji",
     "titleQuery": "Edytor zapytania",
+    "titleMutation": "Edytor mutacji",
     "start": "Start",
     "page": "Strona",
     "pages": "Strony",
@@ -150,7 +151,7 @@
     "fields": "Pola",
     "selectAll": "Zaznacz wszystkie",
     "unselectAll": "Odznacz wszystkie",
-    "restrictions": "Ograniczenia",
+    "restrictions": "Warunki",
     "and": "i",
     "or": "lub",
     "sorting": "Sortowanie",
@@ -189,6 +190,18 @@
     "variableDate": "Data",
     "variableTime": "Czas",
     "response": "Wynik zapytania",
-    "runQuery": "Uruchom zapytanie"
+    "runQuery": "Uruchom zapytanie",
+    "mutations": "Mutacje",
+    "mutation": "Mutacja",
+    "addMutation": "Dodaj mutację",
+    "mutationName": "Nazwa mutacji",
+    "mutationNameRequired": "Nazwa jest wymagana",
+    "mutationNameTooLong": "Nazwa nie może być dłuższa niż 50 znaków",
+    "mutationType": "Rodzaj mutacji",
+    "mutationTypeRequired": "Rodzaj jest wymagany",
+    "mutationInsert": "Dodanie",
+    "mutationUpdate": "Aktualizacja",
+    "mutationDelete": "Usunięcie",
+    "savingMutation": "Zapisywanie mutacji"
   }
 }

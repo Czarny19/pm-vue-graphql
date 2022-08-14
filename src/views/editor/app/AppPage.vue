@@ -8,6 +8,7 @@
     <AppMenuTabPages v-if="currentTab === 0" :project-id="project.id" :datasource-id="datasource.id"/>
     <AppMenuTabTables v-else-if="currentTab === 1" :datasource="datasource"/>
     <AppMenuTabQueries v-else-if="currentTab === 2" :datasource="datasource"/>
+    <AppMenuTabMutations v-else-if="currentTab === 3" :datasource="datasource"/>
   </div>
 </template>
 
@@ -18,6 +19,7 @@ import AppMenuTabPages from "@/views/editor/app/component/tab/AppMenuTabPages.vu
 import AppMenuInfo from "@/views/editor/app/component/AppMenuInfo.vue";
 import AppMenuTabTables from "@/views/editor/app/component/tab/AppMenuTabTables.vue";
 import AppMenuTabQueries from "@/views/editor/app/component/tab/AppMenuTabQueries.vue";
+import AppMenuTabMutations from "@/views/editor/app/component/tab/AppMenuTabMutations.vue";
 import {CURRENT_USER} from "@/graphql/queries/user";
 import {GET_PROJECT_BY_ID} from "@/graphql/queries/project";
 import {GET_THEME_BY_ID} from "@/graphql/queries/theme";
@@ -26,7 +28,7 @@ import {decodeDatasourceSecret} from "@/lib/schema";
 
 export default Vue.extend({
   name: 'AppPage',
-  components: {AppMenuNavigation, AppMenuTabPages, AppMenuInfo, AppMenuTabTables, AppMenuTabQueries},
+  components: {AppMenuTabMutations, AppMenuNavigation, AppMenuTabPages, AppMenuInfo, AppMenuTabTables, AppMenuTabQueries},
   data() {
     return {
       currentTab: 0,

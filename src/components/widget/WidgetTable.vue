@@ -7,12 +7,7 @@ import Vue from "vue";
 import {GET_QUERY_BY_ID} from "@/graphql/queries/query";
 import {AppWidget, Query} from "@/lib/types";
 import {getArgsProps, getCssProps} from "@/lib/widget";
-import {
-  generateGraphQLQuery,
-  mapModelStringToQueryOrderByArray, mapModelStringToQueryVariableArray,
-  mapModelStringToQueryWhereArray,
-  runQuery
-} from "@/lib/query";
+import * as graphql_gen from "@/lib/graphql_gen";
 
 export default Vue.extend({
   name: 'WidgetTable',
@@ -44,11 +39,11 @@ export default Vue.extend({
         return ''
       }
 
-      const where = mapModelStringToQueryWhereArray(query.where ?? '')
-      const orderBy = mapModelStringToQueryOrderByArray(query.order_by ?? '')
-      const vars = mapModelStringToQueryVariableArray(query.variables ?? '')
+      const where = graphql_gen.mapModelStringToQueryWhereArray(query.where ?? '')
+      const orderBy = graphql_gen.mapModelStringToQueryOrderByArray(query.order_by ?? '')
+      const vars = graphql_gen.mapModelStringToQueryVariableArray(query.variables ?? '')
 
-      return generateGraphQLQuery(
+      return graphql_gen.generateGraphQLQuery(
           query.name,
           query.table,
           query.fields,
@@ -83,7 +78,7 @@ export default Vue.extend({
       result({data}): void {
         this.query = data.QUERY[0]
 
-        runQuery(
+        graphql_gen.runQuery(
             this.datasource.address,
             this.graphQLQuery,
             (this.query as Query).table,

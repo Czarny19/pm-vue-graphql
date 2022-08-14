@@ -36,10 +36,10 @@
               class="mt-2"
               :title="i18n('editor.variables')"
               show-hide-button
-              :is-hidden="propsHidden"
-              @showhideclick="propsHidden = !propsHidden">
+              :is-hidden="variablesHidden"
+              @showhideclick="variablesHidden = !variablesHidden">
           </CardSectionTitle>
-          <QueryVariables v-if="!propsHidden" :query="query"/>
+          <EditorVariables v-if="!variablesHidden" :object="query"/>
 
           <CardSectionTitle
               class="mt-2"
@@ -48,7 +48,7 @@
               :is-hidden="whereHidden"
               @showhideclick="whereHidden = !whereHidden">
           </CardSectionTitle>
-          <QueryWhereBuilder v-if="!whereHidden" :query="query" :fields="fields"/>
+          <EditorWhereBuilder v-if="!whereHidden" :object="query" :fields="fields"/>
         </v-card>
       </v-col>
     </v-row>
@@ -67,22 +67,22 @@
 import Vue from "vue";
 import CardSectionTitle from "@/components/card/CardSectionTitle.vue";
 import QueryPreview from "@/views/editor/query/component/QueryPreview.vue";
-import QueryWhereBuilder from "@/views/editor/query/component/form/QueryWhereBuilder.vue";
 import QueryOrderByBuilder from "@/views/editor/query/component/form/QueryOrderByBuilder.vue";
 import QueryInfo from "@/views/editor/query/component/form/QueryInfo.vue";
 import QueryFields from "@/views/editor/query/component/form/QueryFields.vue";
-import QueryVariables from "@/views/editor/query/component/form/QueryVariables.vue";
+import EditorVariables from "@/components/editor/EditorVariables.vue";
+import EditorWhereBuilder from "@/components/editor/EditorWhereBuilder.vue";
 import {Query, SchemaItem, SchemaItemField} from "@/lib/types";
 import {getAllTableFieldsWithRelations} from "@/lib/schema";
 
 export default Vue.extend({
   name: 'QueryForm',
   components: {
-    QueryVariables,
+    EditorWhereBuilder,
+    EditorVariables,
     QueryFields,
     QueryInfo,
     QueryOrderByBuilder,
-    QueryWhereBuilder,
     QueryPreview,
     CardSectionTitle
   },
@@ -98,7 +98,7 @@ export default Vue.extend({
       valid: false,
       fieldsHidden: true,
       sortHidden: true,
-      propsHidden: true,
+      variablesHidden: true,
       whereHidden: true
     }
   },

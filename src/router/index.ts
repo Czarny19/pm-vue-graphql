@@ -7,6 +7,7 @@ import ThemePage from "@/views/main/theme/ThemePage.vue";
 import DatasourcePage from "@/views/main/datasource/DatasourcePage.vue";
 import QueryPage from "@/views/editor/query/QueryPage.vue";
 import GuiEditorPage from "@/views/editor/guieditor/GuiEditorPage.vue";
+import MutationPage from "@/views/editor/mutation/MutationPage.vue";
 import {authGuard} from "@/plugins/auth_guard";
 
 Vue.use(VueRouter)
@@ -30,6 +31,12 @@ const routes = [
         name: 'Query',
         path: '/admin/editor/query/datasource=:datasourceId&query=:queryId',
         component: QueryPage,
+        beforeEnter: authGuard
+    },
+    {
+        name: 'Mutation',
+        path: '/admin/editor/mutation/datasource=:datasourceId&mutation=:mutationId',
+        component: MutationPage,
         beforeEnter: authGuard
     },
     {path: '*', redirect: '/admin/main/dashboard'}

@@ -1,4 +1,4 @@
-import {QueryOrderBy, QueryResult, QueryVariable, QueryWhere} from "@/lib/types";
+import {QueryObject, QueryOrderBy, QueryResult, QueryVariable, QueryWhere} from "@/lib/types";
 import ApolloClient from "apollo-client";
 import {typeDefs} from "@/graphql/typedefs";
 import {HttpLink} from "apollo-link-http";
@@ -17,6 +17,12 @@ export const boolOperators = ['=', '!=', '>', '>=', '=null', '<', '<=']
 export const dateOperators = ['=', '!=', '>', '>=', '=null', '<', '<=']
 
 export const timeOperators = ['=', '!=', '>', '>=', '=null', '<', '<=']
+
+export const enum mutationTypes {
+    Create = 'Create',
+    Update = 'Update',
+    Delete = 'Delete'
+}
 
 /**
  * Runs a graphQL query on an existing table.
@@ -266,6 +272,18 @@ export const mapModelStringToQueryVariableArray = (values: string): QueryVariabl
 
 export const mapModelStringToQueryWhereArray = (values: string): QueryWhere[] => {
     const objectParts: QueryWhere[] = [];
+
+    if (values.length) {
+        values.replaceAll(' ', '')
+            .split(';')
+            .forEach((value) => objectParts.push(JSON.parse(value)));
+    }
+
+    return objectParts
+}
+
+export const mapModelStringToQueryObjectArray = (values: string): QueryObject[] => {
+    const objectParts: QueryObject[] = [];
 
     if (values.length) {
         values.replaceAll(' ', '')

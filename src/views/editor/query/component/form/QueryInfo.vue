@@ -1,5 +1,5 @@
 <template>
-  <v-card-text class="pa-3 pt-0 pb-6">
+  <v-card-text class="pa-3 pt-0">
     <div class="elevation-6 pt-6 pl-2 pr-2">
       <v-text-field
           class="pa-2"
@@ -41,8 +41,8 @@
 </template>
 
 <script lang="ts">
-import {Query} from "@/lib/types";
 import Vue from "vue";
+import {Query} from "@/lib/types";
 
 export default Vue.extend({
   name: 'QueryInfo',

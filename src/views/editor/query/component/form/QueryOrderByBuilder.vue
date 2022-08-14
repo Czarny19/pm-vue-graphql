@@ -57,7 +57,7 @@
 import Vue from "vue";
 import IconButton from "@/components/button/IconButton.vue";
 import {Query, QueryOrderBy, SchemaItemField} from "@/lib/types";
-import {mapModelStringToQueryOrderByArray} from "@/lib/query";
+import {mapModelStringToQueryOrderByArray} from "@/lib/graphql_gen";
 
 export default Vue.extend({
   name: 'QueryOrderByBuilder',

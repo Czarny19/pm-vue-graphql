@@ -41,15 +41,7 @@
 import Vue from "vue";
 import IconButton from "@/components/button/IconButton.vue";
 import {Query} from "@/lib/types";
-import {
-  generateGraphQLPreviewQuery,
-  generateGraphQLPreviewVariables,
-  generateGraphQLQuery,
-  mapModelStringToQueryOrderByArray,
-  mapModelStringToQueryVariableArray,
-  mapModelStringToQueryWhereArray,
-  runQuery
-} from "@/lib/query";
+import * as graphql_gen from "@/lib/graphql_gen";
 
 export default Vue.extend({
   name: 'QueryPreview',
@@ -73,11 +65,11 @@ export default Vue.extend({
         return ''
       }
 
-      const where = mapModelStringToQueryWhereArray(query.where ?? '')
-      const orderBy = mapModelStringToQueryOrderByArray(query.order_by ?? '')
-      const vars = mapModelStringToQueryVariableArray(query.variables ?? '')
+      const where = graphql_gen.mapModelStringToQueryWhereArray(query.where ?? '')
+      const orderBy = graphql_gen.mapModelStringToQueryOrderByArray(query.order_by ?? '')
+      const vars = graphql_gen.mapModelStringToQueryVariableArray(query.variables ?? '')
 
-      return generateGraphQLQuery(
+      return graphql_gen.generateGraphQLQuery(
           query.name,
           query.table,
           query.fields,
@@ -94,11 +86,11 @@ export default Vue.extend({
         return ''
       }
 
-      const where = mapModelStringToQueryWhereArray(query.where ?? '')
-      const orderBy = mapModelStringToQueryOrderByArray(query.order_by ?? '')
-      const vars = mapModelStringToQueryVariableArray(query.variables ?? '')
+      const where = graphql_gen.mapModelStringToQueryWhereArray(query.where ?? '')
+      const orderBy = graphql_gen.mapModelStringToQueryOrderByArray(query.order_by ?? '')
+      const vars = graphql_gen.mapModelStringToQueryVariableArray(query.variables ?? '')
 
-      return generateGraphQLPreviewQuery(
+      return graphql_gen.generateGraphQLPreviewQuery(
           query.name,
           query.table,
           query.fields,
@@ -109,8 +101,8 @@ export default Vue.extend({
       )
     },
     graphQLVariablesPreview(): string {
-      const vars = mapModelStringToQueryVariableArray(this.query.variables ?? '')
-      return generateGraphQLPreviewVariables(vars)
+      const vars = graphql_gen.mapModelStringToQueryVariableArray(this.query.variables ?? '')
+      return graphql_gen.generateGraphQLPreviewVariables(vars)
     },
     tableHeaders(): { text: string; value: string }[] {
       const headers: { text: string; value: string }[] = [];
@@ -124,7 +116,7 @@ export default Vue.extend({
   },
   methods: {
     async run(): Promise<void> {
-      const result = await runQuery(
+      const result = await graphql_gen.runQuery(
           this.datasource.address,
           this.graphQLQuery,
           this.query.table,

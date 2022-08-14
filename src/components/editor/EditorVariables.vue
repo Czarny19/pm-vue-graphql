@@ -71,18 +71,18 @@
 <script lang="ts">
 import Vue from "vue";
 import IconButton from "@/components/button/IconButton.vue";
-import {Query, QueryVariable} from "@/lib/types";
-import {mapModelStringToQueryVariableArray} from "@/lib/query";
+import {QueryVariable} from "@/lib/types";
+import {mapModelStringToQueryVariableArray} from "@/lib/graphql_gen";
 
 export default Vue.extend({
-  name: 'QueryVariables',
+  name: 'EditorVariables',
   components: {IconButton},
   props: {
-    query: Object
+    object: Object
   },
   data() {
     return {
-      currentQuery: {},
+      currentObject: {},
       variables: []
     }
   },
@@ -130,15 +130,16 @@ export default Vue.extend({
   watch: {
     variables: {
       handler() {
-        const query = (this.currentQuery as Query)
-        query.variables = this.variables.map(orderBy => (JSON.stringify(orderBy))).join(';')
+        const obj = this.currentObject as { variables: string }
+        obj.variables = this.variables.map(orderBy => (JSON.stringify(orderBy))).join(';')
       },
       deep: true
     }
   },
   beforeMount() {
-    (this.variables as QueryVariable[]) = mapModelStringToQueryVariableArray((this.query as Query).variables ?? '')
-    this.currentQuery = this.query
+    const obj = this.object as { variables: string }
+    (this.variables as QueryVariable[]) = mapModelStringToQueryVariableArray(obj.variables ?? '')
+    this.currentObject = this.object
   }
 })
 </script>

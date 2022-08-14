@@ -80,19 +80,19 @@
 <script lang="ts">
 import Vue from "vue";
 import IconButton from "@/components/button/IconButton.vue";
-import {Query, QueryWhere, SchemaItemField} from "@/lib/types";
-import * as query from "@/lib/query";
+import {QueryWhere, SchemaItemField} from "@/lib/types";
+import * as graphql_gen from "@/lib/graphql_gen";
 
 export default Vue.extend({
-  name: 'QueryWhereBuilder',
+  name: 'EditorWhereBuilder',
   components: {IconButton},
   props: {
-    query: Object,
+    object: Object,
     fields: Array
   },
   data() {
     return {
-      currentQuery: {},
+      currentObject: {},
       whereParts: []
     }
   },
@@ -107,24 +107,25 @@ export default Vue.extend({
 
       switch (field.type) {
         case 'String':
-          return query.stringOperators;
+          return graphql_gen.stringOperators;
         case 'Int':
         case 'float8':
-          return query.numberOperators;
+          return graphql_gen.numberOperators;
         case 'Boolean':
-          return query.boolOperators;
+          return graphql_gen.boolOperators;
         case 'date':
-          return query.dateOperators;
+          return graphql_gen.dateOperators;
         case 'time':
-          return query.timeOperators;
+          return graphql_gen.timeOperators;
         default:
-          return query.stringOperators;
+          return graphql_gen.stringOperators;
       }
     },
     variables(wherePart: QueryWhere): string [] {
       const field = (this.fields as SchemaItemField []).filter((field) => field.name === wherePart.field)[0];
       const type = field.type
-      const variables = query.mapModelStringToQueryVariableArray((this.query as Query).variables ?? '')
+      const obj = this.object as { variables: string }
+      const variables = graphql_gen.mapModelStringToQueryVariableArray(obj.variables ?? '')
 
       return variables?.filter((variable) => variable.type === type).map((variable) => variable.name) ?? []
     },
@@ -146,21 +147,22 @@ export default Vue.extend({
   watch: {
     query: {
       handler() {
-        this.currentQuery = this.query
+        this.currentObject = this.object
       },
       deep: true
     },
     whereParts: {
       handler() {
-        const query = (this.currentQuery as Query)
-        query.where = this.whereParts.map(wherePart => (JSON.stringify(wherePart))).join(';')
+        const obj = this.currentObject as { where: string }
+        obj.where = this.whereParts.map(wherePart => (JSON.stringify(wherePart))).join(';')
       },
       deep: true
     }
   },
   beforeMount() {
-    (this.whereParts as QueryWhere[]) = query.mapModelStringToQueryWhereArray((this.query as Query).where ?? '')
-    this.currentQuery = this.query
+    const obj = this.object as { where: string }
+    (this.whereParts as QueryWhere[]) = graphql_gen.mapModelStringToQueryWhereArray(obj.where ?? '')
+    this.currentObject = this.object
   }
 })
 </script>
