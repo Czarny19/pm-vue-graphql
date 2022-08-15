@@ -73,7 +73,7 @@ export default Vue.extend({
   },
   methods: {
     openApp(id: string): void {
-      this.$router.push({name: 'App', params: {projectId: id}})
+      this.$router.push({name: 'App', params: {projectId: id, tab: '0'}})
     }
   },
   watch: {

@@ -42,7 +42,7 @@
 <script lang="ts">
 import Vue from "vue";
 import {Mutation} from "@/lib/types";
-import {mutationTypes} from "@/lib/graphql_gen";
+import {mutationType} from "@/lib/graphql_gen";
 
 export default Vue.extend({
   name: 'MutationInfo',
@@ -68,11 +68,11 @@ export default Vue.extend({
   computed: {
     typeDisplay(): string {
       switch ((this.currentMutation as Mutation).type) {
-        case mutationTypes.Create:
+        case mutationType.Create:
           return this.$t('editor.mutationInsert').toString()
-        case mutationTypes.Update:
+        case mutationType.Update:
           return this.$t('editor.mutationUpdate').toString()
-        case mutationTypes.Delete:
+        case mutationType.Delete:
           return this.$t('editor.mutationDelete').toString()
         default:
           return (this.currentMutation as Mutation).type

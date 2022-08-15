@@ -79,7 +79,7 @@ export default Vue.extend({
       this.$router.push({name: 'Project', params: {projectId: id}})
     },
     openApp(id: string): void {
-      this.$router.push({name: 'App', params: {projectId: id}})
+      this.$router.push({name: 'App', params: {projectId: id, tab: '0'}})
     },
     deleteProjectClicked(id: number): void {
       this.$emit('delete', id)

@@ -86,7 +86,6 @@ export default Vue.extend({
           table: this.mutationTyped.table,
           fields: this.mutationTyped.fields,
           where: this.mutationTyped.where,
-          objects: this.mutationTyped.objects,
           variables: this.mutationTyped.variables,
           modifyDate: new Date()
         }

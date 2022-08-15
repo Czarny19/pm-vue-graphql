@@ -16,22 +16,25 @@
           <EditorVariables v-if="!variablesHidden" :object="mutation"/>
 
           <CardSectionTitle
+              v-if="!isCreate"
               class="mt-2"
               :title="i18n('editor.restrictions')"
               show-hide-button
               :is-hidden="whereHidden"
               @showhideclick="whereHidden = !whereHidden">
           </CardSectionTitle>
-          <EditorWhereBuilder v-if="!whereHidden" :object="mutation" :fields="fields"/>
+          <EditorWhereBuilder v-if="!whereHidden && !isCreate" :object="mutation" :fields="fields"/>
 
           <CardSectionTitle
+              v-if="!isDelete"
               class="mt-2"
               :title="i18n('editor.fields')"
               show-hide-button
-              :is-hidden="objectHidden"
-              @showhideclick="objectHidden = !objectHidden">
+              :is-hidden="setHidden"
+              @showhideclick="setHidden = !setHidden">
           </CardSectionTitle>
-          <MutationObject v-if="!objectHidden" :mutation="mutation" :fields="fields"/>
+          <MutationFieldsCreate v-if="!setHidden && isCreate" :mutation="mutation" :fields="fields"/>
+          <MutationFieldsUpdate v-if="!setHidden && isUpdate" :mutation="mutation" :fields="fields"/>
         </v-card>
       </v-col>
     </v-row>
@@ -39,7 +42,7 @@
     <v-row no-gutters>
       <v-col class="pa-3 pt-1">
         <v-card color="primary" class="pa-2 pb-6">
-          <!--          <QueryPreview :query="query" :datasource="datasource"/>-->
+          <MutationTester :mutation="mutation" :datasource="datasource"/>
         </v-card>
       </v-col>
     </v-row>
@@ -52,13 +55,24 @@ import CardSectionTitle from "@/components/card/CardSectionTitle.vue";
 import MutationInfo from "@/views/editor/mutation/component/form/MutationInfo.vue";
 import EditorVariables from "@/components/editor/EditorVariables.vue";
 import EditorWhereBuilder from "@/components/editor/EditorWhereBuilder.vue";
-import MutationObject from "@/views/editor/mutation/component/form/MutationObject.vue";
+import MutationFieldsCreate from "@/views/editor/mutation/component/form/MutationFieldsCreate.vue";
+import MutationTester from "@/views/editor/mutation/component/MutationTester.vue";
+import MutationFieldsUpdate from "@/views/editor/mutation/component/form/MutationFieldsUpdate.vue";
 import {Mutation, Query, SchemaItem, SchemaItemField} from "@/lib/types";
+import {mutationType} from "@/lib/graphql_gen";
 import {getAllTableFieldsWithRelations} from "@/lib/schema";
 
 export default Vue.extend({
   name: 'MutationForm',
-  components: {MutationObject, EditorWhereBuilder, EditorVariables, MutationInfo, CardSectionTitle},
+  components: {
+    MutationFieldsUpdate,
+    MutationTester,
+    MutationFieldsCreate,
+    EditorWhereBuilder,
+    EditorVariables,
+    MutationInfo,
+    CardSectionTitle
+  },
   props: {
     mutation: Object,
     datasource: Object,
@@ -69,12 +83,21 @@ export default Vue.extend({
       currentMutation: {},
       currentSchema: {},
       valid: false,
-      objectHidden: true,
+      setHidden: true,
       variablesHidden: true,
       whereHidden: true
     }
   },
   computed: {
+    isCreate(): boolean {
+      return (this.currentMutation as Mutation).type === mutationType.Create
+    },
+    isUpdate(): boolean {
+      return (this.currentMutation as Mutation).type === mutationType.Update
+    },
+    isDelete(): boolean {
+      return (this.currentMutation as Mutation).type === mutationType.Delete
+    },
     fields(): SchemaItemField[] {
       return getAllTableFieldsWithRelations((this.mutation as Mutation).table, this.schema as SchemaItem[])
     },

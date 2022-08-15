@@ -26,10 +26,9 @@ export default Vue.extend({
   components: {IconButton},
   methods: {
     openDashboard() {
-      this.$router.push({name: 'Dashboard'})
+      this.$router.push({name: 'Dashboard', params: {tab: '0'}})
     },
     logout() {
-      this.$cookies.remove('pmvg_dashtab')
       localStorage.clear()
       this.$auth.logout()
     }

@@ -30,6 +30,17 @@
             </v-select>
           </v-col>
 
+          <v-col cols="1">
+            <v-text-field
+                v-if="wherePart.field"
+                class="pa-0"
+                color="accent"
+                :value="fieldType(wherePart)"
+                readonly
+                :label="i18n('editor.variableType')">
+            </v-text-field>
+          </v-col>
+
           <v-col cols="2">
             <v-select
                 v-if="wherePart.field"
@@ -44,7 +55,7 @@
             </v-select>
           </v-col>
 
-          <v-col cols="5">
+          <v-col cols="4">
             <v-select
                 v-if="wherePart.operator"
                 class="pa-0"
@@ -120,6 +131,10 @@ export default Vue.extend({
         default:
           return graphql_gen.stringOperators;
       }
+    },
+    fieldType(wherePart: QueryWhere): string {
+      const field = (this.fields as SchemaItemField []).filter((field) => field.name === wherePart.field)[0];
+      return field.type
     },
     variables(wherePart: QueryWhere): string [] {
       const field = (this.fields as SchemaItemField []).filter((field) => field.name === wherePart.field)[0];

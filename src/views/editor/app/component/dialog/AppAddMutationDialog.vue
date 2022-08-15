@@ -61,7 +61,7 @@
 import Vue from "vue";
 import IconButton from "@/components/button/IconButton.vue";
 import {ADD_MUTATION} from "@/graphql/queries/mutation";
-import {mutationTypes} from "@/lib/graphql_gen";
+import {mutationType} from "@/lib/graphql_gen";
 
 export default Vue.extend({
   name: 'AppAddMutationDialog',
@@ -93,9 +93,9 @@ export default Vue.extend({
   computed: {
     types(): { id: string, name: string }[] {
       return [
-        {id: mutationTypes.Create, name: this.$t('editor.mutationInsert').toString()},
-        {id: mutationTypes.Update, name: this.$t('editor.mutationUpdate').toString()},
-        {id: mutationTypes.Delete, name: this.$t('editor.mutationDelete').toString()}
+        {id: mutationType.Create, name: this.$t('editor.mutationInsert').toString()},
+        {id: mutationType.Update, name: this.$t('editor.mutationUpdate').toString()},
+        {id: mutationType.Delete, name: this.$t('editor.mutationDelete').toString()}
       ]
     }
   },

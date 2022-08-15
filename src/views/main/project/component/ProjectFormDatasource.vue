@@ -32,7 +32,7 @@
 <script lang="ts">
 import Vue from "vue";
 import GraphQLConnectionTest from "@/components/graphql/GraphQLConnectionTest.vue";
-import {Datasource} from "@/lib/types";
+import {AppProject, Datasource} from "@/lib/types";
 
 export default Vue.extend({
   name: 'ProjectFormDatasource',
@@ -48,7 +48,8 @@ export default Vue.extend({
   },
   computed: {
     currentDatasource(): Datasource {
-      return (this.datasources as Datasource[]).filter((ds: Datasource) => ds.id === this.projectData.source_id)[0]
+      return (this.datasources as Datasource[])
+          .filter((ds: Datasource) => ds.id === (this.projectData as AppProject).source_id)[0]
     }
   },
   methods: {

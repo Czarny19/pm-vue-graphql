@@ -26,7 +26,8 @@
               </v-col>
 
               <v-col class="text-end">
-                   <span class="text-body-2 text--secondary pr-6">
+                <span class="text-body-1 text--secondary pr-10">{{ mutation.type }}</span>
+                <span class="text-body-2 text--secondary pr-6">
                   {{ i18n('editor.modifyDate') }}: {{ mutation.modify_date }}
                 </span>
                 <IconButton

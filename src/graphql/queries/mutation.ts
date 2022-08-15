@@ -5,6 +5,7 @@ export const GET_MUTATION_LIST_BY_DATA_SOURCE_ID = gql`query getMutationListByDa
         id
         name
         table
+        type
         modify_date
     }
 }`
@@ -15,7 +16,6 @@ export const GET_MUTATION_BY_ID = gql`query getMutationById($id: bigint!) {
         name
         table
         fields
-        objects
         where
         variables
         type
@@ -38,7 +38,6 @@ export const UPDATE_MUTATION = gql`mutation updateMutation(
     $table: String!,
     $fields: String,
     $where: String,
-    $objects: String,
     $variables: String,
     $modifyDate: date!
 ) {
@@ -47,7 +46,6 @@ export const UPDATE_MUTATION = gql`mutation updateMutation(
         table: $table,
         fields: $fields,
         where: $where,
-        objects: $objects,
         variables: $variables,
         modify_date: $modifyDate,
     }) {

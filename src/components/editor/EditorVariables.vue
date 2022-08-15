@@ -8,6 +8,8 @@
                 class="pa-0"
                 color="accent"
                 v-model="variable.name"
+                :counter="30"
+                :rules="variableNameRules"
                 :label="i18n('editor.variableName')">
 
               <template v-slot:prepend>
@@ -83,18 +85,24 @@ export default Vue.extend({
   data() {
     return {
       currentObject: {},
-      variables: []
+      variables: [],
+      variableNameRules: [
+        (v: string) => !!v || this.$t('editor.variableNameRequired'),
+        (v: string) => (v && v.length <= 30) || this.$t('editor.variableNameTooLong'),
+        (v: string) => (v && !/[^a-zA-Z0-9]/.test(v)) || this.$t('editor.varaibleNameNoSpecialChars')
+      ]
     }
   },
   computed: {
     variableTypes(): { type: string; display: string } [] {
       return [
-        {type: 'String', display: this.$t('editor.variableString').toString()},
-        {type: 'Int', display: this.$t('editor.variableInt').toString()},
-        {type: 'float8', display: this.$t('editor.variableFloat').toString()},
-        {type: 'Boolean', display: this.$t('editor.variableBoolean').toString()},
-        {type: 'date', display: this.$t('editor.variableDate').toString()},
-        {type: 'time', display: this.$t('editor.variableTime').toString()}
+        {type: 'String', display: this.$t('editor.variableString').toString() + ' (String)'},
+        {type: 'Int', display: this.$t('editor.variableInt').toString() + ' (Int)'},
+        {type: 'bigint', display: this.$t('editor.variableBigInt').toString() + ' (bigint)'},
+        {type: 'float8', display: this.$t('editor.variableFloat').toString() + ' (float8)'},
+        {type: 'Boolean', display: this.$t('editor.variableBoolean').toString() + ' (Boolean)'},
+        {type: 'date', display: this.$t('editor.variableDate').toString() + ' (date)'},
+        {type: 'time', display: this.$t('editor.variableTime').toString() + ' (time)'}
       ]
     }
   },

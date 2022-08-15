@@ -13,14 +13,14 @@ import {authGuard} from "@/plugins/auth_guard";
 Vue.use(VueRouter)
 
 const routes = [
-    {name: 'Dashboard', path: '/admin/main/dashboard', component: DashboardPage},
+    {name: 'Dashboard', path: '/admin/main/dashboard/tab=:tab', component: DashboardPage},
     {name: 'NewProject', path: '/admin/main/project/new', component: ProjectPage, beforeEnter: authGuard},
     {name: 'Project', path: '/admin/main/project/:projectId', component: ProjectPage, beforeEnter: authGuard},
     {name: 'NewTheme', path: '/admin/main/theme/new', component: ThemePage, beforeEnter: authGuard},
     {name: 'Theme', path: '/admin/main/theme/:themeId', component: ThemePage, beforeEnter: authGuard},
     {name: 'NewDatasource', path: '/admin/main/data/new', component: DatasourcePage, beforeEnter: authGuard},
     {name: 'Datasource', path: '/admin/main/data/:datasourceId', component: DatasourcePage, beforeEnter: authGuard},
-    {name: 'App', path: '/admin/editor/app/:projectId', component: AppPage, beforeEnter: authGuard},
+    {name: 'App', path: '/admin/editor/app/project=:projectId&tab=:tab', component: AppPage, beforeEnter: authGuard},
     {
         name: 'GuiEditor',
         path: '/admin/editor/gui/project=:projectId&page=:pageId&datasource=:datasourceId',
@@ -39,7 +39,7 @@ const routes = [
         component: MutationPage,
         beforeEnter: authGuard
     },
-    {path: '*', redirect: '/admin/main/dashboard'}
+    {path: '*', redirect: '/admin/main/dashboard/tab=0'}
 ]
 
 const router = new VueRouter({base: '/', routes})

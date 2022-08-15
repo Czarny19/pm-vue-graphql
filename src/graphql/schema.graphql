@@ -174,7 +174,6 @@ type MUTATION {
     id: bigint!
     modify_date: date!
     name: String!
-    objects: String
     table: String!
     type: String!
     variables: String
@@ -215,7 +214,6 @@ type MUTATION_max_fields {
     id: bigint
     modify_date: date
     name: String
-    objects: String
     table: String
     type: String
     variables: String
@@ -229,7 +227,6 @@ type MUTATION_min_fields {
     id: bigint
     modify_date: date
     name: String
-    objects: String
     table: String
     type: String
     variables: String
@@ -1851,8 +1848,6 @@ enum MUTATION_select_column {
     "column name"
     name
     "column name"
-    objects
-    "column name"
     table
     "column name"
     type
@@ -1874,8 +1869,6 @@ enum MUTATION_update_column {
     modify_date
     "column name"
     name
-    "column name"
-    objects
     "column name"
     table
     "column name"
@@ -2387,7 +2380,6 @@ input MUTATION_bool_exp {
     id: bigint_comparison_exp
     modify_date: date_comparison_exp
     name: String_comparison_exp
-    objects: String_comparison_exp
     table: String_comparison_exp
     type: String_comparison_exp
     variables: String_comparison_exp
@@ -2407,7 +2399,6 @@ input MUTATION_insert_input {
     id: bigint
     modify_date: date
     name: String
-    objects: String
     table: String
     type: String
     variables: String
@@ -2421,7 +2412,6 @@ input MUTATION_max_order_by {
     id: order_by
     modify_date: order_by
     name: order_by
-    objects: order_by
     table: order_by
     type: order_by
     variables: order_by
@@ -2435,7 +2425,6 @@ input MUTATION_min_order_by {
     id: order_by
     modify_date: order_by
     name: order_by
-    objects: order_by
     table: order_by
     type: order_by
     variables: order_by
@@ -2462,7 +2451,6 @@ input MUTATION_order_by {
     id: order_by
     modify_date: order_by
     name: order_by
-    objects: order_by
     table: order_by
     type: order_by
     variables: order_by
@@ -2481,7 +2469,6 @@ input MUTATION_set_input {
     id: bigint
     modify_date: date
     name: String
-    objects: String
     table: String
     type: String
     variables: String

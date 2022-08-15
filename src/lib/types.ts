@@ -113,8 +113,8 @@ export type QueryResult = {
     error?: string;
 }
 
-export type QueryObject = {
-    field: string;
+export type QuerySetValue = {
+    name: string;
     type: string;
     variable: string;
 }
@@ -124,9 +124,8 @@ export type Mutation = {
     name: string;
     table: string;
     type: string;
-    modify_date: Date;
     where: string;
     fields: string;
-    objects: string;
     variables: string;
+    modify_date: Date;
 }

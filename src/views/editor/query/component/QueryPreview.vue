@@ -103,15 +103,6 @@ export default Vue.extend({
     graphQLVariablesPreview(): string {
       const vars = graphql_gen.mapModelStringToQueryVariableArray(this.query.variables ?? '')
       return graphql_gen.generateGraphQLPreviewVariables(vars)
-    },
-    tableHeaders(): { text: string; value: string }[] {
-      const headers: { text: string; value: string }[] = [];
-
-      (this.query.fields as string)?.split(';').forEach((field) => {
-        headers.push({text: field, value: field})
-      })
-
-      return headers
     }
   },
   methods: {

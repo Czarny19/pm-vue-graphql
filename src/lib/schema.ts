@@ -124,7 +124,7 @@ const cleanSchema = (schema: unknown []): Types.SchemaItem [] => {
                     case 'OBJECT':
                         fieldType = schemaField.type.name
                         isNullable = true
-                        break;
+                        break
                     case 'NON_NULL':
                         if (schemaField.type.ofType.kind === 'LIST') {
                             fieldType = null
@@ -135,11 +135,11 @@ const cleanSchema = (schema: unknown []): Types.SchemaItem [] => {
                         }
 
                         isNullable = false
-                        break;
+                        break
                     default:
                         fieldType = schemaField.type.name
                         isNullable = true
-                        break;
+                        break
                 }
 
                 if (fieldType != null) {

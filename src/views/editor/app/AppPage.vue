@@ -28,7 +28,14 @@ import {decodeDatasourceSecret} from "@/lib/schema";
 
 export default Vue.extend({
   name: 'AppPage',
-  components: {AppMenuTabMutations, AppMenuNavigation, AppMenuTabPages, AppMenuInfo, AppMenuTabTables, AppMenuTabQueries},
+  components: {
+    AppMenuTabMutations,
+    AppMenuNavigation,
+    AppMenuTabPages,
+    AppMenuInfo,
+    AppMenuTabTables,
+    AppMenuTabQueries
+  },
   data() {
     return {
       currentTab: 0,
@@ -44,7 +51,10 @@ export default Vue.extend({
   },
   methods: {
     changeTab(tab: number): void {
-      this.currentTab = tab
+      if (tab && tab !== this.currentTab) {
+        this.currentTab = tab
+        this.$router.push({name: 'App', params: {projectId: this.projectId.toString(), tab: tab.toString()}})
+      }
     }
   },
   apollo: {
@@ -97,6 +107,9 @@ export default Vue.extend({
         this.datasource.secret = decodeDatasourceSecret(data.DATA_SOURCE[0].secret)
       }
     }
+  },
+  async beforeMount() {
+    this.currentTab = Number(this.$route.params.tab)
   }
 })
 </script>

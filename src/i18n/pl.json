@@ -185,11 +185,12 @@
     "addVariable": "Dodaj zmienną",
     "variableString": "Tekst",
     "variableInt": "Liczba całkowita",
+    "variableBigInt": "Duża liczba całkowita",
     "variableFloat": "Liczba zmiennoprzecinkowa",
     "variableBoolean": "Tak / Nie",
     "variableDate": "Data",
     "variableTime": "Czas",
-    "response": "Wynik zapytania",
+    "response": "Wynik",
     "runQuery": "Uruchom zapytanie",
     "mutations": "Mutacje",
     "mutation": "Mutacja",
@@ -202,6 +203,12 @@
     "mutationInsert": "Dodanie",
     "mutationUpdate": "Aktualizacja",
     "mutationDelete": "Usunięcie",
-    "savingMutation": "Zapisywanie mutacji"
+    "savingMutation": "Zapisywanie mutacji",
+    "tester": "Tester",
+    "runMutation": "Uruchom mutację",
+    "variableNameRequired": "Nazwa jest wymagana",
+    "variableNameTooLong": "Nazwa nie może być dłuższa niż 30 znaków",
+    "varaibleNameNoSpecialChars": "Nazwa nie może zawierać znaków specjalnych oraz spacji",
+    "mutationSuccess": "Sukces"
   }
 }

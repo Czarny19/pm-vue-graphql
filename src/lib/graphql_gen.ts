@@ -1,4 +1,4 @@
-import {QueryObject, QueryOrderBy, QueryResult, QueryVariable, QueryWhere} from "@/lib/types";
+import {QueryOrderBy, QueryResult, QuerySetValue, QueryVariable, QueryWhere} from "@/lib/types";
 import ApolloClient from "apollo-client";
 import {typeDefs} from "@/graphql/typedefs";
 import {HttpLink} from "apollo-link-http";
@@ -18,11 +18,13 @@ export const dateOperators = ['=', '!=', '>', '>=', '=null', '<', '<=']
 
 export const timeOperators = ['=', '!=', '>', '>=', '=null', '<', '<=']
 
-export const enum mutationTypes {
+export const enum mutationType {
     Create = 'Create',
     Update = 'Update',
     Delete = 'Delete'
 }
+
+export const fieldAutoVar = 'Autom.';
 
 /**
  * Runs a graphQL query on an existing table.
@@ -58,6 +60,59 @@ export const runQuery = async (endpoint: string, query: string, table: string, s
             query: gql`${query}`,
             variables: variablesMap,
             fetchPolicy: 'network-only'
+        }).then(response => {
+            queryData = response.data[table]
+        }).catch(err => {
+            isSuccessful = false
+            queryError = err
+        })
+    } catch (e) {
+        isSuccessful = false
+
+        if (typeof e === "string") {
+            queryError = e
+        } else if (e instanceof Error) {
+            queryError = e.message
+        }
+    }
+
+    return {isSuccessful: isSuccessful, data: queryData, error: queryError}
+}
+
+/**
+ * Runs a graphQL mutation on an existing table.
+ * @param endpoint Address of and existing graphQL endpoint
+ * @param mutation Mutation to run (can be generated using {@link generateGraphQLMutation})
+ * @param table Name of the table that the query should be run on
+ * @param secret GraphQL endpoint secret (null if the endpoint is not secured)
+ * @param vars Variables to be used with the query, separated with ';' (null if there are no query variables)
+ * @returns Promise containing an object with the mutation result of type {@link QueryResult}.
+ **/
+export const runMutation = async (endpoint: string, mutation: string, table: string, secret?: string,
+                                  vars?: string): Promise<QueryResult> => {
+    let isSuccessful = true
+    let queryData: unknown[] = []
+    let queryError = ''
+
+    const linkOptions = {uri: endpoint, headers: createQueryHeaders(secret)}
+
+    const client = new ApolloClient({
+        typeDefs: typeDefs,
+        link: new HttpLink(linkOptions),
+        cache: new InMemoryCache({addTypename: true}),
+        resolvers: {}
+    })
+
+    const variables = mapModelStringToQueryVariableArray(vars ?? '') ?? []
+    const variablesMap: { [key: string]: string } = {}
+
+    variables.forEach((variable) => variablesMap[variable.name] = variable.value)
+
+    try {
+        await client.mutate({
+            mutation: gql`${mutation}`,
+            variables: variablesMap,
+            fetchPolicy: 'no-cache'
         }).then(response => {
             queryData = response.data[table]
         }).catch(err => {
@@ -208,6 +263,178 @@ export const generateGraphQLPreviewQuery = (queryName: string, table: string, fi
 }
 
 /**
+ * Generates an executable version of a graphQL mutation.
+ * @param mutationName Name of the mutation
+ * @param table Name of the table that the mutation should be run on
+ * @param type Type of the mutation (Create, Update, Delete {@link mutationType})
+ * @param fields List of fields that the mutation should use (fields separated with ';')
+ * @param where Where condition (list of where condition parts {@link QueryWhere}).
+ * The order of array elements is significant for proper parts connection using '_and' and '_or' operators
+ * @param vars Variables to be used with the mutation (list of order by condition parts {@link QueryOrderBy})
+ * @returns A string representation of a graphQL mutation.
+ **/
+export const generateGraphQLMutation = (mutationName: string, table: string, type: mutationType,
+                                        fields: QuerySetValue[], where?: QueryWhere[],
+                                        vars?: QueryVariable[]): string => {
+    if (!table.length) {
+        return '';
+    }
+
+    const whereSet = where != undefined && where.length
+    const varsSet = vars != undefined && vars.length
+
+    const cleanName = mutationName
+        .replaceAll(/[^a-zA-Z ]/g, '')
+        .replaceAll(' ', '')
+
+    let mutation = `mutation ${cleanName} `
+
+    if (varsSet) mutation += '('
+
+    vars?.forEach((el, index) => {
+        mutation += `$${el.name}: ${el.type}`
+        mutation += index + 1 !== vars?.length ? ', ' : ') '
+    })
+
+    let mutation_type_name = ''
+
+    switch (type) {
+        case mutationType.Create:
+            mutation_type_name = 'insert_' + table
+            break
+        case mutationType.Update:
+            mutation_type_name = 'update_' + table
+            break
+        case mutationType.Delete:
+            mutation_type_name = 'delete_' + table
+            break
+    }
+
+    mutation += `{\n\t${mutation_type_name} `
+
+    if (type == mutationType.Create && fields.length) {
+        mutation += `(objects: {`
+        mutation += generateGraphQLSetValues(fields)
+        mutation += '\n\t})'
+    }
+
+    if (type == mutationType.Delete && whereSet) {
+        mutation += `(\n\t\twhere: `
+        mutation += generateGraphQLWhere(where)
+        mutation += '\n\t)'
+    }
+
+    if (type == mutationType.Update) {
+        mutation += `(_set: {`
+
+        if (fields.length) {
+            mutation += generateGraphQLSetValues(fields)
+        }
+
+        mutation += '\n\t}'
+        mutation += `, where: `
+
+        if (whereSet) {
+            mutation += generateGraphQLWhere(where)
+        }
+
+        mutation += ')'
+    }
+
+    mutation += ` {\n`
+    mutation += `\t\taffected_rows`
+    mutation += `\n\t}\n}`
+
+    return mutation
+}
+
+/**
+ * Generates a preview version of a graphQL mutation.
+ * @param mutationName Name of the mutation
+ * @param table Name of the table that the mutation should be run on
+ * @param type Type of the mutation (Create, Update, Delete {@link mutationType})
+ * @param fields List of fields that the mutation should use (fields separated with ';')
+ * @param where Where condition (list of where condition parts {@link QueryWhere}).
+ * The order of array elements is significant for proper parts connection using '_and' and '_or' operators
+ * @param vars Variables to be used with the mutation (list of order by condition parts {@link QueryOrderBy})
+ * @returns A html preview representation of a graphQL mutation.
+ **/
+export const generateGraphQLPreviewMutation = (mutationName: string, table: string, type: mutationType,
+                                               fields: QuerySetValue[], where?: QueryWhere[],
+                                               vars?: QueryVariable[]): string => {
+    if (!table.length) {
+        return '';
+    }
+
+    const whereSet = where != undefined && where.length
+    const varsSet = vars != undefined && vars.length
+
+    const cleanName = mutationName
+        .replaceAll(/[^a-zA-Z ]/g, '')
+        .replaceAll(' ', '')
+
+    let mutation = `<span style="color:brown">mutation</span> <span style="color:red">${cleanName} </span>`
+
+    if (varsSet) mutation += '('
+
+    vars?.forEach((el, index) => {
+        mutation += `<span style="color:green">$${el.name}</span>: <span style="color:darkgoldenrod">${el.type}</span>`
+        mutation += index + 1 !== vars?.length ? ', ' : ') '
+    })
+
+    let mutation_type_name = ''
+
+    switch (type) {
+        case mutationType.Create:
+            mutation_type_name = 'insert_' + table
+            break
+        case mutationType.Update:
+            mutation_type_name = 'update_' + table
+            break
+        case mutationType.Delete:
+            mutation_type_name = 'delete_' + table
+            break
+    }
+
+    mutation += `{<br/>&emsp;<span style="color:royalblue">${mutation_type_name}</span> `
+
+    if (type == mutationType.Create && fields.length) {
+        mutation += `(<span style="color:purple">objects</span>: {`
+        mutation += generateGraphQLPreviewSetValues(fields)
+        mutation += '<br/>&emsp;})'
+    }
+
+    if (type == mutationType.Delete && whereSet) {
+        mutation += `(<br/>&emsp;&emsp;<span style="color:purple">where</span>: `
+        mutation += generateGraphQLPreviewWhere(where)
+        mutation += '<br/>&emsp;)'
+    }
+
+    if (type == mutationType.Update) {
+        mutation += `(<span style="color:purple">_set</span>: {`
+
+        if (fields.length) {
+            mutation += generateGraphQLPreviewSetValues(fields)
+        }
+
+        mutation += '<br/>&emsp;}'
+        mutation += `, <span style="color:purple">where</span>: `
+
+        if (whereSet) {
+            mutation += generateGraphQLPreviewWhere(where)
+        }
+
+        mutation += ')'
+    }
+
+    mutation += ` {<br/>`
+    mutation += `&emsp;&emsp;<span style="color:royalblue">affected_rows</span>`
+    mutation += `<br/>&emsp;}<br/>}`
+
+    return mutation
+}
+
+/**
  * Generates a preview version of a graphQL query variables.
  * @param vars Variables to be used with the query (list of order by condition parts {@link QueryOrderBy})
  * @returns A html preview representation of a graphQL query variables.
@@ -221,17 +448,17 @@ export const generateGraphQLPreviewVariables = (vars?: QueryVariable[]) => {
         switch (variable.type) {
             case 'String':
                 variables += `<span style="color:deeppink">"${variable.value}"</span>`
-                break;
+                break
             case 'Int':
             case 'float8':
                 variables += `<span style="color:royalblue">${variable.value}</span>`
                 break
             case 'Boolean':
                 variables += `<span style="color:goldenrod">${variable.value}</span>`
-                break;
+                break
             default:
                 variables += `<span style="color:deeppink">"${variable.value}"</span>`
-                break;
+                break
         }
 
         if (index + 1 === vars.length) {
@@ -282,8 +509,8 @@ export const mapModelStringToQueryWhereArray = (values: string): QueryWhere[] =>
     return objectParts
 }
 
-export const mapModelStringToQueryObjectArray = (values: string): QueryObject[] => {
-    const objectParts: QueryObject[] = [];
+export const mapModelStringToQuerySetValueArray = (values: string): QuerySetValue[] => {
+    const objectParts: QuerySetValue[] = [];
 
     if (values.length) {
         values.replaceAll(' ', '')
@@ -522,6 +749,46 @@ const generateGraphQLPreviewOrderBy = (orderBy: QueryOrderBy[], level: number) =
         result += ` <span style="color:royalblue">${key}</span>: {`
         result += generateGraphQLPreviewOrderBy(value, level + 1)
         result += `}`
+    })
+
+    return result
+}
+
+const generateGraphQLSetValues = (fields: QuerySetValue[]) => {
+    let result = ''
+
+    if (!fields.length) {
+        return ''
+    }
+
+    fields.forEach((field) => {
+        if (!field.name.includes('.') && field.variable !== fieldAutoVar) {
+            result += `\n\t\t${field.name}: `
+
+            if (field.variable.length) {
+                result += `$${field.variable}`
+            }
+        }
+    })
+
+    return result
+}
+
+const generateGraphQLPreviewSetValues = (fields: QuerySetValue[]) => {
+    let result = ''
+
+    if (!fields.length) {
+        return ''
+    }
+
+    fields.forEach((field) => {
+        if (!field.name.includes('.') && field.variable !== fieldAutoVar) {
+            result += `<br/>&emsp;&emsp;<span style="color:purple">${field.name}</span>: `
+
+            if (field.variable.length) {
+                result += `<span style="color:green">$${field.variable}</span>`
+            }
+        }
     })
 
     return result

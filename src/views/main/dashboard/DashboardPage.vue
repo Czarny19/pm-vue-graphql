@@ -84,8 +84,10 @@ export default Vue.extend({
   },
   methods: {
     setTab(tab: number): void {
-      this.currentTab = tab
-      this.$cookies.set('pmvg_dashtab', tab)
+      if (tab && tab !== this.currentTab) {
+        this.currentTab = tab
+        this.$router.push({name: 'Dashboard', params: {tab: tab.toString()}})
+      }
     },
     openSignUp(id: number): void {
       this.userId = id
@@ -156,7 +158,7 @@ export default Vue.extend({
     },
   },
   async beforeMount() {
-    this.currentTab = Number(this.$cookies.get('pmvg_dashtab'))
+    this.currentTab = Number(this.$route.params.tab)
   }
 })
 </script>
