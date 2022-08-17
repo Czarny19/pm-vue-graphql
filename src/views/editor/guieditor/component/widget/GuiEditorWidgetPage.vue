@@ -1,5 +1,5 @@
 <template>
-  <div class="pa-2 accent" @drop.self="onDrop" @dragover.prevent @dragenter.prevent @click.prevent>
+  <div class="pa-2 pb-12 accent" @drop.self="onDrop" @dragover.prevent @dragenter.prevent @click.prevent>
     <template v-for="(child) in widget.children">
       <GuiEditorWidget :widget="child" :key="child.name" @activewidget="setActive" @move="move"/>
     </template>
@@ -13,7 +13,9 @@ import {AppWidget, AppWidgetProp} from "@/lib/types";
 export default Vue.extend({
   name: 'GuiEditorWidgetPage',
   components: {GuiEditorWidget: () => import("@/views/editor/guieditor/component/widget/GuiEditorWidget.vue")},
-  props: {widget: Object},
+  props: {
+    widget: Object
+  },
   data() {
     return {
       page: {children: []}

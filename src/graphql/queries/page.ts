@@ -17,8 +17,8 @@ export const GET_PAGE_BY_ID = gql`query getPageById($id: bigint!) {
     }
 }`
 
-export const ADD_PAGE = gql`mutation addPage($projectId: bigint!, $name: String!) {
-    insert_PAGE(objects: {project_id: $projectId,name: $name}){
+export const ADD_PAGE = gql`mutation addPage($projectId: bigint!, $name: String!, $definition: jsonb!) {
+    insert_PAGE(objects: {project_id: $projectId,name: $name, definition: $definition}){
         returning {
             id
         }

@@ -35,11 +35,13 @@ import {CURRENT_USER} from "@/graphql/queries/user";
 
 export default Vue.extend({
   name: 'AppMenuNavigation',
+  props: {
+    tab: Number,
+  },
   data() {
     return {
       currentTab: 0,
-      currentUser: {id: -1},
-      projects: []
+      currentUser: {id: -1}
     }
   },
   computed: {
@@ -61,6 +63,9 @@ export default Vue.extend({
     currentUser: {
       query: CURRENT_USER
     }
+  },
+  async beforeMount() {
+    this.currentTab = this.tab
   }
 })
 </script>

@@ -19,11 +19,12 @@
 
     <LoadingCircular v-if="loading"/>
 
-    <v-container v-else fluid class="pa-0" :style="{'height': `calc(100% - 64px)`}">
+    <v-container v-else fluid class="pa-0" :style="{'height': `calc(100% - 60px)`}">
       <v-row class="fill-height" no-gutters>
-        <v-col v-if="leftNavShown && !previewOpen" cols="3">
+        <v-col v-if="leftNavShown && !previewOpen" cols="2">
           <GuiEditorLeftNav :page-definition="page.definition" @activewidget="setActiveWidget"/>
         </v-col>
+
         <v-col :cols="editorCols">
           <GuiEditorDisplay
               :page-definition="page.definition"
@@ -38,7 +39,8 @@
               @move="(up) => moveWidget(up, page.definition)">
           </GuiEditorDisplay>
         </v-col>
-        <v-col v-if="rightNavShown && !previewOpen" cols="2" class="text-end">
+
+        <v-col v-if="rightNavShown && !previewOpen" cols="3" class="text-end">
           <GuiEditorRightNav
               :widget="activeWidget"
               :theme="theme"
@@ -91,17 +93,25 @@ export default Vue.extend({
       rightNavShown: true,
       previewOpen: false,
       isClosing: false,
-      projectId: -1,
-      pageId: -1,
-      datasourceId: -1,
+      editorCols: 7,
       project: {},
       theme: {},
       page: {},
-      editorCols: 7,
       activeWidget: {},
       datasource: {},
       queries: []
     }
+  },
+  computed: {
+    projectId(): number {
+      return  Number(this.$route.params.projectId)
+    },
+    pageId(): number {
+      return Number(this.$route.params.pageId)
+    },
+    datasourceId(): number {
+      return Number(this.$route.params.datasourceId)
+    },
   },
   watch: {
     page: {
@@ -117,9 +127,6 @@ export default Vue.extend({
     }
   },
   methods: {
-    i18n(key: string): string {
-      return this.$t(key).toString()
-    },
     setActiveWidget(widget: AppWidget): void {
       if (widget.type === 'Page') {
         (this.activeWidget as AppWidget | null) = null
@@ -190,8 +197,8 @@ export default Vue.extend({
         return
       }
 
-      const leftCols = this.leftNavShown ? 3 : 0
-      const rightCols = this.rightNavShown ? 2 : 0
+      const leftCols = this.leftNavShown ? 2 : 0
+      const rightCols = this.rightNavShown ? 3 : 0
       this.editorCols = 12 - leftCols - rightCols
     },
     removeWidget(parent: { children: [] }): void {
@@ -291,7 +298,6 @@ export default Vue.extend({
       result({data}): void {
         this.datasource = data.DATA_SOURCE[0]
         this.datasource.secret = decodeDatasourceSecret(data.DATA_SOURCE[0].secret)
-        this.loadingDatasource = false
       }
     },
     QUERY: {
@@ -309,11 +315,6 @@ export default Vue.extend({
         this.queries = data.QUERY
       }
     }
-  },
-  beforeMount() {
-    this.projectId = Number(this.$route.params.projectId)
-    this.pageId = Number(this.$route.params.pageId)
-    this.datasourceId = Number(this.$route.params.datasourceId)
   }
 })
 </script>

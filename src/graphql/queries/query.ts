@@ -5,6 +5,8 @@ export const GET_QUERY_LIST_BY_DATA_SOURCE_ID = gql`query getQueryListByDatasour
         id
         name
         table
+        variables
+        fields
         modify_date
     }
 }`

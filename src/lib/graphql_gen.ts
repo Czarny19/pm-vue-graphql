@@ -152,7 +152,7 @@ export const generateGraphQLQuery = (queryName: string, table: string, fields: s
 
     const whereSet = where != undefined && where.length
     const orderBySet = orderBy != undefined && orderBy.length
-    const limitSet = limit != undefined
+    const limitSet = limit != undefined && limit > 0
     const varsSet = vars != undefined && vars.length
 
     const cleanName = queryName

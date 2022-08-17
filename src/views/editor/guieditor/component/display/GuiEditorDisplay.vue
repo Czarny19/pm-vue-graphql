@@ -10,7 +10,9 @@
             <v-icon v-if="!leftNavShown" class="pl-2">fa-caret-right</v-icon>
           </v-btn>
         </v-col>
+
         <v-spacer></v-spacer>
+
         <v-col class="pa-1 text-end">
           <v-btn text class="text-body-2" @click="changeRightNavShown">
             <v-icon v-if="!rightNavShown" class="pr-2">fa-caret-left</v-icon>
@@ -44,9 +46,9 @@
 
 <script lang="ts">
 import Vue from "vue";
-import {AppWidget} from "@/lib/types";
 import GuiEditorWidgetPage from "@/views/editor/guieditor/component/widget/GuiEditorWidgetPage.vue";
 import WidgetPage from "@/components/widget/WidgetPage.vue";
+import {AppWidget} from "@/lib/types";
 
 export default Vue.extend({
   name: 'GuiEditorDisplay',
@@ -60,9 +62,6 @@ export default Vue.extend({
     datasource: Object
   },
   methods: {
-    i18n(key: string): string {
-      return this.$t(key).toString()
-    },
     setActive(widget: AppWidget): void {
       this.$emit('activewidget', widget)
     },

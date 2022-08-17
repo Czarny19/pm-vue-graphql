@@ -1,6 +1,6 @@
 <template>
   <div>
-    <AppMenuNavigation @tabchange="changeTab"/>
+    <AppMenuNavigation :tab="currentTab" @tabchange="changeTab"/>
     <AppMenuInfo :project="project" :theme-name="theme.name" :datasource-name="datasource.name"/>
 
     <v-divider></v-divider>
@@ -51,7 +51,7 @@ export default Vue.extend({
   },
   methods: {
     changeTab(tab: number): void {
-      if (tab && tab !== this.currentTab) {
+      if (tab != undefined && tab !== this.currentTab) {
         this.currentTab = tab
         this.$router.push({name: 'App', params: {projectId: this.projectId.toString(), tab: tab.toString()}})
       }

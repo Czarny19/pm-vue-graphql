@@ -21,13 +21,13 @@
       <v-card
           v-for="widget in widgets"
           :key="widget.title"
-          class="editor--toolbox-widget ma-3"
+          class="editor--toolbox-widget ma-2 mb-3"
           draggable="true"
           @dragstart="startDrag(widget, $event)">
 
-        <v-container v-if="widget.type !== 'Page'">
+        <v-container>
           <v-row>
-            <v-col class="pa-1 ma-auto" cols="3">
+            <v-col class="pa-0 ma-auto" cols="3">
               <v-icon>{{ widget.icon }}</v-icon>
             </v-col>
 
@@ -40,7 +40,6 @@
     <template v-if="navTab === 1">
       <v-treeview
           class="pointer"
-          activatable
           open-all
           dense
           item-text="title"
@@ -56,13 +55,7 @@
         </template>
 
         <template v-slot:label="{ item }">
-          <div v-if="item.type === 'Page'"
-               class="text-start text-body-2 pl-2 overflow-elipsis"
-               @click="setActiveWidget(item)">
-            {{ item.id }}
-          </div>
-
-          <div v-else class="text-start text-body-2 pl-2 overflow-elipsis" @click="setActiveWidget(item)">
+          <div class="text-start text-body-2 pl-2 overflow-elipsis" @click="setActiveWidget(item)">
             {{ item.id }} ({{ item.label }})
           </div>
         </template>
@@ -98,9 +91,6 @@ export default Vue.extend({
     }
   },
   methods: {
-    i18n(key: string): string {
-      return this.$t(key).toString()
-    },
     setTab(tabNum: number): void {
       this.navTab = tabNum
     },

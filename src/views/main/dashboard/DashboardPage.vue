@@ -84,7 +84,7 @@ export default Vue.extend({
   },
   methods: {
     setTab(tab: number): void {
-      if (tab && tab !== this.currentTab) {
+      if (tab != undefined && tab !== this.currentTab) {
         this.currentTab = tab
         this.$router.push({name: 'Dashboard', params: {tab: tab.toString()}})
       }

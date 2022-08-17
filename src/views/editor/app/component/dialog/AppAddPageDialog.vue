@@ -31,6 +31,7 @@
 import Vue from "vue";
 import IconButton from "@/components/button/IconButton.vue";
 import {ADD_PAGE} from "@/graphql/queries/page";
+import {generateInitialPageDefinition} from "@/lib/widget";
 
 export default Vue.extend({
   name: 'AppAddPageDialog',
@@ -63,7 +64,8 @@ export default Vue.extend({
         mutation: ADD_PAGE,
         variables: {
           projectId: this.projectId,
-          name: this.pageName,
+          definition: generateInitialPageDefinition(this.pageName),
+          name: this.pageName
         }
       }).then(async () => {
         this.pageName = ''

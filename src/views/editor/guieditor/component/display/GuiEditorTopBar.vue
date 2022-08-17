@@ -1,13 +1,13 @@
 <template>
-  <v-toolbar color="secondary">
+  <v-toolbar color="secondary" height="60">
     <input id="fileUpload" type="file" hidden @change="setImportedPage">
 
-    <v-btn fab small color="accent" class="mr-4" @click="closeEditor">
-      <v-icon color="primary">fa-arrow-left</v-icon>
+    <v-btn fab x-small color="accent" class="mr-4" @click="closeEditor">
+      <v-icon small color="primary">fa-arrow-left</v-icon>
     </v-btn>
 
-    <div class="text-body-1">
-      {{ i18n('editor.title') }}: {{ projectName }} / {{ i18n('editor.page') }} / {{pageName}}
+    <div class="text-body-2">
+      {{ i18n('editor.title') }}: {{ projectName }} / {{ i18n('editor.page') }} / {{ pageName }}
     </div>
 
     <v-spacer></v-spacer>
@@ -79,9 +79,6 @@ export default Vue.extend({
     previewOpen: Boolean
   },
   methods: {
-    i18n(key: string): string {
-      return this.$t(key).toString()
-    },
     closeEditor(): void {
       this.$emit('closeeditor')
     },

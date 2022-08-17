@@ -3,6 +3,17 @@ import {AppWidget, AppWidgetProp, ThemeColors} from "@/lib/types";
 export const themeColors = ['primary_color', 'secondary_color', 'accent_color', 'info_color',
     'success_color', 'error_color', 'text_color_1', 'text_color_2', 'background_color']
 
+export const generateInitialPageDefinition = (id: string) => {
+    return {
+        "id": id,
+        "type": "Page",
+        "label": "Strona",
+        "icon": "fa-th",
+        "datatable": "",
+        "children": []
+    }
+}
+
 export const groups = (widget: AppWidget) => {
     return widget ? widget.propGroups : []
 }
@@ -26,6 +37,20 @@ export const getArgsProps = (widget: AppWidget) => {
 
     groups(widget)
         .filter((group: { type: string }) => group.type === 'args')
+        .forEach((group: { props: AppWidgetProp }) => argsProps = argsProps.concat(group.props))
+
+    const argsObject: { [k: string]: string } = {}
+
+    argsProps.forEach((prop: AppWidgetProp) => argsObject[prop.id] = prop.value)
+
+    return argsObject
+}
+
+export const getDataProps = (widget: AppWidget) => {
+    let argsProps: AppWidgetProp[] = []
+
+    groups(widget)
+        .filter((group: { type: string }) => group.type === 'data')
         .forEach((group: { props: AppWidgetProp }) => argsProps = argsProps.concat(group.props))
 
     const argsObject: { [k: string]: string } = {}

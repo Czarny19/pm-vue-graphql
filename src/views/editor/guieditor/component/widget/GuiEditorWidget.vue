@@ -20,26 +20,12 @@
       @move="move">
   </GuiEditorWidgetColumn>
 
-  <GuiEditorWidgetText
-      v-else-if="widget.type === 'Text'"
+  <GuiEditorWidgetOther
+      v-else
       :widget="widget"
       @activewidget="setActive"
       @move="move">
-  </GuiEditorWidgetText>
-
-  <GuiEditorWidgetTextField
-      v-else-if="widget.type === 'Text-Field'"
-      :widget="widget"
-      @activewidget="setActive"
-      @move="move">
-  </GuiEditorWidgetTextField>
-
-  <GuiEditorWidgetTable
-      v-else-if="widget.type === 'Table'"
-      :widget="widget"
-      @activewidget="setActive"
-      @move="move">
-  </GuiEditorWidgetTable>
+  </GuiEditorWidgetOther>
 </template>
 
 <script lang="ts">
@@ -47,25 +33,18 @@
 // @ts-nocheck
 
 import Vue from "vue";
-import GuiEditorWidgetContainer from "@/views/editor/guieditor/component/widget/GuiEditorWidgetContainer.vue";
-import GuiEditorWidgetRow from "@/views/editor/guieditor/component/widget/GuiEditorWidgetRow.vue";
-import GuiEditorWidgetColumn from "@/views/editor/guieditor/component/widget/GuiEditorWidgetColumn.vue";
-import GuiEditorWidgetText from "@/views/editor/guieditor/component/widget/GuiEditorWidgetText.vue";
-import GuiEditorWidgetTextField from "@/views/editor/guieditor/component/widget/GuiEditorWidgetTextField.vue";
-import GuiEditorWidgetTable from "@/views/editor/guieditor/component/widget/GuiEditorWidgetTable.vue";
+import GuiEditorWidgetContainer from "@/views/editor/guieditor/component/widget/grid/GuiEditorWidgetContainer.vue";
+import GuiEditorWidgetRow from "@/views/editor/guieditor/component/widget/grid/GuiEditorWidgetRow.vue";
+import GuiEditorWidgetColumn from "@/views/editor/guieditor/component/widget/grid/GuiEditorWidgetColumn.vue";
+import GuiEditorWidgetOther from "@/views/editor/guieditor/component/widget/GuiEditorWidgetOther.vue";
 import {AppWidget} from "@/lib/types";
 
 export default Vue.extend({
   name: 'GuiEditorWidget',
-  components: {
-    GuiEditorWidgetTable,
-    GuiEditorWidgetContainer,
-    GuiEditorWidgetRow,
-    GuiEditorWidgetColumn,
-    GuiEditorWidgetText,
-    GuiEditorWidgetTextField,
+  components: {GuiEditorWidgetOther, GuiEditorWidgetContainer, GuiEditorWidgetRow, GuiEditorWidgetColumn},
+  props: {
+    widget: Object
   },
-  props: {widget: Object},
   methods: {
     setActive(widget: AppWidget): void {
       this.$emit('activewidget', widget)
