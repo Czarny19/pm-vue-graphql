@@ -2,11 +2,12 @@
   <v-container fluid :style="cssProps">
     <template v-for="(child) in widget.children">
       <BaseWidget
-          class="ma-3"
+          class="pa-3"
           :widget="child"
           :theme="theme"
           :datasource="datasource"
-          :key="child.name">
+          :key="child.name"
+          :data-item="dataItem">
       </BaseWidget>
     </template>
   </v-container>
@@ -26,7 +27,8 @@ export default Vue.extend({
   props: {
     widget: Object,
     theme: Object,
-    datasource: Object
+    datasource: Object,
+    dataItem: Object
   },
   computed: {
     appWidget(): AppWidget {

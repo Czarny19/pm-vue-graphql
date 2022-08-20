@@ -3,6 +3,12 @@ import {AppWidget, AppWidgetProp, ThemeColors} from "@/lib/types";
 export const themeColors = ['primary_color', 'secondary_color', 'accent_color', 'info_color',
     'success_color', 'error_color', 'text_color_1', 'text_color_2', 'background_color']
 
+export const themeColorsPicker = [...themeColors, 'custom']
+
+export const sizeUnits = ['px', '%', 'cm', 'pt', 'em', 'vw', 'vh', 'auto']
+
+export const borders = ['dotted', 'dashed', 'solid', 'double', 'groove', 'ridge', 'inset', 'outset', 'none', 'hidden']
+
 export const generateInitialPageDefinition = (id: string) => {
     return {
         "id": id,
@@ -32,7 +38,7 @@ export const getCssProps = (widget: AppWidget, theme: ThemeColors) => {
     })
 }
 
-export const getArgsProps = (widget: AppWidget) => {
+export const getArgsProps = (widget: AppWidget): { [k: string]: string } => {
     let argsProps: AppWidgetProp[] = []
 
     groups(widget)
@@ -46,16 +52,16 @@ export const getArgsProps = (widget: AppWidget) => {
     return argsObject
 }
 
-export const getDataProps = (widget: AppWidget) => {
-    let argsProps: AppWidgetProp[] = []
+export const getDataProps = (widget: AppWidget): { [k: string]: string } => {
+    let dataProps: AppWidgetProp[] = []
 
     groups(widget)
         .filter((group: { type: string }) => group.type === 'data')
-        .forEach((group: { props: AppWidgetProp }) => argsProps = argsProps.concat(group.props))
+        .forEach((group: { props: AppWidgetProp }) => dataProps = dataProps.concat(group.props))
 
     const argsObject: { [k: string]: string } = {}
 
-    argsProps.forEach((prop: AppWidgetProp) => argsObject[prop.id] = prop.value)
+    dataProps.forEach((prop: AppWidgetProp) => argsObject[prop.id] = prop.value)
 
     return argsObject
 }

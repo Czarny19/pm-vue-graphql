@@ -5,7 +5,8 @@
           :widget="child"
           :theme="theme"
           :datasource="datasource"
-          :key="child.name">
+          :key="child.name"
+          :data-item="dataItem">
       </BaseWidget>
     </template>
   </v-col>
@@ -25,7 +26,8 @@ export default Vue.extend({
   props: {
     widget: Object,
     theme: Object,
-    datasource: Object
+    datasource: Object,
+    dataItem: Object
   },
   computed: {
     appWidget(): AppWidget {

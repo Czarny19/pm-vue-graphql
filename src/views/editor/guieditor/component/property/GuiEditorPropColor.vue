@@ -1,45 +1,32 @@
 <template>
   <div>
-    <v-container class="pa-0 pt-2 pb-2">
-      <v-row>
-        <v-col class="ma-auto pl-0 pr-0" cols="3">
-          <div class="text-body-2">{{ prop.label }}:</div>
-        </v-col>
-        <v-col cols="9">
-          <v-select
-              class="pa-0"
-              color="accent"
-              outlined
-              flat
-              single-line
-              dense
-              hide-details
-              append-icon=""
-              :items="themeColors"
-              v-model="displayColor"
-              item-color="accent">
+    <v-select
+        class="pt-3"
+        color="accent"
+        outlined dense hide-details
+        append-icon=""
+        :label="prop.label"
+        :items="themeColors"
+        v-model="displayColor"
+        item-color="accent">
 
-            <template v-slot:item="{item}">
-              <div v-if="item !== 'custom'" class="text-start">
-                {{ i18n('theme.' + item) }}
-              </div>
-              <div v-else class="text-start" @click="openColorPicker">
-                {{ i18n('theme.' + item) }}
-              </div>
-            </template>
+      <template v-slot:item="{item}">
+        <div v-if="item !== 'custom'" class="text-start">
+          {{ i18n('theme.' + item) }}
+        </div>
+        <div v-else class="text-start" @click="openColorPicker">
+          {{ i18n('theme.' + item) }}
+        </div>
+      </template>
 
-            <template v-slot:selection="{item}">
-              {{ i18n('theme.' + item) }}
-            </template>
+      <template v-slot:selection="{item}">
+        {{ i18n('theme.' + item) }}
+      </template>
 
-          </v-select>
-        </v-col>
-      </v-row>
-      <v-row no-gutters>
-        <v-col class="ma-auto pl-0 pr-0" cols="3"></v-col>
-        <v-col class="pt-1 pl-2" cols="9">{{ themeColorAsHex }}</v-col>
-      </v-row>
-    </v-container>
+      <template v-slot:append>
+        <div class="editor--color-box" :style="{'background-color': themeColorAsHex}"></div>
+      </template>
+    </v-select>
 
     <v-dialog v-model="isOpen" width="360">
       <v-card class="text-center">
@@ -63,17 +50,25 @@
 <script lang="ts">
 import Vue from "vue";
 import {ThemeColors} from "@/lib/types";
+import {themeColorsPicker} from "@/lib/widget";
 
 export default Vue.extend({
-  name: 'GuiEditorPropertyColor',
+  name: 'GuiEditorPropColor',
   props: {
     prop: Object,
     theme: Object
   },
+  data() {
+    return {
+      currentProp: {},
+      isOpen: false,
+      displayColor: '',
+      pickerColor: ''
+    }
+  },
   computed: {
     themeColors(): string [] {
-      return ['primary_color', 'secondary_color', 'accent_color', 'info_color',
-        'success_color', 'error_color', 'text_color_1', 'text_color_2', 'background_color', 'custom']
+      return themeColorsPicker
     },
     themeColorAsHex(): string {
       if (this.displayColor === 'custom') {
@@ -84,18 +79,7 @@ export default Vue.extend({
       return this.theme[displayColor]
     }
   },
-  data() {
-    return {
-      currentProp: {},
-      isOpen: false,
-      displayColor: '',
-      pickerColor: ''
-    }
-  },
   methods: {
-    i18n(key: string): string {
-      return this.$t(key).toString()
-    },
     openColorPicker(): void {
       const prop = (this.currentProp as { value: string })
       prop.value = this.pickerColor
@@ -116,12 +100,9 @@ export default Vue.extend({
     pickerColor() {
       const prop = (this.currentProp as { value: string })
       prop.value = this.pickerColor
-    },
-    prop() {
-      this.currentProp = this.prop
     }
   },
-  async beforeMount() {
+  beforeMount() {
     this.currentProp = this.prop
     const propValue = (this.currentProp as { value: string }).value
 

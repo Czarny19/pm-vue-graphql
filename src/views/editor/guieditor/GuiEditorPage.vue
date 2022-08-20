@@ -40,11 +40,12 @@
           </GuiEditorDisplay>
         </v-col>
 
-        <v-col v-if="rightNavShown && !previewOpen" cols="3" class="text-end">
+        <v-col v-if="rightNavShown && !previewOpen" cols="2" class="text-end">
           <GuiEditorRightNav
               :widget="activeWidget"
               :theme="theme"
               :queries="queries"
+              :schema="schema"
               @delete="removeWidget(page.definition)">
           </GuiEditorRightNav>
         </v-col>
@@ -69,7 +70,7 @@ import {GET_THEME_BY_ID} from "@/graphql/queries/theme";
 import {GET_QUERY_LIST_BY_DATA_SOURCE_ID} from "@/graphql/queries/query";
 import {GET_DATA_SOURCE_BY_ID} from "@/graphql/queries/datasource";
 import {AppWidget} from "@/lib/types";
-import {decodeDatasourceSecret} from "@/lib/schema";
+import {decodeDatasourceSecret, getCleanGraphQLSchema} from "@/lib/schema";
 
 export default Vue.extend({
   name: 'GuiEditorPage',
@@ -93,13 +94,14 @@ export default Vue.extend({
       rightNavShown: true,
       previewOpen: false,
       isClosing: false,
-      editorCols: 7,
+      editorCols: 8,
       project: {},
       theme: {},
       page: {},
       activeWidget: {},
       datasource: {},
-      queries: []
+      queries: [],
+      schema: []
     }
   },
   computed: {
@@ -126,10 +128,12 @@ export default Vue.extend({
       deep: true
     }
   },
+
   methods: {
     setActiveWidget(widget: AppWidget): void {
+      (this.activeWidget as AppWidget | null) = null
+
       if (widget.type === 'Page') {
-        (this.activeWidget as AppWidget | null) = null
         return
       }
 
@@ -137,6 +141,7 @@ export default Vue.extend({
     },
     switchPreview(): void {
       this.previewOpen = !this.previewOpen
+      this.activeWidget = {}
       this.calcDisplayCols()
     },
     save(): void {
@@ -198,7 +203,7 @@ export default Vue.extend({
       }
 
       const leftCols = this.leftNavShown ? 2 : 0
-      const rightCols = this.rightNavShown ? 3 : 0
+      const rightCols = this.rightNavShown ? 2 : 0
       this.editorCols = 12 - leftCols - rightCols
     },
     removeWidget(parent: { children: [] }): void {
@@ -295,9 +300,13 @@ export default Vue.extend({
       skip(): boolean {
         return !this.datasourceId
       },
-      result({data}): void {
+      async result({data}): Promise<void> {
         this.datasource = data.DATA_SOURCE[0]
         this.datasource.secret = decodeDatasourceSecret(data.DATA_SOURCE[0].secret)
+
+        await getCleanGraphQLSchema( this.datasource.address,  this.datasource.secret).then((result) => {
+          this.schema = result.schema
+        })
       }
     },
     QUERY: {

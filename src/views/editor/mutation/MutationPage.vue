@@ -25,7 +25,7 @@ import RejectChangesDialog from "@/components/dialog/RejectChangesDialog.vue";
 import LoadingCircular from "@/components/loading/LoadingCircular.vue";
 import MutationTopBar from "@/views/editor/mutation/component/MutationTopBar.vue";
 import MutationForm from "@/views/editor/mutation/component/MutationForm.vue";
-import {Datasource, Mutation, SchemaItem} from "@/lib/types";
+import {Datasource, Mutation} from "@/lib/types";
 import {GET_DATA_SOURCE_BY_ID} from "@/graphql/queries/datasource";
 import {GET_MUTATION_BY_ID, UPDATE_MUTATION} from "@/graphql/queries/mutation";
 import {decodeDatasourceSecret, getCleanGraphQLSchema} from "@/lib/schema";
@@ -122,12 +122,6 @@ export default Vue.extend({
       }
 
       this.$apollo.queries.MUTATION.refetch()
-    },
-    setSchema(schema: SchemaItem[]): void {
-      this.schema = schema as []
-    },
-    clearSchema(): void {
-      this.schema = []
     }
   },
   apollo: {

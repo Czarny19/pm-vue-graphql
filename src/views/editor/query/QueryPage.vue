@@ -27,7 +27,7 @@ import RejectChangesDialog from "@/components/dialog/RejectChangesDialog.vue";
 import {GET_DATA_SOURCE_BY_ID} from "@/graphql/queries/datasource";
 import {GET_QUERY_BY_ID, UPDATE_QUERY} from "@/graphql/queries/query";
 import {decodeDatasourceSecret, getCleanGraphQLSchema} from "@/lib/schema";
-import {Datasource, Query, SchemaItem} from "@/lib/types";
+import {Datasource, Query} from "@/lib/types";
 import LoadingCircular from "@/components/loading/LoadingCircular.vue";
 
 export default Vue.extend({
@@ -124,12 +124,6 @@ export default Vue.extend({
       }
 
       this.$apollo.queries.QUERY.refetch()
-    },
-    setSchema(schema: SchemaItem[]): void {
-      this.schema = schema as []
-    },
-    clearSchema(): void {
-      this.schema = []
     }
   },
   apollo: {

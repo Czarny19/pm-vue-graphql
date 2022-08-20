@@ -22,3 +22,11 @@
 .v-treeview-node__level {
   width: 12px !important;
 }
+
+.v-slider__thumb-label {
+  color: black !important;
+}
+
+.v-application--is-ltr .v-input--selection-controls__input {
+  margin-right: 24px !important;
+}

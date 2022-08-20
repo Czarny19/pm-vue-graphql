@@ -52,12 +52,12 @@ export const getGraphQLSchema = async (endpoint: string, secret?: string): Promi
  **/
 export const getAllTableFieldsWithRelations = (table: string, schema: SchemaItem[]): SchemaItemField[] => {
     const fields: SchemaItemField[] = []
-    const schemaItems = (schema as SchemaItem[])
-    const tableFields = schemaItems?.filter((schemaItem) => schemaItem.name === table)[0].fields
+    const schemaItems = (schema as SchemaItem[]).slice()
+    const tableFields = schemaItems?.filter((schemaItem) => schemaItem.name === table)[0].fields.slice()
 
     tableFields?.forEach((field) => {
         if (schemaItems.map((item) => item.name).includes(field.type)) {
-            getRelatedFields(field.name, fields, field, schema)
+            getRelatedFields(field.name, fields, field, schemaItems)
         } else {
             fields.push(field)
         }

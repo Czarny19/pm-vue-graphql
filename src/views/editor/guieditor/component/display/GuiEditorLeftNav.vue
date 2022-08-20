@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer permanent clipped width="100%" color="secondary">
+  <v-navigation-drawer permanent clipped width="100%" color="primary">
     <v-container fluid class="primary pa-0">
       <v-row no-gutters>
         <v-col class="pa-1">
@@ -19,10 +19,12 @@
 
     <template v-if="navTab === 0">
       <v-card
-          v-for="widget in widgets"
-          :key="widget.title"
+          v-for="(widget, index) in widgets"
+          :key="index"
           class="editor--toolbox-widget ma-2 mb-3"
           draggable="true"
+          elevation="0"
+          color="primary"
           @dragstart="startDrag(widget, $event)">
 
         <v-container>

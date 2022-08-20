@@ -32,4 +32,11 @@
   &--column {
     min-height: 100px;
   }
+
+  &--color-box {
+    height: 24px;
+    width: 24px;
+    border: solid whitesmoke 2px;
+    border-radius: 30px;
+  }
 }

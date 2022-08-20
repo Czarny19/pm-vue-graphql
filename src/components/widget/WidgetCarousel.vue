@@ -1,42 +1,38 @@
 <template>
-  <div>
-    <v-row no-gutters :style="cssProps">
-      <template v-for="(item, indexData) in queryData">
-        <template v-for="(child, indexChild) in widget.children">
-          <BaseWidget
-              :widget="child"
-              :theme="theme"
-              :datasource="datasource"
-              :key="`${indexData}_${indexChild}`"
-              :data-item="item">
-          </BaseWidget>
-        </template>
-      </template>
-    </v-row>
-  </div>
+  <v-carousel v-model="slide">
+    <v-carousel-item  :style="cssProps" v-for="(item, index) in queryData" :key="index">
+      <v-sheet :color="argsProps" height="100%" tile>
+        <v-row
+            class="fill-height"
+            align="center"
+            justify="center"
+        >
+          <div class="text-h2">
+            Slide {{ i + 1 }}
+          </div>
+        </v-row>
+      </v-sheet>
+    </v-carousel-item>
+  </v-carousel>
 </template>
 
 <script lang="ts">
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-
 import Vue from "vue";
 import {AppWidget, Query} from "@/lib/types";
-import {getCssProps, getDataProps} from "@/lib/widget";
-import {GET_QUERY_BY_ID} from "@/graphql/queries/query";
+import {getArgsProps, getCssProps, getDataProps} from "@/lib/widget";
 import * as graphql_gen from "@/lib/graphql_gen";
+import {GET_QUERY_BY_ID} from "@/graphql/queries/query";
 
 export default Vue.extend({
-  name: 'WidgetRow',
-  components: {BaseWidget: () => import("@/components/widget/BaseWidget.vue")},
+  name: 'WidgetCarousel',
   props: {
     widget: Object,
     theme: Object,
-    datasource: Object,
-    dataItem: Object
+    datasource: Object
   },
   data() {
     return {
+      slide: 0,
       query: {},
       queryData: []
     }
@@ -47,6 +43,9 @@ export default Vue.extend({
     },
     cssProps(): ({ [p: string]: string })[] {
       return getCssProps(this.appWidget, this.theme)
+    },
+    argsProps(): { [k: string]: string } {
+      return getArgsProps(this.appWidget)
     },
     dataProps(): { [k: string]: string } {
       return getDataProps(this.appWidget)
@@ -71,6 +70,15 @@ export default Vue.extend({
           query.limit,
           vars
       )
+    },
+    tableHeaders(): { text: string; value: string }[] {
+      const headers: { text: string; value: string }[] = [];
+
+      (this.query as Query).fields?.split(';').forEach((field) => {
+        headers.push({text: field, value: field})
+      })
+
+      return headers
     }
   },
   apollo: {

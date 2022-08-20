@@ -115,7 +115,6 @@
       "label": "Kontener",
       "icon": "fa-table",
       "children": [],
-      "allowedChildren": ["Wiersz"],
       "propGroups": [
         {
           "id": "colors",
@@ -173,8 +172,21 @@
       "label": "Wiersz",
       "icon": "fa-table-columns fa-rotate-270",
       "children": [],
-      "allowedChildren": ["Kolumna"],
-      "propGroups": []
+      "propGroups": [
+        {
+          "id": "data",
+          "label": "Źródło",
+          "type": "data",
+          "props": [
+            {
+              "id": "queryId",
+              "value": "",
+              "label": "Zapytanie",
+              "type": "Query"
+            }
+          ]
+        }
+      ]
     },
     {
       "id": "",
@@ -182,18 +194,19 @@
       "label": "Kolumna",
       "icon": "fa-table-columns",
       "children": [],
-      "allowedChildren": ["Przycisk", "Tekst", "Pole tekstowe", "Tabela"],
       "propGroups": [
         {
-          "id": "main",
-          "label": "Właściwości",
+          "id": "columns",
+          "label": "Kolumny",
           "type": "args",
           "props": [
             {
               "id": "cols",
-              "value": "",
-              "label": "Wielkość",
-              "type": "Cols"
+              "value": "12",
+              "label": "Kolumny",
+              "type": "Slider",
+              "minValue": 1,
+              "maxValue": 12
             }
           ]
         }
@@ -215,8 +228,8 @@
       "children": [],
       "propGroups": [
         {
-          "id": "main",
-          "label": "Właściwości",
+          "id": "constants",
+          "label": "Wartości stałe",
           "type": "args",
           "props": [
             {
@@ -228,10 +241,52 @@
           ]
         },
         {
-          "id": "colors",
-          "label": "Kolor",
+          "id": "fields",
+          "label": "Źródło",
+          "type": "data",
+          "props": [
+            {
+              "id": "textQueryVarId",
+              "value": "",
+              "helperValue": "",
+              "label": "Text",
+              "type": "TableField"
+            }
+          ]
+        },
+        {
+          "id": "display",
+          "label": "Wygląd",
           "type": "css",
           "props": [
+            {
+              "id": "font-size",
+              "value": "12",
+              "unit": "pt",
+              "label": "Rozmiar czcionki",
+              "type": "Size"
+            },
+            {
+              "id": "font-weight",
+              "value": "normal",
+              "label": "Grubość czcionki",
+              "list": [
+                {
+                  "id": "bold",
+                  "name": "Pogrubiona"
+                },
+                {
+                  "id": "normal",
+                  "name": "Normalna"
+                },
+                {
+                  "id": "lighter",
+                  "name": "Lekka"
+                }
+              ],
+              "list-values": ",,lighter",
+              "type": "Select"
+            },
             {
               "id": "color",
               "value": "text_color_1",
@@ -239,10 +294,24 @@
               "type": "Color"
             },
             {
-              "id": "background-color",
-              "value": "background_color",
-              "label": "Tło",
-              "type": "Color"
+              "id": "text-align",
+              "value": "start",
+              "label": "Położenie tekstu",
+              "list": [
+                {
+                  "id": "start",
+                  "name": "Początek"
+                },
+                {
+                  "id": "center",
+                  "name": "Środek"
+                },
+                {
+                  "id": "end",
+                  "name": "Koniec"
+                }
+              ],
+              "type": "Select"
             }
           ]
         }
@@ -258,34 +327,230 @@
     },
     {
       "id": "",
+      "type": "Card",
+      "label": "Karta",
+      "icon": "fa-address-card",
+      "children": [],
+      "propGroups": [
+        {
+          "id": "constants",
+          "label": "Wartości stałe",
+          "type": "args",
+          "props": [
+            {
+              "id": "title",
+              "value": "",
+              "label": "Tytuł",
+              "type": "String"
+            },
+            {
+              "id": "subtitle",
+              "value": "",
+              "label": "Podtytuł",
+              "type": "String"
+            },
+            {
+              "id": "text",
+              "value": "",
+              "label": "Tekst",
+              "type": "String"
+            }
+          ]
+        },
+        {
+          "id": "fields",
+          "label": "Źródło",
+          "type": "data",
+          "props": [
+            {
+              "id": "titleQueryVarId",
+              "value": "",
+              "helperValue": "",
+              "label": "Tytuł",
+              "type": "TableField"
+            },
+            {
+              "id": "subtitleQueryVarId",
+              "value": "",
+              "helperValue": "",
+              "label": "Podtytuł",
+              "type": "TableField"
+            },
+            {
+              "id": "textQueryVarId",
+              "value": "",
+              "helperValue": "",
+              "label": "Tekst",
+              "type": "TableField"
+            }
+          ]
+        },
+        {
+          "id": "action1",
+          "label": "Przycisk 1",
+          "type": "action",
+          "props": [
+            {
+              "id": "label",
+              "value": "",
+              "label": "Etykieta",
+              "type": "String"
+            },
+            {
+              "id": "color",
+              "value": "",
+              "label": "Kolor",
+              "type": "Color"
+            },
+            {
+              "id": "action",
+              "value": "",
+              "label": "Akcja",
+              "type": "Action"
+            }
+          ]
+        },
+        {
+          "id": "shape",
+          "label": "Kształt",
+          "type": "css",
+          "props": [
+            {
+              "id": "outlined",
+              "value": "",
+              "label": "Zarysowane",
+              "type": "Boolean"
+            },
+            {
+              "id": "shaped",
+              "value": "",
+              "label": "Zaokrąglone",
+              "type": "Boolean"
+            },
+            {
+              "id": "elevation",
+              "value": "",
+              "label": "Elewacja",
+              "type": "Slider",
+              "minValue": 0,
+              "maxValue": 24
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "",
+      "type": "Carousel",
+      "label": "Karuzela",
+      "icon": "fa-images",
+      "children": [],
+      "propGroups": [
+        {
+          "id": "properties",
+          "label": "Właściwości",
+          "type": "args",
+          "props": [
+            {
+              "id": "continous",
+              "value": "false",
+              "label": "Pętla",
+              "type": "Boolean"
+            },
+            {
+              "id": "interval",
+              "value": "0",
+              "label": "Interwał zmiany",
+              "type": "Text"
+            }
+          ]
+        },
+        {
+          "id": "fields",
+          "label": "Źródło",
+          "type": "data",
+          "props": [
+            {
+              "id": "queryId",
+              "value": "",
+              "label": "Zapytanie",
+              "variables": "",
+              "type": "Query"
+            },
+            {
+              "id": "titleQueryVarId",
+              "value": "",
+              "helperValue": "",
+              "label": "Tytuł",
+              "type": "TableField"
+            },
+            {
+              "id": "descriptionQueryVarId",
+              "value": "",
+              "helperValue": "",
+              "label": "Opis",
+              "type": "TableField"
+            },
+            {
+              "id": "imgQueryVarId",
+              "value": "",
+              "helperValue": "",
+              "label": "Obraz",
+              "type": "TableField"
+            },
+            {
+              "id": "bgQueryVarId",
+              "value": "",
+              "helperValue": "",
+              "label": "Kolor tła",
+              "type": "TableField"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "",
+      "type": "Divider",
+      "label": "Separator",
+      "icon": "fa-minus",
+      "children": [],
+      "propGroups": []
+    },
+    {
+      "id": "",
+      "type": "Expansion-Panels",
+      "label": "Menu rozwijane",
+      "icon": "fa-angles-down",
+      "children": [],
+      "propGroups": []
+    },
+    {
+      "id": "",
+      "type": "Rating",
+      "label": "Ocena",
+      "icon": "fa-star",
+      "children": [],
+      "propGroups": []
+    },
+    {
+      "id": "",
       "type": "Table",
       "label": "Tabela",
       "icon": "fa-table-cells",
       "children": [],
       "propGroups": [
         {
-          "id": "main",
+          "id": "data",
           "label": "Właściwości",
-          "type": "args",
+          "type": "data",
           "props": [
             {
               "id": "queryId",
               "value": "",
               "label": "Zapytanie",
+              "variables": "",
               "type": "Query"
-            }
-          ]
-        },
-        {
-          "id": "data",
-          "label": "Dane",
-          "type": "data",
-          "props": [
-            {
-              "id": "headers",
-              "values": [],
-              "label": "Nagłówki",
-              "type": "String"
             }
           ]
         }

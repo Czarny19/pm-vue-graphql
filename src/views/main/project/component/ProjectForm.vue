@@ -13,10 +13,15 @@
               <ProjectFormBasicInfo class="pt-4" :project="projectData" :themes="themes" @cleartheme="clearTheme"/>
 
               <CardSectionTitle :title="i18n('project.theme')"/>
-              <ColorReadOnlyList class="pa-3 pt-8" v-if="project.theme_id" :theme="currentTheme"/>
+              <ColorReadOnlyList class="pa-3 pt-8" v-if="currentTheme" :theme="currentTheme"/>
 
               <CardSectionTitle :title="i18n('project.datasource')"/>
-              <ProjectFormDatasource v-if="project" :project="projectData" :datasources="datasources" @clearsource="clearDatasource"/>
+              <ProjectFormDatasource
+                  v-if="project"
+                  :project="projectData"
+                  :datasources="datasources"
+                  @clearsource="clearDatasource">
+              </ProjectFormDatasource>
             </v-form>
 
             <v-divider class="ml-4 mr-4"></v-divider>
@@ -67,15 +72,13 @@ export default Vue.extend({
     return {
       valid: false,
       saving: false,
-      projectData: {}
+      projectData: {},
+      currentTheme: {}
     }
   },
   computed: {
     projectTyped(): AppProject {
       return (this.projectData as AppProject)
-    },
-    currentTheme(): Theme {
-      return (this.themes as Theme[]).filter((theme: Theme) => theme.id === this.project.theme_id)[0]
     }
   },
   methods: {
@@ -135,6 +138,14 @@ export default Vue.extend({
     project: {
       handler() {
         this.projectData = this.project
+      },
+      deep: true
+    },
+    projectData: {
+      handler() {
+        if (this.projectTyped.theme_id) {
+          this.currentTheme = (this.themes as Theme[]).filter((theme) => theme.id === this.projectTyped.theme_id)[0]
+        }
       },
       deep: true
     }

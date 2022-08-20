@@ -6,7 +6,7 @@
 import Vue from "vue";
 import {GET_QUERY_BY_ID} from "@/graphql/queries/query";
 import {AppWidget, Query} from "@/lib/types";
-import {getArgsProps, getCssProps} from "@/lib/widget";
+import {getArgsProps, getCssProps, getDataProps} from "@/lib/widget";
 import * as graphql_gen from "@/lib/graphql_gen";
 
 export default Vue.extend({
@@ -31,6 +31,9 @@ export default Vue.extend({
     },
     argsProps(): { [k: string]: string } {
       return getArgsProps(this.appWidget)
+    },
+    dataProps(): { [k: string]: string } {
+      return getDataProps(this.appWidget)
     },
     graphQLQuery(): string {
       const query = (this.query as Query)
@@ -69,11 +72,11 @@ export default Vue.extend({
       fetchPolicy: 'no-cache',
       variables(): { id: number } {
         return {
-          id: this.argsProps['queryId']
+          id: this.dataProps['queryId']
         }
       },
       skip(): boolean {
-        return !this.argsProps['queryId'] || !this.datasource
+        return !this.dataProps['queryId'] || !this.datasource
       },
       result({data}): void {
         this.query = data.QUERY[0]

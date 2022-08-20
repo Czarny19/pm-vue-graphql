@@ -4,13 +4,14 @@
       {{ widget.id }}
     </div>
 
-    <div class="pa-4 fill-height" :style="{'background-color': theme.background_color}">
+    <div class="fill-height" :style="{'background-color': theme.background_color}">
       <template v-for="(child) in widget.children">
         <BaseWidget
             :widget="child"
             :theme="theme"
             :datasource="datasource"
-            :key="child.name">
+            :key="child.name"
+            :data-item="dataItem">
         </BaseWidget>
       </template>
     </div>
@@ -26,7 +27,8 @@ export default Vue.extend({
   props: {
     widget: Object,
     theme: Object,
-    datasource: Object
+    datasource: Object,
+    dataItem: Object
   }
 })
 </script>
