@@ -21,6 +21,7 @@
             :items="units"
             :value="currentProp.unit"
             v-model="currentProp.unit"
+            :readonly="currentProp.lockUnit"
             item-color="accent">
 
           <template v-slot:item="{item}">

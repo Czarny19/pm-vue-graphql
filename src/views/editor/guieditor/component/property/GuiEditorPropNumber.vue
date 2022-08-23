@@ -1,20 +1,19 @@
 <template>
-  <v-checkbox
-      class="pb-1"
+  <v-text-field
+      class="pt-3"
       color="accent"
-      off-icon="fa-times-circle"
-      on-icon="fa-check-circle"
-      hide-details
+      type="number"
+      outlined dense hide-details
       :label="prop.label"
       v-model="currentProp.value">
-  </v-checkbox>
+  </v-text-field>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 
 export default Vue.extend({
-  name: 'GuiEditorPropBool',
+  name: 'GuiEditorPropNumber',
   props: {
     prop: Object
   },

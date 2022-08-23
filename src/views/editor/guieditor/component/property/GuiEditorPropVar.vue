@@ -1,28 +1,37 @@
 <template>
-  <v-textarea
+  <v-select
       class="pt-3"
       color="accent"
+      item-color="accent"
       outlined dense hide-details
-      :rows="2"
+      item-text="name"
+      item-value="id"
       :label="prop.label"
+      :items="variables"
       v-model="currentProp.value">
-  </v-textarea>
+
+    <template v-slot:item="{item}">
+      <div class="text-start">{{ item.name }}</div>
+    </template>
+
+  </v-select>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 
 export default Vue.extend({
-  name: 'GuiEditorPropString',
+  name: 'GuiEditorPropVar',
   props: {
-    prop: Object
+    prop: Object,
+    variables: Array
   },
   data() {
     return {
       currentProp: {}
     }
   },
-  beforeMount() {
+  async beforeMount() {
     this.currentProp = this.prop
   }
 })

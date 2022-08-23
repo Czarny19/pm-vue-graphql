@@ -15,7 +15,7 @@
 
       <LoadingCircular v-if="loading"/>
 
-      <v-card v-else color="secondary" v-for="page in pages" :key="page.id">
+      <v-card v-else color="secondary" v-for="page in pages" :key="page.id" class="mt-3">
         <v-container fluid class="pl-6 pr-6">
           <v-row no-gutters>
             <v-col class="text-start ma-auto text-body-1">

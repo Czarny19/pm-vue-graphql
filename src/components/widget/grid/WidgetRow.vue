@@ -1,6 +1,19 @@
 <template>
   <div>
-    <v-row no-gutters :style="cssProps">
+    <v-row v-if="!queryData.length" no-gutters :style="cssProps">
+      <template v-for="(child, indexChild) in widget.children">
+        <BaseWidget
+            :key="indexChild"
+            :widget="child"
+            :theme="theme"
+            :datasource="datasource"
+            :data-item="dataItem"
+            :variables="variables">
+        </BaseWidget>
+      </template>
+    </v-row>
+
+    <v-row v-else>
       <template v-for="(item, indexData) in queryData">
         <template v-for="(child, indexChild) in widget.children">
           <BaseWidget
@@ -33,7 +46,8 @@ export default Vue.extend({
     widget: Object,
     theme: Object,
     datasource: Object,
-    dataItem: Object
+    dataItem: Object,
+    variables: Array
   },
   data() {
     return {
@@ -79,11 +93,11 @@ export default Vue.extend({
       fetchPolicy: 'no-cache',
       variables(): { id: number } {
         return {
-          id: this.dataProps['queryId']
+          id: this.dataProps.queryId
         }
       },
       skip(): boolean {
-        return !this.dataProps['queryId'] || !this.datasource
+        return !this.dataProps.queryId || !this.datasource
       },
       result({data}): void {
         this.query = data.QUERY[0]

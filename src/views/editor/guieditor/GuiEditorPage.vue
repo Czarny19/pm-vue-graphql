@@ -33,6 +33,7 @@
               :right-nav-shown="rightNavShown"
               :preview-open="previewOpen"
               :datasource="datasource"
+              :variables="variables"
               @activewidget="setActiveWidget"
               @changeleftnav="changeLeftNavShown"
               @changerightnav="changeRightNavShown"
@@ -46,7 +47,9 @@
               :theme="theme"
               :queries="queries"
               :schema="schema"
-              @delete="removeWidget(page.definition)">
+              :variables="variables"
+              @delete="removeWidget(page.definition)"
+              @refreshvars="refreshVars">
           </GuiEditorRightNav>
         </v-col>
       </v-row>
@@ -71,6 +74,7 @@ import {GET_QUERY_LIST_BY_DATA_SOURCE_ID} from "@/graphql/queries/query";
 import {GET_DATA_SOURCE_BY_ID} from "@/graphql/queries/datasource";
 import {AppWidget} from "@/lib/types";
 import {decodeDatasourceSecret, getCleanGraphQLSchema} from "@/lib/schema";
+import {GET_PROP_LIST_BY_PAGE_ID} from "@/graphql/queries/prop";
 
 export default Vue.extend({
   name: 'GuiEditorPage',
@@ -100,13 +104,14 @@ export default Vue.extend({
       page: {},
       activeWidget: {},
       datasource: {},
+      variables: [],
       queries: [],
       schema: []
     }
   },
   computed: {
     projectId(): number {
-      return  Number(this.$route.params.projectId)
+      return Number(this.$route.params.projectId)
     },
     pageId(): number {
       return Number(this.$route.params.pageId)
@@ -237,6 +242,9 @@ export default Vue.extend({
     },
     importPage(importPage: JSON): void {
       (this.page as { definition: JSON }).definition = importPage
+    },
+    refreshVars(): void {
+      this.$apollo.queries.PROP.refetch()
     }
   },
   apollo: {
@@ -260,7 +268,7 @@ export default Vue.extend({
     },
     THEME: {
       query: GET_THEME_BY_ID,
-      fetchPolicy: 'network-only',
+      fetchPolicy: 'no-cache',
       variables(): { id: number } {
         return {
           id: this.project.theme_id
@@ -275,7 +283,7 @@ export default Vue.extend({
     },
     PAGE: {
       query: GET_PAGE_BY_ID,
-      fetchPolicy: 'network-only',
+      fetchPolicy: 'no-cache',
       variables(): { id: number } {
         return {
           id: this.pageId
@@ -287,6 +295,21 @@ export default Vue.extend({
       result({data}): void {
         this.page = data.PAGE[0]
         this.loading = false
+      }
+    },
+    PROP: {
+      query: GET_PROP_LIST_BY_PAGE_ID,
+      fetchPolicy: 'no-cache',
+      variables(): { pageId: number } {
+        return {
+          pageId: this.pageId
+        }
+      },
+      skip(): boolean {
+        return !this.pageId
+      },
+      result({data}): void {
+        this.variables = data.PROP
       }
     },
     DATA_SOURCE: {
@@ -304,14 +327,14 @@ export default Vue.extend({
         this.datasource = data.DATA_SOURCE[0]
         this.datasource.secret = decodeDatasourceSecret(data.DATA_SOURCE[0].secret)
 
-        await getCleanGraphQLSchema( this.datasource.address,  this.datasource.secret).then((result) => {
+        await getCleanGraphQLSchema(this.datasource.address, this.datasource.secret).then((result) => {
           this.schema = result.schema
         })
       }
     },
     QUERY: {
       query: GET_QUERY_LIST_BY_DATA_SOURCE_ID,
-      fetchPolicy: 'network-only',
+      fetchPolicy: 'no-cache',
       variables(): { datasourceId: number } {
         return {
           datasourceId: this.datasourceId

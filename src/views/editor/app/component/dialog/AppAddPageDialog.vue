@@ -86,7 +86,7 @@ export default Vue.extend({
     dialog(): void {
       this.isOpen = this.dialog
     }
-  },
+  }
 })
 </script>
 

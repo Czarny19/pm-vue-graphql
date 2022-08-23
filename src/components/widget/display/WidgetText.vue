@@ -5,7 +5,7 @@
 <script lang="ts">
 import Vue from "vue";
 import {AppWidget} from "@/lib/types";
-import {getArgsProps, getCssProps, getDataProps} from "@/lib/widget";
+import {getArgsProps, getConstAndDataValue, getCssProps, getDataProps} from "@/lib/widget";
 
 export default Vue.extend({
   name: 'WidgetText',
@@ -27,9 +27,11 @@ export default Vue.extend({
     dataProps(): { [k: string]: string } {
       return getDataProps(this.appWidget)
     },
+    data(): never {
+      return this.dataItem as never
+    },
     displayValue(): string {
-      return this.argsProps.text ? this.argsProps.text : '' +
-      this.dataItem && this.dataProps.queryVarId ? this.dataItem[this.dataProps.queryVarId] : ''
+      return getConstAndDataValue(this.argsProps.text, this.data, this.dataProps.queryVarId)
     }
   }
 })

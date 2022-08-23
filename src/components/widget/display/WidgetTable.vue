@@ -1,30 +1,39 @@
 <template>
-  <v-carousel v-model="slide">
-    <v-carousel-item  :style="cssProps" v-for="(item, index) in queryData" :key="index">
-      <v-sheet :color="argsProps" height="100%" tile>
-        <v-row
-            class="fill-height"
-            align="center"
-            justify="center"
-        >
-          <div class="text-h2">
-            Slide {{ i + 1 }}
-          </div>
-        </v-row>
-      </v-sheet>
-    </v-carousel-item>
-  </v-carousel>
+  <v-data-table
+      :items-per-page="paging ? pageSize : -1"
+      hide-default-footer
+      :loading="!datasource"
+      :headers="tableHeaders"
+      :page.sync="page"
+      :items="queryData"
+      :style="cssProps"
+      :dark="dark"
+      :light="!dark">
+
+    <template v-slot:footer>
+      <div v-if="paging" class="text-center pt-2">
+        <v-pagination
+            v-model="page"
+            :value="1"
+            :length="Math.ceil(queryData.length / pageSize)"
+            prev-icon="fa-caret-left"
+            next-icon="fa-caret-right">
+        </v-pagination>
+      </div>
+    </template>
+
+  </v-data-table>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import {AppWidget, Query} from "@/lib/types";
+import {GET_QUERY_BY_ID} from "@/graphql/queries/query";
+import {AppWidget, Query, TableHeader} from "@/lib/types";
 import {getArgsProps, getCssProps, getDataProps} from "@/lib/widget";
 import * as graphql_gen from "@/lib/graphql_gen";
-import {GET_QUERY_BY_ID} from "@/graphql/queries/query";
 
 export default Vue.extend({
-  name: 'WidgetCarousel',
+  name: 'WidgetTable',
   props: {
     widget: Object,
     theme: Object,
@@ -32,9 +41,9 @@ export default Vue.extend({
   },
   data() {
     return {
-      slide: 0,
       query: {},
-      queryData: []
+      queryData: [],
+      page: 0
     }
   },
   computed: {
@@ -72,13 +81,20 @@ export default Vue.extend({
       )
     },
     tableHeaders(): { text: string; value: string }[] {
-      const headers: { text: string; value: string }[] = [];
+      const dataPropGroups = this.appWidget.propGroups.filter((group: { type: string }) => group.type === 'data')[0]
+      const props = (dataPropGroups as { props: { id: string, labels: TableHeader[] }[] }).props
+      const labels = props.filter((prop) => prop.id === 'queryId')[0].labels
 
-      (this.query as Query).fields?.split(';').forEach((field) => {
-        headers.push({text: field, value: field})
-      })
-
-      return headers
+      return labels.filter(label => label.visible).sort((a, b) => Number(a.order) - Number(b.order))
+    },
+    dark(): boolean {
+      return Boolean(this.argsProps.dark)
+    },
+    paging(): boolean {
+      return Boolean(this.argsProps.paging)
+    },
+    pageSize(): number {
+      return Number(this.argsProps.pageSize)
     }
   },
   apollo: {
@@ -87,11 +103,11 @@ export default Vue.extend({
       fetchPolicy: 'no-cache',
       variables(): { id: number } {
         return {
-          id: this.dataProps['queryId']
+          id: this.dataProps.queryId
         }
       },
       skip(): boolean {
-        return !this.dataProps['queryId'] || !this.datasource
+        return !this.dataProps.queryId || !this.datasource
       },
       result({data}): void {
         this.query = data.QUERY[0]

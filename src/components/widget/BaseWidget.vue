@@ -3,7 +3,8 @@
       v-if="widget.type === 'Container'"
       :widget="widget" :theme="theme"
       :datasource="datasource"
-      :data-item="dataItem">
+      :data-item="dataItem"
+      :variables="variables">
   </WidgetContainer>
 
   <WidgetRow
@@ -11,7 +12,8 @@
       :widget="widget"
       :theme="theme"
       :datasource="datasource"
-      :data-item="dataItem">
+      :data-item="dataItem"
+      :variables="variables">
   </WidgetRow>
 
   <WidgetColumn
@@ -19,8 +21,18 @@
       :widget="widget"
       :theme="theme"
       :datasource="datasource"
-      :data-item="dataItem">
+      :data-item="dataItem"
+      :variables="variables">
   </WidgetColumn>
+
+  <WidgetForm
+      v-else-if="widget.type === 'Form'"
+      :widget="widget"
+      :theme="theme"
+      :datasource="datasource"
+      :data-item="dataItem"
+      :variables="variables">
+  </WidgetForm>
 
   <WidgetText
       v-else-if="widget.type === 'Text'"
@@ -36,11 +48,25 @@
       :data-item="dataItem">
   </WidgetCard>
 
+  <WidgetDivider
+      v-else-if="widget.type === 'Divider'"
+      :widget="widget"
+      :theme="theme">
+  </WidgetDivider>
+
   <WidgetCarousel
-      v-else-if="widget.type === 'Carousel'">
+      v-else-if="widget.type === 'Carousel'"
+      :widget="widget"
+      :datasource="datasource">
   </WidgetCarousel>
 
-  <WidgetTextField v-else-if="widget.type === 'Text-Field'" :widget="widget" :theme="theme"/>
+  <WidgetTextField
+      v-else-if="widget.type === 'Text-Field'"
+      :widget="widget"
+      :theme="theme"
+      :variables="variables">
+  </WidgetTextField>
+
   <WidgetTable v-else-if="widget.type === 'Table'" :widget="widget" :theme="theme" :datasource="datasource"/>
 </template>
 
@@ -49,18 +75,22 @@
 // @ts-nocheck
 
 import Vue from "vue";
-import WidgetContainer from "@/components/widget/WidgetContainer.vue";
-import WidgetRow from "@/components/widget/WidgetRow.vue";
-import WidgetColumn from "@/components/widget/WidgetColumn.vue";
-import WidgetText from "@/components/widget/WidgetText.vue";
-import WidgetTextField from "@/components/widget/WidgetTextField.vue";
-import WidgetTable from "@/components/widget/WidgetTable.vue";
-import WidgetCard from "@/components/widget/WidgetCard.vue";
-import WidgetCarousel from "@/components/widget/WidgetCarousel.vue";
+import WidgetContainer from "@/components/widget/grid/WidgetContainer.vue";
+import WidgetRow from "@/components/widget/grid/WidgetRow.vue";
+import WidgetColumn from "@/components/widget/grid/WidgetColumn.vue";
+import WidgetText from "@/components/widget/display/WidgetText.vue";
+import WidgetTextField from "@/components/widget/input/WidgetTextField.vue";
+import WidgetTable from "@/components/widget/display/WidgetTable.vue";
+import WidgetCard from "@/components/widget/display/WidgetCard.vue";
+import WidgetCarousel from "@/components/widget/display/WidgetCarousel.vue";
+import WidgetDivider from "@/components/widget/display/WidgetDivider.vue";
+import WidgetForm from "@/components/widget/grid/WidgetForm.vue";
 
 export default Vue.extend({
   name: 'BaseWidget',
   components: {
+    WidgetForm,
+    WidgetDivider,
     WidgetCarousel,
     WidgetCard,
     WidgetTable,
@@ -75,6 +105,7 @@ export default Vue.extend({
     theme: Object,
     datasource: Object,
     dataItem: Object,
+    variables: Array
   }
 })
 </script>

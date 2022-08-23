@@ -209,6 +209,19 @@
     "variableNameTooLong": "Nazwa nie może być dłuższa niż 30 znaków",
     "varaibleNameNoSpecialChars": "Nazwa nie może zawierać znaków specjalnych oraz spacji",
     "mutationSuccess": "Sukces",
-    "data": "Dane"
+    "data": "Dane",
+    "labels": "Etykiety pól",
+    "propName": "Nazwa zmiennej",
+    "propNameRequired": "Nazwa zmiennej jest wymagana",
+    "propNameTooLong": "Nazwa zmiennej nie może być dłuższa niż 30 znaków",
+    "propNameNoSpecialChars": "Nazwa zmiennej nie może zawierać znaków specjalnych oraz spacji",
+    "propType": "Typ zmiennej",
+    "propTypeRequired": "Typ zmiennej jest wymagany",
+    "propValue": "Wartość stała",
+    "propString": "Tekst",
+    "propNumber": "Liczba",
+    "valueRequired": "Pole wymagane",
+    "valueTooLong": "Przekroczono maksymalną długość pola",
+    "valueNoSpecialChars": "Pole nie może zawierać znaków specjalnych oraz spacji"
   }
 }

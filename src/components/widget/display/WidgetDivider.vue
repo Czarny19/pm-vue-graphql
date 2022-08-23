@@ -1,7 +1,5 @@
 <template>
-  <v-text-field
-      :label="widget.id">
-  </v-text-field>
+  <v-divider :style="cssProps" :vertical="argsProps.vertical"></v-divider>
 </template>
 
 <script lang="ts">
@@ -10,7 +8,7 @@ import {AppWidget} from "@/lib/types";
 import {getArgsProps, getCssProps} from "@/lib/widget";
 
 export default Vue.extend({
-  name: 'WidgetTextField',
+  name: 'WidgetDivider',
   props: {
     widget: Object,
     theme: Object

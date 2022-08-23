@@ -129,3 +129,18 @@ export type Mutation = {
     variables: string;
     modify_date: Date;
 }
+
+export type TableHeader = {
+    text: string;
+    value: string;
+    order: number;
+    visible: boolean;
+}
+
+export type PageVariable = {
+    id: number;
+    name: string;
+    type: string;
+    type_display: string;
+    value: string;
+}

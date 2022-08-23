@@ -20,6 +20,13 @@
       @move="move">
   </GuiEditorWidgetColumn>
 
+  <GuiEditorWidgetForm
+      v-else-if="widget.type === 'Form'"
+      :widget="widget"
+      @activewidget="setActive"
+      @move="move">
+  </GuiEditorWidgetForm>
+
   <GuiEditorWidgetOther
       v-else
       :widget="widget"
@@ -38,10 +45,13 @@ import GuiEditorWidgetRow from "@/views/editor/guieditor/component/widget/grid/G
 import GuiEditorWidgetColumn from "@/views/editor/guieditor/component/widget/grid/GuiEditorWidgetColumn.vue";
 import GuiEditorWidgetOther from "@/views/editor/guieditor/component/widget/GuiEditorWidgetOther.vue";
 import {AppWidget} from "@/lib/types";
+import GuiEditorWidgetForm from "@/views/editor/guieditor/component/widget/grid/GuiEditorWidgetForm.vue";
 
 export default Vue.extend({
   name: 'GuiEditorWidget',
-  components: {GuiEditorWidgetOther, GuiEditorWidgetContainer, GuiEditorWidgetRow, GuiEditorWidgetColumn},
+  components: {
+    GuiEditorWidgetForm,
+    GuiEditorWidgetOther, GuiEditorWidgetContainer, GuiEditorWidgetRow, GuiEditorWidgetColumn},
   props: {
     widget: Object
   },

@@ -1,16 +1,16 @@
 <template>
-  <v-container fluid :style="cssProps">
-    <template v-for="(child) in widget.children">
+  <v-col :cols="argsProps.cols ? Number(argsProps.cols) : ''" :style="cssProps">
+    <template v-for="(child) in appWidget.children">
       <BaseWidget
-          class="pa-3"
           :widget="child"
           :theme="theme"
           :datasource="datasource"
           :key="child.name"
-          :data-item="dataItem">
+          :data-item="dataItem"
+          :variables="variables">
       </BaseWidget>
     </template>
-  </v-container>
+  </v-col>
 </template>
 
 <script lang="ts">
@@ -18,17 +18,18 @@
 // @ts-nocheck
 
 import Vue from "vue";
-import {getCssProps} from "@/lib/widget";
 import {AppWidget} from "@/lib/types";
+import {getArgsProps, getCssProps} from "@/lib/widget";
 
 export default Vue.extend({
-  name: 'WidgetContainer',
+  name: 'WidgetColumn',
   components: {BaseWidget: () => import("@/components/widget/BaseWidget.vue")},
   props: {
     widget: Object,
     theme: Object,
     datasource: Object,
-    dataItem: Object
+    dataItem: Object,
+    variables: Array
   },
   computed: {
     appWidget(): AppWidget {
@@ -36,8 +37,11 @@ export default Vue.extend({
     },
     cssProps(): ({ [p: string]: string })[] {
       return getCssProps(this.appWidget, this.theme)
+    },
+    argsProps(): { [k: string]: string } {
+      return getArgsProps(this.appWidget)
     }
-  }
+  },
 })
 </script>
 

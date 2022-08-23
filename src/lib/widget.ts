@@ -1,4 +1,5 @@
 import {AppWidget, AppWidgetProp, ThemeColors} from "@/lib/types";
+import {i18n} from "@/main";
 
 export const themeColors = ['primary_color', 'secondary_color', 'accent_color', 'info_color',
     'success_color', 'error_color', 'text_color_1', 'text_color_2', 'background_color']
@@ -64,4 +65,39 @@ export const getDataProps = (widget: AppWidget): { [k: string]: string } => {
     dataProps.forEach((prop: AppWidgetProp) => argsObject[prop.id] = prop.value)
 
     return argsObject
+}
+
+export const getColorPropValue = (theme: ThemeColors, propName: string): string => {
+    if (themeColors.includes(propName)) {
+        return theme[propName as keyof ThemeColors]
+    }
+
+    return propName
+}
+
+export const getConstAndDataValue = (constVal: string, dataItem: never, dataVal: string): string => {
+    return (constVal ? constVal : '') + ' ' + (dataItem && dataVal ? dataItem[dataVal] : '')
+}
+
+export const getRulesForInput = (widget: AppWidget, counter: number | undefined): unknown[] => {
+    const rules = []
+    const props = getArgsProps(widget)
+
+    if (props.required) {
+        rules.push((v: string) => (!!v) || i18n.t('editor.valueRequired'))
+    }
+
+    if (counter) {
+        rules.push((v: string) => (v && v.length <= Number(counter ?? 0)) || i18n.t('editor.valueTooLong'))
+    }
+
+    if (props.specialChars) {
+        rules.push((v: string) => (v && !/[^a-zA-Z0-9]/.test(v)) || i18n.t('editor.valueNoSpecialChars'))
+    }
+
+    if (props.customRegex) {
+        rules.push((v: string) => (v && !(new RegExp(props.customRegex).test(v))) || (props.customRegexMsg ?? ''))
+    }
+
+    return rules
 }

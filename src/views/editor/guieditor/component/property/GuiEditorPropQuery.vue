@@ -37,12 +37,61 @@
         </div>
       </v-tooltip>
     </div>
+
+    <div v-if="prop.customLabels">
+      {{ i18n('editor.labels') }}
+
+      <div v-for="(label, index) in prop.labels" :key="index" class="pt-2">
+        <span class="text-body-2">{{ label.value }}</span>
+
+        <v-row>
+          <v-col cols="12">
+            <v-text-field
+                class="pt-3"
+                color="accent"
+                outlined dense hide-details
+                :label="label.value"
+                v-model="label.text">
+            </v-text-field>
+          </v-col>
+
+          <v-col cols="auto" class="pa-0 pl-3 pb-3">
+            <v-text-field
+                class="pt-0"
+                color="accent"
+                outlined dense hide-details
+                type="number"
+                v-model="label.order">
+            </v-text-field>
+          </v-col>
+
+          <v-spacer></v-spacer>
+
+          <v-col cols="auto" class="pl-3 pr-4 pb-1 pt-1 text-end">
+            <v-btn
+                fab
+                x-small
+                color="primary"
+                hide-details
+                v-model="label.visible"
+                @click="label.visible = !label.visible">
+
+              <v-icon v-if="label.visible">fa-check</v-icon>
+              <v-icon v-else>fa-times</v-icon>
+
+            </v-btn>
+          </v-col>
+        </v-row>
+
+        <v-divider class="mt-3" v-if="index + 1 < prop.labels.length"></v-divider>
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import {Query} from "@/lib/types";
+import {Query, TableHeader} from "@/lib/types";
 import * as graphql_gen from "@/lib/graphql_gen";
 
 export default Vue.extend({
@@ -53,7 +102,9 @@ export default Vue.extend({
   },
   data() {
     return {
-      currentProp: {}
+      currentProp: {},
+      queryId: -1,
+      propInitialized: false
     }
   },
   computed: {
@@ -89,8 +140,39 @@ export default Vue.extend({
       )
     }
   },
+  watch: {
+    currentProp: {
+      handler() {
+        const prop = this.currentProp as { labels: string[], value: number }
+
+        if (!this.propInitialized) {
+          this.propInitialized = true
+          return
+        }
+
+        if (this.queryId !== prop.value) {
+          this.queryId = prop.value
+
+          if (this.currentQuery) {
+            (this.currentProp as { labels: string[] }).labels = []
+
+            this.currentQuery.fields.split(';').forEach((variable, index) => {
+              (this.currentProp as { labels: TableHeader[] }).labels.push({
+                text: variable,
+                value: variable,
+                order: index + 1,
+                visible: true
+              });
+            });
+          }
+        }
+      },
+      deep: true
+    }
+  },
   beforeMount() {
     this.currentProp = this.prop
+    this.queryId = this.prop.value
   }
 })
 </script>

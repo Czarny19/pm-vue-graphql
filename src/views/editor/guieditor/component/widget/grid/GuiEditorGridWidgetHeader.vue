@@ -39,9 +39,6 @@ export default Vue.extend({
     },
     move(up: boolean): void {
       this.$emit('move', up)
-    },
-    onDrop(): void {
-      console.log("aaa")
     }
   }
 })

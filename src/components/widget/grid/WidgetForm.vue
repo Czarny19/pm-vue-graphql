@@ -1,15 +1,16 @@
 <template>
-  <v-col :cols="argsProps.cols ? Number(argsProps.cols) : ''" :style="cssProps">
+  <v-form :style="cssProps">
     <template v-for="(child) in appWidget.children">
       <BaseWidget
           :widget="child"
           :theme="theme"
           :datasource="datasource"
           :key="child.name"
-          :data-item="dataItem">
+          :data-item="dataItem"
+          :variables="variables">
       </BaseWidget>
     </template>
-  </v-col>
+  </v-form>
 </template>
 
 <script lang="ts">
@@ -18,16 +19,17 @@
 
 import Vue from "vue";
 import {AppWidget} from "@/lib/types";
-import {getArgsProps, getCssProps} from "@/lib/widget";
+import {getCssProps} from "@/lib/widget";
 
 export default Vue.extend({
-  name: 'WidgetColumn',
+  name: 'WidgetForm',
   components: {BaseWidget: () => import("@/components/widget/BaseWidget.vue")},
   props: {
     widget: Object,
     theme: Object,
     datasource: Object,
-    dataItem: Object
+    dataItem: Object,
+    variables: Array
   },
   computed: {
     appWidget(): AppWidget {
@@ -35,11 +37,8 @@ export default Vue.extend({
     },
     cssProps(): ({ [p: string]: string })[] {
       return getCssProps(this.appWidget, this.theme)
-    },
-    argsProps(): { [k: string]: string } {
-      return getArgsProps(this.appWidget)
     }
-  },
+  }
 })
 </script>
 

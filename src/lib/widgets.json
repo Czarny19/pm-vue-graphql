@@ -4,32 +4,6 @@
       "type": "Common",
       "propGroups": [
         {
-          "id": "border",
-          "label": "Obramowanie",
-          "type": "css",
-          "props": [
-            {
-              "id": "border-style",
-              "value": "none",
-              "label": "Styl",
-              "type": "Border"
-            },
-            {
-              "id": "border-width",
-              "value": "0",
-              "unit": "px",
-              "label": "Szerokość",
-              "type": "Size"
-            },
-            {
-              "id": "border-color",
-              "value": "",
-              "label": "Kolor",
-              "type": "Color"
-            }
-          ]
-        },
-        {
           "id": "padding",
           "label": "Padding",
           "type": "css",
@@ -163,6 +137,32 @@
               "type": "Size"
             }
           ]
+        },
+        {
+          "id": "border",
+          "label": "Obramowanie",
+          "type": "css",
+          "props": [
+            {
+              "id": "border-style",
+              "value": "none",
+              "label": "Styl",
+              "type": "Border"
+            },
+            {
+              "id": "border-width",
+              "value": "0",
+              "unit": "px",
+              "label": "Szerokość",
+              "type": "Size"
+            },
+            {
+              "id": "border-color",
+              "value": "",
+              "label": "Kolor",
+              "type": "Color"
+            }
+          ]
         }
       ]
     },
@@ -183,6 +183,32 @@
               "value": "",
               "label": "Zapytanie",
               "type": "Query"
+            }
+          ]
+        },
+        {
+          "id": "border",
+          "label": "Obramowanie",
+          "type": "css",
+          "props": [
+            {
+              "id": "border-style",
+              "value": "none",
+              "label": "Styl",
+              "type": "Border"
+            },
+            {
+              "id": "border-width",
+              "value": "0",
+              "unit": "px",
+              "label": "Szerokość",
+              "type": "Size"
+            },
+            {
+              "id": "border-color",
+              "value": "",
+              "label": "Kolor",
+              "type": "Color"
             }
           ]
         }
@@ -209,16 +235,34 @@
               "maxValue": 12
             }
           ]
+        },
+        {
+          "id": "border",
+          "label": "Obramowanie",
+          "type": "css",
+          "props": [
+            {
+              "id": "border-style",
+              "value": "none",
+              "label": "Styl",
+              "type": "Border"
+            },
+            {
+              "id": "border-width",
+              "value": "0",
+              "unit": "px",
+              "label": "Szerokość",
+              "type": "Size"
+            },
+            {
+              "id": "border-color",
+              "value": "",
+              "label": "Kolor",
+              "type": "Color"
+            }
+          ]
         }
       ]
-    },
-    {
-      "id": "",
-      "type": "Button",
-      "label": "Przycisk",
-      "icon": "fa-caret-square-right",
-      "children": [],
-      "propGroups": []
     },
     {
       "id": "",
@@ -241,7 +285,7 @@
           ]
         },
         {
-          "id": "fields",
+          "id": "source",
           "label": "Źródło",
           "type": "data",
           "props": [
@@ -263,6 +307,7 @@
               "id": "font-size",
               "value": "12",
               "unit": "pt",
+              "lockUnit": true,
               "label": "Rozmiar czcionki",
               "type": "Size"
             },
@@ -314,16 +359,34 @@
               "type": "Select"
             }
           ]
+        },
+        {
+          "id": "border",
+          "label": "Obramowanie",
+          "type": "css",
+          "props": [
+            {
+              "id": "border-style",
+              "value": "none",
+              "label": "Styl",
+              "type": "Border"
+            },
+            {
+              "id": "border-width",
+              "value": "0",
+              "unit": "px",
+              "label": "Szerokość",
+              "type": "Size"
+            },
+            {
+              "id": "border-color",
+              "value": "",
+              "label": "Kolor",
+              "type": "Color"
+            }
+          ]
         }
       ]
-    },
-    {
-      "id": "",
-      "type": "Text-Field",
-      "label": "Pole tekstowe",
-      "icon": "fa-keyboard",
-      "children": [],
-      "propGroups": []
     },
     {
       "id": "",
@@ -411,25 +474,56 @@
           ]
         },
         {
+          "id": "display",
+          "label": "Wygląd",
+          "type": "args",
+          "props": [
+            {
+              "id": "background_color",
+              "value": "primary_color",
+              "label": "Kolor",
+              "type": "Color"
+            },
+            {
+              "id": "title_color",
+              "value": "text_color_1",
+              "label": "Tytuł - Kolor",
+              "type": "Color"
+            },
+            {
+              "id": "subtitle_color",
+              "value": "text_color_2",
+              "label": "Podtytuł - Kolor",
+              "type": "Color"
+            },
+            {
+              "id": "text_color",
+              "value": "text_color_2",
+              "label": "Tekst - Kolor",
+              "type": "Color"
+            }
+          ]
+        },
+        {
           "id": "shape",
           "label": "Kształt",
-          "type": "css",
+          "type": "args",
           "props": [
             {
               "id": "outlined",
-              "value": "",
+              "value": false,
               "label": "Zarysowane",
               "type": "Boolean"
             },
             {
               "id": "shaped",
-              "value": "",
+              "value": false,
               "label": "Zaokrąglone",
               "type": "Boolean"
             },
             {
               "id": "elevation",
-              "value": "",
+              "value": 0,
               "label": "Elewacja",
               "type": "Slider",
               "minValue": 0,
@@ -452,16 +546,23 @@
           "type": "args",
           "props": [
             {
-              "id": "continous",
-              "value": "false",
+              "id": "cycle",
+              "value": false,
               "label": "Pętla",
               "type": "Boolean"
             },
             {
               "id": "interval",
-              "value": "0",
+              "value": 6,
               "label": "Interwał zmiany",
-              "type": "Text"
+              "type": "Duration"
+            },
+            {
+              "id": "height",
+              "value": "300",
+              "unit": "px",
+              "label": "Wysokość",
+              "type": "Size"
             }
           ]
         },
@@ -474,7 +575,6 @@
               "id": "queryId",
               "value": "",
               "label": "Zapytanie",
-              "variables": "",
               "type": "Query"
             },
             {
@@ -499,39 +599,22 @@
               "type": "TableField"
             },
             {
-              "id": "bgQueryVarId",
+              "id": "bgColorQueryVarId",
               "value": "",
               "helperValue": "",
               "label": "Kolor tła",
+              "type": "TableField"
+            },
+            {
+              "id": "textColorQueryVarId",
+              "value": "",
+              "helperValue": "",
+              "label": "Kolor tekstu",
               "type": "TableField"
             }
           ]
         }
       ]
-    },
-    {
-      "id": "",
-      "type": "Divider",
-      "label": "Separator",
-      "icon": "fa-minus",
-      "children": [],
-      "propGroups": []
-    },
-    {
-      "id": "",
-      "type": "Expansion-Panels",
-      "label": "Menu rozwijane",
-      "icon": "fa-angles-down",
-      "children": [],
-      "propGroups": []
-    },
-    {
-      "id": "",
-      "type": "Rating",
-      "label": "Ocena",
-      "icon": "fa-star",
-      "children": [],
-      "propGroups": []
     },
     {
       "id": "",
@@ -548,13 +631,238 @@
             {
               "id": "queryId",
               "value": "",
+              "customLabels": true,
+              "labels": [],
               "label": "Zapytanie",
-              "variables": "",
               "type": "Query"
+            }
+          ]
+        },
+        {
+          "id": "display",
+          "label": "Wygląd",
+          "type": "args",
+          "props": [
+            {
+              "id": "dark",
+              "value": false,
+              "label": "Ciemny motyw?",
+              "type": "Boolean"
+            },
+            {
+              "id": "paging",
+              "value": true,
+              "label": "Stronicowanie włączone?",
+              "type": "Boolean"
+            },
+            {
+              "id": "pageSize",
+              "value": 10,
+              "label": "Wielkość strony",
+              "type": "Number"
             }
           ]
         }
       ]
+    },
+    {
+      "id": "",
+      "type": "Divider",
+      "label": "Separator",
+      "icon": "fa-minus",
+      "children": [],
+      "propGroups": [
+        {
+          "id": "display",
+          "label": "Wygląd",
+          "type": "css",
+          "props": [
+            {
+              "id": "background-color",
+              "value": "primary_color",
+              "label": "Kolor",
+              "type": "Color"
+            },
+            {
+              "id": "border-width",
+              "value": "1",
+              "unit": "px",
+              "lockUnit": true,
+              "label": "Grubość",
+              "type": "Size"
+            }
+          ]
+        },
+        {
+          "id": "direction",
+          "label": "Kierunek",
+          "type": "args",
+          "props": [
+            {
+              "id": "vertical",
+              "value": false,
+              "label": "Pionowy?",
+              "type": "Boolean"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "",
+      "type": "Form",
+      "label": "Formularz",
+      "icon": "fa-clipboard-list",
+      "children": [],
+      "propGroups": []
+    },
+    {
+      "id": "",
+      "type": "Text-Field",
+      "label": "Pole tekstowe",
+      "icon": "fa-keyboard",
+      "children": [],
+      "propGroups": [
+        {
+          "id": "data",
+          "label": "Właściwości",
+          "type": "data",
+          "props": [
+            {
+              "id": "variableId",
+              "value": "",
+              "label": "Zmienna",
+              "type": "Variable"
+            }
+          ]
+        },
+        {
+          "id": "behavior",
+          "label": "Zachowanie",
+          "type": "args",
+          "props": [
+            {
+              "id": "label",
+              "value": "",
+              "label": "Etykieta",
+              "type": "String"
+            },
+            {
+              "id": "hint",
+              "value": "",
+              "label": "Podpowiedź",
+              "type": "String"
+            },
+            {
+              "id": "counterNum",
+              "value": 0,
+              "label": "Limit",
+              "type": "Number"
+            },
+            {
+              "id": "counter",
+              "value": false,
+              "label": "Limit włączony?",
+              "type": "Boolean"
+            },
+            {
+              "id": "readonly",
+              "value": false,
+              "label": "Tylko odczyt?",
+              "type": "Boolean"
+            },
+            {
+              "id": "disabled",
+              "value": false,
+              "label": "Wyłączone?",
+              "type": "Boolean"
+            },
+            {
+              "id": "required",
+              "value": false,
+              "label": "Wymagane?",
+              "type": "Boolean"
+            },
+            {
+              "id": "specialChars",
+              "value": false,
+              "label": "Bez znaków specjalnych?",
+              "type": "Boolean"
+            },
+            {
+              "id": "customRegex",
+              "value": "",
+              "label": "Walidacja regex",
+              "type": "String"
+            },
+            {
+              "id": "customRegexMsg",
+              "value": "",
+              "label": "Wiadomość walidacji regex",
+              "type": "String"
+            }
+          ]
+        },
+        {
+          "id": "display",
+          "label": "Wygląd",
+          "type": "args",
+          "props": [
+            {
+              "id": "color",
+              "value": "",
+              "label": "Kolor",
+              "type": "Color"
+            },
+            {
+              "id": "bgColor",
+              "value": "",
+              "label": "Kolor tła",
+              "type": "Color"
+            },
+            {
+              "id": "dense",
+              "value": false,
+              "label": "Zwarte?",
+              "type": "Boolean"
+            },
+            {
+              "id": "filled",
+              "value": false,
+              "label": "Wypełnione?",
+              "type": "Boolean"
+            },
+            {
+              "id": "outlined",
+              "value": false,
+              "label": "Zarysowane?",
+              "type": "Boolean"
+            },
+            {
+              "id": "singleLine",
+              "value": false,
+              "label": "Ukryta etykieta?",
+              "type": "Boolean"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "",
+      "type": "Button",
+      "label": "Przycisk",
+      "icon": "fa-caret-square-right",
+      "children": [],
+      "propGroups": []
+    },
+    {
+      "id": "",
+      "type": "Rating",
+      "label": "Ocena",
+      "icon": "fa-star",
+      "children": [],
+      "propGroups": []
     }
   ]
 }

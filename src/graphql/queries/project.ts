@@ -47,7 +47,6 @@ export const ADD_PROJECT = gql`mutation addProject(
     insert_PROJECT(objects: {
         description: $description,
         name: $name,
-        definition: "",
         user_id: $userId,
         theme_id: $themeId
         source_id: $datasourceId

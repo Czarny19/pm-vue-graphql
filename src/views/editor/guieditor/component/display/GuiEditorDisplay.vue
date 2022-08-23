@@ -30,7 +30,8 @@
         class="fill-height"
         :widget="pageDefinition"
         :theme="theme"
-        :datasource="datasource">
+        :datasource="datasource"
+        :variables="variables">
     </WidgetPage>
 
     <GuiEditorWidgetPage
@@ -47,7 +48,7 @@
 <script lang="ts">
 import Vue from "vue";
 import GuiEditorWidgetPage from "@/views/editor/guieditor/component/widget/GuiEditorWidgetPage.vue";
-import WidgetPage from "@/components/widget/WidgetPage.vue";
+import WidgetPage from "@/components/widget/grid/WidgetPage.vue";
 import {AppWidget} from "@/lib/types";
 
 export default Vue.extend({
@@ -59,7 +60,8 @@ export default Vue.extend({
     leftNavShown: Boolean,
     rightNavShown: Boolean,
     previewOpen: Boolean,
-    datasource: Object
+    datasource: Object,
+    variables: Array
   },
   methods: {
     setActive(widget: AppWidget): void {
