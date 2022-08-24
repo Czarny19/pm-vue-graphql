@@ -222,6 +222,9 @@
     "propNumber": "Liczba",
     "valueRequired": "Pole wymagane",
     "valueTooLong": "Przekroczono maksymalną długość pola",
-    "valueNoSpecialChars": "Pole nie może zawierać znaków specjalnych oraz spacji"
+    "valueNoSpecialChars": "Pole nie może zawierać znaków specjalnych oraz spacji",
+    "widgetsGrid": "Siatka",
+    "widgetsDisplay": "Wyświetlanie",
+    "widgetsInput": "Wstawianie"
   }
 }

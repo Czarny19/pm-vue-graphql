@@ -18,25 +18,9 @@
     <v-divider></v-divider>
 
     <template v-if="navTab === 0">
-      <v-card
-          v-for="(widget, index) in widgets"
-          :key="index"
-          class="editor--toolbox-widget ma-2 mb-3"
-          draggable="true"
-          elevation="0"
-          color="primary"
-          @dragstart="startDrag(widget, $event)">
-
-        <v-container>
-          <v-row>
-            <v-col class="pa-0 ma-auto" cols="3">
-              <v-icon>{{ widget.icon }}</v-icon>
-            </v-col>
-
-            <v-col class="pa-2 ma-auto text-start" cols="8">{{ widget.label }}</v-col>
-          </v-row>
-        </v-container>
-      </v-card>
+      <GuiEditorLeftNavWidgets :label="i18n('editor.widgetsGrid')" :widgets="gridWidgets"/>
+      <GuiEditorLeftNavWidgets :label="i18n('editor.widgetsDisplay')" :widgets="displayWidgets"/>
+      <GuiEditorLeftNavWidgets :label="i18n('editor.widgetsInput')" :widgets="inputWidgets"/>
     </template>
 
     <template v-if="navTab === 1">
@@ -71,9 +55,11 @@
 import Vue from "vue";
 import lib from "@/lib/widgets.json";
 import {AppWidget} from "@/lib/types";
+import GuiEditorLeftNavWidgets from "@/views/editor/guieditor/component/display/GuiEditorLeftNavWidgets.vue";
 
 export default Vue.extend({
   name: 'GuiEditorEditorLeftNav',
+  components: {GuiEditorLeftNavWidgets},
   props: {
     pageDefinition: {}
   },
@@ -85,32 +71,19 @@ export default Vue.extend({
     }
   },
   computed: {
-    widgets() {
-      return lib.widgets.filter((widget) => widget.type !== 'Page' && widget.type !== 'Common')
+    gridWidgets() {
+      return lib.widgets.filter((widget) => widget.group === 'Grid')
     },
-    commonProps() {
-      const common = JSON.parse(JSON.stringify(lib.widgets.filter((widget) => widget.type === 'Common')))[0]
-      return common.propGroups
+    displayWidgets() {
+      return lib.widgets.filter((widget) => widget.group === 'Display')
+    },
+    inputWidgets() {
+      return lib.widgets.filter((widget) => widget.group === 'Input')
     }
   },
   methods: {
     setTab(tabNum: number): void {
       this.navTab = tabNum
-    },
-    startDrag(widget: { id: string }, evt?: DragEvent) {
-      const dataTransfer = evt?.dataTransfer;
-
-      const widgetJSON = JSON.parse(JSON.stringify(widget))
-      widgetJSON.propGroups.push(...this.commonProps)
-
-      if (dataTransfer != null) {
-        // eslint-disable-next-line
-        dataTransfer!.dropEffect = 'move'
-        // eslint-disable-next-line
-        dataTransfer!.effectAllowed = 'move'
-        // eslint-disable-next-line
-        dataTransfer!.setData('widget', JSON.stringify(widgetJSON))
-      }
     },
     setActiveWidget(widget: AppWidget): void {
       this.$emit('activewidget', widget)

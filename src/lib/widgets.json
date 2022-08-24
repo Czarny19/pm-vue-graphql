@@ -2,6 +2,7 @@
   "widgets": [
     {
       "type": "Common",
+      "group": "Base",
       "propGroups": [
         {
           "id": "padding",
@@ -78,6 +79,7 @@
     {
       "id": "",
       "type": "Page",
+      "group": "Base",
       "label": "Strona",
       "icon": "fa-th",
       "datatable": "",
@@ -86,6 +88,7 @@
     {
       "id": "",
       "type": "Container",
+      "group": "Grid",
       "label": "Kontener",
       "icon": "fa-table",
       "children": [],
@@ -169,6 +172,7 @@
     {
       "id": "",
       "type": "Row",
+      "group": "Grid",
       "label": "Wiersz",
       "icon": "fa-table-columns fa-rotate-270",
       "children": [],
@@ -217,6 +221,7 @@
     {
       "id": "",
       "type": "Column",
+      "group": "Grid",
       "label": "Kolumna",
       "icon": "fa-table-columns",
       "children": [],
@@ -267,6 +272,7 @@
     {
       "id": "",
       "type": "Text",
+      "group": "Display",
       "label": "Tekst",
       "icon": "fa-quote-right",
       "children": [],
@@ -391,6 +397,7 @@
     {
       "id": "",
       "type": "Card",
+      "group": "Display",
       "label": "Karta",
       "icon": "fa-address-card",
       "children": [],
@@ -536,6 +543,7 @@
     {
       "id": "",
       "type": "Carousel",
+      "group": "Display",
       "label": "Karuzela",
       "icon": "fa-images",
       "children": [],
@@ -619,6 +627,7 @@
     {
       "id": "",
       "type": "Table",
+      "group": "Display",
       "label": "Tabela",
       "icon": "fa-table-cells",
       "children": [],
@@ -668,6 +677,7 @@
     {
       "id": "",
       "type": "Divider",
+      "group": "Display",
       "label": "Separator",
       "icon": "fa-minus",
       "children": [],
@@ -711,6 +721,7 @@
     {
       "id": "",
       "type": "Form",
+      "group": "Input",
       "label": "Formularz",
       "icon": "fa-clipboard-list",
       "children": [],
@@ -719,6 +730,7 @@
     {
       "id": "",
       "type": "Text-Field",
+      "group": "Input",
       "label": "Pole tekstowe",
       "icon": "fa-pen",
       "children": [],
@@ -851,6 +863,7 @@
     {
       "id": "",
       "type": "Text-Area",
+      "group": "Input",
       "label": "Duże pole tekstowe",
       "icon": "fa-keyboard",
       "children": [],
@@ -980,6 +993,198 @@
               "id": "noResize",
               "value": false,
               "label": "Zablokuj wielkość?",
+              "type": "Boolean"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "",
+      "type": "Select",
+      "group": "Input",
+      "label": "Pole Wyboru",
+      "icon": "fa-caret-down",
+      "children": [],
+      "propGroups": [
+        {
+          "id": "data",
+          "label": "Właściwości",
+          "type": "data",
+          "props": [
+            {
+              "id": "queryId",
+              "value": "",
+              "customLabels": false,
+              "labels": [],
+              "label": "Zapytanie",
+              "type": "Query"
+            },
+            {
+              "id": "textQueryVarId",
+              "value": "",
+              "helperValue": "",
+              "label": "Wartość wyświetlana",
+              "type": "TableField"
+            },
+            {
+              "id": "valueQueryVarId",
+              "value": "",
+              "helperValue": "",
+              "label": "Wartość wyboru",
+              "type": "TableField"
+            },
+            {
+              "id": "variableId",
+              "value": "",
+              "label": "Zmienna",
+              "type": "Variable"
+            }
+          ]
+        },
+        {
+          "id": "behavior",
+          "label": "Zachowanie",
+          "type": "args",
+          "props": [
+            {
+              "id": "label",
+              "value": "",
+              "label": "Etykieta",
+              "type": "String"
+            },
+            {
+              "id": "hint",
+              "value": "",
+              "label": "Podpowiedź",
+              "type": "String"
+            },
+            {
+              "id": "readonly",
+              "value": false,
+              "label": "Tylko odczyt?",
+              "type": "Boolean"
+            },
+            {
+              "id": "disabled",
+              "value": false,
+              "label": "Wyłączone?",
+              "type": "Boolean"
+            },
+            {
+              "id": "required",
+              "value": false,
+              "label": "Wymagane?",
+              "type": "Boolean"
+            }
+          ]
+        },
+        {
+          "id": "display",
+          "label": "Wygląd",
+          "type": "args",
+          "props": [
+            {
+              "id": "color",
+              "value": "",
+              "label": "Kolor",
+              "type": "Color"
+            },
+            {
+              "id": "bgColor",
+              "value": "",
+              "label": "Kolor tła",
+              "type": "Color"
+            },
+            {
+              "id": "dense",
+              "value": false,
+              "label": "Zwarte?",
+              "type": "Boolean"
+            },
+            {
+              "id": "filled",
+              "value": false,
+              "label": "Wypełnione?",
+              "type": "Boolean"
+            },
+            {
+              "id": "outlined",
+              "value": false,
+              "label": "Zarysowane?",
+              "type": "Boolean"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "",
+      "type": "Checkbox",
+      "group": "Input",
+      "label": "Checkbox",
+      "icon": "fa-square-check",
+      "children": [],
+      "propGroups": [
+        {
+          "id": "data",
+          "label": "Właściwości",
+          "type": "data",
+          "props": [
+            {
+              "id": "variableId",
+              "value": "",
+              "label": "Zmienna",
+              "type": "Variable"
+            }
+          ]
+        },
+        {
+          "id": "behavior",
+          "label": "Zachowanie",
+          "type": "args",
+          "props": [
+            {
+              "id": "label",
+              "value": "",
+              "label": "Etykieta",
+              "type": "String"
+            },
+            {
+              "id": "hint",
+              "value": "",
+              "label": "Podpowiedź",
+              "type": "String"
+            },
+            {
+              "id": "disabled",
+              "value": false,
+              "label": "Wyłączone?",
+              "type": "Boolean"
+            }
+          ]
+        },
+        {
+          "id": "display",
+          "label": "Wygląd",
+          "type": "args",
+          "props": [
+            {
+              "id": "color",
+              "value": "",
+              "label": "Kolor",
+              "type": "Color"
+            },
+            {
+              "id": "bgColor",
+              "value": "",
+              "label": "Kolor tła",
+              "type": "Color"
+            },
+            {
+              "id": "dense",
+              "value": false,
+              "label": "Zwarte?",
               "type": "Boolean"
             }
           ]

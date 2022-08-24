@@ -18,19 +18,23 @@
     <v-divider></v-divider>
 
     <template v-if="navTab === 0">
-      <v-container v-if="currentWidget" :key="widgetKey" fluid class="text-start pa-0 pt-3">
-        <b class="pa-4 pb-2 pt-4">{{ currentWidget.label }}</b>
+      <v-container v-if="currentWidget" :key="widgetKey" fluid class="text-start pa-0">
+        <div class="secondary text-start text-body-2 pa-3 pl-6">
+          {{ currentWidget.label }}
+        </div>
+
         <v-text-field class="pa-3" outlined color="accent" dense hide-details v-model="currentWidget.id"/>
-        <v-divider></v-divider>
 
         <template v-for="(group, index) in groups">
+          <div class="secondary text-start text-body-2 pa-3 pl-6" :key="index">
+            {{ group.label }}
+          </div>
+
           <v-row no-gutters :key="group.id" class="pb-3">
-            <b class="pa-3 pb-2 pt-4">{{ group.label }}</b>
             <v-col class="pl-3 pr-3 pb-1" cols="12" v-for="(prop) in group.props" :key="prop.id">
               <GuiEditorProp :prop="prop" :theme="theme" :queries="queries" :schema="schema" :variables="variables"/>
             </v-col>
           </v-row>
-          <v-divider :key="index"></v-divider>
         </template>
 
         <v-row no-gutters class="pa-3 pt-6">
@@ -63,8 +67,10 @@
     <template v-if="navTab === 1">
       <GuiEditorAddPropDialog :dialog="addVarDialog" @close="closeAddVar" @refresh="refreshVars"/>
 
-      <v-container v-for="(type, index) in varTypes" :key="index" fluid class="text-start pa-0 pt-3">
-        <b class="pa-4 pb-2 pt-4">{{ type }}</b>
+      <v-container v-for="(type, index) in varTypes" :key="index" fluid class="text-start pa-0">
+        <div class="secondary text-start text-body-2 pa-3 pl-6">
+          {{ type }}
+        </div>
 
         <template v-for="(variable, index) in variables">
           <div v-if="variable.type_display === type" :key="index" class="pa-0 pt-1">
@@ -88,8 +94,6 @@
             </v-row>
           </div>
         </template>
-
-        <v-divider></v-divider>
       </v-container>
 
       <IconButton
@@ -148,10 +152,12 @@ export default Vue.extend({
   watch: {
     widget: {
       handler() {
-        this.widgetKey = this.widgetKey + 1
-        this.currentWidget = this.widget
-        this.groups = []
-        this.groups = this.currentWidget ? (this.currentWidget as { id: '', propGroups: [] }).propGroups : []
+        if (this.currentWidget != this.widget) {
+          this.widgetKey = this.widgetKey + 1
+          this.currentWidget = this.widget
+          this.groups = []
+          this.groups = this.currentWidget ? (this.currentWidget as { id: '', propGroups: [] }).propGroups : []
+        }
       },
       deep: true
     }

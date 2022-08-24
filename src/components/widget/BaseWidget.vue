@@ -80,6 +80,21 @@
       :theme="theme"
       :variables="variables">
   </WidgetTextArea>
+
+  <WidgetSelect
+      v-else-if="widget.type === 'Select'"
+      :widget="widget"
+      :datasource="datasource"
+      :theme="theme"
+      :variables="variables">
+  </WidgetSelect>
+
+  <WidgetCheckbox
+      v-else-if="widget.type === 'Checkbox'"
+      :widget="widget"
+      :theme="theme"
+      :variables="variables">
+  </WidgetCheckbox>
 </template>
 
 <script lang="ts">
@@ -98,10 +113,14 @@ import WidgetCarousel from "@/components/widget/display/WidgetCarousel.vue";
 import WidgetDivider from "@/components/widget/display/WidgetDivider.vue";
 import WidgetForm from "@/components/widget/grid/WidgetForm.vue";
 import WidgetTextArea from "@/components/widget/input/WidgetTextArea.vue";
+import WidgetSelect from "@/components/widget/input/WidgetSelect.vue";
+import WidgetCheckbox from "@/components/widget/input/WidgetCheckbox.vue";
 
 export default Vue.extend({
   name: 'BaseWidget',
   components: {
+    WidgetCheckbox,
+    WidgetSelect,
     WidgetTextArea,
     WidgetForm,
     WidgetDivider,

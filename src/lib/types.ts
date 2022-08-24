@@ -65,6 +65,7 @@ export type ThemeColors = {
 export type AppWidget = {
     id: number;
     type: string;
+    group: string;
     children: [];
     propGroups: [];
 }
