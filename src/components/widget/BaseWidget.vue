@@ -60,6 +60,13 @@
       :datasource="datasource">
   </WidgetCarousel>
 
+  <WidgetTable
+      v-else-if="widget.type === 'Table'"
+      :widget="widget"
+      :theme="theme"
+      :datasource="datasource">
+  </WidgetTable>
+
   <WidgetTextField
       v-else-if="widget.type === 'Text-Field'"
       :widget="widget"
@@ -67,7 +74,12 @@
       :variables="variables">
   </WidgetTextField>
 
-  <WidgetTable v-else-if="widget.type === 'Table'" :widget="widget" :theme="theme" :datasource="datasource"/>
+  <WidgetTextArea
+      v-else-if="widget.type === 'Text-Area'"
+      :widget="widget"
+      :theme="theme"
+      :variables="variables">
+  </WidgetTextArea>
 </template>
 
 <script lang="ts">
@@ -85,10 +97,12 @@ import WidgetCard from "@/components/widget/display/WidgetCard.vue";
 import WidgetCarousel from "@/components/widget/display/WidgetCarousel.vue";
 import WidgetDivider from "@/components/widget/display/WidgetDivider.vue";
 import WidgetForm from "@/components/widget/grid/WidgetForm.vue";
+import WidgetTextArea from "@/components/widget/input/WidgetTextArea.vue";
 
 export default Vue.extend({
   name: 'BaseWidget',
   components: {
+    WidgetTextArea,
     WidgetForm,
     WidgetDivider,
     WidgetCarousel,

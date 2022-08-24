@@ -36,7 +36,7 @@
 
     <GuiEditorWidgetPage
         v-else
-        :style="{'height': `calc(100% - 46px)`}"
+        :style="{'height': height, 'overflow': 'auto'}"
         :widget="pageDefinition"
         @activewidget="setActive"
         @move="move">
@@ -63,6 +63,11 @@ export default Vue.extend({
     datasource: Object,
     variables: Array
   },
+  data() {
+    return {
+      height: ''
+    }
+  },
   methods: {
     setActive(widget: AppWidget): void {
       this.$emit('activewidget', widget)
@@ -76,6 +81,13 @@ export default Vue.extend({
     move(up: boolean): void {
       this.$emit('move', up)
     }
+  },
+  beforeMount() {
+    this.height = `${window.innerHeight - 170}px`
+
+    addEventListener('resize', () => {
+      this.height = `${window.innerHeight - 170}px`
+    })
   }
 })
 </script>

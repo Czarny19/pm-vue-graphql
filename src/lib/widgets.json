@@ -720,7 +720,7 @@
       "id": "",
       "type": "Text-Field",
       "label": "Pole tekstowe",
-      "icon": "fa-keyboard",
+      "icon": "fa-pen",
       "children": [],
       "propGroups": [
         {
@@ -842,6 +842,144 @@
               "id": "singleLine",
               "value": false,
               "label": "Ukryta etykieta?",
+              "type": "Boolean"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "",
+      "type": "Text-Area",
+      "label": "Duże pole tekstowe",
+      "icon": "fa-keyboard",
+      "children": [],
+      "propGroups": [
+        {
+          "id": "data",
+          "label": "Właściwości",
+          "type": "data",
+          "props": [
+            {
+              "id": "variableId",
+              "value": "",
+              "label": "Zmienna",
+              "type": "Variable"
+            }
+          ]
+        },
+        {
+          "id": "behavior",
+          "label": "Zachowanie",
+          "type": "args",
+          "props": [
+            {
+              "id": "label",
+              "value": "",
+              "label": "Etykieta",
+              "type": "String"
+            },
+            {
+              "id": "hint",
+              "value": "",
+              "label": "Podpowiedź",
+              "type": "String"
+            },
+            {
+              "id": "rows",
+              "value": 3,
+              "label": "Liczba wierszy",
+              "type": "Number"
+            },
+            {
+              "id": "counterNum",
+              "value": 0,
+              "label": "Limit",
+              "type": "Number"
+            },
+            {
+              "id": "counter",
+              "value": false,
+              "label": "Limit włączony?",
+              "type": "Boolean"
+            },
+            {
+              "id": "readonly",
+              "value": false,
+              "label": "Tylko odczyt?",
+              "type": "Boolean"
+            },
+            {
+              "id": "disabled",
+              "value": false,
+              "label": "Wyłączone?",
+              "type": "Boolean"
+            },
+            {
+              "id": "required",
+              "value": false,
+              "label": "Wymagane?",
+              "type": "Boolean"
+            },
+            {
+              "id": "specialChars",
+              "value": false,
+              "label": "Bez znaków specjalnych?",
+              "type": "Boolean"
+            },
+            {
+              "id": "customRegex",
+              "value": "",
+              "label": "Walidacja regex",
+              "type": "String"
+            },
+            {
+              "id": "customRegexMsg",
+              "value": "",
+              "label": "Wiadomość walidacji regex",
+              "type": "String"
+            }
+          ]
+        },
+        {
+          "id": "display",
+          "label": "Wygląd",
+          "type": "args",
+          "props": [
+            {
+              "id": "color",
+              "value": "",
+              "label": "Kolor",
+              "type": "Color"
+            },
+            {
+              "id": "bgColor",
+              "value": "",
+              "label": "Kolor tła",
+              "type": "Color"
+            },
+            {
+              "id": "dense",
+              "value": false,
+              "label": "Zwarte?",
+              "type": "Boolean"
+            },
+            {
+              "id": "filled",
+              "value": false,
+              "label": "Wypełnione?",
+              "type": "Boolean"
+            },
+            {
+              "id": "outlined",
+              "value": false,
+              "label": "Zarysowane?",
+              "type": "Boolean"
+            },
+            {
+              "id": "noResize",
+              "value": false,
+              "label": "Zablokuj wielkość?",
               "type": "Boolean"
             }
           ]

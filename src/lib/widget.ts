@@ -87,6 +87,7 @@ export const getRulesForInput = (widget: AppWidget, counter: number | undefined)
         rules.push((v: string) => (!!v) || i18n.t('editor.valueRequired'))
     }
 
+    // TODO
     if (counter) {
         rules.push((v: string) => (v && v.length <= Number(counter ?? 0)) || i18n.t('editor.valueTooLong'))
     }

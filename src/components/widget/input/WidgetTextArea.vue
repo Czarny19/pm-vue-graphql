@@ -1,10 +1,11 @@
 <template>
   <div :style="cssProps">
-    <v-text-field
+    <v-textarea
         class="pa-0"
         light persistent-hint
         :label="argsProps.label"
         :counter="counter"
+        :rows="argsProps.rows"
         :color="color"
         :readonly="argsProps.readonly"
         :disabled="argsProps.disabled"
@@ -13,11 +14,11 @@
         :filled="argsProps.filled"
         :background-color="bgColor"
         :outlined="argsProps.outlined"
-        :single-line="argsProps.singleLine"
+        :no-resize="argsProps.noResize"
         :value="variableValue"
         :rules="rules"
         @change="updateVariableValue">
-    </v-text-field>
+    </v-textarea>
   </div>
 </template>
 
@@ -27,7 +28,7 @@ import {AppWidget, PageVariable} from "@/lib/types";
 import {getArgsProps, getColorPropValue, getCssProps, getDataProps, getRulesForInput} from "@/lib/widget";
 
 export default Vue.extend({
-  name: 'WidgetTextField',
+  name: 'WidgetTextArea',
   props: {
     widget: Object,
     theme: Object,

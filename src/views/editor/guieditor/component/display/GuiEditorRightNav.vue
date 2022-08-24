@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer permanent clipped right width="100%" color="primary">
+  <v-navigation-drawer permanent clipped right width="100%" color="primary" :style="{'height': height}">
     <v-container fluid class="primary pa-0">
       <v-row no-gutters>
         <v-col class="pa-1">
@@ -18,7 +18,7 @@
     <v-divider></v-divider>
 
     <template v-if="navTab === 0">
-      <v-container v-if="currentWidget" fluid class="text-start pa-0 pt-3">
+      <v-container v-if="currentWidget" :key="widgetKey" fluid class="text-start pa-0 pt-3">
         <b class="pa-4 pb-2 pt-4">{{ currentWidget.label }}</b>
         <v-text-field class="pa-3" outlined color="accent" dense hide-details v-model="currentWidget.id"/>
         <v-divider></v-divider>
@@ -33,7 +33,7 @@
           <v-divider :key="index"></v-divider>
         </template>
 
-        <v-row no-gutters class="pa-3">
+        <v-row no-gutters class="pa-3 pt-6">
           <IconButton
               class="ml-auto"
               color="error"
@@ -130,7 +130,9 @@ export default Vue.extend({
       currentWidget: null,
       addVarDialog: false,
       navTab: 0,
-      groups: []
+      widgetKey: 0,
+      groups: [],
+      height: ''
     }
   },
   computed: {
@@ -146,6 +148,7 @@ export default Vue.extend({
   watch: {
     widget: {
       handler() {
+        this.widgetKey = this.widgetKey + 1
         this.currentWidget = this.widget
         this.groups = []
         this.groups = this.currentWidget ? (this.currentWidget as { id: '', propGroups: [] }).propGroups : []
@@ -175,6 +178,13 @@ export default Vue.extend({
         this.$emit('refreshvars')
       })
     }
+  },
+  beforeMount() {
+    this.height = `${window.innerHeight - 124}px`
+
+    addEventListener('resize', () => {
+      this.height = `${window.innerHeight - 124}px`
+    })
   }
 })
 </script>

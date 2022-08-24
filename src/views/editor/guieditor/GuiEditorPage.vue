@@ -133,7 +133,6 @@ export default Vue.extend({
       deep: true
     }
   },
-
   methods: {
     setActiveWidget(widget: AppWidget): void {
       (this.activeWidget as AppWidget | null) = null
@@ -222,6 +221,7 @@ export default Vue.extend({
       })
     },
     moveWidget(up: boolean, parent: { children: [] }): void {
+      // TODO
       parent.children.forEach((child, index) => {
         if (child == this.activeWidget) {
           if (up && index != 0) {

@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer permanent clipped width="100%" color="primary">
+  <v-navigation-drawer permanent clipped width="100%" color="primary" :style="{'height': height}">
     <v-container fluid class="primary pa-0">
       <v-row no-gutters>
         <v-col class="pa-1">
@@ -80,7 +80,8 @@ export default Vue.extend({
   data() {
     return {
       navTab: 0,
-      widgetIndex: 1
+      widgetIndex: 1,
+      height: ''
     }
   },
   computed: {
@@ -114,6 +115,13 @@ export default Vue.extend({
     setActiveWidget(widget: AppWidget): void {
       this.$emit('activewidget', widget)
     }
+  },
+  beforeMount() {
+    this.height = `${window.innerHeight - 124}px`
+
+    addEventListener('resize', () => {
+      this.height = `${window.innerHeight - 124}px`
+    })
   }
 })
 </script>
