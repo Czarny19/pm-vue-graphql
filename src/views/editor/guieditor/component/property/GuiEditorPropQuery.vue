@@ -60,8 +60,8 @@
                 class="pt-0"
                 color="accent"
                 outlined dense hide-details
-                type="number"
-                v-model="label.order">
+                v-model="label.order"
+                @keydown="filterNumbersOnly">
             </v-text-field>
           </v-col>
 
@@ -93,6 +93,7 @@
 import Vue from "vue";
 import {Query, TableHeader} from "@/lib/types";
 import * as graphql_gen from "@/lib/graphql_gen";
+import {filterNumbersOnly} from "@/lib/filters";
 
 export default Vue.extend({
   name: 'GuiEditorPropQuery',
@@ -138,6 +139,11 @@ export default Vue.extend({
           this.currentQuery.limit,
           vars
       )
+    }
+  },
+  methods: {
+    filterNumbersOnly(event: KeyboardEvent) {
+      filterNumbersOnly(event)
     }
   },
   watch: {

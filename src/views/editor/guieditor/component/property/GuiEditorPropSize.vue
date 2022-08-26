@@ -8,7 +8,8 @@
             outlined dense hide-details
             :readonly="currentProp.unit === 'auto'"
             :label="prop.label"
-            v-model="currentProp.value">
+            v-model="currentProp.value"
+            @keydown="onKeydown">
         </v-text-field>
       </v-col>
 
@@ -37,6 +38,7 @@
 <script lang="ts">
 import Vue from "vue";
 import {sizeUnits} from "@/lib/widget";
+import {filterNumbersOnly} from "@/lib/filters";
 
 export default Vue.extend({
   name: 'GuiEditorPropSize',
@@ -51,6 +53,11 @@ export default Vue.extend({
   computed: {
     units(): string [] {
       return sizeUnits
+    }
+  },
+  methods: {
+    onKeydown(event: KeyboardEvent) {
+      filterNumbersOnly(event)
     }
   },
   watch: {

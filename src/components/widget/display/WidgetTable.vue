@@ -7,11 +7,11 @@
       :page.sync="page"
       :items="queryData"
       :style="cssProps"
-      :dark="dark"
+      :dark="argsProps.dark"
       :light="!dark">
 
     <template v-slot:footer>
-      <div v-if="paging" class="text-center pt-2">
+      <div v-if="argsProps.paging" class="text-center pt-2">
         <v-pagination
             v-model="page"
             :value="1"
@@ -86,12 +86,6 @@ export default Vue.extend({
       const labels = props.filter((prop) => prop.id === 'queryId')[0].labels
 
       return labels.filter(label => label.visible).sort((a, b) => Number(a.order) - Number(b.order))
-    },
-    dark(): boolean {
-      return Boolean(this.argsProps.dark)
-    },
-    paging(): boolean {
-      return Boolean(this.argsProps.paging)
     },
     pageSize(): number {
       return Number(this.argsProps.pageSize)

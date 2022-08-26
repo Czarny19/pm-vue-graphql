@@ -23,7 +23,15 @@
           {{ currentWidget.label }}
         </div>
 
-        <v-text-field class="pa-3" outlined color="accent" dense hide-details v-model="currentWidget.id"/>
+        <v-text-field
+            class="pa-3"
+            outlined
+            color="accent"
+            dense
+            hide-details
+            :label="i18n('editor.description')"
+            v-model="currentWidget.id">
+        </v-text-field>
 
         <template v-for="(group, index) in groups">
           <div class="secondary text-start text-body-2 pa-3 pl-6" :key="index">

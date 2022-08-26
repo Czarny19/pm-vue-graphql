@@ -5,10 +5,10 @@
         <v-text-field
             class="pt-3"
             color="accent"
-            type="number"
             outlined dense hide-details
             :label="prop.label"
-            v-model="currentProp.value">
+            v-model="currentProp.value"
+            @keydown="filterNumbersOnly">
         </v-text-field>
       </v-col>
 
@@ -27,6 +27,7 @@
 
 <script lang="ts">
 import Vue from "vue";
+import {filterNumbersOnly} from "@/lib/filters";
 
 export default Vue.extend({
   name: 'GuiEditorPropDuration',
@@ -36,6 +37,11 @@ export default Vue.extend({
   data() {
     return {
       currentProp: {}
+    }
+  },
+  methods: {
+    filterNumbersOnly(event: KeyboardEvent) {
+      filterNumbersOnly(event)
     }
   },
   async beforeMount() {

@@ -1,5 +1,11 @@
 <template>
-  <v-card :style="cssProps" :color="cardColor" :outlined="outlined" :elevation="elevation" :shaped="shaped">
+  <v-card
+      :style="cssProps"
+      :color="cardColor"
+      :outlined="argsProps.outlined"
+      :elevation="elevation"
+      :shaped="argsProps.shaped">
+
     <v-card-title v-if="title" class="text-h6" :style="{'color': titleColor}">
       {{ title }}
     </v-card-title>
@@ -9,6 +15,7 @@
     <v-card-text v-if="text" class="text-start text-body-2" :style="{'color': textColor}">
       {{ text }}
     </v-card-text>
+
   </v-card>
 </template>
 
@@ -60,12 +67,6 @@ export default Vue.extend({
     },
     textColor(): string {
       return getColorPropValue(this.theme, this.argsProps.text_color)
-    },
-    outlined(): boolean {
-      return Boolean(this.argsProps.outlined)
-    },
-    shaped(): boolean {
-      return Boolean(this.argsProps.shaped)
     },
     elevation(): number {
       return Number(this.argsProps.elevation)

@@ -2,7 +2,7 @@
   <v-carousel
       v-model="slide"
       :style="cssProps"
-      :cycle="cycle"
+      :cycle="argsProps.cycle"
       :interval="interval"
       next-icon="fa-caret-right"
       prev-icon="fa-caret-left"
@@ -62,9 +62,6 @@ export default Vue.extend({
     },
     dataProps(): { [k: string]: string } {
       return getDataProps(this.appWidget)
-    },
-    cycle(): boolean {
-      return Boolean(this.argsProps.cycle)
     },
     interval(): number {
       return Number(this.argsProps.interval)

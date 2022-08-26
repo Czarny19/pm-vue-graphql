@@ -30,11 +30,11 @@
       <v-text-field
           class="pa-2"
           color="accent"
-          type="number"
           v-model="currentQuery.limit"
           :label="i18n('editor.limit')"
           :rules="limitRules"
-          prepend-icon="fa-list-ol">
+          prepend-icon="fa-list-ol"
+          @keydown="filterNumbersOnly">
       </v-text-field>
     </div>
   </v-card-text>
@@ -43,6 +43,7 @@
 <script lang="ts">
 import Vue from "vue";
 import {Query} from "@/lib/types";
+import {filterNumbersOnly} from "@/lib/filters";
 
 export default Vue.extend({
   name: 'QueryInfo',
@@ -63,6 +64,11 @@ export default Vue.extend({
       limitRules: [
         (v: number) => (!v || (v && v > 0)) || this.$t('editor.limitTooSmall')
       ]
+    }
+  },
+  methods: {
+    filterNumbersOnly(event: KeyboardEvent) {
+      filterNumbersOnly(event)
     }
   },
   watch: {

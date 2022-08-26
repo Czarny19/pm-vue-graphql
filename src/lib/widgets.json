@@ -335,7 +335,6 @@
                   "name": "Lekka"
                 }
               ],
-              "list-values": ",,lighter",
               "type": "Select"
             },
             {
@@ -862,6 +861,139 @@
     },
     {
       "id": "",
+      "type": "Number-Field",
+      "group": "Input",
+      "label": "Pole numeryczne",
+      "icon": "fa-hashtag",
+      "children": [],
+      "propGroups": [
+        {
+          "id": "data",
+          "label": "Właściwości",
+          "type": "data",
+          "props": [
+            {
+              "id": "variableId",
+              "value": "",
+              "label": "Zmienna",
+              "type": "Variable"
+            }
+          ]
+        },
+        {
+          "id": "behavior",
+          "label": "Zachowanie",
+          "type": "args",
+          "props": [
+            {
+              "id": "label",
+              "value": "",
+              "label": "Etykieta",
+              "type": "String"
+            },
+            {
+              "id": "hint",
+              "value": "",
+              "label": "Podpowiedź",
+              "type": "String"
+            },
+            {
+              "id": "counterNum",
+              "value": 0,
+              "label": "Limit",
+              "type": "Number"
+            },
+            {
+              "id": "notFloat",
+              "value": false,
+              "label": "Tylko liczby całkowite?",
+              "type": "Boolean"
+            },
+            {
+              "id": "counter",
+              "value": false,
+              "label": "Limit włączony?",
+              "type": "Boolean"
+            },
+            {
+              "id": "readonly",
+              "value": false,
+              "label": "Tylko odczyt?",
+              "type": "Boolean"
+            },
+            {
+              "id": "disabled",
+              "value": false,
+              "label": "Wyłączone?",
+              "type": "Boolean"
+            },
+            {
+              "id": "required",
+              "value": false,
+              "label": "Wymagane?",
+              "type": "Boolean"
+            },
+            {
+              "id": "customRegex",
+              "value": "",
+              "label": "Walidacja regex",
+              "type": "String"
+            },
+            {
+              "id": "customRegexMsg",
+              "value": "",
+              "label": "Wiadomość walidacji regex",
+              "type": "String"
+            }
+          ]
+        },
+        {
+          "id": "display",
+          "label": "Wygląd",
+          "type": "args",
+          "props": [
+            {
+              "id": "color",
+              "value": "",
+              "label": "Kolor",
+              "type": "Color"
+            },
+            {
+              "id": "bgColor",
+              "value": "",
+              "label": "Kolor tła",
+              "type": "Color"
+            },
+            {
+              "id": "dense",
+              "value": false,
+              "label": "Zwarte?",
+              "type": "Boolean"
+            },
+            {
+              "id": "filled",
+              "value": false,
+              "label": "Wypełnione?",
+              "type": "Boolean"
+            },
+            {
+              "id": "outlined",
+              "value": false,
+              "label": "Zarysowane?",
+              "type": "Boolean"
+            },
+            {
+              "id": "singleLine",
+              "value": false,
+              "label": "Ukryta etykieta?",
+              "type": "Boolean"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "",
       "type": "Text-Area",
       "group": "Input",
       "label": "Duże pole tekstowe",
@@ -1194,18 +1326,117 @@
     {
       "id": "",
       "type": "Button",
+      "group": "Input",
       "label": "Przycisk",
       "icon": "fa-caret-square-right",
       "children": [],
-      "propGroups": []
-    },
-    {
-      "id": "",
-      "type": "Rating",
-      "label": "Ocena",
-      "icon": "fa-star",
-      "children": [],
-      "propGroups": []
+      "propGroups": [
+        {
+          "id": "behavior",
+          "label": "Zachowanie",
+          "type": "args",
+          "props": [
+            {
+              "id": "label",
+              "value": "",
+              "label": "Etykieta",
+              "type": "String"
+            },
+            {
+              "id": "disabled",
+              "value": false,
+              "label": "Wyłączony?",
+              "type": "Boolean"
+            }
+          ]
+        },
+        {
+          "id": "display",
+          "label": "Wygląd",
+          "type": "args",
+          "props": [
+            {
+              "id": "color",
+              "value": "",
+              "label": "Kolor",
+              "type": "Color"
+            },
+            {
+              "id": "size",
+              "value": false,
+              "label": "Rozmiar",
+              "list": [
+                {
+                  "id": "x-small",
+                  "name": "B. mały"
+                },
+                {
+                  "id": "small",
+                  "name": "Mały"
+                },
+                {
+                  "id": "normal",
+                  "name": "Normalny"
+                },
+                {
+                  "id": "large",
+                  "name": "Duży"
+                },
+                {
+                  "id": "x-large",
+                  "name": "B. duży"
+                }
+              ],
+              "type": "Select"
+            },
+            {
+              "id": "block",
+              "value": false,
+              "label": "Pełna szerkość?",
+              "type": "Boolean"
+            },
+            {
+              "id": "depressed",
+              "value": false,
+              "label": "Bez cienia?",
+              "type": "Boolean"
+            },
+            {
+              "id": "outlined",
+              "value": false,
+              "label": "Obramowanie?",
+              "type": "Boolean"
+            },
+            {
+              "id": "rounded",
+              "value": false,
+              "label": "Zaokrąglony?",
+              "type": "Boolean"
+            },
+            {
+              "id": "text",
+              "value": false,
+              "label": "Tekstowy?",
+              "type": "Boolean"
+            }
+          ]
+        },
+        {
+          "id": "action",
+          "label": "Akcja",
+          "type": "action",
+          "props": [
+            {
+              "id": "click",
+              "value": "",
+              "action:": "",
+              "variables": [],
+              "label": "Akcja",
+              "type": "Action"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

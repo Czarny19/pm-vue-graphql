@@ -74,6 +74,13 @@
       :variables="variables">
   </WidgetTextField>
 
+  <WidgetNumberField
+      v-else-if="widget.type === 'Number-Field'"
+      :widget="widget"
+      :theme="theme"
+      :variables="variables">
+  </WidgetNumberField>
+
   <WidgetTextArea
       v-else-if="widget.type === 'Text-Area'"
       :widget="widget"
@@ -95,6 +102,15 @@
       :theme="theme"
       :variables="variables">
   </WidgetCheckbox>
+
+  <WidgetButton
+      v-else-if="widget.type === 'Button'"
+      :widget="widget"
+      :theme="theme"
+      :variables="variables"
+      :form-valid="formValid"
+      :form-ref="formRef">
+  </WidgetButton>
 </template>
 
 <script lang="ts">
@@ -115,10 +131,14 @@ import WidgetForm from "@/components/widget/grid/WidgetForm.vue";
 import WidgetTextArea from "@/components/widget/input/WidgetTextArea.vue";
 import WidgetSelect from "@/components/widget/input/WidgetSelect.vue";
 import WidgetCheckbox from "@/components/widget/input/WidgetCheckbox.vue";
+import WidgetNumberField from "@/components/widget/input/WidgetNumberField.vue";
+import WidgetButton from "@/components/widget/input/WidgetButton.vue";
 
 export default Vue.extend({
   name: 'BaseWidget',
   components: {
+    WidgetButton,
+    WidgetNumberField,
     WidgetCheckbox,
     WidgetSelect,
     WidgetTextArea,
@@ -138,7 +158,9 @@ export default Vue.extend({
     theme: Object,
     datasource: Object,
     dataItem: Object,
-    variables: Array
+    variables: Array,
+    formValid: Boolean,
+    formRef: Object
   }
 })
 </script>

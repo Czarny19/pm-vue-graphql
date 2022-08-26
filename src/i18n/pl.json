@@ -145,6 +145,7 @@
     "tableName": "Tabela",
     "tableRequired": "Tabela jest wymagana",
     "field": "Pole",
+    "description": "Opis",
     "operation": "Operacja",
     "variable": "Zmienna",
     "variables": "Zmienne",

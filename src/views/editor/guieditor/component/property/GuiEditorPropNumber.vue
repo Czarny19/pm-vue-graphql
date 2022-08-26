@@ -2,14 +2,15 @@
   <v-text-field
       class="pt-3"
       color="accent"
-      type="number"
       outlined dense hide-details
       :label="prop.label"
-      v-model="currentProp.value">
+      v-model="currentProp.value"
+      @keydown="onKeydown">
   </v-text-field>
 </template>
 
 <script lang="ts">
+import { filterNumbersOnly } from "@/lib/filters";
 import Vue from "vue";
 
 export default Vue.extend({
@@ -20,6 +21,11 @@ export default Vue.extend({
   data() {
     return {
       currentProp: {}
+    }
+  },
+  methods: {
+    onKeydown(event: KeyboardEvent) {
+      filterNumbersOnly(event)
     }
   },
   beforeMount() {

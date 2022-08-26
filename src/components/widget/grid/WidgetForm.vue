@@ -1,5 +1,5 @@
 <template>
-  <v-form :style="cssProps">
+  <v-form :style="cssProps" v-model="valid" ref="form">
     <template v-for="(child) in appWidget.children">
       <BaseWidget
           :widget="child"
@@ -7,7 +7,9 @@
           :datasource="datasource"
           :key="child.name"
           :data-item="dataItem"
-          :variables="variables">
+          :variables="variables"
+          :form-valid="valid"
+          :form-ref="$refs.form">
       </BaseWidget>
     </template>
   </v-form>
@@ -30,6 +32,11 @@ export default Vue.extend({
     datasource: Object,
     dataItem: Object,
     variables: Array
+  },
+  data() {
+    return {
+      valid: false
+    }
   },
   computed: {
     appWidget(): AppWidget {
