@@ -1425,16 +1425,7 @@
           "id": "action",
           "label": "Akcja",
           "type": "action",
-          "props": [
-            {
-              "id": "click",
-              "value": "",
-              "action:": "",
-              "variables": [],
-              "label": "Akcja",
-              "type": "Action"
-            }
-          ]
+          "props": []
         }
       ]
     }

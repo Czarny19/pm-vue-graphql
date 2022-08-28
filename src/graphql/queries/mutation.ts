@@ -10,6 +10,17 @@ export const GET_MUTATION_LIST_BY_DATA_SOURCE_ID = gql`query getMutationListByDa
     }
 }`
 
+export const GET_EXT_MUTATION_LIST_BY_DATA_SOURCE_ID = gql`query getExtMutationListByDatasourceId($datasourceId: bigint!) {
+    MUTATION(where: {data_source_id: {_eq: $datasourceId}}) {
+        id
+        name
+        table
+        type
+        fields
+        variables
+    }
+}`
+
 export const GET_MUTATION_BY_ID = gql`query getMutationById($id: bigint!) {
     MUTATION(where: {id: {_eq: $id}}) {
         id

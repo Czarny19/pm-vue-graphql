@@ -226,6 +226,17 @@
     "valueNoSpecialChars": "Pole nie może zawierać znaków specjalnych oraz spacji",
     "widgetsGrid": "Siatka",
     "widgetsDisplay": "Wyświetlanie",
-    "widgetsInput": "Wstawianie"
+    "widgetsInput": "Wstawianie",
+    "addAction": "Dodaj akcję",
+    "actionType": "Rodzaj",
+    "action": "Akcja",
+    "actionTarget": "Cel akcji",
+    "actionGoTo": "Przejdź do strony",
+    "actionRunMutation": "Uruchom mutację",
+    "pageParams": "Parametry strony",
+    "addPageParam": "Dodaj parametr strony",
+    "paramNameRequired": "Nazwa parametru jest wymagana",
+    "paramNameTooLong": "Nazwa parametru nie może być dłuższa niż 30 znaków",
+    "pageUrl": "Url"
   }
 }

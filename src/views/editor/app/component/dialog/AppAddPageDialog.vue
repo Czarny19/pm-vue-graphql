@@ -15,6 +15,42 @@
               prepend-icon="fa-tag"
               required>
           </v-text-field>
+
+          <div class="pt-4 text-body-1">{{ i18n('editor.pageParams') }}</div>
+
+          <v-text-field
+              class="pt-1"
+              v-for="(param, index) in params"
+              :key="index"
+              color="accent"
+              :value="param"
+              :counter="30"
+              :rules="pageParamRules"
+              dense
+              @change="(val) => params[index] = val">
+
+            <template v-slot:append>
+              <v-btn
+                  class="ma-1"
+                  fab depressed
+                  height="24"
+                  width="24"
+                  color="transparent"
+                  @click="params.splice(index, 1)">
+                <v-icon x-small>fa-times</v-icon>
+              </v-btn>
+            </template>
+          </v-text-field>
+
+          <div>
+            <IconButton
+                class="mt-2"
+                :label="i18n('editor.addPageParam')"
+                icon="fa-plus"
+                color="info"
+                @click="params.push('')">
+            </IconButton>
+          </div>
         </v-form>
       </v-card-text>
 
@@ -45,10 +81,16 @@ export default Vue.extend({
       isOpen: false,
       valid: false,
       pageName: '',
+      params: [],
       pageNameRules: [
         (v: string) => !!v || this.$t('editor.pageNameRequired'),
         (v: string) => (v && v.length <= 30) || this.$t('editor.pageNameTooLong'),
       ],
+      pageParamRules: [
+        (v: string) => !!v || this.$t('editor.paramNameRequired'),
+        (v: string) => (v && v.length <= 30) || this.$t('editor.paramNameTooLong'),
+        (v: string) => (v && !/[^a-zA-Z0-9]/.test(v)) || this.$t('editor.valueNoSpecialChars')
+      ]
     }
   },
   methods: {
@@ -65,7 +107,8 @@ export default Vue.extend({
         variables: {
           projectId: this.projectId,
           definition: generateInitialPageDefinition(this.pageName),
-          name: this.pageName
+          name: this.pageName,
+          params: this.params.join(';')
         }
       }).then(async () => {
         this.pageName = ''

@@ -138,10 +138,32 @@ export type TableHeader = {
     visible: boolean;
 }
 
+export type Page = {
+    id: number;
+    name: string;
+    definition: never;
+    params: string;
+    modify_date: Date;
+}
+
 export type PageVariable = {
     id: number;
     name: string;
     type: string;
     type_display: string;
     value: string;
+}
+
+export type ActionProp = {
+    id: number;
+    type: string;
+    target: number;
+    variables: ActionPropVariable[];
+}
+
+export type ActionPropVariable = {
+    name: string;
+    type: string;
+    value: string;
+    pageVar: number;
 }

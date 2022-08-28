@@ -1,5 +1,5 @@
 <template>
-  <v-btn small class="pa-4" min-width="100" :color="color" @click="click">
+  <v-btn small class="pa-4" min-width="100" :color="color" @click="click" :block="block">
     {{ label }}
     <v-icon small class="pl-6">{{ icon }}</v-icon>
   </v-btn>
@@ -13,7 +13,8 @@ export default Vue.extend({
   props: {
     label: String,
     color: String,
-    icon: String
+    icon: String,
+    block: Boolean
   },
   methods: {
     click() {

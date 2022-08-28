@@ -102,3 +102,8 @@ export const getRulesForInput = (widget: AppWidget, counter: number | undefined)
 
     return rules
 }
+
+export const getActionTypes = (): { id: string; name: string }[] => [
+    {id: 'goToPage', name: i18n.t('editor.actionGoTo').toString()},
+    {id: 'runMutation', name: i18n.t('editor.actionRunMutation').toString()}
+]

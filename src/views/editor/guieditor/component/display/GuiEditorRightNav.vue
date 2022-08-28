@@ -45,9 +45,18 @@
           </v-row>
         </template>
 
-        <v-row no-gutters class="pa-3 pt-6">
+        <GuiEditorActionBuilder
+            v-if="actionPropGroup"
+            :actions-group="actionPropGroup"
+            :mutations="mutations"
+            :pages="pages"
+            :variables="variables">
+        </GuiEditorActionBuilder>
+
+        <v-row no-gutters class="pa-3">
           <IconButton
-              class="ml-auto"
+              block
+              class="ml-auto mb-4"
               color="error"
               icon="fa-trash-can"
               :label="i18n('editor.deleteComponent')"
@@ -120,12 +129,14 @@ import Vue from "vue";
 import IconButton from "@/components/button/IconButton.vue";
 import GuiEditorProp from "@/views/editor/guieditor/component/property/GuiEditorProp.vue";
 import GuiEditorAddPropDialog from "@/views/editor/guieditor/component/dialog/GuiEditorAddPropDialog.vue";
+import GuiEditorActionBuilder from "@/views/editor/guieditor/component/action/GuiEditorActionBuilder.vue";
 import {DELETE_PROP} from "@/graphql/queries/prop";
 import {PageVariable} from "@/lib/types";
 
 export default Vue.extend({
   name: 'GuiEditorRightNav',
   components: {
+    GuiEditorActionBuilder,
     GuiEditorAddPropDialog,
     GuiEditorProp,
     IconButton
@@ -134,7 +145,9 @@ export default Vue.extend({
     widget: Object,
     theme: Object,
     queries: Array,
+    mutations: Array,
     schema: Array,
+    pages: Array,
     variables: Array
   },
   data() {
@@ -155,6 +168,15 @@ export default Vue.extend({
       return (this.variables as PageVariable[])
           ?.map((variable) => variable.type_display)
           .filter((v, i, a) => a.indexOf(v) === i);
+    },
+    actionPropGroup() {
+      const actionGroups = (this.groups as { type: string }[]).filter((group) => group.type === 'action')
+
+      if (actionGroups.length) {
+        return actionGroups[0]
+      }
+
+      return undefined
     }
   },
   watch: {

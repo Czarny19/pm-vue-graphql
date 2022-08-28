@@ -5,6 +5,7 @@
     <RejectChangesDialog :dialog="reject" @cancel="cancelRejectChanges" @confirm="rejectChanges"/>
 
     <GuiEditorTopBar
+        v-if="page"
         :project-name="project.name"
         :page-name="page.name"
         :page-definition="page.definition"
@@ -46,8 +47,10 @@
               :widget="activeWidget"
               :theme="theme"
               :queries="queries"
+              :mutations="mutations"
               :schema="schema"
               :variables="variables"
+              :pages="pages"
               @delete="removeWidget(page.definition)"
               @refreshvars="refreshVars">
           </GuiEditorRightNav>
@@ -66,15 +69,16 @@ import GuiEditorLeftNav from "@/views/editor/guieditor/component/display/GuiEdit
 import GuiEditorDisplay from "@/views/editor/guieditor/component/display/GuiEditorDisplay.vue";
 import GuiEditorRightNav from "@/views/editor/guieditor/component/display/GuiEditorRightNav.vue";
 import RejectChangesDialog from "@/components/dialog/RejectChangesDialog.vue";
-import {GET_PAGE_BY_ID, UPDATE_PAGE_DEFINITION} from "@/graphql/queries/page";
+import {GET_PAGE_LIST_BY_PROJECT_ID, UPDATE_PAGE_DEFINITION} from "@/graphql/queries/page";
 import {CURRENT_USER} from "@/graphql/queries/user";
 import {GET_PROJECT_BY_ID} from "@/graphql/queries/project";
 import {GET_THEME_BY_ID} from "@/graphql/queries/theme";
 import {GET_QUERY_LIST_BY_DATA_SOURCE_ID} from "@/graphql/queries/query";
 import {GET_DATA_SOURCE_BY_ID} from "@/graphql/queries/datasource";
-import {AppWidget} from "@/lib/types";
-import {decodeDatasourceSecret, getCleanGraphQLSchema} from "@/lib/schema";
 import {GET_PROP_LIST_BY_PAGE_ID} from "@/graphql/queries/prop";
+import {GET_EXT_MUTATION_LIST_BY_DATA_SOURCE_ID} from "@/graphql/queries/mutation";
+import {AppWidget, Page} from "@/lib/types";
+import {decodeDatasourceSecret, getCleanGraphQLSchema} from "@/lib/schema";
 
 export default Vue.extend({
   name: 'GuiEditorPage',
@@ -101,11 +105,12 @@ export default Vue.extend({
       editorCols: 8,
       project: {},
       theme: {},
-      page: {},
       activeWidget: {},
       datasource: {},
       variables: [],
       queries: [],
+      mutations: [],
+      pages: [],
       schema: []
     }
   },
@@ -119,6 +124,9 @@ export default Vue.extend({
     datasourceId(): number {
       return Number(this.$route.params.datasourceId)
     },
+    page(): Page {
+      return (this.pages as Page[]).filter((page) => page.id == this.pageId)[0]
+    }
   },
   watch: {
     page: {
@@ -155,7 +163,7 @@ export default Vue.extend({
         mutation: UPDATE_PAGE_DEFINITION,
         variables: {
           id: this.pageId,
-          definition: (this.page as { definition: string }).definition,
+          definition: this.page.definition,
           modifyDate: new Date()
         }
       }).then(() => {
@@ -282,18 +290,18 @@ export default Vue.extend({
       }
     },
     PAGE: {
-      query: GET_PAGE_BY_ID,
+      query: GET_PAGE_LIST_BY_PROJECT_ID,
       fetchPolicy: 'no-cache',
-      variables(): { id: number } {
+      variables(): { projectId: number } {
         return {
-          id: this.pageId
+          projectId: this.projectId
         }
       },
       skip(): boolean {
-        return !this.pageId
+        return !this.projectId
       },
       result({data}): void {
-        this.page = data.PAGE[0]
+        this.pages = data.PAGE
         this.loading = false
       }
     },
@@ -345,6 +353,21 @@ export default Vue.extend({
       },
       result({data}): void {
         this.queries = data.QUERY
+      }
+    },
+    MUTATION: {
+      query: GET_EXT_MUTATION_LIST_BY_DATA_SOURCE_ID,
+      fetchPolicy: 'no-cache',
+      variables(): { datasourceId: number } {
+        return {
+          datasourceId: this.datasourceId
+        }
+      },
+      skip(): boolean {
+        return !this.datasourceId
+      },
+      result({data}): void {
+        this.mutations = data.MUTATION
       }
     }
   }

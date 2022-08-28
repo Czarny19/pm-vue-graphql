@@ -23,6 +23,19 @@
             </v-col>
 
             <v-col class="text-end">
+              <v-tooltip top color="accent" class="pa-4" min-width="600">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn small class="pa-4 mr-2" color="primary" v-bind="attrs" v-on="on">
+                    {{ i18n('editor.pageUrl') }}
+                  </v-btn>
+                </template>
+
+                <div class="text-start accent">
+                  <div class="text-black">
+                    /{{ page.name }}{{ getParamsDisplay(page.params) }}
+                  </div>
+                </div>
+              </v-tooltip>
               <span class="text-body-2 text--secondary pr-6">
                 {{ i18n('editor.modifyDate') }}: {{ page.modify_date }}
               </span>
@@ -107,6 +120,13 @@ export default Vue.extend({
       this.$apollo.mutate({mutation: DELETE_PAGE, variables: {id: this.deleteId}}).then(() => {
         this.$apollo.queries.PAGE.refetch()
       })
+    },
+    getParamsDisplay(params: string | undefined): string {
+      if (params) {
+        return '?' + params.split(';').map((param) => `${param}=:${param}`).join('&')
+      }
+
+      return ''
     }
   },
   apollo: {
