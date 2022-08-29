@@ -427,6 +427,7 @@ type PROJECT {
     ): PAGE_aggregate!
     "An object relationship"
     project_theme: THEME
+    running: Boolean
     source_id: bigint
     start_page: bigint
     theme_id: bigint!
@@ -1975,6 +1976,8 @@ enum PROJECT_select_column {
     "column name"
     name
     "column name"
+    running
+    "column name"
     source_id
     "column name"
     start_page
@@ -1998,6 +2001,8 @@ enum PROJECT_update_column {
     id
     "column name"
     name
+    "column name"
+    running
     "column name"
     source_id
     "column name"
@@ -2811,6 +2816,7 @@ input PROJECT_bool_exp {
     project_data_source: DATA_SOURCE_bool_exp
     project_pages: PAGE_bool_exp
     project_theme: THEME_bool_exp
+    running: Boolean_comparison_exp
     source_id: bigint_comparison_exp
     start_page: bigint_comparison_exp
     theme_id: bigint_comparison_exp
@@ -2852,6 +2858,7 @@ input PROJECT_insert_input {
     project_data_source: DATA_SOURCE_obj_rel_insert_input
     project_pages: PAGE_arr_rel_insert_input
     project_theme: THEME_obj_rel_insert_input
+    running: Boolean
     source_id: bigint
     start_page: bigint
     theme_id: bigint
@@ -2906,6 +2913,7 @@ input PROJECT_order_by {
     project_data_source: DATA_SOURCE_order_by
     project_pages_aggregate: PAGE_aggregate_order_by
     project_theme: THEME_order_by
+    running: order_by
     source_id: order_by
     start_page: order_by
     theme_id: order_by
@@ -2930,6 +2938,7 @@ input PROJECT_set_input {
     description: String
     id: bigint
     name: String
+    running: Boolean
     source_id: bigint
     start_page: bigint
     theme_id: bigint

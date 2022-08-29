@@ -3,8 +3,9 @@
     <LoadingCircular v-if="loading"/>
 
     <template v-else>
-      <AppMenuSettingStartPage :project="project" :pages="pages"/>
-      <AppMenuSettingNav :project="project" :pages="pages"/>
+      <AppMenuSettingRunning :project="project"/>
+      <AppMenuSettingStartPage class="mt-3" :project="project" :pages="pages"/>
+      <AppMenuSettingNav class="mt-3" :project="project" :pages="pages"/>
     </template>
   </v-container>
 </template>
@@ -14,10 +15,11 @@ import Vue from "vue";
 import LoadingCircular from "@/components/loading/LoadingCircular.vue";
 import AppMenuSettingStartPage from "@/views/editor/app/component/settings/AppMenuSettingStartPage.vue";
 import AppMenuSettingNav from "@/views/editor/app/component/settings/AppMenuSettingNav.vue";
+import AppMenuSettingRunning from "@/views/editor/app/component/settings/AppMenuSettingRunning.vue";
 
 export default Vue.extend({
   name: 'AppMenuTabSettings',
-  components: {AppMenuSettingNav, AppMenuSettingStartPage, LoadingCircular},
+  components: {AppMenuSettingRunning, AppMenuSettingNav, AppMenuSettingStartPage, LoadingCircular},
   props: {
     loading: Boolean,
     project: Object,

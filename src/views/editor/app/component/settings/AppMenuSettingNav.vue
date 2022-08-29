@@ -1,5 +1,5 @@
 <template>
-  <v-card color="primary" class="mt-3">
+  <v-card color="primary">
     <v-card-title>{{ i18n('editor.topNavigation') }}</v-card-title>
 
     <v-card-text>

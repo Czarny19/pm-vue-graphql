@@ -7,6 +7,7 @@ export type AppProject = {
     start_page: number | undefined;
     top_nav: boolean;
     top_nav_items: { items: { name: string, page: number }[] }
+    running: boolean;
 }
 
 export type Datasource = {

@@ -24,6 +24,7 @@ export const GET_PROJECT_BY_ID = gql`query getProjectById($id: bigint!) {
         start_page
         top_nav
         top_nav_items
+        running
         id
     }
 }`
@@ -73,6 +74,14 @@ export const UPDATE_PROJECT = gql`mutation updateProject(
         theme_id: $themeId,
         source_id: $datasourceId
     }) {
+        returning {
+            id
+        }
+    }
+}`
+
+export const UPDATE_PROJECT_RUNNING = gql`mutation updateProjectStartPage($id: bigint!,$running: Boolean!) {
+    update_PROJECT(where: {id: {_eq: $id}},_set: {running: $running}) {
         returning {
             id
         }

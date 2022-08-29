@@ -249,6 +249,7 @@
     "navItemNameTooLong": "Nazwa zakładki nie może przekroczyć 30 znaków",
     "navItemPage": "Strona",
     "navItemPageRequired": "Strona jest wymagana",
-    "navItemOrder": "Kolejność"
+    "navItemOrder": "Kolejność",
+    "running": "Aplikacja uruchomiona"
   }
 }
