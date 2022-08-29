@@ -19,14 +19,14 @@ export default Vue.extend({
   props: {
     prop: Object
   },
-  computed: {
-    borders(): string [] {
-      return borders
-    }
-  },
   data() {
     return {
       currentProp: {}
+    }
+  },
+  computed: {
+    borders(): string [] {
+      return borders
     }
   },
   beforeMount() {

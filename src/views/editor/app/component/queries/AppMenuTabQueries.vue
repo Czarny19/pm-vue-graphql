@@ -15,37 +15,8 @@
 
       <template v-if="datasourceSet">
         <AddItemCard v-if="!loading" :label="i18n('editor.addQuery')" @add="addQuery"/>
-
         <LoadingCircular v-if="loading"/>
-
-        <v-card v-else color="secondary" v-for="query in queries" :key="query.id" class="mt-3">
-          <v-container fluid class="pl-6 pr-6">
-            <v-row no-gutters>
-              <v-col class="text-start ma-auto text-body-1">
-                {{ query.name }}
-              </v-col>
-
-              <v-col class="text-end">
-                   <span class="text-body-2 text--secondary pr-6">
-                  {{ i18n('editor.modifyDate') }}: {{ query.modify_date }}
-                </span>
-                <IconButton
-                    :label="i18n('common.edit')"
-                    icon="fa-edit"
-                    color="info"
-                    @click="openQuery(query.id)">
-                </IconButton>
-                <IconButton
-                    class="ml-6"
-                    :label="i18n('common.delete')"
-                    icon="fa-trash-can"
-                    color="error"
-                    @click="deleteQueryClicked(query.id)">
-                </IconButton>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card>
+        <AppMenuQueriesList v-else :datasource-id="datasource.id" :queries="queries" @delete="deleteQueryClicked"/>
       </template>
 
       <AppMenuNoDatasource v-else/>
@@ -58,33 +29,33 @@ import Vue from "vue";
 import TitleCard from "@/components/card/TitleCard.vue";
 import DeleteConfirmationDialog from "@/components/dialog/DeleteConfirmationDialog.vue";
 import LoadingCircular from "@/components/loading/LoadingCircular.vue";
-import IconButton from "@/components/button/IconButton.vue";
-import AppAddQueryDialog from "@/views/editor/app/component/dialog/AppAddQueryDialog.vue";
+import AppMenuQueriesList from "@/views/editor/app/component/queries/AppMenuQueriesList.vue";
+import AppAddQueryDialog from "@/views/editor/app/component/queries/AppAddQueryDialog.vue";
 import AddItemCard from "@/components/card/AddItemCard.vue";
 import AppMenuNoDatasource from "@/views/editor/app/component/AppMenuNoDatasource.vue";
-import {DELETE_QUERY, GET_QUERY_LIST_BY_DATA_SOURCE_ID} from "@/graphql/queries/query";
+import {DELETE_QUERY} from "@/graphql/queries/query";
 import {getCleanGraphQLSchema} from "@/lib/schema";
 import {SchemaItem} from "@/lib/types";
 
 export default Vue.extend({
   name: 'AppMenuTabQueries',
   components: {
+    AppMenuQueriesList,
     AppMenuNoDatasource,
     AddItemCard,
     AppAddQueryDialog,
-    IconButton,
     LoadingCircular,
     DeleteConfirmationDialog,
     TitleCard
   },
   props: {
-    datasource: Object
+    loading: Boolean,
+    datasource: Object,
+    queries: Array
   },
   data() {
     return {
-      loading: true,
       addQueryDialog: false,
-      queries: [],
       deleteDialog: false,
       deleteId: -1,
       schema: []
@@ -108,9 +79,6 @@ export default Vue.extend({
     refresh(): void {
       this.$apollo.queries.QUERY.refetch()
     },
-    openQuery(id: number): void {
-      this.$router.push({name: 'Query', params: {datasourceId: this.datasource.id.toString(), queryId: id.toString()}})
-    },
     deleteQueryClicked(id: number): void {
       this.deleteId = id
       this.deleteDialog = true
@@ -125,24 +93,6 @@ export default Vue.extend({
       this.$apollo.mutate({mutation: DELETE_QUERY, variables: {id: this.deleteId}}).then(() => {
         this.$apollo.queries.QUERY.refetch()
       })
-    }
-  },
-  apollo: {
-    QUERY: {
-      query: GET_QUERY_LIST_BY_DATA_SOURCE_ID,
-      fetchPolicy: 'network-only',
-      variables(): { datasourceId: number } {
-        return {
-          datasourceId: this.datasource.id
-        }
-      },
-      skip(): boolean {
-        return !this.datasourceSet
-      },
-      result({data}): void {
-        this.queries = data.QUERY
-        this.loading = false
-      }
     }
   },
   beforeMount() {

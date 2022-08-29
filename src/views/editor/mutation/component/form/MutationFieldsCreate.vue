@@ -4,16 +4,16 @@
       <v-container fluid class="pa-4">
         <v-row v-for="(field, index) in mutationFields" :key="index">
           <v-col cols="auto">
-            <v-btn fab small v-if="!field.isNullable" color="info" class="disable-events">
-              <v-icon>fa-asterisk</v-icon>
+            <v-btn fab x-small v-if="!field.isNullable" color="info" class="disable-events">
+              <v-icon small>fa-asterisk</v-icon>
             </v-btn>
 
-            <v-btn fab small v-else-if="fieldIsSelected(field)" @click="unselectField(field)" color="success">
-              <v-icon>fa-check</v-icon>
+            <v-btn fab x-small v-else-if="fieldIsSelected(field)" @click="unselectField(field)" color="success">
+              <v-icon small>fa-check</v-icon>
             </v-btn>
 
-            <v-btn v-else fab small @click="selectField(field)" color="error">
-              <v-icon>fa-times</v-icon>
+            <v-btn v-else fab x-small @click="selectField(field)" color="error">
+              <v-icon small>fa-times</v-icon>
             </v-btn>
           </v-col>
 

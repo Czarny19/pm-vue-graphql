@@ -4,17 +4,17 @@
       <v-container fluid class="pa-4">
         <v-row v-for="(wherePart, index) in whereParts" :key="index">
           <v-col v-if="index !== 0" cols="auto">
-            <v-btn fab small v-if="wherePart.isAnd" @click="setPartIsAnd(wherePart)" color="info">
+            <v-btn fab x-small v-if="wherePart.isAnd" @click="setPartIsAnd(wherePart)" color="info">
               {{ i18n('editor.and') }}
             </v-btn>
 
-            <v-btn fab small v-else @click="setPartIsAnd(wherePart)" color="info">
+            <v-btn fab x-small v-else @click="setPartIsAnd(wherePart)" color="info">
               {{ i18n('editor.or') }}
             </v-btn>
           </v-col>
 
           <v-col v-else cols="auto">
-            <v-btn fab small color="transparent" disabled></v-btn>
+            <v-btn fab x-small color="transparent" disabled></v-btn>
           </v-col>
 
           <v-col cols="3">
@@ -72,8 +72,8 @@
           <v-spacer></v-spacer>
 
           <v-col cols="1" class="text-end">
-            <v-btn fab small @click="deletePart(wherePart)" color="error">
-              <v-icon>fa-times</v-icon>
+            <v-btn fab x-small @click="deletePart(wherePart)" color="error">
+              <v-icon small>fa-times</v-icon>
             </v-btn>
           </v-col>
         </v-row>

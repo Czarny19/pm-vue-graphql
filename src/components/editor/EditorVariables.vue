@@ -54,8 +54,8 @@
           <v-spacer></v-spacer>
 
           <v-col cols="1" class="text-end">
-            <v-btn fab small color="error" @click="deleteVariable(variable)">
-              <v-icon>fa-times</v-icon>
+            <v-btn fab x-small color="error" @click="deleteVariable(variable)">
+              <v-icon small>fa-times</v-icon>
             </v-btn>
           </v-col>
         </v-row>
