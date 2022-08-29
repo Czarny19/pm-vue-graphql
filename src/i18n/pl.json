@@ -237,6 +237,18 @@
     "addPageParam": "Dodaj parametr strony",
     "paramNameRequired": "Nazwa parametru jest wymagana",
     "paramNameTooLong": "Nazwa parametru nie może być dłuższa niż 30 znaków",
-    "pageUrl": "Url"
+    "pageUrl": "Url",
+    "settings": "Ustawienia",
+    "startPage": "Strona startowa",
+    "topNavigation": "Nawigacja",
+    "topNavigationEnabled": "Nawigacja górna włączona?",
+    "topNavigationPages": "Strony nawigacji górnej",
+    "topNavigationAdd": "Dodaj element nawigacji",
+    "navItemName": "Nazwa zakładki",
+    "navItemNameRequired": "Nazwa zakładki jest wymagana",
+    "navItemNameTooLong": "Nazwa zakładki nie może przekroczyć 30 znaków",
+    "navItemPage": "Strona",
+    "navItemPageRequired": "Strona jest wymagana",
+    "navItemOrder": "Kolejność"
   }
 }

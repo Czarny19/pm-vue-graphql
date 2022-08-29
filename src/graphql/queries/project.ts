@@ -21,6 +21,9 @@ export const GET_PROJECT_BY_ID = gql`query getProjectById($id: bigint!) {
         description
         theme_id
         source_id
+        start_page
+        top_nav
+        top_nav_items
         id
     }
 }`
@@ -50,8 +53,7 @@ export const ADD_PROJECT = gql`mutation addProject(
         user_id: $userId,
         theme_id: $themeId
         source_id: $datasourceId
-    })
-    {
+    }){
         returning {
             id
         }
@@ -71,6 +73,26 @@ export const UPDATE_PROJECT = gql`mutation updateProject(
         theme_id: $themeId,
         source_id: $datasourceId
     }) {
+        returning {
+            id
+        }
+    }
+}`
+
+export const UPDATE_PROJECT_START_PAGE = gql`mutation updateProjectStartPage($id: bigint!,$startPage: bigint!) {
+    update_PROJECT(where: {id: {_eq: $id}},_set: {start_page: $startPage}) {
+        returning {
+            id
+        }
+    }
+}`
+
+export const UPDATE_PROJECT_TOP_NAV = gql`mutation updateProjectTopNav(
+    $id: bigint!,
+    $topNav: Boolean!, 
+    $topNavItems: jsonb!
+) {
+    update_PROJECT(where: {id: {_eq: $id}},_set: {top_nav: $topNav, top_nav_items: $topNavItems}) {
         returning {
             id
         }

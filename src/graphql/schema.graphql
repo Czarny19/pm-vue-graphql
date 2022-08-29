@@ -428,7 +428,13 @@ type PROJECT {
     "An object relationship"
     project_theme: THEME
     source_id: bigint
+    start_page: bigint
     theme_id: bigint!
+    top_nav: Boolean!
+    top_nav_items(
+        "JSON select path"
+        path: String
+    ): jsonb
     user_id: bigint!
 }
 
@@ -457,6 +463,7 @@ type PROJECT_aggregate_fields {
 type PROJECT_avg_fields {
     id: Float
     source_id: Float
+    start_page: Float
     theme_id: Float
     user_id: Float
 }
@@ -468,6 +475,7 @@ type PROJECT_max_fields {
     id: bigint
     name: String
     source_id: bigint
+    start_page: bigint
     theme_id: bigint
     user_id: bigint
 }
@@ -479,6 +487,7 @@ type PROJECT_min_fields {
     id: bigint
     name: String
     source_id: bigint
+    start_page: bigint
     theme_id: bigint
     user_id: bigint
 }
@@ -495,6 +504,7 @@ type PROJECT_mutation_response {
 type PROJECT_stddev_fields {
     id: Float
     source_id: Float
+    start_page: Float
     theme_id: Float
     user_id: Float
 }
@@ -503,6 +513,7 @@ type PROJECT_stddev_fields {
 type PROJECT_stddev_pop_fields {
     id: Float
     source_id: Float
+    start_page: Float
     theme_id: Float
     user_id: Float
 }
@@ -511,6 +522,7 @@ type PROJECT_stddev_pop_fields {
 type PROJECT_stddev_samp_fields {
     id: Float
     source_id: Float
+    start_page: Float
     theme_id: Float
     user_id: Float
 }
@@ -519,6 +531,7 @@ type PROJECT_stddev_samp_fields {
 type PROJECT_sum_fields {
     id: bigint
     source_id: bigint
+    start_page: bigint
     theme_id: bigint
     user_id: bigint
 }
@@ -527,6 +540,7 @@ type PROJECT_sum_fields {
 type PROJECT_var_pop_fields {
     id: Float
     source_id: Float
+    start_page: Float
     theme_id: Float
     user_id: Float
 }
@@ -535,6 +549,7 @@ type PROJECT_var_pop_fields {
 type PROJECT_var_samp_fields {
     id: Float
     source_id: Float
+    start_page: Float
     theme_id: Float
     user_id: Float
 }
@@ -543,6 +558,7 @@ type PROJECT_var_samp_fields {
 type PROJECT_variance_fields {
     id: Float
     source_id: Float
+    start_page: Float
     theme_id: Float
     user_id: Float
 }
@@ -1249,8 +1265,18 @@ type mutation_root {
     ): PAGE
     "update data of the table: \"PROJECT\""
     update_PROJECT(
+        "append existing jsonb value of filtered columns with new jsonb value"
+        _append: PROJECT_append_input,
+        "delete the field or element with specified path (for JSON arrays, negative integers count from the end)"
+        _delete_at_path: PROJECT_delete_at_path_input,
+        "delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array"
+        _delete_elem: PROJECT_delete_elem_input,
+        "delete key/value pair or string element. key/value pairs are matched based on their key value"
+        _delete_key: PROJECT_delete_key_input,
         "increments the integer columns with given value of the filtered values"
         _inc: PROJECT_inc_input,
+        "prepend existing jsonb value of filtered columns with new jsonb value"
+        _prepend: PROJECT_prepend_input,
         "sets the columns of the filtered rows to the given values"
         _set: PROJECT_set_input,
         "filter the rows which have to be updated"
@@ -1258,8 +1284,18 @@ type mutation_root {
     ): PROJECT_mutation_response
     "update single row of the table: \"PROJECT\""
     update_PROJECT_by_pk(
+        "append existing jsonb value of filtered columns with new jsonb value"
+        _append: PROJECT_append_input,
+        "delete the field or element with specified path (for JSON arrays, negative integers count from the end)"
+        _delete_at_path: PROJECT_delete_at_path_input,
+        "delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array"
+        _delete_elem: PROJECT_delete_elem_input,
+        "delete key/value pair or string element. key/value pairs are matched based on their key value"
+        _delete_key: PROJECT_delete_key_input,
         "increments the integer columns with given value of the filtered values"
         _inc: PROJECT_inc_input,
+        "prepend existing jsonb value of filtered columns with new jsonb value"
+        _prepend: PROJECT_prepend_input,
         "sets the columns of the filtered rows to the given values"
         _set: PROJECT_set_input,
         pk_columns: PROJECT_pk_columns_input!
@@ -1941,7 +1977,13 @@ enum PROJECT_select_column {
     "column name"
     source_id
     "column name"
+    start_page
+    "column name"
     theme_id
+    "column name"
+    top_nav
+    "column name"
+    top_nav_items
     "column name"
     user_id
 }
@@ -1959,7 +2001,13 @@ enum PROJECT_update_column {
     "column name"
     source_id
     "column name"
+    start_page
+    "column name"
     theme_id
+    "column name"
+    top_nav
+    "column name"
+    top_nav_items
     "column name"
     user_id
 }
@@ -2173,6 +2221,19 @@ scalar bigint
 scalar date
 
 scalar jsonb
+
+"expression to compare columns of type Boolean. All fields are combined with logical 'AND'."
+input Boolean_comparison_exp {
+    _eq: Boolean
+    _gt: Boolean
+    _gte: Boolean
+    _in: [Boolean!]
+    _is_null: Boolean
+    _lt: Boolean
+    _lte: Boolean
+    _neq: Boolean
+    _nin: [Boolean!]
+}
 
 "order by aggregate values of table \"DATA_SOURCE\""
 input DATA_SOURCE_aggregate_order_by {
@@ -2718,6 +2779,11 @@ input PROJECT_aggregate_order_by {
     variance: PROJECT_variance_order_by
 }
 
+"append existing jsonb value of filtered columns with new jsonb value"
+input PROJECT_append_input {
+    top_nav_items: jsonb
+}
+
 "input type for inserting array relation for remote table \"PROJECT\""
 input PROJECT_arr_rel_insert_input {
     data: [PROJECT_insert_input!]!
@@ -2728,6 +2794,7 @@ input PROJECT_arr_rel_insert_input {
 input PROJECT_avg_order_by {
     id: order_by
     source_id: order_by
+    start_page: order_by
     theme_id: order_by
     user_id: order_by
 }
@@ -2745,14 +2812,33 @@ input PROJECT_bool_exp {
     project_pages: PAGE_bool_exp
     project_theme: THEME_bool_exp
     source_id: bigint_comparison_exp
+    start_page: bigint_comparison_exp
     theme_id: bigint_comparison_exp
+    top_nav: Boolean_comparison_exp
+    top_nav_items: jsonb_comparison_exp
     user_id: bigint_comparison_exp
+}
+
+"delete the field or element with specified path (for JSON arrays, negative integers count from the end)"
+input PROJECT_delete_at_path_input {
+    top_nav_items: [String]
+}
+
+"delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array"
+input PROJECT_delete_elem_input {
+    top_nav_items: Int
+}
+
+"delete key/value pair or string element. key/value pairs are matched based on their key value"
+input PROJECT_delete_key_input {
+    top_nav_items: String
 }
 
 "input type for incrementing integer column in table \"PROJECT\""
 input PROJECT_inc_input {
     id: bigint
     source_id: bigint
+    start_page: bigint
     theme_id: bigint
     user_id: bigint
 }
@@ -2767,7 +2853,10 @@ input PROJECT_insert_input {
     project_pages: PAGE_arr_rel_insert_input
     project_theme: THEME_obj_rel_insert_input
     source_id: bigint
+    start_page: bigint
     theme_id: bigint
+    top_nav: Boolean
+    top_nav_items: jsonb
     user_id: bigint
 }
 
@@ -2778,6 +2867,7 @@ input PROJECT_max_order_by {
     id: order_by
     name: order_by
     source_id: order_by
+    start_page: order_by
     theme_id: order_by
     user_id: order_by
 }
@@ -2789,6 +2879,7 @@ input PROJECT_min_order_by {
     id: order_by
     name: order_by
     source_id: order_by
+    start_page: order_by
     theme_id: order_by
     user_id: order_by
 }
@@ -2816,13 +2907,21 @@ input PROJECT_order_by {
     project_pages_aggregate: PAGE_aggregate_order_by
     project_theme: THEME_order_by
     source_id: order_by
+    start_page: order_by
     theme_id: order_by
+    top_nav: order_by
+    top_nav_items: order_by
     user_id: order_by
 }
 
 "primary key columns input for table: \"PROJECT\""
 input PROJECT_pk_columns_input {
     id: bigint!
+}
+
+"prepend existing jsonb value of filtered columns with new jsonb value"
+input PROJECT_prepend_input {
+    top_nav_items: jsonb
 }
 
 "input type for updating data in table \"PROJECT\""
@@ -2832,7 +2931,10 @@ input PROJECT_set_input {
     id: bigint
     name: String
     source_id: bigint
+    start_page: bigint
     theme_id: bigint
+    top_nav: Boolean
+    top_nav_items: jsonb
     user_id: bigint
 }
 
@@ -2840,6 +2942,7 @@ input PROJECT_set_input {
 input PROJECT_stddev_order_by {
     id: order_by
     source_id: order_by
+    start_page: order_by
     theme_id: order_by
     user_id: order_by
 }
@@ -2848,6 +2951,7 @@ input PROJECT_stddev_order_by {
 input PROJECT_stddev_pop_order_by {
     id: order_by
     source_id: order_by
+    start_page: order_by
     theme_id: order_by
     user_id: order_by
 }
@@ -2856,6 +2960,7 @@ input PROJECT_stddev_pop_order_by {
 input PROJECT_stddev_samp_order_by {
     id: order_by
     source_id: order_by
+    start_page: order_by
     theme_id: order_by
     user_id: order_by
 }
@@ -2864,6 +2969,7 @@ input PROJECT_stddev_samp_order_by {
 input PROJECT_sum_order_by {
     id: order_by
     source_id: order_by
+    start_page: order_by
     theme_id: order_by
     user_id: order_by
 }
@@ -2872,6 +2978,7 @@ input PROJECT_sum_order_by {
 input PROJECT_var_pop_order_by {
     id: order_by
     source_id: order_by
+    start_page: order_by
     theme_id: order_by
     user_id: order_by
 }
@@ -2880,6 +2987,7 @@ input PROJECT_var_pop_order_by {
 input PROJECT_var_samp_order_by {
     id: order_by
     source_id: order_by
+    start_page: order_by
     theme_id: order_by
     user_id: order_by
 }
@@ -2888,6 +2996,7 @@ input PROJECT_var_samp_order_by {
 input PROJECT_variance_order_by {
     id: order_by
     source_id: order_by
+    start_page: order_by
     theme_id: order_by
     user_id: order_by
 }

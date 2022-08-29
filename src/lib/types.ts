@@ -4,6 +4,9 @@ export type AppProject = {
     description: string;
     theme_id: number | undefined;
     source_id: number | undefined;
+    start_page: number | undefined;
+    top_nav: boolean;
+    top_nav_items: { items: { name: string, page: number }[] }
 }
 
 export type Datasource = {

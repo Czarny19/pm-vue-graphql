@@ -47,6 +47,7 @@ export default Vue.extend({
   computed: {
     navItems(): { title: string, icon: string }[] {
       return [
+        {title: this.$t('editor.settings').toString(), icon: 'fa-gears'},
         {title: this.$t('editor.pages').toString(), icon: 'fa-file-pen'},
         {title: this.$t('editor.tables').toString(), icon: 'fa-table'},
         {title: this.$t('editor.queries').toString(), icon: 'fa-terminal'},
