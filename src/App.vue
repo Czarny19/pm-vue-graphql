@@ -1,7 +1,7 @@
 <template>
   <v-app>
-    <div id="app">
-      <AppBar/>
+    <div id="app-main">
+      <AppBar v-if="isAdminPage"/>
       <v-main>
         <router-view/>
       </v-main>
@@ -15,7 +15,12 @@ import AppBar from "@/components/bar/AppBar.vue";
 
 export default Vue.extend({
   name: 'App',
-  components: {AppBar}
+  components: {AppBar},
+  computed: {
+    isAdminPage(): boolean {
+      return this.$route.path.startsWith('/admin')
+    }
+  }
 })
 
 // Runtime | walidacja danych | skomplikowany przypadek | celem nie jest prototyp tylko analiza zagadnienia | cech |

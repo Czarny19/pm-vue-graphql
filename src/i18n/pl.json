@@ -148,6 +148,7 @@
     "description": "Opis",
     "operation": "Operacja",
     "variable": "Zmienna",
+    "wherePartRequired": "Wymagane?",
     "variables": "Zmienne",
     "fields": "Pola",
     "selectAll": "Zaznacz wszystkie",
@@ -213,6 +214,7 @@
     "data": "Dane",
     "labels": "Etykiety pól",
     "propName": "Nazwa zmiennej",
+    "props": "Zmienne",
     "propNameRequired": "Nazwa zmiennej jest wymagana",
     "propNameTooLong": "Nazwa zmiennej nie może być dłuższa niż 30 znaków",
     "propNameNoSpecialChars": "Nazwa zmiennej nie może zawierać znaków specjalnych oraz spacji",
@@ -250,6 +252,7 @@
     "navItemPage": "Strona",
     "navItemPageRequired": "Strona jest wymagana",
     "navItemOrder": "Kolejność",
-    "running": "Aplikacja uruchomiona"
+    "running": "Aplikacja uruchomiona",
+    "openApp": "Otwórz aplikację"
   }
 }

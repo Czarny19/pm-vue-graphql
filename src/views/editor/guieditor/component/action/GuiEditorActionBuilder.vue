@@ -51,10 +51,10 @@
         </v-col>
       </v-row>
 
-      <v-row no-gutters>
+      <v-row no-gutters v-if="!actionsGroup.addLocked">
         <v-col class="text-start">
           <IconButton
-              class="mt-3 mb-3"
+              class="mt-2 mb-5"
               block
               :label="i18n('editor.addAction')"
               color="success"

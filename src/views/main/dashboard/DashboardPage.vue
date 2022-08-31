@@ -116,7 +116,7 @@ export default Vue.extend({
         }
       },
       skip(): boolean {
-        return !this.currentUser
+        return !this.currentUser || !this.currentUser.id
       },
       result({data}): void {
         this.projects = data.PROJECT
@@ -132,7 +132,7 @@ export default Vue.extend({
         }
       },
       skip(): boolean {
-        return !this.currentUser
+        return !this.currentUser || !this.currentUser.id
       },
       result({data}): void {
         this.themes = data.THEME
@@ -148,7 +148,7 @@ export default Vue.extend({
         }
       },
       skip(): boolean {
-        return !this.currentUser
+        return !this.currentUser || !this.currentUser.id
       },
       result({data}): void {
         this.datasources = data.DATA_SOURCE

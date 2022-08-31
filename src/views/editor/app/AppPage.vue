@@ -11,24 +11,35 @@
         :pages="pages"
         :loading="loadingPages">
     </AppMenuTabSettings>
+
     <AppMenuTabPages
         v-if="currentTab === 1"
         :loading="loadingPages"
         :pages="pages"
         :project-id="project.id"
-        :datasource-id="datasource.id">
+        :datasource-id="datasource.id"
+        @refresh="refreshPages">
     </AppMenuTabPages>
-    <AppMenuTabTables v-else-if="currentTab === 2" :datasource="datasource"/>
+
+    <AppMenuTabTables
+        v-else-if="currentTab === 2"
+        :datasource="datasource">
+    </AppMenuTabTables>
+
     <AppMenuTabQueries
-        v-else-if="currentTab === 3"
+        v-else-if="currentTab === 3 && !loadingQueries"
         :datasource="datasource"
         :queries="queries"
-        :loading="loadingQueries"/>
+        :loading="loadingQueries"
+        @refresh="refreshQueries">
+    </AppMenuTabQueries>
+
     <AppMenuTabMutations
-        v-else-if="currentTab === 4"
+        v-else-if="currentTab === 4 && !loadingMutations"
         :datasource="datasource"
         :mutations="mutations"
-        :loading="loadingMutations">
+        :loading="loadingMutations"
+        @refresh="refreshMutations">
     </AppMenuTabMutations>
   </div>
 </template>
@@ -47,9 +58,9 @@ import {CURRENT_USER} from "@/graphql/queries/user";
 import {GET_PROJECT_BY_ID} from "@/graphql/queries/project";
 import {GET_THEME_BY_ID} from "@/graphql/queries/theme";
 import {GET_DATA_SOURCE_BY_ID} from "@/graphql/queries/datasource";
-import {decodeDatasourceSecret} from "@/lib/schema";
 import {GET_MUTATION_LIST_BY_DATA_SOURCE_ID} from "@/graphql/queries/mutation";
 import {GET_QUERY_LIST_BY_DATA_SOURCE_ID} from "@/graphql/queries/query";
+import {decodeDatasourceSecret} from "@/lib/schema";
 
 export default Vue.extend({
   name: 'AppPage',
@@ -69,9 +80,9 @@ export default Vue.extend({
       loadingMutations: true,
       currentTab: 0,
       project: {},
-      pages: [],
       theme: {},
       datasource: {},
+      pages: [],
       mutations: [],
       queries: []
     }
@@ -87,6 +98,15 @@ export default Vue.extend({
         this.currentTab = tab
         this.$router.push({name: 'App', params: {projectId: this.projectId.toString(), tab: tab.toString()}})
       }
+    },
+    refreshPages(): void {
+      this.$apollo.queries.PAGE.refetch()
+    },
+    refreshQueries(): void {
+      this.$apollo.queries.QUERY.refetch()
+    },
+    refreshMutations(): void {
+      this.$apollo.queries.MUTATION.refetch()
     }
   },
   apollo: {
@@ -117,7 +137,7 @@ export default Vue.extend({
         }
       },
       skip(): boolean {
-        return !this.projectId
+        return !this.currentUser
       },
       result({data}): void {
         this.pages = data.PAGE

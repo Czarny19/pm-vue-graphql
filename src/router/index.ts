@@ -8,12 +8,13 @@ import DatasourcePage from "@/views/main/datasource/DatasourcePage.vue";
 import QueryPage from "@/views/editor/query/QueryPage.vue";
 import GuiEditorPage from "@/views/editor/guieditor/GuiEditorPage.vue";
 import MutationPage from "@/views/editor/mutation/MutationPage.vue";
-import {authGuard} from "@/plugins/auth_guard";
+import AppRunnerPage from "@/views/runtime/apprunner/AppRunnerPage.vue";
+import {authGuard, resetColors} from "@/plugins/auth_guard";
 
 Vue.use(VueRouter)
 
 const routes = [
-    {name: 'Dashboard', path: '/admin/main/dashboard/tab=:tab', component: DashboardPage},
+    {name: 'Dashboard', path: '/admin/main/dashboard/tab=:tab', component: DashboardPage, beforeEnter: resetColors},
     {name: 'NewProject', path: '/admin/main/project/new', component: ProjectPage, beforeEnter: authGuard},
     {name: 'Project', path: '/admin/main/project/:projectId', component: ProjectPage, beforeEnter: authGuard},
     {name: 'NewTheme', path: '/admin/main/theme/new', component: ThemePage, beforeEnter: authGuard},
@@ -39,6 +40,7 @@ const routes = [
         component: MutationPage,
         beforeEnter: authGuard
     },
+    {name: 'AppRunner', path: '/app/:projectId/page/:pageId?', component: AppRunnerPage},
     {path: '*', redirect: '/admin/main/dashboard/tab=0'}
 ]
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="pb-2">
+  <div class="pb-2 pt-2">
     {{ prop.label }}
 
     <v-select

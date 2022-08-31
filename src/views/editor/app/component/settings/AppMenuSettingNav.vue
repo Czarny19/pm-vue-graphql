@@ -5,16 +5,17 @@
     <v-card-text>
       <v-form v-model="topNavValid" ref="form" @submit.prevent="updateNav">
         <v-switch
-            color="info"
+            class="pb-4"
+            color="success"
             v-model="currentProject.top_nav"
             :label="i18n('editor.topNavigationEnabled')"
             @change="changed=true">
         </v-switch>
 
         <template v-for="(item, index) in currentProject.top_nav_items.items">
-          <v-container :key="index" class="pa-0">
+          <v-container :key="index" fluid class="pa-0">
             <v-row no-gutters class="pb-2">
-              <v-col cols="5" class="pr-3">
+              <v-col cols="5" class="pr-3 text-start">
                 <v-text-field
                     class="pa-0"
                     color="accent"

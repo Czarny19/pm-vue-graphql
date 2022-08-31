@@ -82,7 +82,7 @@ export default Vue.extend({
       this.addMutationDialog = false
     },
     refresh(): void {
-      this.$apollo.queries.MUTATION.refetch()
+      this.$emit('refresh')
     },
     deleteMutationClicked(id: number): void {
       this.deleteId = id
@@ -96,7 +96,7 @@ export default Vue.extend({
       this.deleteDialog = false
 
       this.$apollo.mutate({mutation: DELETE_MUTATION, variables: {id: this.deleteId}}).then(() => {
-        this.$apollo.queries.MUTATION.refetch()
+        this.$emit('refresh')
       })
     }
   },

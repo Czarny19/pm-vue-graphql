@@ -65,7 +65,7 @@ export default Vue.extend({
       this.addPageDialog = false
     },
     refresh(): void {
-      this.$apollo.queries.PAGE.refetch()
+      this.$emit('refresh')
     },
     deletePageClicked(id: number): void {
       this.deleteId = id
@@ -79,7 +79,7 @@ export default Vue.extend({
       this.deleteDialog = false
 
       this.$apollo.mutate({mutation: DELETE_PAGE, variables: {id: this.deleteId}}).then(() => {
-        this.$apollo.queries.PAGE.refetch()
+        this.$emit('refresh')
       })
     }
   }

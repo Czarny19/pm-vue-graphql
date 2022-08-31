@@ -34,15 +34,17 @@
         </v-text-field>
 
         <template v-for="(group, index) in groups">
-          <div class="secondary text-start text-body-2 pa-3 pl-6" :key="index">
-            {{ group.label }}
-          </div>
+          <template v-if="group.type !== 'action'">
+            <div class="secondary text-start text-body-2 pa-3 pl-6" :key="index">
+              {{ group.label }}
+            </div>
 
-          <v-row no-gutters :key="group.id" class="pb-3">
-            <v-col class="pl-3 pr-3 pb-1" cols="12" v-for="(prop) in group.props" :key="prop.id">
-              <GuiEditorProp :prop="prop" :theme="theme" :queries="queries" :schema="schema" :variables="variables"/>
-            </v-col>
-          </v-row>
+            <v-row no-gutters :key="group.id" class="pb-3">
+              <v-col class="pl-3 pr-3 pb-1" cols="12" v-for="(prop) in group.props" :key="prop.id">
+                <GuiEditorProp :prop="prop" :theme="theme" :queries="queries" :schema="schema" :variables="variables"/>
+              </v-col>
+            </v-row>
+          </template>
         </template>
 
         <GuiEditorActionBuilder
@@ -53,7 +55,7 @@
             :variables="variables">
         </GuiEditorActionBuilder>
 
-        <v-row no-gutters class="pa-3">
+        <v-row no-gutters class="pa-4">
           <IconButton
               block
               class="ml-auto mb-4"

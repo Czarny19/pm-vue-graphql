@@ -1,7 +1,7 @@
 <template>
   <v-container class="pa-0">
     <v-row>
-      <v-col cols="10">
+      <v-col cols="9">
         <v-text-field
             class="pt-3"
             color="accent"
@@ -12,7 +12,7 @@
         </v-text-field>
       </v-col>
 
-      <v-col cols="2" class="pl-0">
+      <v-col cols="3" class="pl-0">
         <v-text-field
             class="pt-3"
             color="accent"
