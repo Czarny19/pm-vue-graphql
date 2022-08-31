@@ -34,7 +34,7 @@
                     color="accent"
                     item-color="accent"
                     v-model="item.page"
-                    :items="pages"
+                    :items="['', ...pages]"
                     :label="i18n('editor.navItemPage')"
                     item-value="id"
                     item-text="name"

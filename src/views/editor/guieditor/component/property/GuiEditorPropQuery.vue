@@ -5,7 +5,7 @@
         color="accent"
         outlined dense hide-details
         :label="prop.label"
-        :items="queries"
+        :items="['', ...queries]"
         v-model="currentProp.value"
         item-value="id"
         item-text="name"
@@ -47,7 +47,7 @@
             color="accent"
             outlined dense hide-details
             :label="varMapping.qrVar"
-            :items="variables"
+            :items="['', ...variables]"
             v-model="varMapping.pageVar"
             item-value="id"
             item-text="name"

@@ -29,7 +29,7 @@
         color="accent"
         item-color="accent"
         v-model="projectData.theme_id"
-        :items="themes"
+        :items="['', ...themes]"
         :label="i18n('project.theme')"
         :rules="themeRules"
         required

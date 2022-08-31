@@ -23,7 +23,7 @@
                 color="accent"
                 item-color="accent"
                 v-model="wherePart.field"
-                :items="fieldNames"
+                :items="['', ...fieldNames]"
                 :label="i18n('editor.field')"
                 required
                 append-icon="fa-chevron-down">
@@ -62,7 +62,7 @@
                 color="accent"
                 item-color="accent"
                 v-model="wherePart.variable"
-                :items="variables(wherePart)"
+                :items="['', ...variables(wherePart)]"
                 :label="i18n('editor.variable')"
                 required
                 append-icon="fa-chevron-down">

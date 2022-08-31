@@ -8,7 +8,7 @@
           color="accent"
           item-color="accent"
           v-model="currentProject.start_page"
-          :items="pages"
+          :items="['', ...pages]"
           item-value="id"
           item-text="name"
           required

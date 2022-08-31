@@ -5,7 +5,7 @@
         color="accent"
         item-color="accent"
         v-model="projectData.source_id"
-        :items="datasources"
+        :items="['', ...datasources]"
         :label="i18n('project.datasource')"
         required
         append-icon="fa-chevron-down"

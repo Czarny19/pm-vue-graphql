@@ -3,6 +3,7 @@
     <v-select
         class="pa-0"
         light persistent-hint
+        item-color="accent"
         :label="argsProps.label"
         :color="color"
         :readonly="argsProps.readonly"
@@ -14,7 +15,7 @@
         :outlined="argsProps.outlined"
         :value="variableValue"
         :rules="rules"
-        :items="queryData"
+        :items="['', ...queryData]"
         :item-text="dataProps.textQueryVarId"
         :item-value="dataProps.valueQueryVarId"
         @change="updateVariableValue">

@@ -9,7 +9,7 @@
                 color="accent"
                 item-color="accent"
                 v-model="orderBy.field"
-                :items="fieldsNames"
+                :items="['', ...fieldsNames]"
                 :label="i18n('editor.field')"
                 required
                 append-icon="fa-chevron-down">

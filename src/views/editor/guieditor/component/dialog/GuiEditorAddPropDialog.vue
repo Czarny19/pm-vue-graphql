@@ -20,7 +20,7 @@
               class="pa-2"
               color="accent"
               :label="i18n('editor.propType')"
-              :items="types"
+              :items="['', ...types]"
               v-model="propType"
               :rules="propTypeRules"
               item-value="id"

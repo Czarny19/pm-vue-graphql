@@ -254,5 +254,8 @@
     "navItemOrder": "Kolejność",
     "running": "Aplikacja uruchomiona",
     "openApp": "Otwórz aplikację"
+  },
+  "runtime": {
+    "appOffline": "Aplikacja jest obecnie niedostępna, skontaktuj się z administratorem systemu"
   }
 }

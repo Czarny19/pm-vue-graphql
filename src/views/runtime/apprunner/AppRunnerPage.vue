@@ -1,15 +1,15 @@
 <template>
-  <div>
-    <template v-if="!isLoading">
-      <AppRunnerTopNav v-if="project.top_nav" :project="project" :theme="theme"/>
-      <AppRunnerPageHolder
-          v-if="!loadingVariables"
-          :page="currentPage"
-          :theme="theme"
-          :datasource="datasource"
-          :variables="variables">
-      </AppRunnerPageHolder>
-    </template>
+  <AppRunnerPageOffline v-if="!project.running && !isLoading"/>
+
+  <div v-else-if="!isLoading">
+    <AppRunnerTopNav v-if="project.top_nav" :project="project" :theme="theme"/>
+    <AppRunnerPageHolder
+        v-if="!loadingVariables"
+        :page="currentPage"
+        :theme="theme"
+        :datasource="datasource"
+        :variables="variables">
+    </AppRunnerPageHolder>
   </div>
 </template>
 
@@ -17,6 +17,7 @@
 import Vue from "vue";
 import AppRunnerTopNav from "@/views/runtime/apprunner/component/AppRunnerTopNav.vue";
 import AppRunnerPageHolder from "@/views/runtime/apprunner/component/AppRunnerPageHolder.vue";
+import AppRunnerPageOffline from "@/views/runtime/apprunner/component/AppRunnerPageOffline.vue";
 import {GET_PROJECT_BY_ID} from "@/graphql/queries/project";
 import {GET_PAGE_LIST_BY_PROJECT_ID} from "@/graphql/queries/page";
 import {GET_THEME_BY_ID} from "@/graphql/queries/theme";
@@ -27,7 +28,7 @@ import {AppProject, Page} from "@/lib/types";
 
 export default Vue.extend({
   name: 'AppRunnerPage',
-  components: {AppRunnerPageHolder, AppRunnerTopNav},
+  components: {AppRunnerPageOffline, AppRunnerPageHolder, AppRunnerTopNav},
   data() {
     return {
       loadingProject: true,

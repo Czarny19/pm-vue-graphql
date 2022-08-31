@@ -4,7 +4,7 @@
         color="accent"
         outlined dense hide-details
         :label="i18n('editor.actionTarget')"
-        :items="pages"
+        :items="['', ...pages]"
         v-model="currentProp.target"
         item-value="id"
         item-text="name"
@@ -21,7 +21,7 @@
           color="accent"
           outlined dense hide-details
           :label="`${variable.name} (${variable.type})`"
-          :items="variables"
+          :items="['', ...variables]"
           v-model="variable.pageVar"
           item-value="id"
           item-text="name"

@@ -17,7 +17,7 @@
           color="accent"
           item-color="accent"
           v-model="currentMutation.table"
-          :items="tablesNames"
+          :items="['', ...tablesNames]"
           :label="i18n('editor.tableName')"
           :rules="mutationTableRules"
           required

@@ -21,7 +21,7 @@
               color="accent"
               item-color="accent"
               v-model="queryTable"
-              :items="tables"
+              :items="['', ...tables]"
               :label="i18n('editor.tableName')"
               :rules="queryTableRules"
               required

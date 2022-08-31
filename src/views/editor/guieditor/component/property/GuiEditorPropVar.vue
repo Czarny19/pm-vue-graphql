@@ -7,7 +7,7 @@
       item-text="name"
       item-value="id"
       :label="prop.label"
-      :items="variables"
+      :items="['', ...variables]"
       v-model="currentProp.value">
 
     <template v-slot:item="{item}">

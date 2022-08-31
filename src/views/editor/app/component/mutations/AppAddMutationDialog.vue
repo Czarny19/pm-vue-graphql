@@ -21,7 +21,7 @@
               color="accent"
               item-color="accent"
               v-model="mutationTable"
-              :items="tables"
+              :items="['', ...tables]"
               :label="i18n('editor.tableName')"
               :rules="mutationTableRules"
               required
@@ -36,7 +36,7 @@
               color="accent"
               item-color="accent"
               v-model="mutationType"
-              :items="types"
+              :items="['', ...types]"
               :label="i18n('editor.mutationType')"
               :rules="mutationTypeRules"
               required

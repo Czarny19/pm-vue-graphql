@@ -40,7 +40,7 @@
                 color="accent"
                 item-color="accent"
                 :value="selectedFieldsVariables[index]"
-                :items="variables(field)"
+                :items="['', ...variables(field)]"
                 :label="i18n('editor.variable')"
                 required
                 append-icon="fa-chevron-down"

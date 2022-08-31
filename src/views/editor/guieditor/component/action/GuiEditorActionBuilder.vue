@@ -22,7 +22,7 @@
               color="accent"
               outlined dense hide-details
               :label="i18n('editor.actionType')"
-              :items="types"
+              :items="['', ...types]"
               v-model="prop.type"
               item-value="id"
               item-text="name"

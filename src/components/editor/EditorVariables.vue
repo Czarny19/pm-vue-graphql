@@ -26,7 +26,7 @@
                 item-text="display"
                 item-value="type"
                 v-model="variable.type"
-                :items="variableTypes"
+                :items="['', ...variableTypes]"
                 :label="i18n('editor.variableType')"
                 append-icon="fa-chevron-down">
             </v-select>

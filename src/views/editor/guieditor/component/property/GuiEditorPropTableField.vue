@@ -7,7 +7,7 @@
         color="accent"
         outlined dense hide-details
         :label="i18n('editor.tableName')"
-        :items="tablesNames"
+        :items="['', ...tablesNames]"
         v-model="currentProp.helperValue"
         item-value="id"
         item-text="name"
@@ -20,7 +20,7 @@
         color="accent"
         outlined dense hide-details
         :label="i18n('editor.field')"
-        :items="fields"
+        :items="['', ...fields]"
         v-model="currentProp.value"
         item-value="id"
         item-text="name"
