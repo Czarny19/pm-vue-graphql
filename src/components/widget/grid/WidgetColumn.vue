@@ -19,7 +19,7 @@
 
 import Vue from "vue";
 import {AppWidget} from "@/lib/types";
-import {getArgsProps, getCssProps} from "@/lib/widget";
+import * as widget from "@/lib/widget";
 
 export default Vue.extend({
   name: 'WidgetColumn',
@@ -36,10 +36,10 @@ export default Vue.extend({
       return this.widget as AppWidget
     },
     cssProps(): ({ [p: string]: string })[] {
-      return getCssProps(this.appWidget, this.theme)
+      return widget.getCssProps(this.appWidget, this.theme)
     },
     argsProps(): { [k: string]: string } {
-      return getArgsProps(this.appWidget)
+      return widget.getArgsProps(this.appWidget)
     }
   },
 })

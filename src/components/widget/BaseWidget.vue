@@ -57,14 +57,16 @@
   <WidgetCarousel
       v-else-if="widget.type === 'Carousel'"
       :widget="widget"
-      :datasource="datasource">
+      :datasource="datasource"
+      :variables="variables">
   </WidgetCarousel>
 
   <WidgetTable
       v-else-if="widget.type === 'Table'"
       :widget="widget"
       :theme="theme"
-      :datasource="datasource">
+      :datasource="datasource"
+      :variables="variables">
   </WidgetTable>
 
   <WidgetTextField

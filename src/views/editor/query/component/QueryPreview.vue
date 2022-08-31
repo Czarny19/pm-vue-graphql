@@ -40,7 +40,7 @@
 <script lang="ts">
 import Vue from "vue";
 import IconButton from "@/components/button/IconButton.vue";
-import {Query} from "@/lib/types";
+import {Query, QueryOrderBy, QueryVariable, QueryWhere} from "@/lib/types";
 import * as graphql_gen from "@/lib/graphql_gen";
 
 export default Vue.extend({
@@ -58,6 +58,15 @@ export default Vue.extend({
     }
   },
   computed: {
+    graphQlQueryWhere(): QueryWhere[] {
+      return graphql_gen.mapModelStringToQueryWhereArray((this.query as Query).where ?? '')
+    },
+    graphQlQueryOrderBy(): QueryOrderBy[] {
+      return graphql_gen.mapModelStringToQueryOrderByArray((this.query as Query).order_by ?? '')
+    },
+    graphQlQueryVars(): QueryVariable[] {
+      return graphql_gen.mapModelStringToQueryVariableArray((this.query as Query).variables ?? '')
+    },
     graphQLQuery(): string {
       const query = (this.query as Query)
 
@@ -65,18 +74,14 @@ export default Vue.extend({
         return ''
       }
 
-      const where = graphql_gen.mapModelStringToQueryWhereArray(query.where ?? '')
-      const orderBy = graphql_gen.mapModelStringToQueryOrderByArray(query.order_by ?? '')
-      const vars = graphql_gen.mapModelStringToQueryVariableArray(query.variables ?? '')
-
       return graphql_gen.generateGraphQLQuery(
           query.name,
           query.table,
           query.fields,
-          where,
-          orderBy,
+          this.graphQlQueryWhere,
+          this.graphQlQueryOrderBy,
           query.limit,
-          vars
+          this.graphQlQueryVars
       )
     },
     previewQuery(): string {
@@ -86,18 +91,14 @@ export default Vue.extend({
         return ''
       }
 
-      const where = graphql_gen.mapModelStringToQueryWhereArray(query.where ?? '')
-      const orderBy = graphql_gen.mapModelStringToQueryOrderByArray(query.order_by ?? '')
-      const vars = graphql_gen.mapModelStringToQueryVariableArray(query.variables ?? '')
-
       return graphql_gen.generateGraphQLPreviewQuery(
           query.name,
           query.table,
           query.fields,
-          where,
-          orderBy,
+          this.graphQlQueryWhere,
+          this.graphQlQueryOrderBy,
           query.limit,
-          vars
+          this.graphQlQueryVars
       )
     },
     graphQLVariablesPreview(): string {
@@ -112,7 +113,8 @@ export default Vue.extend({
           this.graphQLQuery,
           this.query.table,
           this.datasource.secret,
-          this.query.variables
+          this.graphQlQueryWhere,
+          this.graphQlQueryVars
       )
 
       this.isSuccessful = result.isSuccessful;

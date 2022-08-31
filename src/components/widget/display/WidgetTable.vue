@@ -1,6 +1,6 @@
 <template>
   <v-data-table
-      :items-per-page="paging ? pageSize : -1"
+      :items-per-page="argsProps.paging ? pageSize : -1"
       hide-default-footer
       :loading="!datasource"
       :headers="tableHeaders"
@@ -8,7 +8,7 @@
       :items="queryData"
       :style="cssProps"
       :dark="argsProps.dark"
-      :light="!dark">
+      :light="!argsProps.dark">
 
     <template v-slot:footer>
       <div v-if="argsProps.paging" class="text-center pt-2">
@@ -28,16 +28,17 @@
 <script lang="ts">
 import Vue from "vue";
 import {GET_QUERY_BY_ID} from "@/graphql/queries/query";
-import {AppWidget, Query, TableHeader} from "@/lib/types";
-import {getArgsProps, getCssProps, getDataProps} from "@/lib/widget";
+import {AppWidget, PageVariable, Query, QueryOrderBy, QueryVariable, QueryWhere} from "@/lib/types";
 import * as graphql_gen from "@/lib/graphql_gen";
+import * as widget from "@/lib/widget";
 
 export default Vue.extend({
   name: 'WidgetTable',
   props: {
     widget: Object,
     theme: Object,
-    datasource: Object
+    datasource: Object,
+    variables: Array
   },
   data() {
     return {
@@ -51,13 +52,23 @@ export default Vue.extend({
       return this.widget as AppWidget
     },
     cssProps(): ({ [p: string]: string })[] {
-      return getCssProps(this.appWidget, this.theme)
+      return widget.getCssProps(this.appWidget, this.theme)
     },
     argsProps(): { [k: string]: string } {
-      return getArgsProps(this.appWidget)
+      return widget.getArgsProps(this.appWidget)
     },
     dataProps(): { [k: string]: string } {
-      return getDataProps(this.appWidget)
+      return widget.getDataProps(this.appWidget)
+    },
+    graphQlQueryWhere(): QueryWhere[] {
+      return graphql_gen.mapModelStringToQueryWhereArray((this.query as Query).where ?? '')
+    },
+    graphQlQueryOrderBy(): QueryOrderBy[] {
+      return graphql_gen.mapModelStringToQueryOrderByArray((this.query as Query).order_by ?? '')
+    },
+    graphQlQueryVars(): QueryVariable[] {
+      const vars = graphql_gen.mapModelStringToQueryVariableArray((this.query as Query).variables ?? '')
+      return widget.mapPageVarValuesToQueryVars(this.appWidget, vars, (this.variables as PageVariable[]))
     },
     graphQLQuery(): string {
       const query = (this.query as Query)
@@ -66,29 +77,29 @@ export default Vue.extend({
         return ''
       }
 
-      const where = graphql_gen.mapModelStringToQueryWhereArray(query.where ?? '')
-      const orderBy = graphql_gen.mapModelStringToQueryOrderByArray(query.order_by ?? '')
-      const vars = graphql_gen.mapModelStringToQueryVariableArray(query.variables ?? '')
-
       return graphql_gen.generateGraphQLQuery(
           query.name,
           query.table,
           query.fields,
-          where,
-          orderBy,
+          this.graphQlQueryWhere,
+          this.graphQlQueryOrderBy,
           query.limit,
-          vars
+          this.graphQlQueryVars
       )
     },
     tableHeaders(): { text: string; value: string }[] {
-      const dataPropGroups = this.appWidget.propGroups.filter((group: { type: string }) => group.type === 'data')[0]
-      const props = (dataPropGroups as { props: { id: string, labels: TableHeader[] }[] }).props
-      const labels = props.filter((prop) => prop.id === 'queryId')[0].labels
-
-      return labels.filter(label => label.visible).sort((a, b) => Number(a.order) - Number(b.order))
+      return widget.getQueryPropLabels(this.appWidget)
     },
     pageSize(): number {
       return Number(this.argsProps.pageSize)
+    }
+  },
+  watch: {
+    variables: {
+      handler() {
+        this.$apollo.queries.QUERY.refetch()
+      },
+      deep: true
     }
   },
   apollo: {
@@ -111,7 +122,8 @@ export default Vue.extend({
             this.graphQLQuery,
             (this.query as Query).table,
             this.datasource.secret,
-            (this.query as Query).variables
+            this.graphQlQueryWhere,
+            this.graphQlQueryVars
         ).then((result) => {
           (this.queryData as unknown[]) = result.data;
         })

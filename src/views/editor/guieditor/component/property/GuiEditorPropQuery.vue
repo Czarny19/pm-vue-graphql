@@ -38,6 +38,24 @@
       </v-tooltip>
     </div>
 
+    <div v-if="prop.variablesMapping && prop.variablesMapping.length">
+      {{ i18n('editor.props') }}
+
+      <div v-for="(varMapping, index) in prop.variablesMapping" :key="index" class="pt-2">
+        <v-select
+            class="pa-0"
+            color="accent"
+            outlined dense hide-details
+            :label="varMapping.qrVar"
+            :items="variables"
+            v-model="varMapping.pageVar"
+            item-value="id"
+            item-text="name"
+            item-color="accent">
+        </v-select>
+      </div>
+    </div>
+
     <div v-if="prop.customLabels">
       {{ i18n('editor.labels') }}
 
@@ -91,15 +109,16 @@
 
 <script lang="ts">
 import Vue from "vue";
-import {Query, TableHeader} from "@/lib/types";
-import * as graphql_gen from "@/lib/graphql_gen";
+import {Query, QueryPagePropMapping, TableHeader} from "@/lib/types";
 import {filterNumbersOnly} from "@/lib/filters";
+import * as graphql_gen from "@/lib/graphql_gen";
 
 export default Vue.extend({
   name: 'GuiEditorPropQuery',
   props: {
     prop: Object,
-    queries: Array
+    queries: Array,
+    variables: Array
   },
   data() {
     return {
@@ -160,7 +179,8 @@ export default Vue.extend({
           this.queryId = prop.value
 
           if (this.currentQuery) {
-            (this.currentProp as { labels: string[] }).labels = []
+            (this.currentProp as { labels: string[] }).labels = [];
+            (this.currentProp as { variablesMapping: QueryPagePropMapping[] }).variablesMapping = [];
 
             this.currentQuery.fields.split(';').forEach((variable, index) => {
               (this.currentProp as { labels: TableHeader[] }).labels.push({
@@ -170,6 +190,16 @@ export default Vue.extend({
                 visible: true
               });
             });
+
+            const vars = graphql_gen.mapModelStringToQueryVariableArray(this.currentQuery.variables ?? '')
+
+            vars.forEach((variable) => {
+              (this.currentProp as { variablesMapping: QueryPagePropMapping[] }).variablesMapping.push({
+                qrVar: variable.name,
+                type: variable.type,
+                pageVar: undefined
+              })
+            })
           }
         }
       },

@@ -105,6 +105,7 @@ export type QueryWhere = {
     operator: string;
     variable: string;
     isAnd: boolean;
+    required: boolean;
 }
 
 export type QueryOrderBy = {
@@ -170,4 +171,10 @@ export type ActionPropVariable = {
     type: string;
     value: string;
     pageVar: number;
+}
+
+export type QueryPagePropMapping = {
+    qrVar: string;
+    pageVar: number | undefined;
+    type: string;
 }

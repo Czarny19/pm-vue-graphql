@@ -24,7 +24,7 @@
 <script lang="ts">
 import Vue from "vue";
 import {AppWidget, PageVariable} from "@/lib/types";
-import {getArgsProps, getColorPropValue, getCssProps, getDataProps, getRulesForInput} from "@/lib/widget";
+import * as widget from "@/lib/widget";
 
 export default Vue.extend({
   name: 'WidgetTextField',
@@ -38,22 +38,22 @@ export default Vue.extend({
       return this.widget as AppWidget
     },
     cssProps(): ({ [p: string]: string })[] {
-      return getCssProps(this.appWidget, this.theme)
+      return widget.getCssProps(this.appWidget, this.theme)
     },
     argsProps(): { [k: string]: string } {
-      return getArgsProps(this.appWidget)
+      return widget.getArgsProps(this.appWidget)
     },
     dataProps(): { [k: string]: string } {
-      return getDataProps(this.appWidget)
+      return widget.getDataProps(this.appWidget)
     },
     counter(): number | undefined {
       return this.argsProps.counter ? Number(this.argsProps.counterNum) : undefined
     },
     color(): string {
-      return getColorPropValue(this.theme, this.argsProps.color)
+      return widget.getColorPropValue(this.theme, this.argsProps.color)
     },
     bgColor(): string {
-      return getColorPropValue(this.theme, this.argsProps.bgColor)
+      return widget.getColorPropValue(this.theme, this.argsProps.bgColor)
     },
     variable(): PageVariable | undefined {
       if (this.dataProps.variableId) {
@@ -71,7 +71,7 @@ export default Vue.extend({
       return undefined
     },
     rules(): unknown[] {
-      return getRulesForInput(this.appWidget, this.counter)
+      return widget.getRulesForInput(this.appWidget, this.counter)
     }
   },
   methods: {

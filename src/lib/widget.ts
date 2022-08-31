@@ -1,5 +1,13 @@
-import {AppWidget, AppWidgetProp, ThemeColors} from "@/lib/types";
 import {i18n} from "@/main";
+import {
+    AppWidget,
+    AppWidgetProp,
+    PageVariable,
+    QueryPagePropMapping,
+    QueryVariable,
+    TableHeader,
+    ThemeColors
+} from "@/lib/types";
 
 export const themeColors = ['primary_color', 'secondary_color', 'accent_color', 'info_color',
     'success_color', 'error_color', 'text_color_1', 'text_color_2', 'background_color']
@@ -107,3 +115,31 @@ export const getActionTypes = (): { id: string; name: string }[] => [
     {id: 'goToPage', name: i18n.t('editor.actionGoTo').toString()},
     {id: 'runMutation', name: i18n.t('editor.actionRunMutation').toString()}
 ]
+
+export const getQueryPropLabels = (widget: AppWidget): { text: string; value: string }[] => {
+    const dataPropGroups = widget.propGroups.filter((group: { type: string }) => group.type === 'data')[0]
+
+    const props = (dataPropGroups as { props: { id: string, labels: TableHeader[] }[] }).props
+    const labels = props.filter((prop) => prop.id === 'queryId')[0].labels
+
+    return labels
+        .filter(label => label.visible)
+        .sort((a, b) => Number(a.order) - Number(b.order))
+}
+
+export const mapPageVarValuesToQueryVars = (widget: AppWidget, qrVars: QueryVariable[],
+                                            pageVars: PageVariable[]): QueryVariable[] => {
+
+    const dataPropGroups = widget.propGroups.filter((group: { type: string }) => group.type === 'data')[0]
+    const props = (dataPropGroups as { props: { id: string, variablesMapping: QueryPagePropMapping[] }[] }).props
+
+    const queryVariablesMapping = props.filter((prop) => prop.id === 'queryId')[0].variablesMapping
+
+    qrVars.forEach((qrVar) => {
+        const mapping = queryVariablesMapping.filter((mapping) => mapping.qrVar === qrVar.name)[0]
+        const pageVar = pageVars.filter((variable) => variable.id === mapping.pageVar)[0]
+        qrVar.value = pageVar.value
+    })
+
+    return qrVars
+}

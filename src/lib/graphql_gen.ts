@@ -32,11 +32,28 @@ export const fieldAutoVar = 'Autom.';
  * @param query Query to run (can be generated using {@link generateGraphQLQuery})
  * @param table Name of the table that the query should be run on
  * @param secret GraphQL endpoint secret (null if the endpoint is not secured)
- * @param vars Variables to be used with the query, separated with ';' (null if there are no query variables)
+ * @param where Where condition (list of where condition parts {@link QueryWhere}).
+ * @param vars Variables to be used with the query (list of order by condition parts {@link QueryOrderBy})
  * @returns Promise containing an object with the query result of type {@link QueryResult}.
  **/
 export const runQuery = async (endpoint: string, query: string, table: string, secret?: string,
-                               vars?: string): Promise<QueryResult> => {
+                               where?: QueryWhere[], vars?: QueryVariable[]): Promise<QueryResult> => {
+    const whereSet = where != undefined && where.length
+
+    const emptyVars = (vars ?? [])
+        .filter((variable) => !variable.value)
+        .map((variable) => variable.name)
+
+    let filteredWhere = []
+    let filteredWhereVarNames = ['']
+
+    if (whereSet) {
+        filteredWhere = [...where].filter((part) => part.required || !emptyVars.includes(part.variable))
+        filteredWhereVarNames = filteredWhere.map((part) => part.variable.toString())
+    }
+
+    const filteredVars = vars?.filter((variable) => filteredWhereVarNames.includes(variable.name)) ?? []
+
     let isSuccessful = true
     let queryData: unknown[] = []
     let queryError = ''
@@ -50,10 +67,9 @@ export const runQuery = async (endpoint: string, query: string, table: string, s
         resolvers: {}
     })
 
-    const variables = mapModelStringToQueryVariableArray(vars ?? '') ?? []
     const variablesMap: { [key: string]: string } = {}
 
-    variables.forEach((variable) => variablesMap[variable.name] = variable.value)
+    filteredVars.forEach((variable) => variablesMap[variable.name] = variable.value)
 
     try {
         await client.query({
@@ -159,13 +175,29 @@ export const generateGraphQLQuery = (queryName: string, table: string, fields: s
         .replaceAll(/[^a-zA-Z ]/g, '')
         .replaceAll(' ', '')
 
+    const emptyVars = (vars ?? [])
+        .filter((variable) => !variable.value)
+        .map((variable) => variable.name)
+
+    let filteredWhere = []
+    let filteredWhereVarNames = ['']
+    let generatedWhere = ''
+
+    if (whereSet) {
+        filteredWhere = [...where].filter((part) => part.required || !emptyVars.includes(part.variable))
+        filteredWhereVarNames = filteredWhere.map((part) => part.variable.toString())
+        generatedWhere = generateGraphQLWhere(filteredWhere)
+    }
+
     let query = `query ${cleanName} `
 
-    if (varsSet) query += '('
+    const filteredVars = vars?.filter((variable) => filteredWhereVarNames.includes(variable.name)) ?? []
 
-    vars?.forEach((el, index) => {
+    if (varsSet && filteredVars.length) query += '('
+
+    filteredVars.forEach((el, index) => {
         query += `$${el.name}: ${el.type}`
-        query += index + 1 !== vars?.length ? ', ' : ') '
+        query += index + 1 !== filteredVars?.length ? ', ' : ') '
     })
 
     query += `{\n\t${table} `
@@ -182,8 +214,10 @@ export const generateGraphQLQuery = (queryName: string, table: string, fields: s
     }
 
     if (whereSet) {
-        if (limitSet || orderBySet) query += ', '
-        query += `where: ${generateGraphQLWhere(where)}`
+        if (generatedWhere.length) {
+            if (limitSet || orderBySet) query += ', '
+            query += `where: ${generatedWhere}`
+        }
     }
 
     if (limitSet || orderBySet || whereSet) query += ') '

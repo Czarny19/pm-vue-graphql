@@ -22,7 +22,7 @@
 <script lang="ts">
 import Vue from "vue";
 import {AppWidget} from "@/lib/types";
-import {getArgsProps, getColorPropValue, getCssProps, getDataProps} from "@/lib/widget";
+import * as widget from "@/lib/widget";
 
 export default Vue.extend({
   name: 'WidgetButton',
@@ -38,16 +38,16 @@ export default Vue.extend({
       return this.widget as AppWidget
     },
     cssProps(): ({ [p: string]: string })[] {
-      return getCssProps(this.appWidget, this.theme)
+      return widget.getCssProps(this.appWidget, this.theme)
     },
     argsProps(): { [k: string]: string } {
-      return getArgsProps(this.appWidget)
+      return widget.getArgsProps(this.appWidget)
     },
     dataProps(): { [k: string]: string } {
-      return getDataProps(this.appWidget)
+      return widget.getDataProps(this.appWidget)
     },
     color(): string {
-      return getColorPropValue(this.theme, this.argsProps.color)
+      return widget.getColorPropValue(this.theme, this.argsProps.color)
     }
   },
   methods: {

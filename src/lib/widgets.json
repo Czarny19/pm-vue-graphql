@@ -186,6 +186,7 @@
               "id": "queryId",
               "value": "",
               "label": "Zapytanie",
+              "variablesMapping": [],
               "type": "Query"
             }
           ]
@@ -455,55 +456,30 @@
           ]
         },
         {
-          "id": "action1",
-          "label": "Przycisk 1",
-          "type": "action",
-          "props": [
-            {
-              "id": "label",
-              "value": "",
-              "label": "Etykieta",
-              "type": "String"
-            },
-            {
-              "id": "color",
-              "value": "",
-              "label": "Kolor",
-              "type": "Color"
-            },
-            {
-              "id": "action",
-              "value": "",
-              "label": "Akcja",
-              "type": "Action"
-            }
-          ]
-        },
-        {
           "id": "display",
           "label": "Wygląd",
           "type": "args",
           "props": [
             {
-              "id": "background_color",
+              "id": "backgroundColor",
               "value": "primary_color",
               "label": "Kolor",
               "type": "Color"
             },
             {
-              "id": "title_color",
+              "id": "titleColor",
               "value": "text_color_1",
               "label": "Tytuł - Kolor",
               "type": "Color"
             },
             {
-              "id": "subtitle_color",
+              "id": "subtitleColor",
               "value": "text_color_2",
               "label": "Podtytuł - Kolor",
               "type": "Color"
             },
             {
-              "id": "text_color",
+              "id": "textColor",
               "value": "text_color_2",
               "label": "Tekst - Kolor",
               "type": "Color"
@@ -536,6 +512,64 @@
               "maxValue": 24
             }
           ]
+        },
+        {
+          "id": "action1",
+          "label": "Przycisk 1",
+          "type": "args",
+          "props": [
+            {
+              "id": "action1Label",
+              "value": "",
+              "label": "Etykieta",
+              "type": "String"
+            },
+            {
+              "id": "action1color",
+              "value": "",
+              "label": "Kolor",
+              "type": "Color"
+            }
+          ]
+        },
+        {
+          "id": "action2",
+          "label": "Przycisk 2",
+          "type": "args",
+          "props": [
+            {
+              "id": "action2label",
+              "value": "",
+              "label": "Etykieta",
+              "type": "String"
+            },
+            {
+              "id": "action2color",
+              "value": "",
+              "label": "Kolor",
+              "type": "Color"
+            }
+          ]
+        },
+        {
+          "id": "action",
+          "label": "Akcja",
+          "addLocked": true,
+          "type": "action",
+          "props": [
+            {
+              "id": 1,
+              "type": "",
+              "target": -1,
+              "variables": []
+            },
+            {
+              "id": 2,
+              "type": "",
+              "target": -1,
+              "variables": []
+            }
+          ]
         }
       ]
     },
@@ -560,7 +594,7 @@
             },
             {
               "id": "interval",
-              "value": 6,
+              "value": 6000,
               "label": "Interwał zmiany",
               "type": "Duration"
             },
@@ -582,6 +616,7 @@
               "id": "queryId",
               "value": "",
               "label": "Zapytanie",
+              "variablesMapping": [],
               "type": "Query"
             },
             {
@@ -641,6 +676,7 @@
               "value": "",
               "customLabels": true,
               "labels": [],
+              "variablesMapping": [],
               "label": "Zapytanie",
               "type": "Query"
             }
@@ -1149,6 +1185,7 @@
               "value": "",
               "customLabels": false,
               "labels": [],
+              "variablesMapping": [],
               "label": "Zapytanie",
               "type": "Query"
             },

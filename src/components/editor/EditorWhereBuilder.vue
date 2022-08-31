@@ -55,7 +55,7 @@
             </v-select>
           </v-col>
 
-          <v-col cols="4">
+          <v-col cols="3">
             <v-select
                 v-if="wherePart.operator"
                 class="pa-0"
@@ -69,9 +69,19 @@
             </v-select>
           </v-col>
 
+          <v-col cols="2">
+            <v-switch
+                v-if="wherePart.variable"
+                class="mt-1"
+                color="success"
+                v-model="wherePart.required"
+                :label="i18n('editor.wherePartRequired')">
+            </v-switch>
+          </v-col>
+
           <v-spacer></v-spacer>
 
-          <v-col cols="1" class="text-end">
+          <v-col cols="auto" class="text-end">
             <v-btn fab x-small @click="deletePart(wherePart)" color="error">
               <v-icon small>fa-times</v-icon>
             </v-btn>
@@ -145,7 +155,7 @@ export default Vue.extend({
       return variables?.filter((variable) => variable.type === type).map((variable) => variable.name) ?? []
     },
     addWherePart(): void {
-      const newPart = {field: '', operator: '', variable: '', isAnd: true};
+      const newPart = {field: '', operator: '', variable: '', isAnd: true, required: true};
       (this.whereParts as QueryWhere[]).push(newPart)
     },
     setPartIsAnd(wherePart: QueryWhere): void {

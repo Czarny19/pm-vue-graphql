@@ -4,7 +4,7 @@
   <GuiEditorPropSize v-else-if="prop.type === 'Size'" :prop="prop"/>
   <GuiEditorPropSlider v-else-if="prop.type === 'Slider'" :prop="prop"/>
   <GuiEditorPropBool v-else-if="prop.type === 'Boolean'" :prop="prop"/>
-  <GuiEditorPropQuery v-else-if="prop.type === 'Query'" :prop="prop" :queries="queries"/>
+  <GuiEditorPropQuery v-else-if="prop.type === 'Query'" :prop="prop" :queries="queries" :variables="variables"/>
   <GuiEditorPropTableField v-else-if="prop.type === 'TableField'" :prop="prop" :schema="schema"/>
   <GuiEditorPropBorder v-else-if="prop.type === 'Border'" :prop="prop"/>
   <GuiEditorPropSelect v-else-if="prop.type === 'Select'" :prop="prop"/>
