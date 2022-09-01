@@ -12,6 +12,11 @@
             {{ i18n('editor.variables') }}
           </v-btn>
         </v-col>
+        <v-col class="pa-1">
+          <v-btn text block class="text-body-2" :style="{'opacity': navTab === 2 ? '1.0' : '0.2'}" @click="setTab(2)">
+            {{ i18n('editor.params') }}
+          </v-btn>
+        </v-col>
       </v-row>
     </v-container>
 
@@ -41,7 +46,15 @@
 
             <v-row no-gutters :key="group.id" class="pb-3">
               <v-col class="pl-3 pr-3 pb-1" cols="12" v-for="(prop) in group.props" :key="prop.id">
-                <GuiEditorProp :prop="prop" :theme="theme" :queries="queries" :schema="schema" :variables="variables"/>
+                <GuiEditorProp
+                    :prop="prop"
+                    :page="page"
+                    :widget="widget"
+                    :theme="theme"
+                    :queries="queries"
+                    :schema="schema"
+                    :variables="variables">
+                </GuiEditorProp>
               </v-col>
             </v-row>
           </template>
@@ -51,7 +64,10 @@
             v-if="actionPropGroup"
             :actions-group="actionPropGroup"
             :mutations="mutations"
+            :page="page"
             :pages="pages"
+            :widget="widget"
+            :schema="schema"
             :variables="variables">
         </GuiEditorActionBuilder>
 
@@ -123,6 +139,39 @@
           @click="addProp">
       </IconButton>
     </template>
+
+    <template v-if="navTab === 2">
+      <div class="pa-3 text-start">
+        <span>{{ i18n('editor.pageParams') }}</span>
+
+        <div class="pt-3">
+          <v-row no-gutters v-for="(param, index) in currentParams" :key="index">
+            <v-col cols="9">
+              <v-text-field
+                  class="pt-1 pb-3"
+                  color="accent"
+                  v-model="currentParams[index]"
+                  outlined hide-details dense>
+              </v-text-field>
+            </v-col>
+
+            <v-col cols="3" class="mt-auto text-end" :key="param">
+              <v-btn fab x-small height="30" class="mr-3 mb-4" color="error" @click="deleteParam(index)">
+                <v-icon small>fa-trash-can</v-icon>
+              </v-btn>
+            </v-col>
+          </v-row>
+        </div>
+
+        <IconButton
+            class="mr-2 mt-4 ml-auto"
+            color="success"
+            icon="fa-add"
+            :label="i18n('editor.addParam')"
+            @click="addParam">
+        </IconButton>
+      </div>
+    </template>
   </v-navigation-drawer>
 </template>
 
@@ -149,12 +198,15 @@ export default Vue.extend({
     queries: Array,
     mutations: Array,
     schema: Array,
+    page: Object,
     pages: Array,
-    variables: Array
+    variables: Array,
+    params: Array
   },
   data() {
     return {
       currentWidget: null,
+      currentParams: [],
       addVarDialog: false,
       navTab: 0,
       widgetKey: 0,
@@ -215,14 +267,22 @@ export default Vue.extend({
       this.$apollo.mutate({mutation: DELETE_PROP, variables: {id: id}}).then(async () => {
         this.$emit('refreshvars')
       })
+    },
+    addParam(): void {
+      (this.currentParams as string[]).push('')
+    },
+    deleteParam(index: number): void {
+      (this.currentParams as string[]).splice(index, 1)
     }
   },
   beforeMount() {
-    this.height = `${window.innerHeight - 124}px`
+    this.height = `${window.innerHeight - 124}px`;
 
     addEventListener('resize', () => {
       this.height = `${window.innerHeight - 124}px`
-    })
+    });
+
+    (this.currentParams as string[]) = (this.params as string[]);
   }
 })
 </script>

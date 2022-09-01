@@ -66,7 +66,7 @@ export default Vue.extend({
     variable(): PageVariable | undefined {
       if (this.dataProps.variableId) {
         const variableId = Number(this.dataProps.variableId)
-        return (this.variables as PageVariable[])?.filter((variable) => variable.id === variableId)[0]
+        return (this.variables as PageVariable[])?.find((variable) => variable.id === variableId)
       }
 
       return undefined

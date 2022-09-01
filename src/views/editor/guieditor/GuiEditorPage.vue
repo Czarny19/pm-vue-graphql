@@ -50,7 +50,9 @@
               :mutations="mutations"
               :schema="schema"
               :variables="variables"
+              :page="page"
               :pages="pages"
+              :params="pageParams"
               @delete="removeWidget(page.definition)"
               @refreshvars="refreshVars">
           </GuiEditorRightNav>
@@ -126,6 +128,9 @@ export default Vue.extend({
     },
     page(): Page {
       return (this.pages as Page[]).filter((page) => page.id == this.pageId)[0]
+    },
+    pageParams(): string[] {
+      return this.page.params.length ? this.page.params.split(';') : []
     }
   },
   watch: {
@@ -164,7 +169,8 @@ export default Vue.extend({
         variables: {
           id: this.pageId,
           definition: this.page.definition,
-          modifyDate: new Date()
+          modifyDate: new Date(),
+          params: this.pageParams.join(';')
         }
       }).then(() => {
         this.changesMade = false

@@ -38,14 +38,16 @@
       v-else-if="widget.type === 'Text'"
       :widget="widget"
       :theme="theme"
-      :data-item="dataItem">
+      :data-item="dataItem"
+      :variables="variables">
   </WidgetText>
 
   <WidgetCard
       v-else-if="widget.type === 'Card'"
       :widget="widget"
       :theme="theme"
-      :data-item="dataItem">
+      :data-item="dataItem"
+      :variables="variables">
   </WidgetCard>
 
   <WidgetDivider

@@ -53,7 +53,7 @@ export const getGraphQLSchema = async (endpoint: string, secret?: string): Promi
 export const getAllTableFieldsWithRelations = (table: string, schema: SchemaItem[]): SchemaItemField[] => {
     const fields: SchemaItemField[] = []
     const schemaItems = (schema as SchemaItem[]).slice()
-    const tableFields = schemaItems?.filter((schemaItem) => schemaItem.name === table)[0].fields.slice()
+    const tableFields = schemaItems?.find((schemaItem) => schemaItem.name === table)?.fields.slice()
 
     tableFields?.forEach((field) => {
         if (schemaItems.map((item) => item.name).includes(field.type)) {
@@ -164,7 +164,7 @@ const cleanSchema = (schema: unknown []): Types.SchemaItem [] => {
 }
 
 const getRelatedFields = (path: string, fields: SchemaItemField[], field: SchemaItemField, schema: SchemaItem[]) => {
-    schema.filter((item) => item.name === field.type)[0].fields.forEach((fld) => {
+    schema.find((item) => item.name === field.type)?.fields.forEach((fld) => {
         if (schema.map((item) => item.name).includes(fld.type)) {
             getRelatedFields(`${path}.${fld.name}`, fields, fld, schema)
         } else {

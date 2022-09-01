@@ -150,6 +150,8 @@
     "variable": "Zmienna",
     "wherePartRequired": "Wymagane?",
     "variables": "Zmienne",
+    "params": "Parametry",
+    "addParam": "Dodaj parametr",
     "fields": "Pola",
     "selectAll": "Zaznacz wszystkie",
     "unselectAll": "Odznacz wszystkie",
@@ -253,7 +255,13 @@
     "navItemPageRequired": "Strona jest wymagana",
     "navItemOrder": "Kolejność",
     "running": "Aplikacja uruchomiona",
-    "openApp": "Otwórz aplikację"
+    "openApp": "Otwórz aplikację",
+    "actionVars": "Argumenty",
+    "actionVarType": "Rodzaj",
+    "actionVar": "Argument",
+    "actionVarsPage": "Zmienna strony",
+    "actionVarsTable": "Źródło danych",
+    "actionVarsParams": "Parameter strony"
   },
   "runtime": {
     "appOffline": "Aplikacja jest obecnie niedostępna, skontaktuj się z administratorem systemu"

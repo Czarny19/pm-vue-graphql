@@ -21,7 +21,7 @@
         {{ argsProps.action1Label }}
       </v-btn>
 
-      <v-btn v-if="argsProps.action2Label" text :color="action2Color">
+      <v-btn v-if="argsProps.action2Label" text :color="action2Color" @click="action2">
         {{ argsProps.action2Label }}
       </v-btn>
     </v-card-actions>
@@ -30,7 +30,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import {AppWidget} from "@/lib/types";
+import {AppWidget, PageVariable} from "@/lib/types";
 import * as widget from "@/lib/widget";
 
 export default Vue.extend({
@@ -38,7 +38,8 @@ export default Vue.extend({
   props: {
     widget: Object,
     theme: Object,
-    dataItem: Object
+    dataItem: Object,
+    variables: Array
   },
   computed: {
     appWidget(): AppWidget {
@@ -60,13 +61,27 @@ export default Vue.extend({
       return widget.getColorPropValue(this.theme, this.argsProps.backgroundColor)
     },
     title(): string {
-      return widget.getConstAndDataValue(this.argsProps.title, this.data, this.dataProps.titleQueryVarId)
+      return widget.getConstAndVarValue(
+          this.data,
+          this.dataProps.titleQueryVarId,
+          (this.variables as PageVariable[]),
+          Number(this.dataProps.titlePageVarId),
+          this.$route.params,
+          this.dataProps.titleParamVarId
+      )
     },
     titleColor(): string {
       return widget.getColorPropValue(this.theme, this.argsProps.titleColor)
     },
     subtitle(): string {
-      return widget.getConstAndDataValue(this.argsProps.subtitle, this.data, this.dataProps.subtitleQueryVarId)
+      return widget.getConstAndVarValue(
+          this.data,
+          this.dataProps.subtitleQueryVarId,
+          (this.variables as PageVariable[]),
+          Number(this.dataProps.subtitlePageVarId),
+          this.$route.params,
+          this.dataProps.subtitleParamVarId
+      )
     },
     subtitleColor(): string {
       return widget.getColorPropValue(this.theme, this.argsProps.subtitleColor)
@@ -81,7 +96,14 @@ export default Vue.extend({
       return widget.getColorPropValue(this.theme, this.argsProps.textColor)
     },
     text(): string {
-      return widget.getConstAndDataValue(this.argsProps.text, this.data, this.dataProps.textQueryVarId)
+      return widget.getConstAndVarValue(
+          this.data,
+          this.dataProps.textQueryVarId,
+          (this.variables as PageVariable[]),
+          Number(this.dataProps.textPageVarId),
+          this.$route.params,
+          this.dataProps.textParamVarId
+      )
     },
     elevation(): number {
       return Number(this.argsProps.elevation)
@@ -89,7 +111,26 @@ export default Vue.extend({
   },
   methods: {
     action1(): void {
-      console.log('aaa')
+      if (!this.$route.path.startsWith('/admin')) {
+        widget.runWidgetClickAction(
+            this.appWidget,
+            this.$route.params.projectId,
+            this.dataItem,
+            (this.variables as PageVariable[]),
+            1
+        )
+      }
+    },
+    action2(): void {
+      if (!this.$route.path.startsWith('/admin')) {
+        widget.runWidgetClickAction(
+            this.appWidget,
+            this.$route.params.projectId,
+            this.dataItem,
+            (this.variables as PageVariable[]),
+            2
+        )
+      }
     }
   }
 })

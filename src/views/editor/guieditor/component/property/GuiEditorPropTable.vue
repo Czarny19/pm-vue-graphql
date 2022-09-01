@@ -2,13 +2,13 @@
   <v-select
       class="pt-3"
       color="accent"
-      item-color="accent"
       outlined dense hide-details
-      item-text="name"
+      :label="i18n('editor.tableName')"
+      :items="['', ...tablesNames]"
+      v-model="currentProp.value"
       item-value="id"
-      :label="prop.label"
-      :items="['', ...variables]"
-      v-model="currentProp.value">
+      item-text="name"
+      item-color="accent">
   </v-select>
 </template>
 
@@ -16,17 +16,22 @@
 import Vue from "vue";
 
 export default Vue.extend({
-  name: 'GuiEditorPropVar',
+  name: 'GuiEditorPropTable',
   props: {
     prop: Object,
-    variables: Array
+    schema: Array
   },
   data() {
     return {
       currentProp: {}
     }
   },
-  async beforeMount() {
+  computed: {
+    tablesNames(): string [] {
+      return (this.schema as { name: string }[]).slice()?.map((table) => table.name)
+    }
+  },
+  beforeMount() {
     this.currentProp = this.prop
   }
 })

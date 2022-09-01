@@ -279,29 +279,47 @@
       "children": [],
       "propGroups": [
         {
-          "id": "constants",
-          "label": "Wartości stałe",
-          "type": "args",
+          "id": "variables",
+          "label": "Wartość - Zmienna strony",
+          "type": "data",
           "props": [
             {
-              "id": "text",
+              "id": "textPageVarId",
               "value": "",
-              "label": "Tekst",
-              "type": "String"
+              "label": "Text",
+              "type": "Variable"
             }
           ]
         },
         {
           "id": "source",
-          "label": "Źródło",
+          "label": "Wartość - Źródło danych",
           "type": "data",
           "props": [
             {
+              "id": "dataTable",
+              "value": "",
+              "label": "Tabela",
+              "type": "Table"
+            },
+            {
               "id": "textQueryVarId",
               "value": "",
-              "helperValue": "",
               "label": "Text",
               "type": "TableField"
+            }
+          ]
+        },
+        {
+          "id": "parameters",
+          "label": "Wartość - Parametr strony",
+          "type": "data",
+          "props": [
+            {
+              "id": "textParamVarId",
+              "value": "",
+              "label": "Text",
+              "type": "Param"
             }
           ]
         },
@@ -403,55 +421,83 @@
       "children": [],
       "propGroups": [
         {
-          "id": "constants",
-          "label": "Wartości stałe",
-          "type": "args",
+          "id": "variables",
+          "label": "Wartość - Zmienna strony",
+          "type": "data",
           "props": [
             {
-              "id": "title",
+              "id": "titlePageVarId",
               "value": "",
               "label": "Tytuł",
-              "type": "String"
+              "type": "Variable"
             },
             {
-              "id": "subtitle",
+              "id": "subtitlePageVarId",
               "value": "",
               "label": "Podtytuł",
-              "type": "String"
+              "type": "Variable"
             },
             {
-              "id": "text",
+              "id": "textPageVarId",
               "value": "",
               "label": "Tekst",
-              "type": "String"
+              "type": "Variable"
             }
           ]
         },
         {
           "id": "fields",
-          "label": "Źródło",
+          "label": "Wartość - Źródło danych",
           "type": "data",
           "props": [
             {
+              "id": "dataTable",
+              "value": "",
+              "label": "Tabela",
+              "type": "Table"
+            },
+            {
               "id": "titleQueryVarId",
               "value": "",
-              "helperValue": "",
               "label": "Tytuł",
               "type": "TableField"
             },
             {
               "id": "subtitleQueryVarId",
               "value": "",
-              "helperValue": "",
               "label": "Podtytuł",
               "type": "TableField"
             },
             {
               "id": "textQueryVarId",
               "value": "",
-              "helperValue": "",
               "label": "Tekst",
               "type": "TableField"
+            }
+          ]
+        },
+        {
+          "id": "parameters",
+          "label": "Wartość - Parametr strony",
+          "type": "data",
+          "props": [
+            {
+              "id": "titleParamVarId",
+              "value": "",
+              "label": "Tytuł",
+              "type": "Param"
+            },
+            {
+              "id": "subtitleParamVarId",
+              "value": "",
+              "label": "Podtytuł",
+              "type": "Param"
+            },
+            {
+              "id": "textParamVarId",
+              "value": "",
+              "label": "Tekst",
+              "type": "Param"
             }
           ]
         },
@@ -620,37 +666,38 @@
               "type": "Query"
             },
             {
+              "id": "dataTable",
+              "value": "",
+              "label": "Tabela",
+              "type": "Table"
+            },
+            {
               "id": "titleQueryVarId",
               "value": "",
-              "helperValue": "",
               "label": "Tytuł",
               "type": "TableField"
             },
             {
               "id": "descriptionQueryVarId",
               "value": "",
-              "helperValue": "",
               "label": "Opis",
               "type": "TableField"
             },
             {
               "id": "imgQueryVarId",
               "value": "",
-              "helperValue": "",
               "label": "Obraz",
               "type": "TableField"
             },
             {
               "id": "bgColorQueryVarId",
               "value": "",
-              "helperValue": "",
               "label": "Kolor tła",
               "type": "TableField"
             },
             {
               "id": "textColorQueryVarId",
               "value": "",
-              "helperValue": "",
               "label": "Kolor tekstu",
               "type": "TableField"
             }
@@ -1190,16 +1237,20 @@
               "type": "Query"
             },
             {
+              "id": "dataTable",
+              "value": "",
+              "label": "Tabela",
+              "type": "Table"
+            },
+            {
               "id": "textQueryVarId",
               "value": "",
-              "helperValue": "",
               "label": "Wartość wyświetlana",
               "type": "TableField"
             },
             {
               "id": "valueQueryVarId",
               "value": "",
-              "helperValue": "",
               "label": "Wartość wyboru",
               "type": "TableField"
             },

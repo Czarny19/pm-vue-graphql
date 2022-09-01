@@ -1,13 +1,6 @@
+import router from "@/router/index";
 import {i18n} from "@/main";
-import {
-    AppWidget,
-    AppWidgetProp,
-    PageVariable,
-    QueryPagePropMapping,
-    QueryVariable,
-    TableHeader,
-    ThemeColors
-} from "@/lib/types";
+import {ActionProp, AppWidget, AppWidgetProp, PageVariable, QueryVariable, ThemeColors} from "@/lib/types";
 
 export const themeColors = ['primary_color', 'secondary_color', 'accent_color', 'info_color',
     'success_color', 'error_color', 'text_color_1', 'text_color_2', 'background_color']
@@ -36,7 +29,7 @@ export const groups = (widget: AppWidget) => {
 export const getCssProps = (widget: AppWidget, theme: ThemeColors) => {
     let props: AppWidgetProp[] = []
 
-    groups(widget).forEach((group: { props: AppWidgetProp }) => props = props.concat(group.props))
+    groups(widget).forEach((group) => props = props.concat(group.props))
 
     return props.map((prop: AppWidgetProp) => {
         if (prop.type === 'Color' && themeColors.includes(prop.value)) {
@@ -51,8 +44,8 @@ export const getArgsProps = (widget: AppWidget): { [k: string]: string } => {
     let argsProps: AppWidgetProp[] = []
 
     groups(widget)
-        .filter((group: { type: string }) => group.type === 'args')
-        .forEach((group: { props: AppWidgetProp }) => argsProps = argsProps.concat(group.props))
+        .filter((group) => group.type === 'args')
+        .forEach((group) => argsProps = argsProps.concat(group.props))
 
     const argsObject: { [k: string]: string } = {}
 
@@ -65,8 +58,8 @@ export const getDataProps = (widget: AppWidget): { [k: string]: string } => {
     let dataProps: AppWidgetProp[] = []
 
     groups(widget)
-        .filter((group: { type: string }) => group.type === 'data')
-        .forEach((group: { props: AppWidgetProp }) => dataProps = dataProps.concat(group.props))
+        .filter((group) => group.type === 'data')
+        .forEach((group) => dataProps = dataProps.concat(group.props))
 
     const argsObject: { [k: string]: string } = {}
 
@@ -83,8 +76,30 @@ export const getColorPropValue = (theme: ThemeColors, propName: string): string 
     return propName
 }
 
-export const getConstAndDataValue = (constVal: string, dataItem: never, dataVal: string): string => {
-    return (constVal ? constVal : '') + ' ' + (dataItem && dataVal ? dataItem[dataVal] : '')
+export const getConstAndVarValue = (dataItem?: never, dataVal?: string,
+                                    vars?: PageVariable[], pageVal?: number,
+                                    routeParams?: { [k: string]: string }, paramVal?: string): string => {
+
+    const dataValue = dataItem && dataVal ? dataItem[dataVal] : ''
+
+    let paramValue = ''
+
+    if (routeParams && routeParams.params && paramVal) {
+        const params = routeParams.params.split('&')
+        const param = params.find((param) => param.includes(`${paramVal}=`))
+        paramValue = param ? param.substring(param.indexOf('=') + 1) : ''
+    }
+
+    let pageValue = ''
+
+    if (pageVal && pageVal > 0 && vars && vars.length) {
+        const variable = vars.find((variable) => variable.id === pageVal)
+        pageValue = variable ? variable.value : ''
+    }
+
+    const values = [dataValue, pageValue, paramValue]
+
+    return values.filter((value) => value && value.length).join(' ')
 }
 
 export const getRulesForInput = (widget: AppWidget, counter: number | undefined): unknown[] => {
@@ -117,29 +132,89 @@ export const getActionTypes = (): { id: string; name: string }[] => [
 ]
 
 export const getQueryPropLabels = (widget: AppWidget): { text: string; value: string }[] => {
-    const dataPropGroups = widget.propGroups.filter((group: { type: string }) => group.type === 'data')[0]
+    const dataPropGroup = widget.propGroups.find((group) => group.type === 'data')
 
-    const props = (dataPropGroups as { props: { id: string, labels: TableHeader[] }[] }).props
-    const labels = props.filter((prop) => prop.id === 'queryId')[0].labels
+    if (dataPropGroup) {
+        const props = dataPropGroup.props
+        const prop = props.find((prop) => prop.id === 'queryId')
 
-    return labels
-        .filter(label => label.visible)
-        .sort((a, b) => Number(a.order) - Number(b.order))
+        if (prop && prop.labels) {
+            return prop.labels
+                .filter(label => label.visible)
+                .sort((a, b) => Number(a.order) - Number(b.order))
+        }
+    }
+
+    return []
+}
+
+export const getTableNameForWidget = (widget: AppWidget): string => {
+    const dataPropGroups = widget.propGroups.find((group) => group.id === 'source')
+
+    if (dataPropGroups) {
+        const props = dataPropGroups.props
+        const prop = props.find((prop) => prop.id === 'dataTable')
+        return prop ? prop.value : ''
+    }
+
+    return ''
 }
 
 export const mapPageVarValuesToQueryVars = (widget: AppWidget, qrVars: QueryVariable[],
                                             pageVars: PageVariable[]): QueryVariable[] => {
 
-    const dataPropGroups = widget.propGroups.filter((group: { type: string }) => group.type === 'data')[0]
-    const props = (dataPropGroups as { props: { id: string, variablesMapping: QueryPagePropMapping[] }[] }).props
+    const dataPropGroup = widget.propGroups.find((group: { type: string }) => group.type === 'data')
 
-    const queryVariablesMapping = props.filter((prop) => prop.id === 'queryId')[0].variablesMapping
+    if (dataPropGroup) {
+        const props = dataPropGroup.props
+        const prop = props.find((prop) => prop.id === 'queryId')
 
-    qrVars.forEach((qrVar) => {
-        const mapping = queryVariablesMapping.filter((mapping) => mapping.qrVar === qrVar.name)[0]
-        const pageVar = pageVars.filter((variable) => variable.id === mapping.pageVar)[0]
-        qrVar.value = pageVar.value
-    })
+        if (prop && prop.variablesMapping) {
+            qrVars.forEach((qrVar) => {
+                const mapping = prop.variablesMapping?.find((mapping) => mapping.qrVar === qrVar.name)
+                const pageVar = pageVars.find((variable) => variable.id === mapping?.pageVar)
+                qrVar.value = pageVar?.value ?? ''
+            })
+        }
+
+    }
 
     return qrVars
+}
+
+export const runWidgetClickAction = (widget: AppWidget, projectId: string,
+                                     dataItem?: never, vars?: PageVariable[], action?: number) => {
+
+    const actionPropGroup = widget.propGroups.find((group: { type: string }) => group.type === 'action')
+
+    if (actionPropGroup && action) {
+        const props = actionPropGroup.props
+        const prop = (props[action - 1] as unknown as ActionProp)
+
+        prop.variables?.forEach((actionVar) => {
+            if (actionVar.pageVar > 0) {
+                actionVar.value = vars?.find((pageVar) => pageVar.id === actionVar.pageVar)?.value ?? ''
+            } else if (actionVar.tableVar.length > 0) {
+                actionVar.value = dataItem != undefined ? dataItem[actionVar.tableVar] : ''
+            }
+        })
+
+        switch (prop.type) {
+            case 'goToPage':
+                runOpenPageAction(prop, projectId)
+                break;
+        }
+    }
+}
+
+const runOpenPageAction = (prop: ActionProp, projectId: string) => {
+    const params = prop.variables.map((variable) => `${variable.name}=${variable.value}`)
+
+    router.push({
+        name: 'AppRunner', params: {
+            projectId: projectId,
+            pageId: prop.target.toString(),
+            params: params.join('&')
+        }
+    }).then()
 }

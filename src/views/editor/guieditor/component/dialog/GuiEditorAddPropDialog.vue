@@ -102,7 +102,7 @@ export default Vue.extend({
           pageId: this.pageId,
           name: this.propName,
           type: this.propType,
-          type_display: this.types.filter((type) => type.id === this.propType)[0].name,
+          type_display: this.types.find((type) => type.id === this.propType)?.name ?? '',
           value: this.propValue
         }
       }).then(async () => {

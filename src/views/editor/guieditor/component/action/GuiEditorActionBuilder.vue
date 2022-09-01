@@ -10,7 +10,7 @@
           {{ `${i18n('editor.action')}: ${index + 1}` }}
         </v-col>
 
-        <v-col cols="2" class="text-end">
+        <v-col v-if="!actionsGroup.addLocked" cols="2" class="text-end">
           <v-btn class="mr-2" fab height="24" width="24" color="error" @click="deleteAction(prop)">
             <v-icon x-small>fa-times</v-icon>
           </v-btn>
@@ -41,7 +41,10 @@
           <GuiEditorActionGoToPage
               v-if="prop.type === 'goToPage'"
               :prop="prop"
+              :page="page"
               :pages="pages"
+              :widget="widget"
+              :schema="schema"
               :variables="variables">
           </GuiEditorActionGoToPage>
         </v-col>
@@ -83,7 +86,10 @@ export default Vue.extend({
   props: {
     actionsGroup: Object,
     mutations: Array,
+    page: Object,
     pages: Array,
+    widget: Object,
+    schema: Array,
     variables: Array
   },
   data() {

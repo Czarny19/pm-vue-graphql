@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import {AppWidget} from "@/lib/types";
+import {AppWidget, PageVariable} from "@/lib/types";
 import * as widget from "@/lib/widget";
 
 export default Vue.extend({
@@ -12,7 +12,8 @@ export default Vue.extend({
   props: {
     widget: Object,
     theme: Object,
-    dataItem: Object
+    dataItem: Object,
+    variables: Array
   },
   computed: {
     appWidget(): AppWidget {
@@ -31,7 +32,14 @@ export default Vue.extend({
       return this.dataItem as never
     },
     displayValue(): string {
-      return widget.getConstAndDataValue(this.argsProps.text, this.data, this.dataProps.textQueryVarId)
+      return widget.getConstAndVarValue(
+          this.data,
+          this.dataProps.textQueryVarId,
+          (this.variables as PageVariable[]),
+          Number(this.dataProps.textPageVarId),
+          this.$route.params,
+          this.dataProps.textParamVarId
+      )
     }
   }
 })

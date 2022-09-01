@@ -28,7 +28,7 @@ export default Vue.extend({
   },
   methods: {
     goToStart(): void {
-      this.$router.push({name: 'AppRunner', params: {projectId: this.project.id}})
+      this.$router.push({name: 'AppRunner', params: {projectId: this.project.id, pageId: 'start'}})
     },
     goToPage(id: number): void {
       this.$router.push({name: 'AppRunner', params: {projectId: this.project.id, pageId: id.toString()}})

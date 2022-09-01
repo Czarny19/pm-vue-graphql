@@ -5,12 +5,14 @@
   <GuiEditorPropSlider v-else-if="prop.type === 'Slider'" :prop="prop"/>
   <GuiEditorPropBool v-else-if="prop.type === 'Boolean'" :prop="prop"/>
   <GuiEditorPropQuery v-else-if="prop.type === 'Query'" :prop="prop" :queries="queries" :variables="variables"/>
-  <GuiEditorPropTableField v-else-if="prop.type === 'TableField'" :prop="prop" :schema="schema"/>
+  <GuiEditorPropTable v-else-if="prop.type === 'Table'" :prop="prop" :schema="schema"/>
+  <GuiEditorPropTableField v-else-if="prop.type === 'TableField'" :prop="prop" :widget="widget" :schema="schema"/>
   <GuiEditorPropBorder v-else-if="prop.type === 'Border'" :prop="prop"/>
   <GuiEditorPropSelect v-else-if="prop.type === 'Select'" :prop="prop"/>
   <GuiEditorPropDuration v-else-if="prop.type === 'Duration'" :prop="prop"/>
   <GuiEditorPropNumber v-else-if="prop.type === 'Number'" :prop="prop"/>
   <GuiEditorPropVar v-else-if="prop.type === 'Variable'" :prop="prop" :variables="variables"/>
+  <GuiEditorPropParam v-else-if="prop.type === 'Param'" :prop="prop" :page="page"/>
 </template>
 
 <script lang="ts">
@@ -27,10 +29,14 @@ import GuiEditorPropSelect from "@/views/editor/guieditor/component/property/Gui
 import GuiEditorPropDuration from "@/views/editor/guieditor/component/property/GuiEditorPropDuration.vue";
 import GuiEditorPropNumber from "@/views/editor/guieditor/component/property/GuiEditorPropNumber.vue";
 import GuiEditorPropVar from "@/views/editor/guieditor/component/property/GuiEditorPropVar.vue";
+import GuiEditorPropTable from "@/views/editor/guieditor/component/property/GuiEditorPropTable.vue";
+import GuiEditorPropParam from "@/views/editor/guieditor/component/property/GuiEditorPropParam.vue";
 
 export default Vue.extend({
   name: 'GuiEditorProp',
   components: {
+    GuiEditorPropParam,
+    GuiEditorPropTable,
     GuiEditorPropVar,
     GuiEditorPropNumber,
     GuiEditorPropDuration,
@@ -46,6 +52,8 @@ export default Vue.extend({
   },
   props: {
     prop: Object,
+    page: Object,
+    widget: Object,
     theme: Object,
     queries: Array,
     schema: Array,

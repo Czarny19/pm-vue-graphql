@@ -20,6 +20,7 @@
             :theme="theme"
             :datasource="datasource"
             :key="`${indexData}_${indexChild}`"
+            :variables="variables"
             :data-item="item">
         </BaseWidget>
       </template>

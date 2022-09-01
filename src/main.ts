@@ -2,7 +2,7 @@ import Vue from "vue";
 import App from "./App.vue";
 import VueI18n from "vue-i18n";
 import VModal from "vue-js-modal";
-import router from "./router/index"
+import router from "./router/index";
 import vuetify from "./plugins/vuetify";
 import VueCookies from "vue-cookies";
 import VueApollo from "vue-apollo";

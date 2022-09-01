@@ -124,7 +124,11 @@ export default Vue.extend({
   },
   methods: {
     operators(wherePart: QueryWhere): string [] {
-      const field = (this.fields as SchemaItemField []).filter((field) => field.name === wherePart.field)[0];
+      const field = (this.fields as SchemaItemField []).find((field) => field.name === wherePart.field);
+
+      if (!field) {
+        return graphql_gen.stringOperators
+      }
 
       switch (field.type) {
         case 'String':
@@ -143,12 +147,12 @@ export default Vue.extend({
       }
     },
     fieldType(wherePart: QueryWhere): string {
-      const field = (this.fields as SchemaItemField []).filter((field) => field.name === wherePart.field)[0];
-      return field.type
+      const field = (this.fields as SchemaItemField []).find((field) => field.name === wherePart.field);
+      return field?.type ?? ''
     },
     variables(wherePart: QueryWhere): string [] {
-      const field = (this.fields as SchemaItemField []).filter((field) => field.name === wherePart.field)[0];
-      const type = field.type
+      const field = (this.fields as SchemaItemField []).find((field) => field.name === wherePart.field);
+      const type = field?.type ?? ''
       const obj = this.object as { variables: string }
       const variables = graphql_gen.mapModelStringToQueryVariableArray(obj.variables ?? '')
 

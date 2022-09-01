@@ -22,8 +22,9 @@ export const UPDATE_PAGE_DEFINITION = gql`mutation updatePageDefinition(
     $id: bigint!,
     $definition: jsonb!,
     $modifyDate: date!,
+    $params: String
 ) {
-    update_PAGE(where: {id: {_eq: $id}},_set: {definition: $definition,modify_date: $modifyDate}) {
+    update_PAGE(where: {id: {_eq: $id}},_set: {definition: $definition,modify_date: $modifyDate, params: $params}) {
         returning {
             id
         }

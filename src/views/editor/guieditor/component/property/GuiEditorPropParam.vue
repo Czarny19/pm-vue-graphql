@@ -7,7 +7,7 @@
       item-text="name"
       item-value="id"
       :label="prop.label"
-      :items="['', ...variables]"
+      :items="['', ...params]"
       v-model="currentProp.value">
   </v-select>
 </template>
@@ -16,14 +16,19 @@
 import Vue from "vue";
 
 export default Vue.extend({
-  name: 'GuiEditorPropVar',
+  name: 'GuiEditorPropParam',
   props: {
     prop: Object,
-    variables: Array
+    page: Object
   },
   data() {
     return {
       currentProp: {}
+    }
+  },
+  computed: {
+    params(): string[] {
+      return this.page.params.split(';')
     }
   },
   async beforeMount() {

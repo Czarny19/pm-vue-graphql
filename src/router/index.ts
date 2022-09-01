@@ -40,7 +40,7 @@ const routes = [
         component: MutationPage,
         beforeEnter: authGuard
     },
-    {name: 'AppRunner', path: '/app/:projectId/page/:pageId?', component: AppRunnerPage},
+    {name: 'AppRunner', path: '/app/:projectId/page/:pageId?/params/:params?', component: AppRunnerPage},
     {path: '*', redirect: '/admin/main/dashboard/tab=0'}
 ]
 

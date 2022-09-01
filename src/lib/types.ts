@@ -71,7 +71,14 @@ export type AppWidget = {
     type: string;
     group: string;
     children: [];
-    propGroups: [];
+    propGroups: AppWidgetPropGroup[];
+}
+
+export type AppWidgetPropGroup = {
+    id: string;
+    label: string;
+    type: string;
+    props: AppWidgetProp[]
 }
 
 export type AppWidgetProp = {
@@ -80,6 +87,8 @@ export type AppWidgetProp = {
     unit?: string;
     type: string;
     dataType: string;
+    labels: TableHeader[] | undefined;
+    variablesMapping: QueryPagePropMapping[] | undefined;
 }
 
 export type Query = {
@@ -170,7 +179,10 @@ export type ActionPropVariable = {
     name: string;
     type: string;
     value: string;
+    varType: number;
     pageVar: number;
+    tableVar: string;
+    paramVar: string;
 }
 
 export type QueryPagePropMapping = {
