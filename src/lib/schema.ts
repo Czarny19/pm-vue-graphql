@@ -66,6 +66,18 @@ export const getAllTableFieldsWithRelations = (table: string, schema: SchemaItem
     return fields
 }
 
+const getRelatedFields = (path: string, fields: SchemaItemField[], field: SchemaItemField, schema: SchemaItem[]) => {
+    schema.find((item) => item.name === field.type)?.fields.slice().forEach((fld) => {
+        if (schema.map((item) => item.name).includes(fld.type)) {
+            getRelatedFields(`${path}.${fld.name}`, fields, fld, schema)
+        } else {
+            const relationshipField = {name: fld.name, type: fld.type, isNullable: fld.isNullable}
+            relationshipField.name = `${path.length ? path + '.' : ''}${fld.name}`
+            fields.push(relationshipField)
+        }
+    })
+}
+
 /**
  * Decodes the datasource secret that has been encoded for storage in admin db.
  * @param secret GraphQL endpoint encoded secret (null if the endpoint is not secured)
@@ -161,16 +173,4 @@ const cleanSchema = (schema: unknown []): Types.SchemaItem [] => {
     })
 
     return cleanSchema;
-}
-
-const getRelatedFields = (path: string, fields: SchemaItemField[], field: SchemaItemField, schema: SchemaItem[]) => {
-    schema.find((item) => item.name === field.type)?.fields.forEach((fld) => {
-        if (schema.map((item) => item.name).includes(fld.type)) {
-            getRelatedFields(`${path}.${fld.name}`, fields, fld, schema)
-        } else {
-            const relationshipField = fld
-            relationshipField.name = `${path.length ? path + '.' : ''}${fld.name}`
-            fields.push(relationshipField)
-        }
-    })
 }

@@ -51,13 +51,7 @@ export default Vue.extend({
   },
   computed: {
     selectedMutation(): Mutation | undefined {
-      const mutations = (this.mutations as Mutation[])?.filter((mutation) => mutation.id === this.prop.target)
-
-      if (mutations.length) {
-        return mutations[0]
-      }
-
-      return undefined
+      return (this.mutations as Mutation[])?.find((mutation) => mutation.id === this.prop.target)
     }
   },
   watch: {

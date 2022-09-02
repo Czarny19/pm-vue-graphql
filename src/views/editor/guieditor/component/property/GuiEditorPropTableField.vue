@@ -28,7 +28,8 @@ export default Vue.extend({
   },
   data() {
     return {
-      currentProp: {}
+      currentProp: {},
+      fields: []
     }
   },
   computed: {
@@ -37,13 +38,18 @@ export default Vue.extend({
     },
     fieldsVisible(): boolean {
       return this.tableName.length > 0
-    },
-    fields(): SchemaItemField[] {
-      return getAllTableFieldsWithRelations(this.tableName, this.schema as SchemaItem[])
+    }
+  },
+  watch: {
+    tableName() {
+      (this.fields as  SchemaItemField[]) = getAllTableFieldsWithRelations(this.tableName, this.schema as SchemaItem[])
     }
   },
   beforeMount() {
-    this.currentProp = this.prop
+    this.currentProp = this.prop;
+
+    const tableName = getTableNameForWidget(this.widget);
+    (this.fields as  SchemaItemField[]) = getAllTableFieldsWithRelations(tableName, this.schema as SchemaItem[])
   }
 })
 </script>

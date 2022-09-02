@@ -1,15 +1,16 @@
 <template>
   <div :style="cssProps">
     <v-textarea
+        v-if="initialized"
         class="pa-0"
         light persistent-hint
-        :label="argsProps.label"
+        :label="label"
         :counter="counter"
         :rows="argsProps.rows"
         :color="color"
         :readonly="argsProps.readonly"
         :disabled="argsProps.disabled"
-        :hint="argsProps.hint"
+        :hint="hint"
         :dense="argsProps.dense"
         :filled="argsProps.filled"
         :background-color="bgColor"
@@ -17,7 +18,7 @@
         :no-resize="argsProps.noResize"
         :value="variableValue"
         :rules="rules"
-        @change="updateVariableValue">
+        @input="updateVariableValue">
     </v-textarea>
   </div>
 </template>
@@ -33,6 +34,11 @@ export default Vue.extend({
     widget: Object,
     theme: Object,
     variables: Array
+  },
+  data() {
+    return {
+      initialized: false
+    }
   },
   computed: {
     appWidget(): AppWidget {
@@ -56,6 +62,12 @@ export default Vue.extend({
     bgColor(): string {
       return widget.getColorPropValue(this.theme, this.argsProps.bgColor)
     },
+    label(): string {
+      return widget.getPageVarValue((this.variables as PageVariable[]), Number(this.argsProps.label))
+    },
+    hint(): string {
+      return widget.getPageVarValue((this.variables as PageVariable[]), Number(this.argsProps.hint))
+    },
     variable(): PageVariable | undefined {
       if (this.dataProps.variableId) {
         const variableId = Number(this.dataProps.variableId)
@@ -65,7 +77,7 @@ export default Vue.extend({
       return undefined
     },
     variableValue(): string | undefined {
-      if (this.variable) {
+      if (this.variable && this.initialized) {
         return this.variable.value
       }
 
@@ -80,6 +92,21 @@ export default Vue.extend({
       if (this.variable) {
         this.variable.value = val
       }
+    }
+  },
+  beforeMount() {
+    if (!this.initialized) {
+      const intialValue = widget.getConstAndVarValue(
+          undefined,
+          undefined,
+          (this.variables as PageVariable[]),
+          Number(this.dataProps.initalPageVarId),
+          this.$route.params,
+          this.dataProps.initalParamVarId
+      )
+
+      this.updateVariableValue(intialValue)
+      this.initialized = true
     }
   }
 })

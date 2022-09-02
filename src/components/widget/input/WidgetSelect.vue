@@ -4,11 +4,11 @@
         class="pa-0"
         light persistent-hint
         item-color="accent"
-        :label="argsProps.label"
+        :label="label"
         :color="color"
         :readonly="argsProps.readonly"
         :disabled="argsProps.disabled"
-        :hint="argsProps.hint"
+        :hint="hint"
         :dense="argsProps.dense"
         :filled="argsProps.filled"
         :background-color="bgColor"
@@ -41,7 +41,8 @@ export default Vue.extend({
   data() {
     return {
       query: {},
-      queryData: []
+      queryData: [],
+      initialized: false
     }
   },
   computed: {
@@ -62,6 +63,12 @@ export default Vue.extend({
     },
     bgColor(): string {
       return widget.getColorPropValue(this.theme, this.argsProps.bgColor)
+    },
+    label(): string {
+      return widget.getPageVarValue((this.variables as PageVariable[]), Number(this.argsProps.label))
+    },
+    hint(): string {
+      return widget.getPageVarValue((this.variables as PageVariable[]), Number(this.argsProps.hint))
     },
     variable(): PageVariable | undefined {
       if (this.dataProps.variableId) {
@@ -110,7 +117,7 @@ export default Vue.extend({
     }
   },
   methods: {
-    updateVariableValue(val: string): void {
+    updateVariableValue(val: never): void {
       if (this.variable) {
         this.variable.value = val
       }
@@ -150,6 +157,21 @@ export default Vue.extend({
           (this.queryData as unknown[]) = result.data;
         })
       }
+    }
+  },
+  beforeUpdate() {
+    if (!this.initialized) {
+      const intialValue = widget.getConstAndVarValue(
+          undefined,
+          undefined,
+          (this.variables as PageVariable[]),
+          Number(this.dataProps.initalPageVarId),
+          this.$route.params,
+          this.dataProps.initalParamVarId
+      )
+
+      this.updateVariableValue((isNaN(Number(intialValue)) ? intialValue : Number(intialValue)) as never)
+      this.initialized = true
     }
   }
 })

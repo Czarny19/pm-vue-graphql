@@ -76,11 +76,28 @@ export const getColorPropValue = (theme: ThemeColors, propName: string): string 
     return propName
 }
 
+export const getPageVarValue = (vars?: PageVariable[], pageVal?: number): string => {
+    let pageValue = ''
+
+    if (pageVal && pageVal > 0 && vars && vars.length) {
+        const variable = vars.find((variable) => variable.id === pageVal)
+        pageValue = variable ? variable.value : ''
+    }
+
+    return pageValue
+}
+
 export const getConstAndVarValue = (dataItem?: never, dataVal?: string,
                                     vars?: PageVariable[], pageVal?: number,
                                     routeParams?: { [k: string]: string }, paramVal?: string): string => {
 
-    const dataValue = dataItem && dataVal ? dataItem[dataVal] : ''
+    let dataValue = ''
+
+    if (dataItem && dataVal) {
+        dataValue = getRelationshipFirstDataValue(dataVal, dataItem)
+    }
+
+    const pageValue = getPageVarValue(vars, pageVal)
 
     let paramValue = ''
 
@@ -90,16 +107,18 @@ export const getConstAndVarValue = (dataItem?: never, dataVal?: string,
         paramValue = param ? param.substring(param.indexOf('=') + 1) : ''
     }
 
-    let pageValue = ''
-
-    if (pageVal && pageVal > 0 && vars && vars.length) {
-        const variable = vars.find((variable) => variable.id === pageVal)
-        pageValue = variable ? variable.value : ''
-    }
-
     const values = [dataValue, pageValue, paramValue]
 
     return values.filter((value) => value && value.length).join(' ')
+}
+
+const getRelationshipFirstDataValue = (dataVal: string, dataItem?: never): string => {
+    if (dataItem && dataVal && dataVal.includes('.')) {
+        const relation = dataVal.substring(0, dataVal.indexOf('.'))
+        return getRelationshipFirstDataValue(dataVal.substring(dataVal.indexOf('.') + 1), dataItem[relation])
+    } else {
+        return dataItem ? dataItem[dataVal] : ''
+    }
 }
 
 export const getRulesForInput = (widget: AppWidget, counter: number | undefined): unknown[] => {

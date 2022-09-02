@@ -1,12 +1,13 @@
 <template>
   <div :style="cssProps">
     <v-checkbox
+        v-if="initialized"
         class="pa-0"
         light persistent-hint
-        :label="argsProps.label"
+        :label="label"
         :color="color"
         :disabled="argsProps.disabled"
-        :hint="argsProps.hint"
+        :hint="hint"
         :dense="argsProps.dense"
         :background-color="bgColor"
         :false-value="false"
@@ -32,6 +33,11 @@ export default Vue.extend({
     theme: Object,
     variables: Array
   },
+  data() {
+    return {
+      initialized: false
+    }
+  },
   computed: {
     appWidget(): AppWidget {
       return this.widget as AppWidget
@@ -50,6 +56,12 @@ export default Vue.extend({
     },
     bgColor(): string {
       return widget.getColorPropValue(this.theme, this.argsProps.bgColor)
+    },
+    label(): string {
+      return widget.getPageVarValue((this.variables as PageVariable[]), Number(this.argsProps.label))
+    },
+    hint(): string {
+      return widget.getPageVarValue((this.variables as PageVariable[]), Number(this.argsProps.hint))
     },
     variable(): PageVariable | undefined {
       if (this.dataProps.variableId) {
@@ -72,6 +84,21 @@ export default Vue.extend({
       if (this.variable) {
         this.variable.value = val
       }
+    }
+  },
+  beforeMount() {
+    if (!this.initialized) {
+      const intialValue = widget.getConstAndVarValue(
+          undefined,
+          undefined,
+          (this.variables as PageVariable[]),
+          Number(this.dataProps.initalPageVarId),
+          this.$route.params,
+          this.dataProps.initalParamVarId
+      )
+
+      this.updateVariableValue(intialValue)
+      this.initialized = true
     }
   }
 })

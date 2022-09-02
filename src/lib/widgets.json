@@ -446,7 +446,7 @@
           ]
         },
         {
-          "id": "fields",
+          "id": "source",
           "label": "Wartość - Źródło danych",
           "type": "data",
           "props": [
@@ -654,7 +654,7 @@
           ]
         },
         {
-          "id": "fields",
+          "id": "source",
           "label": "Źródło",
           "type": "data",
           "props": [
@@ -818,8 +818,8 @@
       "children": [],
       "propGroups": [
         {
-          "id": "data",
-          "label": "Właściwości",
+          "id": "variables",
+          "label": "Wartość",
           "type": "data",
           "props": [
             {
@@ -827,6 +827,32 @@
               "value": "",
               "label": "Zmienna",
               "type": "Variable"
+            }
+          ]
+        },
+        {
+          "id": "initialpage",
+          "label": "Wartość początkowa - Zmienna strony",
+          "type": "data",
+          "props": [
+            {
+              "id": "initalPageVarId",
+              "value": "",
+              "label": "Text",
+              "type": "Variable"
+            }
+          ]
+        },
+        {
+          "id": "initialparam",
+          "label": "Wartość początkowa - Parametr strony",
+          "type": "data",
+          "props": [
+            {
+              "id": "initalParamVarId",
+              "value": "",
+              "label": "Text",
+              "type": "Param"
             }
           ]
         },
@@ -839,13 +865,13 @@
               "id": "label",
               "value": "",
               "label": "Etykieta",
-              "type": "String"
+              "type": "Variable"
             },
             {
               "id": "hint",
               "value": "",
               "label": "Podpowiedź",
-              "type": "String"
+              "type": "Variable"
             },
             {
               "id": "counterNum",
@@ -951,8 +977,8 @@
       "children": [],
       "propGroups": [
         {
-          "id": "data",
-          "label": "Właściwości",
+          "id": "variables",
+          "label": "Wartość",
           "type": "data",
           "props": [
             {
@@ -960,6 +986,32 @@
               "value": "",
               "label": "Zmienna",
               "type": "Variable"
+            }
+          ]
+        },
+        {
+          "id": "initialpage",
+          "label": "Wartość początkowa - Zmienna strony",
+          "type": "data",
+          "props": [
+            {
+              "id": "initalPageVarId",
+              "value": "",
+              "label": "Text",
+              "type": "Variable"
+            }
+          ]
+        },
+        {
+          "id": "initialparam",
+          "label": "Wartość początkowa - Parametr strony",
+          "type": "data",
+          "props": [
+            {
+              "id": "initalParamVarId",
+              "value": "",
+              "label": "Text",
+              "type": "Param"
             }
           ]
         },
@@ -972,13 +1024,13 @@
               "id": "label",
               "value": "",
               "label": "Etykieta",
-              "type": "String"
+              "type": "Variable"
             },
             {
               "id": "hint",
               "value": "",
               "label": "Podpowiedź",
-              "type": "String"
+              "type": "Variable"
             },
             {
               "id": "counterNum",
@@ -1084,8 +1136,8 @@
       "children": [],
       "propGroups": [
         {
-          "id": "data",
-          "label": "Właściwości",
+          "id": "variables",
+          "label": "Wartość",
           "type": "data",
           "props": [
             {
@@ -1093,6 +1145,32 @@
               "value": "",
               "label": "Zmienna",
               "type": "Variable"
+            }
+          ]
+        },
+        {
+          "id": "initialpage",
+          "label": "Wartość początkowa - Zmienna strony",
+          "type": "data",
+          "props": [
+            {
+              "id": "initalPageVarId",
+              "value": "",
+              "label": "Text",
+              "type": "Variable"
+            }
+          ]
+        },
+        {
+          "id": "initialparam",
+          "label": "Wartość początkowa - Parametr strony",
+          "type": "data",
+          "props": [
+            {
+              "id": "initalParamVarId",
+              "value": "",
+              "label": "Text",
+              "type": "Param"
             }
           ]
         },
@@ -1105,13 +1183,13 @@
               "id": "label",
               "value": "",
               "label": "Etykieta",
-              "type": "String"
+              "type": "Variable"
             },
             {
               "id": "hint",
               "value": "",
               "label": "Podpowiedź",
-              "type": "String"
+              "type": "Variable"
             },
             {
               "id": "rows",
@@ -1223,7 +1301,7 @@
       "children": [],
       "propGroups": [
         {
-          "id": "data",
+          "id": "source",
           "label": "Właściwości",
           "type": "data",
           "props": [
@@ -1253,12 +1331,45 @@
               "value": "",
               "label": "Wartość wyboru",
               "type": "TableField"
-            },
+            }
+          ]
+        },
+        {
+          "id": "variables",
+          "label": "Wartość",
+          "type": "data",
+          "props": [
             {
               "id": "variableId",
               "value": "",
               "label": "Zmienna",
               "type": "Variable"
+            }
+          ]
+        },
+        {
+          "id": "initialpage",
+          "label": "Wartość początkowa - Zmienna strony",
+          "type": "data",
+          "props": [
+            {
+              "id": "initalPageVarId",
+              "value": "",
+              "label": "Text",
+              "type": "Variable"
+            }
+          ]
+        },
+        {
+          "id": "initialparam",
+          "label": "Wartość początkowa - Parametr strony",
+          "type": "data",
+          "props": [
+            {
+              "id": "initalParamVarId",
+              "value": "",
+              "label": "Text",
+              "type": "Param"
             }
           ]
         },
@@ -1271,13 +1382,13 @@
               "id": "label",
               "value": "",
               "label": "Etykieta",
-              "type": "String"
+              "type": "Variable"
             },
             {
               "id": "hint",
               "value": "",
               "label": "Podpowiedź",
-              "type": "String"
+              "type": "Variable"
             },
             {
               "id": "readonly",
@@ -1347,8 +1458,8 @@
       "children": [],
       "propGroups": [
         {
-          "id": "data",
-          "label": "Właściwości",
+          "id": "variables",
+          "label": "Wartość",
           "type": "data",
           "props": [
             {
@@ -1356,6 +1467,32 @@
               "value": "",
               "label": "Zmienna",
               "type": "Variable"
+            }
+          ]
+        },
+        {
+          "id": "initialpage",
+          "label": "Wartość początkowa - Zmienna strony",
+          "type": "data",
+          "props": [
+            {
+              "id": "initalPageVarId",
+              "value": "",
+              "label": "Text",
+              "type": "Variable"
+            }
+          ]
+        },
+        {
+          "id": "initialparam",
+          "label": "Wartość początkowa - Parametr strony",
+          "type": "data",
+          "props": [
+            {
+              "id": "initalParamVarId",
+              "value": "",
+              "label": "Text",
+              "type": "Param"
             }
           ]
         },
@@ -1368,13 +1505,13 @@
               "id": "label",
               "value": "",
               "label": "Etykieta",
-              "type": "String"
+              "type": "Variable"
             },
             {
               "id": "hint",
               "value": "",
               "label": "Podpowiedź",
-              "type": "String"
+              "type": "Variable"
             },
             {
               "id": "disabled",
@@ -1428,7 +1565,7 @@
               "id": "label",
               "value": "",
               "label": "Etykieta",
-              "type": "String"
+              "type": "Variable"
             },
             {
               "id": "disabled",
