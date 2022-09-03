@@ -12,26 +12,19 @@ export const sizeUnits = ['px', '%', 'cm', 'pt', 'em', 'vw', 'vh', 'auto']
 export const borders = ['dotted', 'dashed', 'solid', 'double', 'groove', 'ridge', 'inset', 'outset', 'none', 'hidden']
 
 export const generateInitialPageDefinition = (id: string) => {
-    return {
-        "id": id,
-        "type": "Page",
-        "label": "Strona",
-        "icon": "fa-th",
-        "datatable": "",
-        "children": []
-    }
-}
-
-export const groups = (widget: AppWidget) => {
-    return widget ? widget.propGroups : []
+    return {"id": id, "type": "Page", "label": "Strona", "icon": "fa-th", "children": []}
 }
 
 export const getCssProps = (widget: AppWidget, theme: ThemeColors) => {
-    let props: AppWidgetProp[] = []
+    const propGroups = widget ? widget.propGroups.slice() : []
 
-    groups(widget).forEach((group) => props = props.concat(group.props))
+    let cssProps: AppWidgetProp[] = []
 
-    return props.map((prop: AppWidgetProp) => {
+    propGroups
+        .filter((group) => group.type === 'css')
+        .forEach((group) => cssProps = cssProps.concat(group.props))
+
+    return cssProps.map((prop: AppWidgetProp) => {
         if (prop.type === 'Color' && themeColors.includes(prop.value)) {
             return {[prop.id]: theme[prop.value as keyof ThemeColors]}
         }
@@ -41,9 +34,11 @@ export const getCssProps = (widget: AppWidget, theme: ThemeColors) => {
 }
 
 export const getArgsProps = (widget: AppWidget): { [k: string]: string } => {
+    const propGroups = widget ? widget.propGroups.slice() : []
+
     let argsProps: AppWidgetProp[] = []
 
-    groups(widget)
+    propGroups
         .filter((group) => group.type === 'args')
         .forEach((group) => argsProps = argsProps.concat(group.props))
 
@@ -55,9 +50,11 @@ export const getArgsProps = (widget: AppWidget): { [k: string]: string } => {
 }
 
 export const getDataProps = (widget: AppWidget): { [k: string]: string } => {
+    const propGroups = widget ? widget.propGroups.slice() : []
+
     let dataProps: AppWidgetProp[] = []
 
-    groups(widget)
+    propGroups
         .filter((group) => group.type === 'data')
         .forEach((group) => dataProps = dataProps.concat(group.props))
 
@@ -69,11 +66,7 @@ export const getDataProps = (widget: AppWidget): { [k: string]: string } => {
 }
 
 export const getColorPropValue = (theme: ThemeColors, propName: string): string => {
-    if (themeColors.includes(propName)) {
-        return theme[propName as keyof ThemeColors]
-    }
-
-    return propName
+    return themeColors.includes(propName) ? theme[propName as keyof ThemeColors] : propName
 }
 
 export const getPageVarValue = (vars?: PageVariable[], pageVal?: number): string => {
@@ -87,38 +80,91 @@ export const getPageVarValue = (vars?: PageVariable[], pageVal?: number): string
     return pageValue
 }
 
-export const getConstAndVarValue = (dataItem?: never, dataVal?: string,
-                                    vars?: PageVariable[], pageVal?: number,
-                                    routeParams?: { [k: string]: string }, paramVal?: string): string => {
-
-    let dataValue = ''
-
-    if (dataItem && dataVal) {
-        dataValue = getRelationshipFirstDataValue(dataVal, dataItem)
-    }
-
-    const pageValue = getPageVarValue(vars, pageVal)
-
-    let paramValue = ''
-
+export const getParamVarValue = (routeParams?: { [k: string]: string }, paramVal?: string): string => {
     if (routeParams && routeParams.params && paramVal) {
         const params = routeParams.params.split('&')
         const param = params.find((param) => param.includes(`${paramVal}=`))
-        paramValue = param ? param.substring(param.indexOf('=') + 1) : ''
+        return param ? param.substring(param.indexOf('=') + 1) : ''
     }
+
+    return ''
+}
+
+export const getDataVarValueAsString = (dataVal?: string, dataItem?: never): string => {
+    if (!dataVal || !dataItem) {
+        return ''
+    }
+
+    const valIsRelation = dataItem && dataVal && dataVal.includes('.')
+
+    if (valIsRelation) {
+        const relation = dataVal.substring(0, dataVal.indexOf('.'))
+        const val = dataVal.substring(dataVal.indexOf('.') + 1)
+
+        return getDataVarValueAsString(val, dataItem[relation])
+    }
+
+    if (Array.isArray(dataItem)) {
+        return (dataItem as never[]).map((item) => item[dataVal]).join(' ')
+    }
+
+    return dataItem ? dataItem[dataVal] : ''
+}
+
+export const getDataVarValueAsArray = (pageValue: string, paramValue: string, dataVal?: string,
+                                       dataItem?: never): string => {
+
+    if (!dataVal || !dataItem) {
+        return `${paramValue} ${pageValue}`.trim()
+    }
+
+    const valIsRelation = dataItem && dataVal && dataVal.includes('.')
+
+    if (valIsRelation) {
+        const relation = dataVal.substring(0, dataVal.indexOf('.'))
+        const val = dataVal.substring(dataVal.indexOf('.') + 1)
+
+        return getDataVarValueAsArray(pageValue, paramValue, val, dataItem[relation])
+    }
+
+    if (Array.isArray(dataItem)) {
+        return (dataItem as never[])
+            .map((item) => `${paramValue} ${pageValue} ${item[dataVal]}`.trim())
+            .join('<>')
+    }
+
+    return `${paramValue} ${pageValue} ${dataItem ? dataItem[dataVal] : ''}`.trim()
+}
+
+export const getDisplayWidgetVarValue = (dataItem?: never, dataVal?: string, vars?: PageVariable[], pageVal?: number,
+                                         routeParams?: { [k: string]: string }, paramVal?: string): string => {
+
+    const dataValue = getDataVarValueAsString(dataVal, dataItem)
+    const pageValue = getPageVarValue(vars, pageVal)
+    const paramValue = getParamVarValue(routeParams, paramVal)
 
     const values = [dataValue, pageValue, paramValue]
 
     return values.filter((value) => value && value.length).join(' ')
 }
 
-const getRelationshipFirstDataValue = (dataVal: string, dataItem?: never): string => {
-    if (dataItem && dataVal && dataVal.includes('.')) {
-        const relation = dataVal.substring(0, dataVal.indexOf('.'))
-        return getRelationshipFirstDataValue(dataVal.substring(dataVal.indexOf('.') + 1), dataItem[relation])
-    } else {
-        return dataItem ? dataItem[dataVal] : ''
-    }
+export const getDisplayWidgetVarValues = (dataItem?: never, dataVal?: string, vars?: PageVariable[], pageVal?: number,
+                                          routeParams?: { [k: string]: string }, paramVal?: string): string => {
+
+    const pageValue = getPageVarValue(vars, pageVal)
+    const paramValue = getParamVarValue(routeParams, paramVal)
+    return getDataVarValueAsArray(pageValue, paramValue, dataVal, dataItem)
+}
+
+export const getInputWidgetInitialValue = (vars?: PageVariable[], pageVal?: number,
+                                           routeParams?: { [k: string]: string }, paramVal?: string): string => {
+
+    const pageValue = getPageVarValue(vars, pageVal)
+    const paramValue = getParamVarValue(routeParams, paramVal)
+
+    const values = [pageValue, paramValue]
+
+    return values.filter((value) => value && value.length).join(' ')
 }
 
 export const getRulesForInput = (widget: AppWidget, counter: number | undefined): unknown[] => {
@@ -201,28 +247,24 @@ export const mapPageVarValuesToQueryVars = (widget: AppWidget, qrVars: QueryVari
     return qrVars
 }
 
-export const runWidgetClickAction = (widget: AppWidget, projectId: string,
-                                     dataItem?: never, vars?: PageVariable[], action?: number) => {
+export const runWidgetClickAction = (action: ActionProp, projectId: string, itemIndex: number, dataItem?: never,
+                                     vars?: PageVariable[], routeParams?: { [k: string]: string }) => {
 
-    const actionPropGroup = widget.propGroups.find((group: { type: string }) => group.type === 'action')
-
-    if (actionPropGroup && action) {
-        const props = actionPropGroup.props
-        const prop = (props[action - 1] as unknown as ActionProp)
-
-        prop.variables?.forEach((actionVar) => {
-            if (actionVar.pageVar > 0) {
-                actionVar.value = vars?.find((pageVar) => pageVar.id === actionVar.pageVar)?.value ?? ''
-            } else if (actionVar.tableVar.length > 0) {
-                actionVar.value = dataItem != undefined ? dataItem[actionVar.tableVar] : ''
-            }
-        })
-
-        switch (prop.type) {
-            case 'goToPage':
-                runOpenPageAction(prop, projectId)
-                break;
+    action.variables?.forEach((actionVar) => {
+        if (actionVar.pageVar > 0) {
+            actionVar.value = getPageVarValue(vars, actionVar.pageVar)
+        } else if (actionVar.tableVar.length > 0) {
+            const values = getDataVarValueAsArray('', '', actionVar.tableVar, dataItem)
+            actionVar.value = values.split('<>')[itemIndex]
+        } else if (actionVar.paramVar.length > 0) {
+            actionVar.value = getParamVarValue(routeParams, actionVar.paramVar)
         }
+    })
+
+    switch (action.type) {
+        case 'goToPage':
+            runOpenPageAction(action, projectId)
+            break;
     }
 }
 

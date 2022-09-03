@@ -1557,16 +1557,55 @@
       "children": [],
       "propGroups": [
         {
+          "id": "variables",
+          "label": "Etykieta - Zmienna strony",
+          "type": "data",
+          "props": [
+            {
+              "id": "labelPageVarId",
+              "value": "",
+              "label": "Text",
+              "type": "Variable"
+            }
+          ]
+        },
+        {
+          "id": "source",
+          "label": "Etykieta - Źródło danych",
+          "type": "data",
+          "props": [
+            {
+              "id": "dataTable",
+              "value": "",
+              "label": "Tabela",
+              "type": "Table"
+            },
+            {
+              "id": "labelQueryVarId",
+              "value": "",
+              "label": "Text",
+              "type": "TableField"
+            }
+          ]
+        },
+        {
+          "id": "parameters",
+          "label": "Etykieta - Parametr strony",
+          "type": "data",
+          "props": [
+            {
+              "id": "labelParamVarId",
+              "value": "",
+              "label": "Text",
+              "type": "Param"
+            }
+          ]
+        },
+        {
           "id": "behavior",
           "label": "Zachowanie",
           "type": "args",
           "props": [
-            {
-              "id": "label",
-              "value": "",
-              "label": "Etykieta",
-              "type": "Variable"
-            },
             {
               "id": "disabled",
               "value": false,
@@ -1584,6 +1623,12 @@
               "id": "color",
               "value": "",
               "label": "Kolor",
+              "type": "Color"
+            },
+            {
+              "id": "textColor",
+              "value": "",
+              "label": "Kolor tekstu",
               "type": "Color"
             },
             {

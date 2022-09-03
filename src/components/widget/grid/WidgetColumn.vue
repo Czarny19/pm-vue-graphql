@@ -1,5 +1,5 @@
 <template>
-  <v-col :cols="argsProps.cols ? Number(argsProps.cols) : ''" :style="cssProps">
+  <v-col :cols="argsProps.cols ? Number(argsProps.cols) : ''" :style="cssProps" style="text-align: start;">
     <template v-for="(child) in appWidget.children">
       <BaseWidget
           :widget="child"

@@ -113,7 +113,8 @@
       :theme="theme"
       :variables="variables"
       :form-valid="formValid"
-      :form-ref="formRef">
+      :form-ref="formRef"
+      :data-item="dataItem">
   </WidgetButton>
 </template>
 

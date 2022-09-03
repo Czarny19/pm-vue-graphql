@@ -32,7 +32,7 @@ export default Vue.extend({
       return this.dataItem as never
     },
     displayValue(): string {
-      return widget.getConstAndVarValue(
+      return widget.getDisplayWidgetVarValue(
           this.data,
           this.dataProps.textQueryVarId,
           (this.variables as PageVariable[]),

@@ -161,14 +161,13 @@ export default Vue.extend({
   },
   beforeUpdate() {
     if (!this.initialized) {
-      const intialValue = widget.getConstAndVarValue(
-          undefined,
-          undefined,
-          (this.variables as PageVariable[]),
-          Number(this.dataProps.initalPageVarId),
-          this.$route.params,
-          this.dataProps.initalParamVarId
-      )
+      const variables = (this.variables as PageVariable[])
+      const pagePropVal = Number(this.dataProps.initalPageVarId)
+
+      const params = this.$route.params
+      const paramPropVal = this.dataProps.initalParamVarId
+
+      const intialValue = widget.getInputWidgetInitialValue(variables, pagePropVal, params, paramPropVal)
 
       this.updateVariableValue((isNaN(Number(intialValue)) ? intialValue : Number(intialValue)) as never)
       this.initialized = true

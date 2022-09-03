@@ -30,7 +30,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import {AppWidget, PageVariable} from "@/lib/types";
+import {ActionProp, AppWidget, PageVariable} from "@/lib/types";
 import * as widget from "@/lib/widget";
 
 export default Vue.extend({
@@ -61,27 +61,31 @@ export default Vue.extend({
       return widget.getColorPropValue(this.theme, this.argsProps.backgroundColor)
     },
     title(): string {
-      return widget.getConstAndVarValue(
-          this.data,
-          this.dataProps.titleQueryVarId,
-          (this.variables as PageVariable[]),
-          Number(this.dataProps.titlePageVarId),
-          this.$route.params,
-          this.dataProps.titleParamVarId
-      )
+      const data = this.data
+      const queryVar = this.dataProps.titleQueryVarId
+
+      const variables = (this.variables as PageVariable[])
+      const pageVar = Number(this.dataProps.titlePageVarId)
+
+      const params = this.$route.params
+      const paramVar = this.dataProps.titleParamVarId
+
+      return widget.getDisplayWidgetVarValue(data, queryVar, variables, pageVar, params, paramVar)
     },
     titleColor(): string {
       return widget.getColorPropValue(this.theme, this.argsProps.titleColor)
     },
     subtitle(): string {
-      return widget.getConstAndVarValue(
-          this.data,
-          this.dataProps.subtitleQueryVarId,
-          (this.variables as PageVariable[]),
-          Number(this.dataProps.subtitlePageVarId),
-          this.$route.params,
-          this.dataProps.subtitleParamVarId
-      )
+      const data = this.data
+      const queryVar = this.dataProps.subtitleQueryVarId
+
+      const variables = (this.variables as PageVariable[])
+      const pageVar = Number(this.dataProps.subtitlePageVarId)
+
+      const params = this.$route.params
+      const paramVar = this.dataProps.subtitleParamVarId
+
+      return widget.getDisplayWidgetVarValue(data, queryVar, variables, pageVar, params, paramVar)
     },
     subtitleColor(): string {
       return widget.getColorPropValue(this.theme, this.argsProps.subtitleColor)
@@ -96,14 +100,16 @@ export default Vue.extend({
       return widget.getColorPropValue(this.theme, this.argsProps.textColor)
     },
     text(): string {
-      return widget.getConstAndVarValue(
-          this.data,
-          this.dataProps.textQueryVarId,
-          (this.variables as PageVariable[]),
-          Number(this.dataProps.textPageVarId),
-          this.$route.params,
-          this.dataProps.textParamVarId
-      )
+      const data = this.data
+      const queryVar = this.dataProps.textQueryVarId
+
+      const variables = (this.variables as PageVariable[])
+      const pageVar = Number(this.dataProps.textPageVarId)
+
+      const params = this.$route.params
+      const paramVar = this.dataProps.textParamVarId
+
+      return widget.getDisplayWidgetVarValue(data, queryVar, variables, pageVar, params, paramVar)
     },
     elevation(): number {
       return Number(this.argsProps.elevation)
@@ -112,24 +118,26 @@ export default Vue.extend({
   methods: {
     action1(): void {
       if (!this.$route.path.startsWith('/admin')) {
-        widget.runWidgetClickAction(
-            this.appWidget,
-            this.$route.params.projectId,
-            this.dataItem,
-            (this.variables as PageVariable[]),
-            1
-        )
+        const projectId = this.$route.params.projectId
+        const variables = (this.variables as PageVariable[])
+        const params = this.$route.params
+
+        const actions = this.appWidget.propGroups.find((group: { type: string }) => group.type === 'action')
+        const action = actions?.props[0] as unknown as ActionProp
+
+        widget.runWidgetClickAction(action, projectId, 0, this.dataItem, variables, params)
       }
     },
     action2(): void {
       if (!this.$route.path.startsWith('/admin')) {
-        widget.runWidgetClickAction(
-            this.appWidget,
-            this.$route.params.projectId,
-            this.dataItem,
-            (this.variables as PageVariable[]),
-            2
-        )
+        const projectId = this.$route.params.projectId
+        const variables = (this.variables as PageVariable[])
+        const params = this.$route.params
+
+        const actions = this.appWidget.propGroups.find((group: { type: string }) => group.type === 'action')
+        const action = actions?.props[1] as unknown as ActionProp
+
+        widget.runWidgetClickAction(action, projectId, 1, this.dataItem, variables, params)
       }
     }
   }

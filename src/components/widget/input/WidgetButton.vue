@@ -1,7 +1,10 @@
 <template>
-  <div :style="cssProps">
+  <div>
     <v-btn
+        v-for="(label, index) in labels"
         light
+        :key="index"
+        :style="cssProps"
         :color="color"
         :disabled="argsProps.disabled"
         :block="argsProps.block"
@@ -13,15 +16,15 @@
         :small="argsProps.size === 'small'"
         :large="argsProps.size === 'large'"
         :x-large="argsProps.size === 'x-large'"
-        @click="click">
-      {{ argsProps.label }}
+        @click="action(index)">
+      <span :style="{'color': textColor}">{{ label }}</span>
     </v-btn>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import {AppWidget} from "@/lib/types";
+import {ActionProp, AppWidget, PageVariable} from "@/lib/types";
 import * as widget from "@/lib/widget";
 
 export default Vue.extend({
@@ -31,7 +34,8 @@ export default Vue.extend({
     theme: Object,
     variables: Array,
     formValid: Boolean,
-    formRef: Object
+    formRef: Object,
+    dataItem: Object
   },
   computed: {
     appWidget(): AppWidget {
@@ -48,10 +52,51 @@ export default Vue.extend({
     },
     color(): string {
       return widget.getColorPropValue(this.theme, this.argsProps.color)
+    },
+    textColor(): string {
+      return widget.getColorPropValue(this.theme, this.argsProps.textColor)
+    },
+    data(): never {
+      return this.dataItem as never
+    },
+    labels(): string[] {
+      const data = this.data
+      const dataPropVal = this.dataProps.labelQueryVarId
+
+      const variables = (this.variables as PageVariable[])
+      const pagePropVal = Number(this.dataProps.labelPageVarId)
+
+      const params = this.$route.params
+      const paramPropVal = this.dataProps.labelParamVarId
+
+      const labels = widget.getDisplayWidgetVarValues(data, dataPropVal, variables, pagePropVal, params, paramPropVal)
+
+      if (labels.includes('<>')) {
+        return labels.split('<>')
+      }
+
+      if (labels.length) {
+        return [labels]
+      }
+
+      return []
     }
   },
   methods: {
-    click(): void {
+    action(index: number): void {
+      if (!this.$route.path.startsWith('/admin')) {
+        const projectId = this.$route.params.projectId
+        const variables = (this.variables as PageVariable[])
+        const params = this.$route.params
+
+        const actions = this.appWidget.propGroups.find((group: { type: string }) => group.type === 'action')
+
+        actions?.props.forEach((prop) => {
+          const action = prop as unknown as ActionProp
+          widget.runWidgetClickAction(action, projectId, index, this.dataItem, variables, params)
+        })
+      }
+
       console.log(this.formValid);
       console.log(this.formRef);
     }
