@@ -50,6 +50,14 @@
       :variables="variables">
   </WidgetCard>
 
+  <WidgetLink
+      v-else-if="widget.type === 'Link'"
+      :widget="widget"
+      :theme="theme"
+      :data-item="dataItem"
+      :variables="variables">
+  </WidgetLink>
+
   <WidgetDivider
       v-else-if="widget.type === 'Divider'"
       :widget="widget"
@@ -138,10 +146,12 @@ import WidgetSelect from "@/components/widget/input/WidgetSelect.vue";
 import WidgetCheckbox from "@/components/widget/input/WidgetCheckbox.vue";
 import WidgetNumberField from "@/components/widget/input/WidgetNumberField.vue";
 import WidgetButton from "@/components/widget/input/WidgetButton.vue";
+import WidgetLink from "@/components/widget/display/WidgetLink.vue";
 
 export default Vue.extend({
   name: 'BaseWidget',
   components: {
+    WidgetLink,
     WidgetButton,
     WidgetNumberField,
     WidgetCheckbox,

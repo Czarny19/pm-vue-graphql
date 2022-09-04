@@ -2,7 +2,6 @@
   <v-container fluid :style="cssProps">
     <template v-for="(child) in widget.children">
       <BaseWidget
-          class="pa-3"
           :widget="child"
           :theme="theme"
           :datasource="datasource"

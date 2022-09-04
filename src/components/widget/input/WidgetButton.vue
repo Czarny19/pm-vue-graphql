@@ -84,6 +84,14 @@ export default Vue.extend({
   },
   methods: {
     action(index: number): void {
+      if (this.formRef) {
+        (this.formRef as Vue & { validate: () => boolean }).validate()
+      }
+
+      if (this.formRef && !this.formValid) {
+        return
+      }
+
       if (!this.$route.path.startsWith('/admin')) {
         const projectId = this.$route.params.projectId
         const variables = (this.variables as PageVariable[])
@@ -96,9 +104,6 @@ export default Vue.extend({
           widget.runWidgetClickAction(action, projectId, index, this.dataItem, variables, params)
         })
       }
-
-      console.log(this.formValid);
-      console.log(this.formRef);
     }
   }
 })

@@ -1,7 +1,6 @@
 <template>
   <div :style="cssProps">
     <v-checkbox
-        v-if="initialized"
         class="pa-0"
         light persistent-hint
         :label="label"
@@ -14,6 +13,7 @@
         :true-value="true"
         :value="variableValue"
         :input-value="variableValue"
+        :rules="rules"
         on-icon="fa-square-check"
         off-icon="fa-square"
         @change="updateVariableValue">
@@ -32,11 +32,6 @@ export default Vue.extend({
     widget: Object,
     theme: Object,
     variables: Array
-  },
-  data() {
-    return {
-      initialized: false
-    }
   },
   computed: {
     appWidget(): AppWidget {
@@ -77,6 +72,9 @@ export default Vue.extend({
       }
 
       return false
+    },
+    rules(): unknown[] {
+      return widget.getRulesForInput(this.appWidget, undefined)
     }
   },
   methods: {
@@ -87,18 +85,15 @@ export default Vue.extend({
     }
   },
   beforeMount() {
-    if (!this.initialized) {
-      const variables = (this.variables as PageVariable[])
-      const pagePropVal = Number(this.dataProps.initalPageVarId)
+    const variables = (this.variables as PageVariable[])
+    const pagePropVal = Number(this.dataProps.initalPageVarId)
 
-      const params = this.$route.params
-      const paramPropVal = this.dataProps.initalParamVarId
+    const params = this.$route.params
+    const paramPropVal = this.dataProps.initalParamVarId
 
-      const intialValue = widget.getInputWidgetInitialValue(variables, pagePropVal, params, paramPropVal)
+    const intialValue = widget.getInputWidgetInitialValue(variables, pagePropVal, params, paramPropVal)
 
-      this.updateVariableValue(intialValue)
-      this.initialized = true
-    }
+    this.updateVariableValue(intialValue)
   }
 })
 </script>

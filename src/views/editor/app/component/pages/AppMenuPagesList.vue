@@ -4,7 +4,7 @@
       <v-container fluid class="pl-6 pr-6">
         <v-row no-gutters>
           <v-col class="text-start ma-auto text-body-1">
-            {{ page.name }}
+            {{ page.name }} (ID: {{ page.id }})
           </v-col>
 
           <v-col class="text-end">

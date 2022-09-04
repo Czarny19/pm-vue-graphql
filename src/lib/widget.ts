@@ -185,7 +185,12 @@ export const getRulesForInput = (widget: AppWidget, counter: number | undefined)
     }
 
     if (props.customRegex) {
-        rules.push((v: string) => (v && !(new RegExp(props.customRegex).test(v))) || (props.customRegexMsg ?? ''))
+        const regex = new RegExp(props.customRegex.replaceAll('/', ''))
+        rules.push((v: string) => (v && regex.test(v)) || (props.customRegexMsg ?? ''))
+    }
+
+    if (props.mustBeChecked) {
+        rules.push((v: boolean) => v || i18n.t('editor.valueRequired'))
     }
 
     return rules
@@ -255,7 +260,12 @@ export const runWidgetClickAction = (action: ActionProp, projectId: string, item
             actionVar.value = getPageVarValue(vars, actionVar.pageVar)
         } else if (actionVar.tableVar.length > 0) {
             const values = getDataVarValueAsArray('', '', actionVar.tableVar, dataItem)
-            actionVar.value = values.split('<>')[itemIndex]
+
+            if (values.includes('<>')) {
+                actionVar.value = values.split('<>')[itemIndex]
+            } else {
+                actionVar.value = values
+            }
         } else if (actionVar.paramVar.length > 0) {
             actionVar.value = getParamVarValue(routeParams, actionVar.paramVar)
         }

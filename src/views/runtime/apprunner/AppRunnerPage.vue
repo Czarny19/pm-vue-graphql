@@ -59,6 +59,11 @@ export default Vue.extend({
       return this.loadingProject || this.loadingPages || this.loadingTheme || this.loadingDatasource
     }
   },
+  watch: {
+    $route() {
+      this.loadingVariables = true
+    }
+  },
   apollo: {
     PROJECT: {
       query: GET_PROJECT_BY_ID,

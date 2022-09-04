@@ -102,7 +102,15 @@
     <template v-if="navTab === 1">
       <GuiEditorAddPropDialog :dialog="addVarDialog" @close="closeAddVar" @refresh="refreshVars"/>
 
-      <v-container v-for="(type, index) in varTypes" :key="index" fluid class="text-start pa-0">
+      <IconButton
+          class="mr-3 mt-4 mb-4 ml-3"
+          color="success"
+          icon="fa-add"
+          :label="i18n('editor.addVariable')"
+          @click="addProp">
+      </IconButton>
+
+      <v-container v-for="(type, index) in varTypes" :key="index" fluid class="text-start pa-0 pb-3">
         <div class="secondary text-start text-body-2 pa-3 pl-6">
           {{ type }}
         </div>
@@ -111,42 +119,46 @@
           <div v-if="variable.type_display === type" :key="index" class="pa-0 pt-1">
             <v-row no-gutters>
               <v-col cols="10">
-                <i><b class="pa-4 pt-2 text-body-2">{{ variable.name }}</b></i>
+                <i><b class="pa-4 text-body-2">{{ variable.name }}</b></i>
 
-                <v-text-field
-                    class="pa-3 pt-1"
+                <v-textarea
+                    class="pl-3 pb-1 pt-0"
                     color="accent"
+                    :rows="1"
                     :value="variable.value"
+                    persistent-hint
                     outlined hide-details dense readonly disabled>
-                </v-text-field>
+                </v-textarea>
               </v-col>
 
               <v-col cols="2" class="mt-auto text-end">
-                <v-btn fab x-small height="30" class="mr-3 mb-4" color="error" @click="deleteVar(variable.id)">
-                  <v-icon small>fa-trash-can</v-icon>
+                <v-btn fab x-small height="30" class="mr-3 mb-3" color="error" @click="deleteVar(variable.id)">
+                  <v-icon class="ma-auto">fa-times</v-icon>
                 </v-btn>
               </v-col>
             </v-row>
           </div>
         </template>
       </v-container>
-
-      <IconButton
-          class="mr-2 mt-4 ml-auto"
-          color="success"
-          icon="fa-add"
-          :label="i18n('editor.addVariable')"
-          @click="addProp">
-      </IconButton>
     </template>
 
     <template v-if="navTab === 2">
-      <div class="pa-3 text-start">
-        <span>{{ i18n('editor.pageParams') }}</span>
+      <IconButton
+          class="mr-3 mt-4 mb-4 ml-3"
+          color="success"
+          icon="fa-add"
+          :label="i18n('editor.addParam')"
+          @click="addParam">
+      </IconButton>
 
-        <div class="pt-3">
+      <div class="secondary text-start text-body-2 pa-3 pl-6">
+        {{ i18n('editor.pageParams') }}
+      </div>
+
+      <div class="pa-3 text-start">
+        <div class="pt-1">
           <v-row no-gutters v-for="(param, index) in currentParams" :key="index">
-            <v-col cols="9">
+            <v-col cols="10">
               <v-text-field
                   class="pt-1 pb-3"
                   color="accent"
@@ -155,21 +167,13 @@
               </v-text-field>
             </v-col>
 
-            <v-col cols="3" class="mt-auto text-end" :key="param">
+            <v-col cols="2" class="mt-auto text-end" :key="param">
               <v-btn fab x-small height="30" class="mr-3 mb-4" color="error" @click="deleteParam(index)">
-                <v-icon small>fa-trash-can</v-icon>
+                <v-icon class="ma-auto">fa-times</v-icon>
               </v-btn>
             </v-col>
           </v-row>
         </div>
-
-        <IconButton
-            class="mr-2 mt-4 ml-auto"
-            color="success"
-            icon="fa-add"
-            :label="i18n('editor.addParam')"
-            @click="addParam">
-        </IconButton>
       </div>
     </template>
   </v-navigation-drawer>

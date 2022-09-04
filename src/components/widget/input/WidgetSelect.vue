@@ -41,8 +41,7 @@ export default Vue.extend({
   data() {
     return {
       query: {},
-      queryData: [],
-      initialized: false
+      queryData: []
     }
   },
   computed: {
@@ -159,19 +158,16 @@ export default Vue.extend({
       }
     }
   },
-  beforeUpdate() {
-    if (!this.initialized) {
-      const variables = (this.variables as PageVariable[])
-      const pagePropVal = Number(this.dataProps.initalPageVarId)
+  beforeMount() {
+    const variables = (this.variables as PageVariable[])
+    const pagePropVal = Number(this.dataProps.initalPageVarId)
 
-      const params = this.$route.params
-      const paramPropVal = this.dataProps.initalParamVarId
+    const params = this.$route.params
+    const paramPropVal = this.dataProps.initalParamVarId
 
-      const intialValue = widget.getInputWidgetInitialValue(variables, pagePropVal, params, paramPropVal)
+    const intialValue = widget.getInputWidgetInitialValue(variables, pagePropVal, params, paramPropVal)
 
-      this.updateVariableValue((isNaN(Number(intialValue)) ? intialValue : Number(intialValue)) as never)
-      this.initialized = true
-    }
+    this.updateVariableValue((isNaN(Number(intialValue)) ? intialValue : Number(intialValue)) as never)
   }
 })
 </script>

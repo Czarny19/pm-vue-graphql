@@ -286,7 +286,7 @@
             {
               "id": "textPageVarId",
               "value": "",
-              "label": "Text",
+              "label": "Tekst",
               "type": "Variable"
             }
           ]
@@ -305,7 +305,7 @@
             {
               "id": "textQueryVarId",
               "value": "",
-              "label": "Text",
+              "label": "Tekst",
               "type": "TableField"
             }
           ]
@@ -318,7 +318,7 @@
             {
               "id": "textParamVarId",
               "value": "",
-              "label": "Text",
+              "label": "Tekst",
               "type": "Param"
             }
           ]
@@ -758,6 +758,134 @@
     },
     {
       "id": "",
+      "type": "Link",
+      "group": "Display",
+      "label": "Link",
+      "icon": "fa-link",
+      "children": [],
+      "propGroups": [
+        {
+          "id": "variables",
+          "label": "Wartość - Zmienna strony",
+          "type": "data",
+          "props": [
+            {
+              "id": "labelPageVarId",
+              "value": "",
+              "label": "Tekst",
+              "type": "Variable"
+            },
+            {
+              "id": "linkPageVarId",
+              "value": "",
+              "label": "Link",
+              "type": "Variable"
+            }
+          ]
+        },
+        {
+          "id": "source",
+          "label": "Wartość - Źródło danych",
+          "type": "data",
+          "props": [
+            {
+              "id": "dataTable",
+              "value": "",
+              "label": "Tabela",
+              "type": "Table"
+            },
+            {
+              "id": "labelQueryVarId",
+              "value": "",
+              "label": "Tekst",
+              "type": "Variable"
+            },
+            {
+              "id": "linkQueryVarId",
+              "value": "",
+              "label": "Link",
+              "type": "TableField"
+            }
+          ]
+        },
+        {
+          "id": "parameters",
+          "label": "Wartość - Parametr strony",
+          "type": "data",
+          "props": [
+            {
+              "id": "labelParamVarId",
+              "value": "",
+              "label": "Tekst",
+              "type": "Param"
+            },
+            {
+              "id": "linkParamVarId",
+              "value": "",
+              "label": "Link",
+              "type": "Param"
+            }
+          ]
+        },
+        {
+          "id": "display",
+          "label": "Wygląd",
+          "type": "css",
+          "props": [
+            {
+              "id": "font-size",
+              "value": "12",
+              "unit": "pt",
+              "lockUnit": true,
+              "label": "Rozmiar czcionki",
+              "type": "Size"
+            },
+            {
+              "id": "font-weight",
+              "value": "normal",
+              "label": "Grubość czcionki",
+              "list": [
+                {
+                  "id": "bold",
+                  "name": "Pogrubiona"
+                },
+                {
+                  "id": "normal",
+                  "name": "Normalna"
+                },
+                {
+                  "id": "lighter",
+                  "name": "Lekka"
+                }
+              ],
+              "type": "Select"
+            },
+            {
+              "id": "text-align",
+              "value": "start",
+              "label": "Położenie tekstu",
+              "list": [
+                {
+                  "id": "start",
+                  "name": "Początek"
+                },
+                {
+                  "id": "center",
+                  "name": "Środek"
+                },
+                {
+                  "id": "end",
+                  "name": "Koniec"
+                }
+              ],
+              "type": "Select"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "",
       "type": "Divider",
       "group": "Display",
       "label": "Separator",
@@ -838,7 +966,7 @@
             {
               "id": "initalPageVarId",
               "value": "",
-              "label": "Text",
+              "label": "Wartość",
               "type": "Variable"
             }
           ]
@@ -851,7 +979,7 @@
             {
               "id": "initalParamVarId",
               "value": "",
-              "label": "Text",
+              "label": "Wartość",
               "type": "Param"
             }
           ]
@@ -997,7 +1125,7 @@
             {
               "id": "initalPageVarId",
               "value": "",
-              "label": "Text",
+              "label": "Wartość",
               "type": "Variable"
             }
           ]
@@ -1010,7 +1138,7 @@
             {
               "id": "initalParamVarId",
               "value": "",
-              "label": "Text",
+              "label": "Wartość",
               "type": "Param"
             }
           ]
@@ -1156,7 +1284,7 @@
             {
               "id": "initalPageVarId",
               "value": "",
-              "label": "Text",
+              "label": "Wartość",
               "type": "Variable"
             }
           ]
@@ -1169,7 +1297,7 @@
             {
               "id": "initalParamVarId",
               "value": "",
-              "label": "Text",
+              "label": "Wartość",
               "type": "Param"
             }
           ]
@@ -1355,7 +1483,7 @@
             {
               "id": "initalPageVarId",
               "value": "",
-              "label": "Text",
+              "label": "Wartość",
               "type": "Variable"
             }
           ]
@@ -1368,7 +1496,7 @@
             {
               "id": "initalParamVarId",
               "value": "",
-              "label": "Text",
+              "label": "Wartość",
               "type": "Param"
             }
           ]
@@ -1478,7 +1606,7 @@
             {
               "id": "initalPageVarId",
               "value": "",
-              "label": "Text",
+              "label": "Wartość",
               "type": "Variable"
             }
           ]
@@ -1491,7 +1619,7 @@
             {
               "id": "initalParamVarId",
               "value": "",
-              "label": "Text",
+              "label": "Wartość",
               "type": "Param"
             }
           ]
@@ -1517,6 +1645,12 @@
               "id": "disabled",
               "value": false,
               "label": "Wyłączone?",
+              "type": "Boolean"
+            },
+            {
+              "id": "mustBeChecked",
+              "value": false,
+              "label": "Wymagane zaznaczenie?",
               "type": "Boolean"
             }
           ]
@@ -1564,7 +1698,7 @@
             {
               "id": "labelPageVarId",
               "value": "",
-              "label": "Text",
+              "label": "Etykieta",
               "type": "Variable"
             }
           ]
@@ -1583,7 +1717,7 @@
             {
               "id": "labelQueryVarId",
               "value": "",
-              "label": "Text",
+              "label": "Etykieta",
               "type": "TableField"
             }
           ]
@@ -1596,7 +1730,7 @@
             {
               "id": "labelParamVarId",
               "value": "",
-              "label": "Text",
+              "label": "Etykieta",
               "type": "Param"
             }
           ]

@@ -29,7 +29,8 @@
           v-model="variable.varType"
           item-value="id"
           item-text="name"
-          item-color="accent">
+          item-color="accent"
+          @change="clearVarValues(variable)">
       </v-select>
 
       <v-select
@@ -76,7 +77,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import {ActionProp, Page, SchemaItem, SchemaItemField} from "@/lib/types";
+import {ActionProp, ActionPropVariable, Page, SchemaItem, SchemaItemField} from "@/lib/types";
 import {getTableNameForWidget} from "@/lib/widget";
 import {getAllTableFieldsWithRelations} from "@/lib/schema";
 
@@ -115,6 +116,13 @@ export default Vue.extend({
     },
     params(): string[] {
       return this.page.params.split(';')
+    }
+  },
+  methods: {
+    clearVarValues(variable: ActionPropVariable) {
+      variable.paramVar = ''
+      variable.tableVar = ''
+      variable.pageVar = -1
     }
   },
   watch: {
