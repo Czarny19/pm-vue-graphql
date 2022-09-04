@@ -72,7 +72,7 @@ export default Vue.extend({
     },
     graphQlQueryVars(): QueryVariable[] {
       const vars = graphql_gen.mapModelStringToQueryVariableArray((this.query as Query).variables ?? '')
-      return widget.mapPageVarValuesToQueryVars(this.appWidget, vars, (this.variables as PageVariable[]))
+      return widget.mapPageVarValuesToQueryVars(this.appWidget, vars, this.variables as PageVariable[])
     },
     graphQLQuery(): string {
       const query = (this.query as Query)
@@ -81,15 +81,8 @@ export default Vue.extend({
         return ''
       }
 
-      return graphql_gen.generateGraphQLQuery(
-          query.name,
-          query.table,
-          query.fields,
-          this.graphQlQueryWhere,
-          this.graphQlQueryOrderBy,
-          query.limit,
-          this.graphQlQueryVars
-      )
+      return graphql_gen.generateGraphQLQuery(query.name, query.table, query.fields, this.graphQlQueryWhere,
+          this.graphQlQueryOrderBy, query.limit, this.graphQlQueryVars)
     },
     interval(): number {
       return Number(this.argsProps.interval)
@@ -135,14 +128,8 @@ export default Vue.extend({
       result({data}): void {
         this.query = data.QUERY[0]
 
-        graphql_gen.runQuery(
-            this.datasource.address,
-            this.graphQLQuery,
-            (this.query as Query).table,
-            this.datasource.secret,
-            this.graphQlQueryWhere,
-            this.graphQlQueryVars
-        ).then((result) => {
+        graphql_gen.runQuery(this.datasource.address, this.graphQLQuery, (this.query as Query).table,
+            this.datasource.secret, this.graphQlQueryWhere, this.graphQlQueryVars).then((result) => {
           (this.queryData as unknown[]) = result.data;
         })
       }

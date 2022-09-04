@@ -8,7 +8,8 @@
         :page="currentPage"
         :theme="theme"
         :datasource="datasource"
-        :variables="variables">
+        :variables="variables"
+        :mutations="mutations">
     </AppRunnerPageHolder>
   </div>
 </template>
@@ -23,6 +24,7 @@ import {GET_PAGE_LIST_BY_PROJECT_ID} from "@/graphql/queries/page";
 import {GET_THEME_BY_ID} from "@/graphql/queries/theme";
 import {GET_DATA_SOURCE_BY_ID} from "@/graphql/queries/datasource";
 import {GET_PROP_LIST_BY_PAGE_ID} from "@/graphql/queries/prop";
+import {GET_EXT_MUTATION_LIST_BY_DATA_SOURCE_ID} from "@/graphql/queries/mutation";
 import {decodeDatasourceSecret} from "@/lib/schema";
 import {AppProject, Page} from "@/lib/types";
 
@@ -36,11 +38,13 @@ export default Vue.extend({
       loadingTheme: true,
       loadingDatasource: true,
       loadingVariables: true,
+      loadingMutations: true,
       project: {},
       theme: {},
       datasource: {},
       pages: [],
-      variables: []
+      variables: [],
+      mutations: []
     }
   },
   computed: {
@@ -56,7 +60,8 @@ export default Vue.extend({
       return (this.pages as Page[]).filter((page) => page.id === this.pageId)[0]
     },
     isLoading(): boolean {
-      return this.loadingProject || this.loadingPages || this.loadingTheme || this.loadingDatasource
+      return this.loadingProject || this.loadingPages || this.loadingTheme
+          || this.loadingDatasource || this.loadingMutations
     }
   },
   watch: {
@@ -145,6 +150,22 @@ export default Vue.extend({
         this.datasource = data.DATA_SOURCE[0]
         this.datasource.secret = decodeDatasourceSecret(data.DATA_SOURCE[0].secret)
         this.loadingDatasource = false
+      }
+    },
+    MUTATION: {
+      query: GET_EXT_MUTATION_LIST_BY_DATA_SOURCE_ID,
+      fetchPolicy: 'network-only',
+      variables(): { datasourceId: number } {
+        return {
+          datasourceId: this.project.source_id
+        }
+      },
+      skip(): boolean {
+        return !this.project.source_id
+      },
+      result({data}): void {
+        this.mutations = data.MUTATION
+        this.loadingMutations = false
       }
     }
   }

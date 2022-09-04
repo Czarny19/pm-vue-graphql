@@ -24,7 +24,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import {ActionProp, AppWidget, PageVariable} from "@/lib/types";
+import {ActionProp, AppWidget, Mutation, PageVariable} from "@/lib/types";
 import * as widget from "@/lib/widget";
 
 export default Vue.extend({
@@ -35,7 +35,9 @@ export default Vue.extend({
     variables: Array,
     formValid: Boolean,
     formRef: Object,
-    dataItem: Object
+    dataItem: Object,
+    datasource: Object,
+    mutations: Array
   },
   computed: {
     appWidget(): AppWidget {
@@ -63,7 +65,7 @@ export default Vue.extend({
       const data = this.data
       const dataPropVal = this.dataProps.labelQueryVarId
 
-      const variables = (this.variables as PageVariable[])
+      const variables = this.variables as PageVariable[]
       const pagePropVal = Number(this.dataProps.labelPageVarId)
 
       const params = this.$route.params
@@ -83,26 +85,40 @@ export default Vue.extend({
     }
   },
   methods: {
-    action(index: number): void {
-      if (this.formRef) {
-        (this.formRef as Vue & { validate: () => boolean }).validate()
-      }
-
-      if (this.formRef && !this.formValid) {
-        return
-      }
+    async action(index: number): Promise<void> {
+      // if (this.formRef) {
+      //   (this.formRef as Vue & { validate: () => boolean }).validate()
+      // }
+      //
+      // if (this.formRef && !this.formValid) {
+      //   return
+      // }
 
       if (!this.$route.path.startsWith('/admin')) {
         const projectId = this.$route.params.projectId
-        const variables = (this.variables as PageVariable[])
+        const variables = this.variables as PageVariable[]
         const params = this.$route.params
+        const mutations = this.mutations as Mutation[]
 
         const actions = this.appWidget.propGroups.find((group: { type: string }) => group.type === 'action')
 
-        actions?.props.forEach((prop) => {
+        for (const prop of actions?.props ?? []) {
           const action = prop as unknown as ActionProp
-          widget.runWidgetClickAction(action, projectId, index, this.dataItem, variables, params)
-        })
+          const result = await widget.runWidgetClickAction(action, projectId, index, this.datasource,
+              this.dataItem, variables, params, mutations)
+
+          if (result) {
+            if (!result.isSuccessful) {
+              this.$emit('showerror', result.error)
+              return
+            }
+
+            if (!result.data) {
+              this.$emit('showerror', 'Suabo')
+              return
+            }
+          }
+        }
       }
     }
   }

@@ -7,7 +7,9 @@
           :datasource="datasource"
           :key="child.name"
           :data-item="dataItem"
-          :variables="variables">
+          :variables="variables"
+          :mutations="mutations"
+          @showerror="showError">
       </BaseWidget>
     </template>
   </v-col>
@@ -29,7 +31,8 @@ export default Vue.extend({
     theme: Object,
     datasource: Object,
     dataItem: Object,
-    variables: Array
+    variables: Array,
+    mutations: Array
   },
   computed: {
     appWidget(): AppWidget {
@@ -42,6 +45,11 @@ export default Vue.extend({
       return widget.getArgsProps(this.appWidget)
     }
   },
+  methods: {
+    showError(error: string) {
+      this.$emit('showerror', error)
+    }
+  }
 })
 </script>
 

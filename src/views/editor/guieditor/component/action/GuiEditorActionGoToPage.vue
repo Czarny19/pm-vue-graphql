@@ -66,7 +66,7 @@
           outlined dense hide-details
           :label="i18n('editor.actionVar')"
           :items="['', ...params]"
-          v-model="variable.tableVar"
+          v-model="variable.paramVar"
           item-value="id"
           item-text="name"
           item-color="accent">

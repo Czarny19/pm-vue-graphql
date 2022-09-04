@@ -53,10 +53,10 @@ export default Vue.extend({
       return widget.getColorPropValue(this.theme, this.argsProps.bgColor)
     },
     label(): string {
-      return widget.getPageVarValue((this.variables as PageVariable[]), Number(this.argsProps.label))
+      return widget.getPageVarValue(this.variables as PageVariable[], Number(this.argsProps.label))
     },
     hint(): string {
-      return widget.getPageVarValue((this.variables as PageVariable[]), Number(this.argsProps.hint))
+      return widget.getPageVarValue(this.variables as PageVariable[], Number(this.argsProps.hint))
     },
     variable(): PageVariable | undefined {
       if (this.dataProps.variableId) {
@@ -85,7 +85,7 @@ export default Vue.extend({
     }
   },
   beforeMount() {
-    const variables = (this.variables as PageVariable[])
+    const variables = this.variables as PageVariable[]
     const pagePropVal = Number(this.dataProps.initalPageVarId)
 
     const params = this.$route.params

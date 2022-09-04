@@ -12,7 +12,7 @@
 
           <div v-if="queryRun && isSuccessful" class="text-body-1">
             <v-icon color="success" class="ml-1 mr-4">fa-check</v-icon>
-             {{i18n('editor.mutationSuccess') }}
+            {{ i18n('editor.mutationSuccess') }}
           </div>
 
           <div v-else-if="queryRun" class="text-error text-body-1">{{ mutationError }}</div>
@@ -46,8 +46,8 @@
 import Vue from "vue";
 import IconButton from "@/components/button/IconButton.vue";
 import {Mutation} from "@/lib/types";
-import {mutationType} from "@/lib/graphql_gen";
 import * as graphql_gen from "@/lib/graphql_gen";
+import {mutationType} from "@/lib/graphql_gen";
 
 export default Vue.extend({
   name: 'MutationTester',
@@ -75,14 +75,8 @@ export default Vue.extend({
       const vars = graphql_gen.mapModelStringToQueryVariableArray(mutation.variables ?? '')
       const fields = graphql_gen.mapModelStringToQuerySetValueArray(mutation.fields ?? '')
 
-      return graphql_gen.generateGraphQLMutation(
-          mutation.name,
-          mutation.table,
-          mutation.type as mutationType,
-          fields,
-          where,
-          vars
-      )
+      return graphql_gen.generateGraphQLMutation(mutation.name, mutation.table, mutation.type as mutationType,
+          fields, where, vars)
     },
     previewMutation(): string {
       const mutation = (this.mutation as Mutation)
@@ -95,14 +89,8 @@ export default Vue.extend({
       const vars = graphql_gen.mapModelStringToQueryVariableArray(mutation.variables ?? '')
       const fields = graphql_gen.mapModelStringToQuerySetValueArray(mutation.fields ?? '')
 
-      return graphql_gen.generateGraphQLPreviewMutation(
-          mutation.name,
-          mutation.table,
-          mutation.type as mutationType,
-          fields,
-          where,
-          vars
-      )
+      return graphql_gen.generateGraphQLPreviewMutation(mutation.name, mutation.table, mutation.type as mutationType,
+          fields, where, vars)
     },
     graphQLVariablesPreview(): string {
       const vars = graphql_gen.mapModelStringToQueryVariableArray(this.mutation.variables ?? '')
@@ -111,13 +99,8 @@ export default Vue.extend({
   },
   methods: {
     async run(): Promise<void> {
-      const result = await graphql_gen.runMutation(
-          this.datasource.address,
-          this.graphQLMutation,
-          this.mutation.table,
-          this.datasource.secret,
-          this.mutation.variables
-      )
+      const result = await graphql_gen.runMutation(this.datasource.address, this.graphQLMutation,
+          this.mutation.table, this.mutation.type as mutationType, this.datasource.secret, this.mutation.variables)
 
       this.isSuccessful = result.isSuccessful;
       this.queryRun = true;

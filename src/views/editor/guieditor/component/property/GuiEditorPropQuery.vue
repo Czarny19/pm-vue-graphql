@@ -149,15 +149,8 @@ export default Vue.extend({
       const orderBy = graphql_gen.mapModelStringToQueryOrderByArray(this.currentQuery.order_by ?? '')
       const vars = graphql_gen.mapModelStringToQueryVariableArray(this.currentQuery.variables ?? '')
 
-      return graphql_gen.generateGraphQLPreviewQuery(
-          this.currentQuery.name,
-          this.currentQuery.table,
-          this.currentQuery.fields,
-          where,
-          orderBy,
-          this.currentQuery.limit,
-          vars
-      )
+      return graphql_gen.generateGraphQLPreviewQuery(this.currentQuery.name, this.currentQuery.table,
+          this.currentQuery.fields, where, orderBy, this.currentQuery.limit, vars)
     }
   },
   methods: {

@@ -8,7 +8,9 @@
             :theme="theme"
             :datasource="datasource"
             :data-item="dataItem"
-            :variables="variables">
+            :variables="variables"
+            :mutations="mutations"
+            @showerror="showError">
         </BaseWidget>
       </template>
     </v-row>
@@ -21,7 +23,9 @@
             :datasource="datasource"
             :key="`${indexData}_${indexChild}`"
             :variables="variables"
-            :data-item="item">
+            :data-item="item"
+            :mutations="mutations"
+            @showerror="showError">
         </BaseWidget>
       </template>
     </v-row>
@@ -46,7 +50,8 @@ export default Vue.extend({
     theme: Object,
     datasource: Object,
     dataItem: Object,
-    variables: Array
+    variables: Array,
+    mutations: Array
   },
   data() {
     return {
@@ -72,7 +77,7 @@ export default Vue.extend({
     },
     graphQlQueryVars(): QueryVariable[] {
       const vars = graphql_gen.mapModelStringToQueryVariableArray((this.query as Query).variables ?? '')
-      return widget.mapPageVarValuesToQueryVars(this.appWidget, vars, (this.variables as PageVariable[]))
+      return widget.mapPageVarValuesToQueryVars(this.appWidget, vars, this.variables as PageVariable[])
     },
     graphQLQuery(): string {
       const query = (this.query as Query)
@@ -81,15 +86,13 @@ export default Vue.extend({
         return ''
       }
 
-      return graphql_gen.generateGraphQLQuery(
-          query.name,
-          query.table,
-          query.fields,
-          this.graphQlQueryWhere,
-          this.graphQlQueryOrderBy,
-          query.limit,
-          this.graphQlQueryVars
-      )
+      return graphql_gen.generateGraphQLQuery(query.name, query.table, query.fields, this.graphQlQueryWhere,
+          this.graphQlQueryOrderBy, query.limit, this.graphQlQueryVars)
+    }
+  },
+  methods: {
+    showError(error: string) {
+      this.$emit('showerror', error)
     }
   },
   watch: {
@@ -115,14 +118,8 @@ export default Vue.extend({
       result({data}): void {
         this.query = data.QUERY[0]
 
-        graphql_gen.runQuery(
-            this.datasource.address,
-            this.graphQLQuery,
-            (this.query as Query).table,
-            this.datasource.secret,
-            this.graphQlQueryWhere,
-            this.graphQlQueryVars
-        ).then((result) => {
+        graphql_gen.runQuery(this.datasource.address, this.graphQLQuery, (this.query as Query).table,
+            this.datasource.secret, this.graphQlQueryWhere, this.graphQlQueryVars).then((result) => {
           (this.queryData as unknown[]) = result.data;
         })
       }

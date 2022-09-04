@@ -32,24 +32,28 @@ export default Vue.extend({
       return this.dataItem as never
     },
     labelValue(): string {
-      return widget.getDisplayWidgetVarValue(
-          this.data,
-          this.dataProps.labelQueryVarId,
-          (this.variables as PageVariable[]),
-          Number(this.dataProps.labelPageVarId),
-          this.$route.params,
-          this.dataProps.labelParamVarId
-      )
+      const data = this.data
+      const queryVar = this.dataProps.labelQueryVarId
+
+      const variables = this.variables as PageVariable[]
+      const pagePropVal = Number(this.dataProps.labelPageVarId)
+
+      const params = this.$route.params
+      const paramPropVal = this.dataProps.labelParamVarId
+
+      return widget.getDisplayWidgetVarValue(data, queryVar, variables, pagePropVal, params, paramPropVal)
     },
     linkValue(): string {
-      const link = widget.getDisplayWidgetVarValue(
-          this.data,
-          this.dataProps.linkQueryVarId,
-          (this.variables as PageVariable[]),
-          Number(this.dataProps.linkPageVarId),
-          this.$route.params,
-          this.dataProps.linkParamVarId
-      )
+      const data = this.data
+      const queryVar = this.dataProps.linkQueryVarId
+
+      const variables = this.variables as PageVariable[]
+      const pagePropVal = Number(this.dataProps.linkPageVarId)
+
+      const params = this.$route.params
+      const paramPropVal = this.dataProps.linkParamVarId
+
+      const link = widget.getDisplayWidgetVarValue(data, queryVar, variables, pagePropVal, params, paramPropVal)
 
       return link ? link : this.labelValue
     }

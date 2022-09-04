@@ -12,17 +12,61 @@
     </v-select>
 
     <div class="text-start text-body-2 pt-4 pl-1">
-      {{ i18n('editor.variables') }}
+      {{ i18n('editor.actionVars') }}
     </div>
 
     <div v-for="(variable, index) in currentProp.variables" :key="index">
+      <div class="text-start text-body-2 pt-4 pl-1">
+        {{ `${variable.name} (${variable.type})` }}
+      </div>
+
       <v-select
           class="pt-3"
           color="accent"
           outlined dense hide-details
-          :label="`${variable.name} (${variable.type})`"
+          :label="i18n('editor.actionVarType')"
+          :items="varTypes"
+          v-model="variable.varType"
+          item-value="id"
+          item-text="name"
+          item-color="accent"
+          @change="clearVarValues(variable)">
+      </v-select>
+
+      <v-select
+          v-if="variable.varType === 0"
+          class="pt-3"
+          color="accent"
+          outlined dense hide-details
+          :label="i18n('editor.actionVar')"
           :items="['', ...variables]"
           v-model="variable.pageVar"
+          item-value="id"
+          item-text="name"
+          item-color="accent">
+      </v-select>
+
+      <v-select
+          v-if="variable.varType === 1"
+          class="pt-3"
+          color="accent"
+          outlined dense hide-details
+          :label="i18n('editor.actionVar')"
+          :items="['', ...fields]"
+          v-model="variable.tableVar"
+          item-value="id"
+          item-text="name"
+          item-color="accent">
+      </v-select>
+
+      <v-select
+          v-if="variable.varType === 2"
+          class="pt-3"
+          color="accent"
+          outlined dense hide-details
+          :label="i18n('editor.actionVar')"
+          :items="['', ...params]"
+          v-model="variable.paramVar"
           item-value="id"
           item-text="name"
           item-color="accent">
@@ -33,14 +77,18 @@
 
 <script lang="ts">
 import Vue from "vue";
-import {ActionProp, Mutation} from "@/lib/types";
-import * as graphql_gen from "@/lib/graphql_gen";
+import {ActionProp, ActionPropVariable, Mutation, SchemaItem, SchemaItemField} from "@/lib/types";
+import {getTableNameForWidget} from "@/lib/widget";
+import {getAllTableFieldsWithRelations} from "@/lib/schema";
 
 export default Vue.extend({
   name: 'GuiEditorActionRunMutation',
   props: {
     prop: Object,
+    page: Object,
     mutations: Array,
+    widget: Object,
+    schema: Array,
     variables: Array
   },
   data() {
@@ -52,6 +100,29 @@ export default Vue.extend({
   computed: {
     selectedMutation(): Mutation | undefined {
       return (this.mutations as Mutation[])?.find((mutation) => mutation.id === this.prop.target)
+    },
+    varTypes(): { id: number; name: string }[] {
+      return [
+        {id: 0, name: this.$t('editor.actionVarsPage').toString()},
+        {id: 1, name: this.$t('editor.actionVarsTable').toString()},
+        {id: 2, name: this.$t('editor.actionVarsParams').toString()}
+      ]
+    },
+    tableName(): string {
+      return getTableNameForWidget(this.widget)
+    },
+    fields(): SchemaItemField[] {
+      return getAllTableFieldsWithRelations(this.tableName, this.schema as SchemaItem[])
+    },
+    params(): string[] {
+      return this.page.params.split(';')
+    }
+  },
+  methods: {
+    clearVarValues(variable: ActionPropVariable) {
+      variable.paramVar = ''
+      variable.tableVar = ''
+      variable.pageVar = -1
     }
   },
   watch: {
@@ -61,14 +132,18 @@ export default Vue.extend({
           this.currentMutationId = (this.currentProp as ActionProp).target
 
           if (this.selectedMutation) {
-            const mutationVars = graphql_gen.mapModelStringToQueryVariableArray(this.selectedMutation.variables ?? '')
+            (this.currentProp as ActionProp).variables = []
+            const mutationVars = this.selectedMutation.variables.length ? this.selectedMutation.variables.split(';') : []
 
             mutationVars.forEach((variable) => {
               (this.currentProp as ActionProp).variables.push({
-                name: variable.name,
-                type: variable.type,
-                value: variable.value,
-                pageVar: -1
+                name: variable,
+                type: 'String',
+                value: '',
+                varType: -1,
+                pageVar: -1,
+                tableVar: '',
+                paramVar: ''
               })
             })
           }

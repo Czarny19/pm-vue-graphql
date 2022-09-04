@@ -100,12 +100,13 @@ export const runQuery = async (endpoint: string, query: string, table: string, s
  * @param endpoint Address of and existing graphQL endpoint
  * @param mutation Mutation to run (can be generated using {@link generateGraphQLMutation})
  * @param table Name of the table that the query should be run on
+ * @param type Type of the mutation (Create, Update, Delete {@link mutationType})
  * @param secret GraphQL endpoint secret (null if the endpoint is not secured)
  * @param vars Variables to be used with the query, separated with ';' (null if there are no query variables)
  * @returns Promise containing an object with the mutation result of type {@link QueryResult}.
  **/
-export const runMutation = async (endpoint: string, mutation: string, table: string, secret?: string,
-                                  vars?: string): Promise<QueryResult> => {
+export const runMutation = async (endpoint: string, mutation: string, table: string, type: mutationType,
+                                  secret?: string, vars?: string): Promise<QueryResult> => {
     let isSuccessful = true
     let queryData: unknown[] = []
     let queryError = ''
@@ -124,13 +125,27 @@ export const runMutation = async (endpoint: string, mutation: string, table: str
 
     variables.forEach((variable) => variablesMap[variable.name] = variable.value)
 
+    let mutation_type_name = ''
+
+    switch (type) {
+        case mutationType.Create:
+            mutation_type_name = 'insert_' + table
+            break
+        case mutationType.Update:
+            mutation_type_name = 'update_' + table
+            break
+        case mutationType.Delete:
+            mutation_type_name = 'delete_' + table
+            break
+    }
+
     try {
         await client.mutate({
             mutation: gql`${mutation}`,
             variables: variablesMap,
             fetchPolicy: 'no-cache'
         }).then(response => {
-            queryData = response.data[table]
+            queryData = response.data[mutation_type_name]['affected_rows']
         }).catch(err => {
             isSuccessful = false
             queryError = err

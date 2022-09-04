@@ -8,7 +8,7 @@
               <v-icon small>fa-check</v-icon>
             </v-btn>
 
-            <v-btn v-else x-fab small @click="selectField(field)" color="error">
+            <v-btn v-else x-small fab @click="selectField(field)" color="error">
               <v-icon small>fa-times</v-icon>
             </v-btn>
           </v-col>

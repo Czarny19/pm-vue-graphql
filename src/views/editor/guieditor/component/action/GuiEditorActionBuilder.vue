@@ -34,7 +34,10 @@
           <GuiEditorActionRunMutation
               v-if="prop.type === 'runMutation'"
               :prop="prop"
+              :page="page"
               :mutations="mutations"
+              :widget="widget"
+              :schema="schema"
               :variables="variables">
           </GuiEditorActionRunMutation>
 

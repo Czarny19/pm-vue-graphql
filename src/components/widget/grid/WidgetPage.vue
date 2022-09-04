@@ -7,14 +7,27 @@
           :datasource="datasource"
           :key="child.name"
           :data-item="dataItem"
-          :variables="variables">
+          :variables="variables"
+          :mutations="mutations"
+          @showerror="showError">
       </BaseWidget>
     </template>
+
+    <v-snackbar v-model="errorSnackbar" :color="errColor">
+      {{ errorMsg }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn text v-bind="attrs" @click="errorSnackbar = false">
+          {{ i18n('runtime.close') }}
+        </v-btn>
+      </template>
+    </v-snackbar>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
+import * as widget from "@/lib/widget";
 
 export default Vue.extend({
   name: 'WidgetPage',
@@ -24,7 +37,25 @@ export default Vue.extend({
     theme: Object,
     datasource: Object,
     dataItem: Object,
-    variables: Array
+    variables: Array,
+    mutations: Array
+  },
+  data() {
+    return {
+      errorSnackbar: false,
+      errorMsg: ''
+    }
+  },
+  computed: {
+    errColor(): string {
+      return widget.getColorPropValue(this.theme, 'error_color')
+    }
+  },
+  methods: {
+    showError(error: string) {
+      this.errorMsg = error
+      this.errorSnackbar = true
+    }
   }
 })
 </script>

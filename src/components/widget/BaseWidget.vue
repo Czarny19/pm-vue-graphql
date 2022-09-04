@@ -4,7 +4,9 @@
       :widget="widget" :theme="theme"
       :datasource="datasource"
       :data-item="dataItem"
-      :variables="variables">
+      :variables="variables"
+      :mutations="mutations"
+      @showerror="showError">
   </WidgetContainer>
 
   <WidgetRow
@@ -13,7 +15,9 @@
       :theme="theme"
       :datasource="datasource"
       :data-item="dataItem"
-      :variables="variables">
+      :variables="variables"
+      :mutations="mutations"
+      @showerror="showError">
   </WidgetRow>
 
   <WidgetColumn
@@ -22,7 +26,9 @@
       :theme="theme"
       :datasource="datasource"
       :data-item="dataItem"
-      :variables="variables">
+      :variables="variables"
+      :mutations="mutations"
+      @showerror="showError">
   </WidgetColumn>
 
   <WidgetForm
@@ -31,7 +37,9 @@
       :theme="theme"
       :datasource="datasource"
       :data-item="dataItem"
-      :variables="variables">
+      :variables="variables"
+      :mutations="mutations"
+      @showerror="showError">
   </WidgetForm>
 
   <WidgetText
@@ -122,7 +130,10 @@
       :variables="variables"
       :form-valid="formValid"
       :form-ref="formRef"
-      :data-item="dataItem">
+      :data-item="dataItem"
+      :datasource="datasource"
+      :mutations="mutations"
+      @showerror="showError">
   </WidgetButton>
 </template>
 
@@ -175,7 +186,13 @@ export default Vue.extend({
     dataItem: Object,
     variables: Array,
     formValid: Boolean,
-    formRef: Object
+    formRef: Object,
+    mutations: Array
+  },
+  methods: {
+    showError(error: string) {
+      this.$emit('showerror', error)
+    }
   }
 })
 </script>

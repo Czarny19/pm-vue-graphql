@@ -18,6 +18,7 @@ export const GET_EXT_MUTATION_LIST_BY_DATA_SOURCE_ID = gql`query getExtMutationL
         type
         fields
         variables
+        where
     }
 }`
 

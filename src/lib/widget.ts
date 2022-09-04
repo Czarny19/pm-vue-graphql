@@ -1,6 +1,18 @@
 import router from "@/router/index";
 import {i18n} from "@/main";
-import {ActionProp, AppWidget, AppWidgetProp, PageVariable, QueryVariable, ThemeColors} from "@/lib/types";
+import * as graphql_gen from "@/lib/graphql_gen";
+import {mapModelStringToQueryVariableArray, mutationType} from "@/lib/graphql_gen";
+import {
+    ActionProp,
+    AppWidget,
+    AppWidgetProp,
+    Datasource,
+    Mutation,
+    PageVariable,
+    QueryResult,
+    QueryVariable,
+    ThemeColors
+} from "@/lib/types";
 
 export const themeColors = ['primary_color', 'secondary_color', 'accent_color', 'info_color',
     'success_color', 'error_color', 'text_color_1', 'text_color_2', 'background_color']
@@ -252,13 +264,15 @@ export const mapPageVarValuesToQueryVars = (widget: AppWidget, qrVars: QueryVari
     return qrVars
 }
 
-export const runWidgetClickAction = (action: ActionProp, projectId: string, itemIndex: number, dataItem?: never,
-                                     vars?: PageVariable[], routeParams?: { [k: string]: string }) => {
+export const runWidgetClickAction = async (action: ActionProp, projectId: string, itemIndex: number,
+                                           datasource: Datasource, dataItem?: never, vars?: PageVariable[],
+                                           routeParams?: { [k: string]: string },
+                                           mutations?: Mutation[]): Promise<QueryResult | undefined> => {
 
     action.variables?.forEach((actionVar) => {
         if (actionVar.pageVar > 0) {
             actionVar.value = getPageVarValue(vars, actionVar.pageVar)
-        } else if (actionVar.tableVar.length > 0) {
+        } else if (actionVar.tableVar && actionVar.tableVar.length > 0) {
             const values = getDataVarValueAsArray('', '', actionVar.tableVar, dataItem)
 
             if (values.includes('<>')) {
@@ -266,7 +280,7 @@ export const runWidgetClickAction = (action: ActionProp, projectId: string, item
             } else {
                 actionVar.value = values
             }
-        } else if (actionVar.paramVar.length > 0) {
+        } else if (actionVar.paramVar && actionVar.paramVar.length > 0) {
             actionVar.value = getParamVarValue(routeParams, actionVar.paramVar)
         }
     })
@@ -274,18 +288,44 @@ export const runWidgetClickAction = (action: ActionProp, projectId: string, item
     switch (action.type) {
         case 'goToPage':
             runOpenPageAction(action, projectId)
-            break;
+            return undefined;
+        case 'runMutation':
+            return await runMutationAction(action, projectId, datasource, mutations)
     }
 }
 
-const runOpenPageAction = (prop: ActionProp, projectId: string) => {
-    const params = prop.variables.map((variable) => `${variable.name}=${variable.value}`)
+const runOpenPageAction = (action: ActionProp, projectId: string) => {
+    const params = action.variables.map((variable) => `${variable.name}=${variable.value}`)
 
     router.push({
-        name: 'AppRunner', params: {
-            projectId: projectId,
-            pageId: prop.target.toString(),
-            params: params.join('&')
-        }
+        name: 'AppRunner', params:
+            {projectId: projectId, pageId: action.target.toString(), params: params.join('&')}
     }).then()
+}
+
+const runMutationAction = async (action: ActionProp, projectId: string, datasource: Datasource,
+                                 mutations?: Mutation[]): Promise<QueryResult | undefined> => {
+
+    const mutation = mutations?.find((mutation) => mutation.id === action.target)
+
+    if (!mutation) {
+        return undefined
+    }
+
+    const where = graphql_gen.mapModelStringToQueryWhereArray(mutation.where ?? '')
+    const variables = [...mapModelStringToQueryVariableArray(mutation.variables ?? '') ?? []]
+    const fields = graphql_gen.mapModelStringToQuerySetValueArray(mutation.fields ?? '')
+
+    variables.forEach((variable) => {
+        const param = action.variables.find((actionVar) => actionVar.name === variable.name)
+        if (param) variable.value = param?.value
+    })
+
+    const mutationVars = variables.map((variable) => JSON.stringify(variable)).join(';')
+
+    const graphQLMutation = graphql_gen.generateGraphQLMutation(mutation.name, mutation.table,
+        mutation.type as mutationType, fields, where, variables)
+
+    return await graphql_gen.runMutation(datasource.address, graphQLMutation, mutation.table,
+        mutation.type as mutationType, datasource.secret, mutationVars)
 }

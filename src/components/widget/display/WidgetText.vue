@@ -32,14 +32,16 @@ export default Vue.extend({
       return this.dataItem as never
     },
     displayValue(): string {
-      return widget.getDisplayWidgetVarValue(
-          this.data,
-          this.dataProps.textQueryVarId,
-          (this.variables as PageVariable[]),
-          Number(this.dataProps.textPageVarId),
-          this.$route.params,
-          this.dataProps.textParamVarId
-      )
+      const data = this.data
+      const queryVar = this.dataProps.textQueryVarId
+
+      const variables = this.variables as PageVariable[]
+      const pagePropVal = Number(this.dataProps.textPageVarId)
+
+      const params = this.$route.params
+      const paramPropVal = this.dataProps.textParamVarId
+
+      return widget.getDisplayWidgetVarValue(data, queryVar, variables, pagePropVal, params, paramPropVal)
     }
   }
 })

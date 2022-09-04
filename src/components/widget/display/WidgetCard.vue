@@ -64,7 +64,7 @@ export default Vue.extend({
       const data = this.data
       const queryVar = this.dataProps.titleQueryVarId
 
-      const variables = (this.variables as PageVariable[])
+      const variables = this.variables as PageVariable[]
       const pageVar = Number(this.dataProps.titlePageVarId)
 
       const params = this.$route.params
@@ -79,7 +79,7 @@ export default Vue.extend({
       const data = this.data
       const queryVar = this.dataProps.subtitleQueryVarId
 
-      const variables = (this.variables as PageVariable[])
+      const variables = this.variables as PageVariable[]
       const pageVar = Number(this.dataProps.subtitlePageVarId)
 
       const params = this.$route.params
@@ -103,7 +103,7 @@ export default Vue.extend({
       const data = this.data
       const queryVar = this.dataProps.textQueryVarId
 
-      const variables = (this.variables as PageVariable[])
+      const variables = this.variables as PageVariable[]
       const pageVar = Number(this.dataProps.textPageVarId)
 
       const params = this.$route.params
@@ -119,7 +119,7 @@ export default Vue.extend({
     action1(): void {
       if (!this.$route.path.startsWith('/admin')) {
         const projectId = this.$route.params.projectId
-        const variables = (this.variables as PageVariable[])
+        const variables = this.variables as PageVariable[]
         const params = this.$route.params
 
         const actions = this.appWidget.propGroups.find((group: { type: string }) => group.type === 'action')
@@ -131,7 +131,7 @@ export default Vue.extend({
     action2(): void {
       if (!this.$route.path.startsWith('/admin')) {
         const projectId = this.$route.params.projectId
-        const variables = (this.variables as PageVariable[])
+        const variables = this.variables as PageVariable[]
         const params = this.$route.params
 
         const actions = this.appWidget.propGroups.find((group: { type: string }) => group.type === 'action')

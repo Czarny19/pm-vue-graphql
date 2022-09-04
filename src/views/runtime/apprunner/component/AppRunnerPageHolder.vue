@@ -3,7 +3,8 @@
       :widget="page.definition"
       :theme="theme"
       :datasource="datasource"
-      :variables="variables">
+      :variables="variables"
+      :mutations="mutations">
   </WidgetPage>
 </template>
 
@@ -18,7 +19,8 @@ export default Vue.extend({
     page: Object,
     theme: Object,
     datasource: Object,
-    variables: Array
+    variables: Array,
+    mutations: Array
   }
 })
 </script>

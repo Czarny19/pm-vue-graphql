@@ -264,6 +264,7 @@
     "actionVarsParams": "Parameter strony"
   },
   "runtime": {
-    "appOffline": "Aplikacja jest obecnie niedostępna, skontaktuj się z administratorem systemu"
+    "appOffline": "Aplikacja jest obecnie niedostępna, skontaktuj się z administratorem systemu",
+    "close": "Zamknij"
   }
 }

@@ -9,7 +9,9 @@
           :data-item="dataItem"
           :variables="variables"
           :form-valid="valid"
-          :form-ref="$refs.form">
+          :form-ref="$refs.form"
+          :mutations="mutations"
+          @showerror="showError">
       </BaseWidget>
     </template>
   </v-form>
@@ -31,7 +33,8 @@ export default Vue.extend({
     theme: Object,
     datasource: Object,
     dataItem: Object,
-    variables: Array
+    variables: Array,
+    mutations: Array
   },
   data() {
     return {
@@ -44,6 +47,11 @@ export default Vue.extend({
     },
     cssProps(): ({ [p: string]: string })[] {
       return getCssProps(this.appWidget, this.theme)
+    }
+  },
+  methods: {
+    showError(error: string) {
+      this.$emit('showerror', error)
     }
   }
 })
