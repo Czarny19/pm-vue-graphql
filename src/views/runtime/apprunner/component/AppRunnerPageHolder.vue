@@ -4,7 +4,9 @@
       :theme="theme"
       :datasource="datasource"
       :variables="variables"
-      :mutations="mutations">
+      :mutations="mutations"
+      @saving="saving"
+      @savingdone="savingDone">
   </WidgetPage>
 </template>
 
@@ -21,6 +23,14 @@ export default Vue.extend({
     datasource: Object,
     variables: Array,
     mutations: Array
+  },
+  methods: {
+    saving(): void {
+      this.$emit('saving')
+    },
+    savingDone(): void {
+      this.$emit('savingdone')
+    }
   }
 })
 </script>

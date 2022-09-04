@@ -232,7 +232,10 @@
     "widgetsDisplay": "Wyświetlanie",
     "widgetsInput": "Wstawianie",
     "addAction": "Dodaj akcję",
+    "deleteAction": "Usuń akcję",
     "actionType": "Rodzaj",
+    "errorMsg": "Wiadomość błędu",
+    "errorShowResponse": "Dodaj odpowiedź serwera do wiadomości błędu?",
     "action": "Akcja",
     "actionTarget": "Cel akcji",
     "actionGoTo": "Przejdź do strony",
@@ -265,6 +268,9 @@
   },
   "runtime": {
     "appOffline": "Aplikacja jest obecnie niedostępna, skontaktuj się z administratorem systemu",
-    "close": "Zamknij"
+    "close": "Zamknij",
+    "error": "Błąd",
+    "errorOccured": "Podczas wykonywania akcji wystąpił błąd",
+    "saving": "Zapisywanie"
   }
 }

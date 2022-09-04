@@ -71,7 +71,7 @@
             :variables="variables">
         </GuiEditorActionBuilder>
 
-        <v-row no-gutters class="pa-4">
+        <v-row no-gutters class="pa-4 mb-8">
           <IconButton
               block
               class="ml-auto mb-4"

@@ -9,11 +9,13 @@
           :data-item="dataItem"
           :variables="variables"
           :mutations="mutations"
-          @showerror="showError">
+          @showerror="showError"
+          @saving="saving"
+          @savingdone="savingDone">
       </BaseWidget>
     </template>
 
-    <v-snackbar v-model="errorSnackbar" :color="errColor">
+    <v-snackbar v-model="errorSnackbar" :color="errColor" :timeout="8000">
       {{ errorMsg }}
 
       <template v-slot:action="{ attrs }">
@@ -52,9 +54,15 @@ export default Vue.extend({
     }
   },
   methods: {
-    showError(error: string) {
+    showError(error: string): void {
       this.errorMsg = error
       this.errorSnackbar = true
+    },
+    saving(): void {
+      this.$emit('saving')
+    },
+    savingDone(): void {
+      this.$emit('savingdone')
     }
   }
 })

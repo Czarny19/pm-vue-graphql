@@ -11,12 +11,12 @@
         item-color="accent">
     </v-select>
 
-    <div class="text-start text-body-2 pt-4 pl-1">
+    <div class="text-body-1 pl-3 pr-3 pt-1 pb-1 mt-4 editor--action-tab">
       {{ i18n('editor.actionVars') }}
     </div>
 
     <div v-for="(variable, index) in currentProp.variables" :key="index">
-      <div class="text-start text-body-2 pt-4 pl-1">
+      <div class="text-start text-body-2 pt-3 pl-1 text--secondary">
         {{ `${variable.name} (${variable.type})` }}
       </div>
 
@@ -71,6 +71,8 @@
           item-text="name"
           item-color="accent">
       </v-select>
+
+      <v-divider class="mt-3 mb-3"></v-divider>
     </div>
   </div>
 </template>
@@ -137,13 +139,7 @@ export default Vue.extend({
 
             mutationVars.forEach((variable) => {
               (this.currentProp as ActionProp).variables.push({
-                name: variable,
-                type: 'String',
-                value: '',
-                varType: -1,
-                pageVar: -1,
-                tableVar: '',
-                paramVar: ''
+                name: variable, type: 'String', value: '', varType: -1, pageVar: -1, tableVar: '', paramVar: ''
               })
             })
           }

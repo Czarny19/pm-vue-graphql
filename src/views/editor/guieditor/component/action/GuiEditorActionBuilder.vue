@@ -5,33 +5,53 @@
     </div>
 
     <v-container fluid class="pa-4">
-      <v-row v-for="(prop, index) in actionsGroup.props" :key="index">
-        <v-col cols="10" class="text-start text-body-1 pl-4">
+      <div v-for="(prop, index) in actionsGroup.props" :key="index">
+        <div class="text-body-1 pl-3 pr-3 pt-1 pb-1 mt-1 mb-3 editor--action-tab">
           {{ `${i18n('editor.action')}: ${index + 1}` }}
-        </v-col>
+        </div>
 
-        <v-col v-if="!actionsGroup.addLocked" cols="2" class="text-end">
-          <v-btn class="mr-2" fab height="24" width="24" color="error" @click="deleteAction(prop)">
-            <v-icon x-small>fa-times</v-icon>
-          </v-btn>
-        </v-col>
+        <v-btn class="mt-2 mb-4 ml-auto mr-2" block color="error" @click="deleteAction(prop)">
+          {{ `${i18n('editor.deleteAction')}: ${index + 1}` }}
+        </v-btn>
 
-        <v-col cols="12">
-          <v-select
-              class="pt-1"
-              color="accent"
-              outlined dense hide-details
-              :label="i18n('editor.actionType')"
-              :items="['', ...types]"
-              v-model="prop.type"
-              item-value="id"
-              item-text="name"
-              item-color="accent">
-          </v-select>
-        </v-col>
+        <v-select
+            class="pt-2"
+            color="accent"
+            outlined dense hide-details
+            :label="i18n('editor.actionType')"
+            :items="['', ...types]"
+            v-model="prop.type"
+            item-value="id"
+            item-text="name"
+            item-color="accent">
+        </v-select>
 
-        <v-col cols="12" v-if="prop.type">
+        <v-select
+            class="pt-3"
+            color="accent"
+            outlined dense hide-details
+            :label="i18n('editor.errorMsg')"
+            :items="['', ...variables]"
+            v-model="prop.errorMsgVar"
+            item-value="id"
+            item-text="name"
+            item-color="accent">
+        </v-select>
+
+        <v-switch
+            class="pt-0"
+            color="success"
+            v-model="prop.errorMsgShowResponse"
+            :label="i18n('editor.errorShowResponse')">
+        </v-switch>
+
+        <div class="text-body-1 pl-3 pr-3 pt-1 pb-1 mt-0 mb-3 editor--action-tab">
+          {{ i18n('editor.actionTarget') }}
+        </div>
+
+        <template v-if="prop.type">
           <GuiEditorActionRunMutation
+              class="pt-2"
               v-if="prop.type === 'runMutation'"
               :prop="prop"
               :page="page"
@@ -42,6 +62,7 @@
           </GuiEditorActionRunMutation>
 
           <GuiEditorActionGoToPage
+              class="pt-2"
               v-if="prop.type === 'goToPage'"
               :prop="prop"
               :page="page"
@@ -50,17 +71,13 @@
               :schema="schema"
               :variables="variables">
           </GuiEditorActionGoToPage>
-        </v-col>
-
-        <v-col cols="12">
-          <v-divider></v-divider>
-        </v-col>
-      </v-row>
+        </template>
+      </div>
 
       <v-row no-gutters v-if="!actionsGroup.addLocked">
-        <v-col class="text-start">
+        <v-col>
           <IconButton
-              class="mt-2 mb-5"
+              class="mt-5 mb-5"
               block
               :label="i18n('editor.addAction')"
               color="success"
@@ -108,10 +125,8 @@ export default Vue.extend({
   methods: {
     addAction(): void {
       (this.actionGroupProps as ActionProp[]).push({
-        id: this.actionGroupProps.length + 1,
-        type: '',
-        target: -1,
-        variables: []
+        id: this.actionGroupProps.length + 1, type: '', target: -1, variables: [],
+        errorMsgVar: -1, errorMsgShowResponse: false
       })
     },
     deleteAction(action: ActionProp): void {

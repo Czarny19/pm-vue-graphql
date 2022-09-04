@@ -2,6 +2,7 @@
   <AppRunnerPageOffline v-if="!project.running && !isLoading"/>
 
   <div v-else-if="!isLoading">
+    <AppRunnerSavingDialog :dialog="saving" :theme="theme"/>
     <AppRunnerTopNav v-if="project.top_nav" :project="project" :theme="theme"/>
     <AppRunnerPageHolder
         v-if="!loadingVariables"
@@ -9,7 +10,9 @@
         :theme="theme"
         :datasource="datasource"
         :variables="variables"
-        :mutations="mutations">
+        :mutations="mutations"
+        @saving="showSavingDialog"
+        @savingdone="hideSavingDialog">
     </AppRunnerPageHolder>
   </div>
 </template>
@@ -19,6 +22,7 @@ import Vue from "vue";
 import AppRunnerTopNav from "@/views/runtime/apprunner/component/AppRunnerTopNav.vue";
 import AppRunnerPageHolder from "@/views/runtime/apprunner/component/AppRunnerPageHolder.vue";
 import AppRunnerPageOffline from "@/views/runtime/apprunner/component/AppRunnerPageOffline.vue";
+import AppRunnerSavingDialog from "@/views/runtime/apprunner/component/AppRunnerSavingDialog.vue";
 import {GET_PROJECT_BY_ID} from "@/graphql/queries/project";
 import {GET_PAGE_LIST_BY_PROJECT_ID} from "@/graphql/queries/page";
 import {GET_THEME_BY_ID} from "@/graphql/queries/theme";
@@ -30,7 +34,7 @@ import {AppProject, Page} from "@/lib/types";
 
 export default Vue.extend({
   name: 'AppRunnerPage',
-  components: {AppRunnerPageOffline, AppRunnerPageHolder, AppRunnerTopNav},
+  components: {AppRunnerSavingDialog, AppRunnerPageOffline, AppRunnerPageHolder, AppRunnerTopNav},
   data() {
     return {
       loadingProject: true,
@@ -39,6 +43,7 @@ export default Vue.extend({
       loadingDatasource: true,
       loadingVariables: true,
       loadingMutations: true,
+      saving: false,
       project: {},
       theme: {},
       datasource: {},
@@ -62,6 +67,14 @@ export default Vue.extend({
     isLoading(): boolean {
       return this.loadingProject || this.loadingPages || this.loadingTheme
           || this.loadingDatasource || this.loadingMutations
+    }
+  },
+  methods: {
+    showSavingDialog(): void {
+      this.saving = true
+    },
+    hideSavingDialog(): void {
+      this.saving = false
     }
   },
   watch: {

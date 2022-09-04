@@ -264,6 +264,24 @@ export const mapPageVarValuesToQueryVars = (widget: AppWidget, qrVars: QueryVari
     return qrVars
 }
 
+export const getActionErrorMsg = (action: ActionProp, vars?: PageVariable[], errorMsg?: string): string => {
+    let msg = ''
+
+    if (action.errorMsgVar) {
+        msg += getPageVarValue(vars, action.errorMsgVar)
+    }
+
+    if (action.errorMsgShowResponse && errorMsg) {
+        msg += `\n ${i18n.t('runtime.error')}: ${errorMsg}`
+    }
+
+    if (!msg.trim().length) {
+        msg = i18n.t('runtime.errorOccured').toString()
+    }
+
+    return msg
+}
+
 export const runWidgetClickAction = async (action: ActionProp, projectId: string, itemIndex: number,
                                            datasource: Datasource, dataItem?: never, vars?: PageVariable[],
                                            routeParams?: { [k: string]: string },

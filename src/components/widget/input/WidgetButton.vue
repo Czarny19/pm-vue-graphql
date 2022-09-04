@@ -86,13 +86,13 @@ export default Vue.extend({
   },
   methods: {
     async action(index: number): Promise<void> {
-      // if (this.formRef) {
-      //   (this.formRef as Vue & { validate: () => boolean }).validate()
-      // }
-      //
-      // if (this.formRef && !this.formValid) {
-      //   return
-      // }
+      if (this.formRef) {
+        (this.formRef as Vue & { validate: () => boolean }).validate()
+      }
+
+      if (this.formRef && !this.formValid) {
+        return
+      }
 
       if (!this.$route.path.startsWith('/admin')) {
         const projectId = this.$route.params.projectId
@@ -104,8 +104,17 @@ export default Vue.extend({
 
         for (const prop of actions?.props ?? []) {
           const action = prop as unknown as ActionProp
+
+          if (action.type === 'runMutation') {
+            this.$emit('saving')
+          }
+
           const result = await widget.runWidgetClickAction(action, projectId, index, this.datasource,
               this.dataItem, variables, params, mutations)
+
+          if (action.type === 'runMutation') {
+            this.$emit('savingdone')
+          }
 
           if (result) {
             if (!result.isSuccessful) {
@@ -114,7 +123,7 @@ export default Vue.extend({
             }
 
             if (!result.data) {
-              this.$emit('showerror', 'Suabo')
+              this.$emit('showerror', widget.getActionErrorMsg(action, variables, result.error))
               return
             }
           }

@@ -172,6 +172,8 @@ export type ActionProp = {
     id: number;
     type: string;
     target: number;
+    errorMsgVar: number | undefined;
+    errorMsgShowResponse: boolean;
     variables: ActionPropVariable[];
 }
 

@@ -39,4 +39,11 @@
     border: solid whitesmoke 2px;
     border-radius: 30px;
   }
+
+  &--action-tab {
+    background-color: $accent;
+    color: $secondary;
+    border-radius: 6px;
+    font-weight: bold !important;
+  }
 }

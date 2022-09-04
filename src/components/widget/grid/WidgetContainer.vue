@@ -9,7 +9,9 @@
           :data-item="dataItem"
           :variables="variables"
           :mutations="mutations"
-          @showerror="showError">
+          @showerror="showError"
+          @saving="saving"
+          @savingdone="savingDone">
       </BaseWidget>
     </template>
   </v-container>
@@ -45,6 +47,12 @@ export default Vue.extend({
   methods: {
     showError(error: string) {
       this.$emit('showerror', error)
+    },
+    saving(): void {
+      this.$emit('saving')
+    },
+    savingDone(): void {
+      this.$emit('savingdone')
     }
   }
 })

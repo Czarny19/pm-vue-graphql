@@ -39,6 +39,7 @@ export default Vue.extend({
     widget: Object,
     theme: Object,
     dataItem: Object,
+    datasource: Object,
     variables: Array
   },
   computed: {
@@ -125,7 +126,7 @@ export default Vue.extend({
         const actions = this.appWidget.propGroups.find((group: { type: string }) => group.type === 'action')
         const action = actions?.props[0] as unknown as ActionProp
 
-        widget.runWidgetClickAction(action, projectId, 0, this.dataItem, variables, params)
+        widget.runWidgetClickAction(action, projectId, 0, this.datasource, this.dataItem, variables, params)
       }
     },
     action2(): void {
@@ -137,7 +138,7 @@ export default Vue.extend({
         const actions = this.appWidget.propGroups.find((group: { type: string }) => group.type === 'action')
         const action = actions?.props[1] as unknown as ActionProp
 
-        widget.runWidgetClickAction(action, projectId, 1, this.dataItem, variables, params)
+        widget.runWidgetClickAction(action, projectId, 1, this.dataItem, this.datasource, variables, params)
       }
     }
   }

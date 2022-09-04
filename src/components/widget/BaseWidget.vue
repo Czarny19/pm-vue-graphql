@@ -6,7 +6,9 @@
       :data-item="dataItem"
       :variables="variables"
       :mutations="mutations"
-      @showerror="showError">
+      @showerror="showError"
+      @saving="saving"
+      @savingdone="savingDone">
   </WidgetContainer>
 
   <WidgetRow
@@ -17,7 +19,9 @@
       :data-item="dataItem"
       :variables="variables"
       :mutations="mutations"
-      @showerror="showError">
+      @showerror="showError"
+      @saving="saving"
+      @savingdone="savingDone">
   </WidgetRow>
 
   <WidgetColumn
@@ -28,7 +32,9 @@
       :data-item="dataItem"
       :variables="variables"
       :mutations="mutations"
-      @showerror="showError">
+      @showerror="showError"
+      @saving="saving"
+      @savingdone="savingDone">
   </WidgetColumn>
 
   <WidgetForm
@@ -39,7 +45,9 @@
       :data-item="dataItem"
       :variables="variables"
       :mutations="mutations"
-      @showerror="showError">
+      @showerror="showError"
+      @saving="saving"
+      @savingdone="savingDone">
   </WidgetForm>
 
   <WidgetText
@@ -55,6 +63,7 @@
       :widget="widget"
       :theme="theme"
       :data-item="dataItem"
+      :datasource="datasource"
       :variables="variables">
   </WidgetCard>
 
@@ -133,7 +142,9 @@
       :data-item="dataItem"
       :datasource="datasource"
       :mutations="mutations"
-      @showerror="showError">
+      @showerror="showError"
+      @saving="saving"
+      @savingdone="savingDone">
   </WidgetButton>
 </template>
 
@@ -192,6 +203,12 @@ export default Vue.extend({
   methods: {
     showError(error: string) {
       this.$emit('showerror', error)
+    },
+    saving(): void {
+      this.$emit('saving')
+    },
+    savingDone(): void {
+      this.$emit('savingdone')
     }
   }
 })
