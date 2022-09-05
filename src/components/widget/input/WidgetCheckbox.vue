@@ -1,5 +1,5 @@
 <template>
-  <div :style="cssProps">
+  <div :style="cssProps" v-if="visible">
     <v-checkbox
         class="pa-0"
         light persistent-hint
@@ -31,11 +31,15 @@ export default Vue.extend({
   props: {
     widget: Object,
     theme: Object,
+    dataItem: Object,
     variables: Array
   },
   computed: {
     appWidget(): AppWidget {
       return this.widget as AppWidget
+    },
+    visible(): boolean {
+      return widget.widgetVisible(this.appWidget, undefined, this.dataItem)
     },
     cssProps(): ({ [p: string]: string })[] {
       return widget.getCssProps(this.appWidget, this.theme)

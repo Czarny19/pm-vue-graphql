@@ -11,7 +11,9 @@
     "edit": "Edytuj",
     "hide": "Ukryj",
     "show": "Pokaż",
-    "preview": "Podgląd"
+    "preview": "Podgląd",
+    "yes": "Tak",
+    "no": "Nie"
   },
   "delete": {
     "title": "Czy na pewno chcesz usunąć wybrany element?",
@@ -264,7 +266,14 @@
     "actionVar": "Argument",
     "actionVarsPage": "Zmienna strony",
     "actionVarsTable": "Źródło danych",
-    "actionVarsParams": "Parameter strony"
+    "actionVarsParams": "Parameter strony",
+    "condition": "Warunek",
+    "addCondition": "Dodaj warunek",
+    "deleteCondition": "Usuń warunek",
+    "conditionField": "Pole",
+    "conditionOperator": "Warunek",
+    "conditionValue": "Wartość",
+    "options": "Opcje"
   },
   "runtime": {
     "appOffline": "Aplikacja jest obecnie niedostępna, skontaktuj się z administratorem systemu",

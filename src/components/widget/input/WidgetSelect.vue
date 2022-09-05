@@ -1,5 +1,5 @@
 <template>
-  <div :style="cssProps">
+  <div :style="cssProps" v-if="visible">
     <v-select
         class="pa-0"
         light persistent-hint
@@ -36,6 +36,7 @@ export default Vue.extend({
     widget: Object,
     datasource: Object,
     theme: Object,
+    dataItem: Object,
     variables: Array
   },
   data() {
@@ -47,6 +48,9 @@ export default Vue.extend({
   computed: {
     appWidget(): AppWidget {
       return this.widget as AppWidget
+    },
+    visible(): boolean {
+      return widget.widgetVisible(this.appWidget, undefined, this.dataItem)
     },
     cssProps(): ({ [p: string]: string })[] {
       return widget.getCssProps(this.appWidget, this.theme)

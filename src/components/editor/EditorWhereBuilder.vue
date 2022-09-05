@@ -132,18 +132,19 @@ export default Vue.extend({
 
       switch (field.type) {
         case 'String':
-          return graphql_gen.stringOperators;
+          return graphql_gen.stringOperators
         case 'Int':
         case 'float8':
-          return graphql_gen.numberOperators;
+        case 'bigint':
+          return graphql_gen.numberOperators
         case 'Boolean':
-          return graphql_gen.boolOperators;
+          return graphql_gen.boolOperators
         case 'date':
-          return graphql_gen.dateOperators;
+          return graphql_gen.dateOperators
         case 'time':
-          return graphql_gen.timeOperators;
+          return graphql_gen.timeOperators
         default:
-          return graphql_gen.stringOperators;
+          return graphql_gen.stringOperators
       }
     },
     fieldType(wherePart: QueryWhere): string {

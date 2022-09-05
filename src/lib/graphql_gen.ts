@@ -500,6 +500,7 @@ export const generateGraphQLPreviewVariables = (vars?: QueryVariable[]) => {
                 break
             case 'Int':
             case 'float8':
+            case 'bigint':
                 variables += `<span style="color:royalblue">${variable.value}</span>`
                 break
             case 'Boolean':

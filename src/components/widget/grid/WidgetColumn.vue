@@ -1,5 +1,10 @@
 <template>
-  <v-col :cols="argsProps.cols ? Number(argsProps.cols) : ''" :style="cssProps" style="text-align: start;">
+  <v-col
+      :cols="argsProps.cols ? Number(argsProps.cols) : ''"
+      :style="cssProps"
+      style="text-align: start"
+      v-if="visible">
+
     <template v-for="(child) in appWidget.children">
       <BaseWidget
           :widget="child"
@@ -14,6 +19,7 @@
           @savingdone="savingDone">
       </BaseWidget>
     </template>
+
   </v-col>
 </template>
 
@@ -39,6 +45,9 @@ export default Vue.extend({
   computed: {
     appWidget(): AppWidget {
       return this.widget as AppWidget
+    },
+    visible(): boolean {
+      return widget.widgetVisible(this.appWidget, undefined, this.dataItem)
     },
     cssProps(): ({ [p: string]: string })[] {
       return widget.getCssProps(this.appWidget, this.theme)

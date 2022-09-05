@@ -5,6 +5,12 @@
       "group": "Base",
       "propGroups": [
         {
+          "id": "conditions",
+          "label": "Wyświetlanie warunkowe",
+          "type": "condition",
+          "props": []
+        },
+        {
           "id": "padding",
           "label": "Padding",
           "type": "css",

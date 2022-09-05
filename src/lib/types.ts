@@ -2,9 +2,9 @@ export type AppProject = {
     id: number;
     name: string;
     description: string;
-    theme_id: number | undefined;
-    source_id: number | undefined;
-    start_page: number | undefined;
+    theme_id?: number;
+    source_id?: number;
+    start_page?: number;
     top_nav: boolean;
     top_nav_items: { items: { name: string, page: number }[] }
     running: boolean;
@@ -14,7 +14,7 @@ export type Datasource = {
     id: number;
     name: string;
     address: string;
-    secret: string | undefined;
+    secret?: string;
     isConnected: boolean;
     schema: SchemaItem[];
 }
@@ -87,8 +87,8 @@ export type AppWidgetProp = {
     unit?: string;
     type: string;
     dataType: string;
-    labels: TableHeader[] | undefined;
-    variablesMapping: QueryPagePropMapping[] | undefined;
+    labels?: TableHeader[];
+    variablesMapping?: QueryPagePropMapping[];
 }
 
 export type Query = {
@@ -96,7 +96,7 @@ export type Query = {
     name: string;
     table: string;
     modify_date: Date;
-    limit: number | undefined;
+    limit?: number;
     order_by: string;
     where: string;
     fields: string;
@@ -172,7 +172,7 @@ export type ActionProp = {
     id: number;
     type: string;
     target: number;
-    errorMsgVar: number | undefined;
+    errorMsgVar?: number;
     errorMsgShowResponse: boolean;
     variables: ActionPropVariable[];
 }
@@ -187,8 +187,15 @@ export type ActionPropVariable = {
     paramVar: string;
 }
 
+export type ConditionProp = {
+    id: number;
+    field: string;
+    condition: string;
+    value?: string | number | boolean;
+}
+
 export type QueryPagePropMapping = {
     qrVar: string;
-    pageVar: number | undefined;
+    pageVar?: number;
     type: string;
 }

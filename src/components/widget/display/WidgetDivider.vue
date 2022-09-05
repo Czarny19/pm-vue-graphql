@@ -1,5 +1,5 @@
 <template>
-  <v-divider :style="cssProps" :vertical="argsProps.vertical"></v-divider>
+  <v-divider :style="cssProps" :vertical="argsProps.vertical" v-if="visible"></v-divider>
 </template>
 
 <script lang="ts">
@@ -11,11 +11,15 @@ export default Vue.extend({
   name: 'WidgetDivider',
   props: {
     widget: Object,
+    dataItem: Object,
     theme: Object
   },
   computed: {
     appWidget(): AppWidget {
       return this.widget as AppWidget
+    },
+    visible(): boolean {
+      return widget.widgetVisible(this.appWidget, undefined, this.dataItem)
     },
     cssProps(): ({ [p: string]: string })[] {
       return widget.getCssProps(this.appWidget, this.theme)

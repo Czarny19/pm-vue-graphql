@@ -1,24 +1,26 @@
 <template>
   <div>
-    <v-btn
-        v-for="(label, index) in labels"
-        light
-        :key="index"
-        :style="cssProps"
-        :color="color"
-        :disabled="argsProps.disabled"
-        :block="argsProps.block"
-        :depressed="argsProps.depressed"
-        :outlined="argsProps.outlined"
-        :rounded="argsProps.rounded"
-        :text="argsProps.text"
-        :x-small="argsProps.size === 'x-small'"
-        :small="argsProps.size === 'small'"
-        :large="argsProps.size === 'large'"
-        :x-large="argsProps.size === 'x-large'"
-        @click="action(index)">
-      <span :style="{'color': textColor}">{{ label }}</span>
-    </v-btn>
+    <template v-for="(label, index) in labels">
+      <v-btn
+          v-if="visible(index)"
+          :key="index"
+          :style="cssProps"
+          :color="color"
+          :disabled="argsProps.disabled"
+          :block="argsProps.block"
+          :depressed="argsProps.depressed"
+          :outlined="argsProps.outlined"
+          :rounded="argsProps.rounded"
+          :text="argsProps.text"
+          :x-small="argsProps.size === 'x-small'"
+          :small="argsProps.size === 'small'"
+          :large="argsProps.size === 'large'"
+          :x-large="argsProps.size === 'x-large'"
+          light
+          @click="action(index)">
+        <span :style="{'color': textColor}">{{ label }}</span>
+      </v-btn>
+    </template>
   </div>
 </template>
 
@@ -85,6 +87,9 @@ export default Vue.extend({
     }
   },
   methods: {
+    visible(index: number): boolean {
+      return widget.widgetVisible(this.appWidget, index, this.data)
+    },
     async action(index: number): Promise<void> {
       if (this.formRef) {
         (this.formRef as Vue & { validate: () => boolean }).validate()

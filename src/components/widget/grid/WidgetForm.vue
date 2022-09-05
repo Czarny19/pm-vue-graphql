@@ -1,5 +1,5 @@
 <template>
-  <v-form :style="cssProps" v-model="valid" ref="form">
+  <v-form :style="cssProps" v-model="valid" ref="form" v-if="visible">
     <template v-for="(child) in appWidget.children">
       <BaseWidget
           :widget="child"
@@ -26,6 +26,7 @@
 import Vue from "vue";
 import {AppWidget} from "@/lib/types";
 import {getCssProps} from "@/lib/widget";
+import * as widget from "@/lib/widget";
 
 export default Vue.extend({
   name: 'WidgetForm',
@@ -46,6 +47,9 @@ export default Vue.extend({
   computed: {
     appWidget(): AppWidget {
       return this.widget as AppWidget
+    },
+    visible(): boolean {
+      return widget.widgetVisible(this.appWidget, undefined, this.dataItem)
     },
     cssProps(): ({ [p: string]: string })[] {
       return getCssProps(this.appWidget, this.theme)

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-row v-if="!queryData.length" no-gutters :style="cssProps">
+    <v-row v-if="!queryData.length && visibleSingle" no-gutters :style="cssProps">
       <template v-for="(child, indexChild) in widget.children">
         <BaseWidget
             :key="indexChild"
@@ -17,22 +17,25 @@
       </template>
     </v-row>
 
-    <v-row v-else v-for="(item, indexData) in queryData" :key="indexData" :style="cssProps">
-      <template v-for="(child, indexChild) in widget.children">
-        <BaseWidget
-            :widget="child"
-            :theme="theme"
-            :datasource="datasource"
-            :key="`${indexData}_${indexChild}`"
-            :variables="variables"
-            :data-item="item"
-            :mutations="mutations"
-            @showerror="showError"
-            @saving="saving"
-            @savingdone="savingDone">
-        </BaseWidget>
-      </template>
-    </v-row>
+    <template v-else v-for="(item, indexData) in queryData">
+      <v-row :key="indexData" :style="cssProps" v-if="visible(index)">
+        <template v-for="(child, indexChild) in widget.children">
+          <BaseWidget
+              :widget="child"
+              :theme="theme"
+              :datasource="datasource"
+              :key="`${indexData}_${indexChild}`"
+              :variables="variables"
+              :data-item="item"
+              :mutations="mutations"
+              @showerror="showError"
+              @saving="saving"
+              @savingdone="savingDone">
+          </BaseWidget>
+        </template>
+      </v-row>
+    </template>
+
   </div>
 </template>
 
@@ -67,6 +70,9 @@ export default Vue.extend({
     appWidget(): AppWidget {
       return this.widget as AppWidget
     },
+    visibleSingle(): boolean {
+      return widget.widgetVisible(this.appWidget, undefined, this.dataItem)
+    },
     cssProps(): ({ [p: string]: string })[] {
       return widget.getCssProps(this.appWidget, this.theme)
     },
@@ -95,6 +101,9 @@ export default Vue.extend({
     }
   },
   methods: {
+    visible(index: number): boolean {
+      return widget.widgetVisible(this.appWidget, index, this.data)
+    },
     showError(error: string) {
       this.$emit('showerror', error)
     },

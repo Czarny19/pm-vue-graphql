@@ -1,5 +1,5 @@
 <template>
-  <a :style="cssProps" :href="linkValue" target="_blank">{{ labelValue }}</a>
+  <a :style="cssProps" :href="linkValue" target="_blank" v-if="visible">{{ labelValue }}</a>
 </template>
 
 <script lang="ts">
@@ -18,6 +18,9 @@ export default Vue.extend({
   computed: {
     appWidget(): AppWidget {
       return this.widget as AppWidget
+    },
+    visible(): boolean {
+      return widget.widgetVisible(this.appWidget, undefined, this.dataItem)
     },
     cssProps(): ({ [p: string]: string })[] {
       return widget.getCssProps(this.appWidget, this.theme)

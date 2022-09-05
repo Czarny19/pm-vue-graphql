@@ -6,6 +6,7 @@ import {
     ActionProp,
     AppWidget,
     AppWidgetProp,
+    ConditionProp,
     Datasource,
     Mutation,
     PageVariable,
@@ -23,8 +24,92 @@ export const sizeUnits = ['px', '%', 'cm', 'pt', 'em', 'vw', 'vh', 'auto']
 
 export const borders = ['dotted', 'dashed', 'solid', 'double', 'groove', 'ridge', 'inset', 'outset', 'none', 'hidden']
 
+export const numCondTypes = ['=', '!=', '>', '>=', '=null', '!=null', '<', '<=']
+
+export const stringCondTypes = ['=', '!=', '>', '>=', '=null', '!=null', '<', '<=', '%', '!%']
+
+export const boolCondTypes = ['=']
+
 export const generateInitialPageDefinition = (id: string) => {
     return {"id": id, "type": "Page", "label": "Strona", "icon": "fa-th", "children": []}
+}
+
+export const widgetVisible = (widget: AppWidget, dataIndex?: number, dataItem?: never): boolean => {
+    if (!dataItem) {
+        return true
+    }
+
+    const conditionGroups = widget ? widget.propGroups.slice() : []
+
+    let props: ConditionProp[] = []
+
+    conditionGroups
+        .filter((group) => group.type === 'condition')
+        .forEach((group) => props = props.concat(group.props as unknown as ConditionProp[]))
+
+    for (const prop of props) {
+        const cond = prop.condition
+        const condVal = prop.value?.toString()
+        const dataValue = getDataVarValueAsArray('', '', prop.field, dataItem)
+
+        if (dataValue && dataValue.includes('<>')) {
+            const dataValueArray = dataValue.split('<>')
+
+            if (dataIndex && dataValueArray.length > dataIndex) {
+                if (!checkIfWidgetConditionMet(dataValueArray[dataIndex], cond, condVal)) {
+                    return false
+                }
+            } else {
+                let anyConditionMet = false
+
+                for (const dataVal of dataValueArray) {
+                    if (checkIfWidgetConditionMet(dataVal, cond, condVal)) {
+                        anyConditionMet = true
+                    }
+                }
+
+                if (!anyConditionMet) {
+                    return false
+                }
+            }
+        } else if (dataValue && !checkIfWidgetConditionMet(dataValue, cond, condVal)) {
+            return false
+        } else if (!dataValue) {
+            return false
+        }
+    }
+
+    return true
+}
+
+const checkIfWidgetConditionMet = (actualValue: string, condition: string, expectedValue?: string): boolean => {
+    actualValue = actualValue.toString()
+    expectedValue = expectedValue?.toString()
+
+    switch (condition) {
+        case '=':
+            return actualValue === expectedValue
+        case '!=':
+            return actualValue !== expectedValue
+        case '>':
+            return expectedValue ? actualValue > expectedValue : true
+        case '>=':
+            return expectedValue ? actualValue >= expectedValue : true
+        case '=null':
+            return (actualValue?.length ?? 0) === 0
+        case '!=null':
+            return (actualValue?.length ?? 0) !== 0
+        case '<':
+            return expectedValue ? actualValue < expectedValue : true
+        case '<=':
+            return expectedValue ? actualValue <= expectedValue : true
+        case '%':
+            return expectedValue ? actualValue.includes(expectedValue) : true
+        case '!%':
+            return expectedValue ? !actualValue.includes(expectedValue) : true
+        default:
+            return true
+    }
 }
 
 export const getCssProps = (widget: AppWidget, theme: ThemeColors) => {
@@ -306,7 +391,7 @@ export const runWidgetClickAction = async (action: ActionProp, projectId: string
     switch (action.type) {
         case 'goToPage':
             runOpenPageAction(action, projectId)
-            return undefined;
+            return undefined
         case 'runMutation':
             return await runMutationAction(action, projectId, datasource, mutations)
     }

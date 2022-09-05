@@ -10,8 +10,8 @@
           {{ `${i18n('editor.action')}: ${index + 1}` }}
         </div>
 
-        <v-btn class="mt-2 mb-4 ml-auto mr-2" block color="error" @click="deleteAction(prop)">
-          {{ `${i18n('editor.deleteAction')}: ${index + 1}` }}
+        <v-btn class="mt-2 mb-4 ml-auto mr-2" block small color="error" @click="deleteAction(prop)">
+          {{ `${i18n('editor.deleteAction')} ${index + 1}` }}
         </v-btn>
 
         <v-select
@@ -77,15 +77,13 @@
       <v-row no-gutters v-if="!actionsGroup.addLocked">
         <v-col>
           <IconButton
-              class="mt-5 mb-5"
+              class="mt-1 mb-1"
               block
               :label="i18n('editor.addAction')"
               color="success"
               icon="fa-plus"
               @click="addAction">
           </IconButton>
-
-          <v-divider></v-divider>
         </v-col>
       </v-row>
     </v-container>
@@ -132,7 +130,7 @@ export default Vue.extend({
     deleteAction(action: ActionProp): void {
       (this.actionGroupProps as ActionProp[]).forEach((actionProp, index) => {
         if (actionProp == action) {
-          (this.actionGroupProps as ActionProp[]).splice(index, 1)
+          this.actionGroupProps.splice(index, 1)
         }
       })
     }

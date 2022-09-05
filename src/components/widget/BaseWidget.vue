@@ -78,6 +78,7 @@
   <WidgetDivider
       v-else-if="widget.type === 'Divider'"
       :widget="widget"
+      :data-item="dataItem"
       :theme="theme">
   </WidgetDivider>
 
@@ -85,6 +86,7 @@
       v-else-if="widget.type === 'Carousel'"
       :widget="widget"
       :datasource="datasource"
+      :data-item="dataItem"
       :variables="variables">
   </WidgetCarousel>
 
@@ -93,6 +95,7 @@
       :widget="widget"
       :theme="theme"
       :datasource="datasource"
+      :data-item="dataItem"
       :variables="variables">
   </WidgetTable>
 
@@ -100,6 +103,7 @@
       v-else-if="widget.type === 'Text-Field'"
       :widget="widget"
       :theme="theme"
+      :data-item="dataItem"
       :variables="variables">
   </WidgetTextField>
 
@@ -107,6 +111,7 @@
       v-else-if="widget.type === 'Number-Field'"
       :widget="widget"
       :theme="theme"
+      :data-item="dataItem"
       :variables="variables">
   </WidgetNumberField>
 
@@ -114,6 +119,7 @@
       v-else-if="widget.type === 'Text-Area'"
       :widget="widget"
       :theme="theme"
+      :data-item="dataItem"
       :variables="variables">
   </WidgetTextArea>
 
@@ -122,6 +128,7 @@
       :widget="widget"
       :datasource="datasource"
       :theme="theme"
+      :data-item="dataItem"
       :variables="variables">
   </WidgetSelect>
 
@@ -129,6 +136,7 @@
       v-else-if="widget.type === 'Checkbox'"
       :widget="widget"
       :theme="theme"
+      :data-item="dataItem"
       :variables="variables">
   </WidgetCheckbox>
 

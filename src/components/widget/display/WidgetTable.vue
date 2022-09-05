@@ -1,5 +1,6 @@
 <template>
   <v-data-table
+      v-if="visible"
       :items-per-page="argsProps.paging ? pageSize : -1"
       hide-default-footer
       :loading="!datasource"
@@ -37,6 +38,7 @@ export default Vue.extend({
   props: {
     widget: Object,
     theme: Object,
+    dataItem: Object,
     datasource: Object,
     variables: Array
   },
@@ -50,6 +52,9 @@ export default Vue.extend({
   computed: {
     appWidget(): AppWidget {
       return this.widget as AppWidget
+    },
+    visible(): boolean {
+      return widget.widgetVisible(this.appWidget, undefined, this.dataItem)
     },
     cssProps(): ({ [p: string]: string })[] {
       return widget.getCssProps(this.appWidget, this.theme)

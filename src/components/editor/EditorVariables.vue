@@ -120,18 +120,19 @@ export default Vue.extend({
     variableType(queryVariable: QueryVariable): string {
       switch (queryVariable.type) {
         case 'String':
-          return 'text';
+          return 'text'
         case 'Int':
         case 'float8':
-          return 'number';
+        case 'bigint':
+          return 'number'
         case 'Boolean':
-          return 'checkbox';
+          return 'checkbox'
         case 'date':
-          return 'date';
+          return 'date'
         case 'time':
-          return 'time';
+          return 'time'
         default:
-          return 'text';
+          return 'text'
       }
     }
   },

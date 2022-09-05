@@ -1,5 +1,6 @@
 <template>
   <v-card
+      v-if="visible"
       :style="cssProps"
       :color="cardColor"
       :outlined="argsProps.outlined"
@@ -45,6 +46,9 @@ export default Vue.extend({
   computed: {
     appWidget(): AppWidget {
       return this.widget as AppWidget
+    },
+    visible(): boolean {
+      return widget.widgetVisible(this.appWidget, undefined, this.dataItem)
     },
     cssProps(): ({ [p: string]: string })[] {
       return widget.getCssProps(this.appWidget, this.theme)

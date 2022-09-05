@@ -39,7 +39,7 @@
         </v-text-field>
 
         <template v-for="(group, index) in groups">
-          <template v-if="group.type !== 'action'">
+          <template v-if="group.type !== 'action' && group.type !== 'condition'">
             <div class="secondary text-start text-body-2 pa-3 pl-6" :key="index">
               {{ group.label }}
             </div>
@@ -60,6 +60,13 @@
           </template>
         </template>
 
+        <GuiEditorConditionBuilder
+            v-if="conditionPropGroup"
+            :conditions-group="conditionPropGroup"
+            :widget="widget"
+            :schema="schema">
+        </GuiEditorConditionBuilder>
+
         <GuiEditorActionBuilder
             v-if="actionPropGroup"
             :actions-group="actionPropGroup"
@@ -70,6 +77,10 @@
             :schema="schema"
             :variables="variables">
         </GuiEditorActionBuilder>
+
+        <div class="secondary text-start text-body-2 pa-3 pl-6">
+          {{ i18n('editor.options')}}
+        </div>
 
         <v-row no-gutters class="pa-4 mb-8">
           <IconButton
@@ -187,10 +198,12 @@ import GuiEditorAddPropDialog from "@/views/editor/guieditor/component/dialog/Gu
 import GuiEditorActionBuilder from "@/views/editor/guieditor/component/action/GuiEditorActionBuilder.vue";
 import {DELETE_PROP} from "@/graphql/queries/prop";
 import {PageVariable} from "@/lib/types";
+import GuiEditorConditionBuilder from "@/views/editor/guieditor/component/condition/GuiEditorConditionBuilder.vue";
 
 export default Vue.extend({
   name: 'GuiEditorRightNav',
   components: {
+    GuiEditorConditionBuilder,
     GuiEditorActionBuilder,
     GuiEditorAddPropDialog,
     GuiEditorProp,
@@ -227,14 +240,11 @@ export default Vue.extend({
           ?.map((variable) => variable.type_display)
           .filter((v, i, a) => a.indexOf(v) === i);
     },
-    actionPropGroup() {
-      const actionGroups = (this.groups as { type: string }[]).filter((group) => group.type === 'action')
-
-      if (actionGroups.length) {
-        return actionGroups[0]
-      }
-
-      return undefined
+    actionPropGroup(): { type: string } | undefined {
+      return (this.groups as { type: string }[]).find((group) => group.type === 'action')
+    },
+    conditionPropGroup(): { type: string } | undefined {
+      return (this.groups as { type: string }[]).find((group) => group.type === 'condition')
     }
   },
   watch: {

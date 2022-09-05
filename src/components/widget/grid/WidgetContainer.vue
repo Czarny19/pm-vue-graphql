@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid :style="cssProps">
+  <v-container fluid :style="cssProps" v-if="visible">
     <template v-for="(child) in widget.children">
       <BaseWidget
           :widget="child"
@@ -22,6 +22,7 @@
 // @ts-nocheck
 
 import Vue from "vue";
+import * as widget from "@/lib/widget";
 import {getCssProps} from "@/lib/widget";
 import {AppWidget} from "@/lib/types";
 
@@ -39,6 +40,9 @@ export default Vue.extend({
   computed: {
     appWidget(): AppWidget {
       return this.widget as AppWidget
+    },
+    visible(): boolean {
+      return widget.widgetVisible(this.appWidget, undefined, this.dataItem)
     },
     cssProps(): ({ [p: string]: string })[] {
       return getCssProps(this.appWidget, this.theme)
