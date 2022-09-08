@@ -88,7 +88,6 @@
       "group": "Base",
       "label": "Strona",
       "icon": "fa-th",
-      "datatable": "",
       "children": []
     },
     {
@@ -234,6 +233,25 @@
       "children": [],
       "propGroups": [
         {
+          "id": "source",
+          "label": "Relacja",
+          "type": "data",
+          "props": [
+            {
+              "id": "dataTable",
+              "value": "",
+              "label": "Tabela",
+              "type": "Table"
+            },
+            {
+              "id": "relationship",
+              "value": "",
+              "label": "Relacja obieku nadrzędnego",
+              "type": "Relation"
+            }
+          ]
+        },
+        {
           "id": "columns",
           "label": "Kolumny",
           "type": "args",
@@ -309,7 +327,7 @@
               "type": "Table"
             },
             {
-              "id": "textQueryVarId",
+              "id": "textQueryFieldName",
               "value": "",
               "label": "Tekst",
               "type": "TableField"
@@ -322,7 +340,7 @@
           "type": "data",
           "props": [
             {
-              "id": "textParamVarId",
+              "id": "textPageParamName",
               "value": "",
               "label": "Tekst",
               "type": "Param"
@@ -463,19 +481,19 @@
               "type": "Table"
             },
             {
-              "id": "titleQueryVarId",
+              "id": "titleQueryFieldName",
               "value": "",
               "label": "Tytuł",
               "type": "TableField"
             },
             {
-              "id": "subtitleQueryVarId",
+              "id": "subtitleQueryFieldName",
               "value": "",
               "label": "Podtytuł",
               "type": "TableField"
             },
             {
-              "id": "textQueryVarId",
+              "id": "textQueryFieldName",
               "value": "",
               "label": "Tekst",
               "type": "TableField"
@@ -488,19 +506,19 @@
           "type": "data",
           "props": [
             {
-              "id": "titleParamVarId",
+              "id": "titlePageParamName",
               "value": "",
               "label": "Tytuł",
               "type": "Param"
             },
             {
-              "id": "subtitleParamVarId",
+              "id": "subtitlePageParamName",
               "value": "",
               "label": "Podtytuł",
               "type": "Param"
             },
             {
-              "id": "textParamVarId",
+              "id": "textPageParamName",
               "value": "",
               "label": "Tekst",
               "type": "Param"
@@ -577,7 +595,7 @@
               "type": "String"
             },
             {
-              "id": "action1color",
+              "id": "action1Color",
               "value": "",
               "label": "Kolor",
               "type": "Color"
@@ -590,13 +608,13 @@
           "type": "args",
           "props": [
             {
-              "id": "action2label",
+              "id": "action2Label",
               "value": "",
               "label": "Etykieta",
               "type": "String"
             },
             {
-              "id": "action2color",
+              "id": "action2Color",
               "value": "",
               "label": "Kolor",
               "type": "Color"
@@ -678,31 +696,31 @@
               "type": "Table"
             },
             {
-              "id": "titleQueryVarId",
+              "id": "titleQueryFieldName",
               "value": "",
               "label": "Tytuł",
               "type": "TableField"
             },
             {
-              "id": "descriptionQueryVarId",
+              "id": "descriptionQueryFieldName",
               "value": "",
               "label": "Opis",
               "type": "TableField"
             },
             {
-              "id": "imgQueryVarId",
+              "id": "imgQueryFieldName",
               "value": "",
               "label": "Obraz",
               "type": "TableField"
             },
             {
-              "id": "bgColorQueryVarId",
+              "id": "bgColorQueryFieldName",
               "value": "",
               "label": "Kolor tła",
               "type": "TableField"
             },
             {
-              "id": "textColorQueryVarId",
+              "id": "textColorQueryFieldName",
               "value": "",
               "label": "Kolor tekstu",
               "type": "TableField"
@@ -801,13 +819,13 @@
               "type": "Table"
             },
             {
-              "id": "labelQueryVarId",
+              "id": "labelQueryFieldName",
               "value": "",
               "label": "Tekst",
               "type": "Variable"
             },
             {
-              "id": "linkQueryVarId",
+              "id": "linkQueryFieldName",
               "value": "",
               "label": "Link",
               "type": "TableField"
@@ -820,13 +838,13 @@
           "type": "data",
           "props": [
             {
-              "id": "labelParamVarId",
+              "id": "labelPageParamName",
               "value": "",
               "label": "Tekst",
               "type": "Param"
             },
             {
-              "id": "linkParamVarId",
+              "id": "linkPageParamName",
               "value": "",
               "label": "Link",
               "type": "Param"
@@ -983,7 +1001,7 @@
           "type": "data",
           "props": [
             {
-              "id": "initalParamVarId",
+              "id": "initalParamName",
               "value": "",
               "label": "Wartość",
               "type": "Param"
@@ -1142,7 +1160,7 @@
           "type": "data",
           "props": [
             {
-              "id": "initalParamVarId",
+              "id": "initalParamName",
               "value": "",
               "label": "Wartość",
               "type": "Param"
@@ -1301,7 +1319,7 @@
           "type": "data",
           "props": [
             {
-              "id": "initalParamVarId",
+              "id": "initalParamName",
               "value": "",
               "label": "Wartość",
               "type": "Param"
@@ -1455,13 +1473,13 @@
               "type": "Table"
             },
             {
-              "id": "textQueryVarId",
+              "id": "textQueryFieldName",
               "value": "",
               "label": "Wartość wyświetlana",
               "type": "TableField"
             },
             {
-              "id": "valueQueryVarId",
+              "id": "valueQueryFieldName",
               "value": "",
               "label": "Wartość wyboru",
               "type": "TableField"
@@ -1500,7 +1518,7 @@
           "type": "data",
           "props": [
             {
-              "id": "initalParamVarId",
+              "id": "initalParamName",
               "value": "",
               "label": "Wartość",
               "type": "Param"
@@ -1623,7 +1641,7 @@
           "type": "data",
           "props": [
             {
-              "id": "initalParamVarId",
+              "id": "initalParamName",
               "value": "",
               "label": "Wartość",
               "type": "Param"
@@ -1721,7 +1739,7 @@
               "type": "Table"
             },
             {
-              "id": "labelQueryVarId",
+              "id": "labelQueryFieldName",
               "value": "",
               "label": "Etykieta",
               "type": "TableField"
@@ -1734,7 +1752,7 @@
           "type": "data",
           "props": [
             {
-              "id": "labelParamVarId",
+              "id": "labelPageParamName",
               "value": "",
               "label": "Etykieta",
               "type": "Param"
