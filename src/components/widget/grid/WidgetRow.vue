@@ -1,32 +1,16 @@
 <template>
   <div>
-    <v-row v-if="!queryData.length && visibleSingle" no-gutters :style="cssProps">
-      <template v-for="(child, indexChild) in widget.children">
-        <BaseWidget
-            :key="indexChild"
-            :widget="child"
-            :theme="theme"
-            :datasource="datasource"
-            :data-item="dataItem"
-            :variables="variables"
-            :mutations="mutations"
-            @showerror="showError"
-            @saving="saving"
-            @savingdone="savingDone">
-        </BaseWidget>
-      </template>
-    </v-row>
-
-    <template v-else v-for="(item, indexData) in queryData">
-      <v-row :key="indexData" :style="cssProps" v-if="visible(index)">
-        <template v-for="(child, indexChild) in widget.children">
+    <template v-for="(rowItem, rowIndex) in dataItems">
+      <v-row :key="rowIndex" :style="cssProps" v-if="visible(rowItem)">
+        <template v-for="(child, childIndex) in widget.children">
           <BaseWidget
+              v-for="(columnItem, colIndex) in columnDataItems(rowItem, columnRelationshipName(child))"
+              :key="`${rowIndex}_${childIndex}_${colIndex}`"
               :widget="child"
               :theme="theme"
               :datasource="datasource"
-              :key="`${indexData}_${indexChild}`"
               :variables="variables"
-              :data-item="item"
+              :data-item="columnItem"
               :mutations="mutations"
               @showerror="showError"
               @saving="saving"
@@ -35,7 +19,6 @@
         </template>
       </v-row>
     </template>
-
   </div>
 </template>
 
@@ -70,9 +53,6 @@ export default Vue.extend({
     appWidget(): AppWidget {
       return this.widget as AppWidget
     },
-    visibleSingle(): boolean {
-      return widget.widgetVisible(this.appWidget, undefined, this.dataItem)
-    },
     cssProps(): ({ [p: string]: string })[] {
       return widget.getCssProps(this.appWidget, this.theme)
     },
@@ -98,11 +78,40 @@ export default Vue.extend({
 
       return graphql_gen.generateGraphQLQuery(query.name, query.table, query.fields, this.graphQlQueryWhere,
           this.graphQlQueryOrderBy, query.limit, this.graphQlQueryVars)
+    },
+    dataItems(): never[] {
+      if (this.queryData.length) {
+        return this.queryData
+      }
+
+      if (this.dataItem) {
+        return [this.dataItem as never]
+      }
+
+      return [{} as never]
     }
   },
   methods: {
-    visible(index: number): boolean {
-      return widget.widgetVisible(this.appWidget, index, this.data)
+    visible(dataItem: never): boolean {
+      return widget.isWidgetVisible(this.appWidget, dataItem)
+    },
+    columnRelationshipName(colWidget: AppWidget): string {
+      return widget.getDataProps(colWidget).relationship
+    },
+    columnDataItems(rowDataItem: never, relationshipName: string): never[] {
+      if (rowDataItem && relationshipName) {
+        return rowDataItem[relationshipName]
+      }
+
+      if (rowDataItem) {
+        return [rowDataItem]
+      }
+
+      if (this.dataItem) {
+        return [this.dataItem as never]
+      }
+
+      return [{} as never]
     },
     showError(error: string) {
       this.$emit('showerror', error)

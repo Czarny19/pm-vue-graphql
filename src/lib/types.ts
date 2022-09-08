@@ -29,6 +29,7 @@ export type SchemaItem = {
 export type SchemaItemField = {
     name: string;
     type: string;
+    isList: boolean;
     isNullable: boolean;
 }
 

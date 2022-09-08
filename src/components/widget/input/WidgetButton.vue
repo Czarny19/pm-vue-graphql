@@ -1,27 +1,22 @@
 <template>
-  <div>
-    <template v-for="(label, index) in labels">
-      <v-btn
-          v-if="visible(index)"
-          :key="index"
-          :style="cssProps"
-          :color="color"
-          :disabled="argsProps.disabled"
-          :block="argsProps.block"
-          :depressed="argsProps.depressed"
-          :outlined="argsProps.outlined"
-          :rounded="argsProps.rounded"
-          :text="argsProps.text"
-          :x-small="argsProps.size === 'x-small'"
-          :small="argsProps.size === 'small'"
-          :large="argsProps.size === 'large'"
-          :x-large="argsProps.size === 'x-large'"
-          light
-          @click="action(index)">
-        <span :style="{'color': textColor}">{{ label }}</span>
-      </v-btn>
-    </template>
-  </div>
+  <v-btn
+      v-if="visible"
+      :style="cssProps"
+      :color="color"
+      :disabled="argsProps.disabled"
+      :block="argsProps.block"
+      :depressed="argsProps.depressed"
+      :outlined="argsProps.outlined"
+      :rounded="argsProps.rounded"
+      :text="argsProps.text"
+      :x-small="argsProps.size === 'x-small'"
+      :small="argsProps.size === 'small'"
+      :large="argsProps.size === 'large'"
+      :x-large="argsProps.size === 'x-large'"
+      light
+      @click="action">
+    <span :style="{'color': textColor}">{{ label }}</span>
+  </v-btn>
 </template>
 
 <script lang="ts">
@@ -45,6 +40,9 @@ export default Vue.extend({
     appWidget(): AppWidget {
       return this.widget as AppWidget
     },
+    visible(): boolean {
+      return widget.isWidgetVisible(this.appWidget, this.dataItem)
+    },
     cssProps(): ({ [p: string]: string })[] {
       return widget.getCssProps(this.appWidget, this.theme)
     },
@@ -63,34 +61,21 @@ export default Vue.extend({
     data(): never {
       return this.dataItem as never
     },
-    labels(): string[] {
+    label(): string {
       const data = this.data
-      const dataPropVal = this.dataProps.labelQueryVarId
+      const queryFieldName = this.dataProps.labelQueryFieldName
 
       const variables = this.variables as PageVariable[]
-      const pagePropVal = Number(this.dataProps.labelPageVarId)
+      const pageVarId = Number(this.dataProps.labelPageVarId)
 
       const params = this.$route.params
-      const paramPropVal = this.dataProps.labelParamVarId
+      const pageParamName = this.dataProps.labelPageParamName
 
-      const labels = widget.getDisplayWidgetVarValues(data, dataPropVal, variables, pagePropVal, params, paramPropVal)
-
-      if (labels.includes('<>')) {
-        return labels.split('<>')
-      }
-
-      if (labels.length) {
-        return [labels]
-      }
-
-      return []
+      return widget.getDisplayWidgetVarValue(data, queryFieldName, variables, pageVarId, params, pageParamName)
     }
   },
   methods: {
-    visible(index: number): boolean {
-      return widget.widgetVisible(this.appWidget, index, this.data)
-    },
-    async action(index: number): Promise<void> {
+    async action(): Promise<void> {
       if (this.formRef) {
         (this.formRef as Vue & { validate: () => boolean }).validate()
       }
@@ -114,8 +99,8 @@ export default Vue.extend({
             this.$emit('saving')
           }
 
-          const result = await widget.runWidgetClickAction(action, projectId, index, this.datasource,
-              this.dataItem, variables, params, mutations)
+          const result = await widget.runWidgetClickAction(action, projectId, this.datasource, this.dataItem,
+              variables, params, mutations)
 
           if (action.type === 'runMutation') {
             this.$emit('savingdone')

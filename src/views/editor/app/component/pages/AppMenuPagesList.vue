@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card color="secondary" v-for="page in pages" :key="page.id" class="mt-3">
+    <v-card color="secondary" v-for="page in pagesOrdered" :key="page.id" class="mt-3">
       <v-container fluid class="pl-6 pr-6">
         <v-row no-gutters>
           <v-col class="text-start ma-auto text-body-1">
@@ -35,6 +35,7 @@
 <script lang="ts">
 import Vue from "vue";
 import IconButton from "@/components/button/IconButton.vue";
+import {Page} from "@/lib/types";
 
 export default Vue.extend({
   name: 'AppMenuPagesList',
@@ -43,6 +44,11 @@ export default Vue.extend({
     projectId: Number,
     datasourceId: Number,
     pages: Array
+  },
+  computed: {
+    pagesOrdered(): Page[] {
+      return (this.pages as Page[]).sort((a, b) => Number(a.id) - Number(b.id))
+    }
   },
   methods: {
     openEditor(id: number): void {

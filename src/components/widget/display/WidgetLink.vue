@@ -20,7 +20,7 @@ export default Vue.extend({
       return this.widget as AppWidget
     },
     visible(): boolean {
-      return widget.widgetVisible(this.appWidget, undefined, this.dataItem)
+      return widget.isWidgetVisible(this.appWidget, this.dataItem)
     },
     cssProps(): ({ [p: string]: string })[] {
       return widget.getCssProps(this.appWidget, this.theme)
@@ -36,27 +36,27 @@ export default Vue.extend({
     },
     labelValue(): string {
       const data = this.data
-      const queryVar = this.dataProps.labelQueryVarId
+      const queryFieldName = this.dataProps.labelQueryFieldName
 
       const variables = this.variables as PageVariable[]
-      const pagePropVal = Number(this.dataProps.labelPageVarId)
+      const pageVarId = Number(this.dataProps.labelPageVarId)
 
       const params = this.$route.params
-      const paramPropVal = this.dataProps.labelParamVarId
+      const pageParamName = this.dataProps.labelPageParamName
 
-      return widget.getDisplayWidgetVarValue(data, queryVar, variables, pagePropVal, params, paramPropVal)
+      return widget.getDisplayWidgetVarValue(data, queryFieldName, variables, pageVarId, params, pageParamName)
     },
     linkValue(): string {
       const data = this.data
-      const queryVar = this.dataProps.linkQueryVarId
+      const queryFieldName = this.dataProps.linkQueryFieldName
 
       const variables = this.variables as PageVariable[]
-      const pagePropVal = Number(this.dataProps.linkPageVarId)
+      const pageVarId = Number(this.dataProps.linkPageVarId)
 
       const params = this.$route.params
-      const paramPropVal = this.dataProps.linkParamVarId
+      const pageParamName = this.dataProps.linkPageParamName
 
-      const link = widget.getDisplayWidgetVarValue(data, queryVar, variables, pagePropVal, params, paramPropVal)
+      const link = widget.getDisplayWidgetVarValue(data, queryFieldName, variables, pageVarId, params, pageParamName)
 
       return link ? link : this.labelValue
     }

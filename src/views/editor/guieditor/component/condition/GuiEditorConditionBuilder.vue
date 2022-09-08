@@ -57,10 +57,11 @@
 <script lang="ts">
 import Vue from "vue";
 import IconButton from "@/components/button/IconButton.vue";
-import {ConditionProp, SchemaItem, SchemaItemField} from "@/lib/types";
 import GuiEditorConditionValue from "@/views/editor/guieditor/component/condition/GuiEditorConditionValue.vue";
+import {ConditionProp, SchemaItem, SchemaItemField} from "@/lib/types";
+import {getAllTableFieldsWithObjectRelations} from "@/lib/schema";
 import * as widget from "@/lib/widget";
-import {getAllTableFieldsWithRelations} from "@/lib/schema";
+
 
 export default Vue.extend({
   name: 'GuiEditorConditionBuilder',
@@ -80,7 +81,7 @@ export default Vue.extend({
       return widget.getTableNameForWidget(this.widget)
     },
     fields(): SchemaItemField[] {
-      return getAllTableFieldsWithRelations(this.tableName, this.schema as SchemaItem[])
+      return getAllTableFieldsWithObjectRelations(this.tableName, this.schema as SchemaItem[])
     }
   },
   methods: {

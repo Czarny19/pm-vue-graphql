@@ -30,11 +30,22 @@ export const stringCondTypes = ['=', '!=', '>', '>=', '=null', '!=null', '<', '<
 
 export const boolCondTypes = ['=']
 
+/**
+ * Generates a new page definition to be inserted on page add to the database.
+ * @param id Page id
+ * @returns New JSON page definition.
+ **/
 export const generateInitialPageDefinition = (id: string) => {
     return {"id": id, "type": "Page", "label": "Strona", "icon": "fa-th", "children": []}
 }
 
-export const widgetVisible = (widget: AppWidget, dataIndex?: number, dataItem?: never): boolean => {
+/**
+ * Checks if this widget should be displayed on the page based on the widget defined condtions.
+ * @param widget The widget to be displayed {@link AppWidget}
+ * @param dataItem The data item (Query result object) that the condition will be checked with
+ * @returns The result of the condition check.
+ **/
+export const isWidgetVisible = (widget: AppWidget, dataItem?: never): boolean => {
     if (!dataItem) {
         return true
     }
@@ -50,29 +61,9 @@ export const widgetVisible = (widget: AppWidget, dataIndex?: number, dataItem?: 
     for (const prop of props) {
         const cond = prop.condition
         const condVal = prop.value?.toString()
-        const dataValue = getDataVarValueAsArray('', '', prop.field, dataItem)
+        const dataValue = getQueryDataValue(dataItem, prop.field).toString()
 
-        if (dataValue && dataValue.includes('<>')) {
-            const dataValueArray = dataValue.split('<>')
-
-            if (dataIndex && dataValueArray.length > dataIndex) {
-                if (!checkIfWidgetConditionMet(dataValueArray[dataIndex], cond, condVal)) {
-                    return false
-                }
-            } else {
-                let anyConditionMet = false
-
-                for (const dataVal of dataValueArray) {
-                    if (checkIfWidgetConditionMet(dataVal, cond, condVal)) {
-                        anyConditionMet = true
-                    }
-                }
-
-                if (!anyConditionMet) {
-                    return false
-                }
-            }
-        } else if (dataValue && !checkIfWidgetConditionMet(dataValue, cond, condVal)) {
+        if (dataValue && !checkIfWidgetConditionMet(dataValue, cond, condVal)) {
             return false
         } else if (!dataValue) {
             return false
@@ -112,6 +103,12 @@ const checkIfWidgetConditionMet = (actualValue: string, condition: string, expec
     }
 }
 
+/**
+ * Return all the widget css type props.
+ * @param widget The widget to be displayed {@link AppWidget}
+ * @param theme The project defined theme, used for value mappings {@link ThemeColors}
+ * @returns The widgets css type props, mapped with theme values.
+ **/
 export const getCssProps = (widget: AppWidget, theme: ThemeColors) => {
     const propGroups = widget ? widget.propGroups.slice() : []
 
@@ -130,6 +127,11 @@ export const getCssProps = (widget: AppWidget, theme: ThemeColors) => {
     })
 }
 
+/**
+ * Return all the widget args type props.
+ * @param widget The widget to be displayed {@link AppWidget}
+ * @returns The widgets args type props.
+ **/
 export const getArgsProps = (widget: AppWidget): { [k: string]: string } => {
     const propGroups = widget ? widget.propGroups.slice() : []
 
@@ -146,6 +148,11 @@ export const getArgsProps = (widget: AppWidget): { [k: string]: string } => {
     return argsObject
 }
 
+/**
+ * Return all the widget data type props.
+ * @param widget The widget to be displayed {@link AppWidget}
+ * @returns The widgets data type props.
+ **/
 export const getDataProps = (widget: AppWidget): { [k: string]: string } => {
     const propGroups = widget ? widget.propGroups.slice() : []
 
@@ -162,109 +169,120 @@ export const getDataProps = (widget: AppWidget): { [k: string]: string } => {
     return argsObject
 }
 
+/**
+ * Return the actual color hex value of a property, based on the property theme value.
+ * @param theme The project defined theme, used for value mappings {@link ThemeColors}
+ * @param propName The css prop name
+ * @returns The hex color value.
+ **/
 export const getColorPropValue = (theme: ThemeColors, propName: string): string => {
     return themeColors.includes(propName) ? theme[propName as keyof ThemeColors] : propName
 }
 
-export const getPageVarValue = (vars?: PageVariable[], pageVal?: number): string => {
+/**
+ * Gets the actual value of a page variable, based on the widget variable property id.
+ * @param vars The page defined variables (list of page variables {@link PageVariable})
+ * @param pageVarId The page variable id
+ * @returns Value of the actual page parameter.
+ **/
+export const getPageVariableValue = (vars?: PageVariable[], pageVarId?: number): string => {
     let pageValue = ''
 
-    if (pageVal && pageVal > 0 && vars && vars.length) {
-        const variable = vars.find((variable) => variable.id === pageVal)
+    if (pageVarId && pageVarId > 0 && vars && vars.length) {
+        const variable = vars.find((variable) => variable.id === pageVarId)
         pageValue = variable ? variable.value : ''
     }
 
     return pageValue
 }
 
-export const getParamVarValue = (routeParams?: { [k: string]: string }, paramVal?: string): string => {
-    if (routeParams && routeParams.params && paramVal) {
+/**
+ * Gets the actual value of a route page parameter, based on the widget page parameter property id.
+ * @param routeParams Vue route parameters ($route.params)
+ * @param pageParamName The route parameter name
+ * @returns Value of the actual page parameter.
+ **/
+export const getPageParamValue = (routeParams?: { [k: string]: string }, pageParamName?: string): string => {
+    if (routeParams && routeParams.params && pageParamName) {
         const params = routeParams.params.split('&')
-        const param = params.find((param) => param.includes(`${paramVal}=`))
+        const param = params.find((param) => param.includes(`${pageParamName}=`))
         return param ? param.substring(param.indexOf('=') + 1) : ''
     }
 
     return ''
 }
 
-export const getDataVarValueAsString = (dataVal?: string, dataItem?: never): string => {
-    if (!dataVal || !dataItem) {
+/**
+ * Gets the actual value of a widget page parameter type property, from the page route parameters.
+ * @param dataItem The data item (Query result object) that the value should be found in
+ * @param queryFieldName The data item field name
+ * @returns Value of the actual data table parameter.
+ **/
+export const getQueryDataValue = (dataItem?: never, queryFieldName?: string): string => {
+    if (!queryFieldName || !dataItem) {
         return ''
     }
 
-    const valIsRelation = dataItem && dataVal && dataVal.includes('.')
+    const fieldIsRelation = dataItem && queryFieldName && queryFieldName.includes('.')
 
-    if (valIsRelation) {
-        const relation = dataVal.substring(0, dataVal.indexOf('.'))
-        const val = dataVal.substring(dataVal.indexOf('.') + 1)
+    if (fieldIsRelation) {
+        const relation = queryFieldName.substring(0, queryFieldName.indexOf('.'))
+        const name = queryFieldName.substring(queryFieldName.indexOf('.') + 1)
 
-        return getDataVarValueAsString(val, dataItem[relation])
+        return getQueryDataValue(dataItem[relation], name)
     }
 
-    if (Array.isArray(dataItem)) {
-        return (dataItem as never[]).map((item) => item[dataVal]).join(' ')
-    }
-
-    return dataItem ? dataItem[dataVal] : ''
+    return dataItem ? dataItem[queryFieldName] : ''
 }
 
-export const getDataVarValueAsArray = (pageValue: string, paramValue: string, dataVal?: string,
-                                       dataItem?: never): string => {
+/**
+ * Creates the display value of a display widget, based on values of the widget page parameter,
+ * page variable and query data field.
+ * The final value is constructed as `{pageParamValue} {pageVarValue} {queryDataValue}`
+ * @param dataItem The data item (Query result object) that the value should be found in
+ * @param queryFieldName The data item field name
+ * @param vars The page defined variables
+ * @param pageVarId The page variable id
+ * @param routeParams Vue route parameters ($route.params)
+ * @param pageParamName The route parameter name
+ * @returns Display string to be shown on the widget.
+ **/
+export const getDisplayWidgetVarValue = (dataItem?: never, queryFieldName?: string,
+                                         vars?: PageVariable[], pageVarId?: number,
+                                         routeParams?: { [k: string]: string }, pageParamName?: string): string => {
 
-    if (!dataVal || !dataItem) {
-        return `${paramValue} ${pageValue}`.trim()
-    }
+    const pageParamValue = getPageParamValue(routeParams, pageParamName)
+    const pageVarValue = getPageVariableValue(vars, pageVarId)
+    const queryDataValue = getQueryDataValue(dataItem, queryFieldName)
 
-    const valIsRelation = dataItem && dataVal && dataVal.includes('.')
-
-    if (valIsRelation) {
-        const relation = dataVal.substring(0, dataVal.indexOf('.'))
-        const val = dataVal.substring(dataVal.indexOf('.') + 1)
-
-        return getDataVarValueAsArray(pageValue, paramValue, val, dataItem[relation])
-    }
-
-    if (Array.isArray(dataItem)) {
-        return (dataItem as never[])
-            .map((item) => `${paramValue} ${pageValue} ${item[dataVal]}`.trim())
-            .join('<>')
-    }
-
-    return `${paramValue} ${pageValue} ${dataItem ? dataItem[dataVal] : ''}`.trim()
+    return [pageParamValue, pageVarValue, queryDataValue].filter((value) => value && value.length).join(' ')
 }
 
-export const getDisplayWidgetVarValue = (dataItem?: never, dataVal?: string, vars?: PageVariable[], pageVal?: number,
-                                         routeParams?: { [k: string]: string }, paramVal?: string): string => {
+/**
+ * Gets the initial value of an input widget, based on values of the widget page parameter and page variable.
+ * The final value is constructed as `{pageParamValue} {pageVarValue}`
+ * @param vars The page defined variables
+ * @param pageVarId The page variable id
+ * @param routeParams Vue route parameters ($route.params)
+ * @param pageParamName The route parameter name
+ * @returns Initial value string of the widget.
+ **/
+export const getInputWidgetInitialValue = (vars?: PageVariable[], pageVarId?: number,
+                                           routeParams?: { [k: string]: string }, pageParamName?: string): string => {
 
-    const dataValue = getDataVarValueAsString(dataVal, dataItem)
-    const pageValue = getPageVarValue(vars, pageVal)
-    const paramValue = getParamVarValue(routeParams, paramVal)
+    const pageParamValue = getPageParamValue(routeParams, pageParamName)
+    const pageVarValue = getPageVariableValue(vars, pageVarId)
 
-    const values = [dataValue, pageValue, paramValue]
-
-    return values.filter((value) => value && value.length).join(' ')
+    return [pageParamValue, pageVarValue].filter((value) => value && value.length).join(' ')
 }
 
-export const getDisplayWidgetVarValues = (dataItem?: never, dataVal?: string, vars?: PageVariable[], pageVal?: number,
-                                          routeParams?: { [k: string]: string }, paramVal?: string): string => {
-
-    const pageValue = getPageVarValue(vars, pageVal)
-    const paramValue = getParamVarValue(routeParams, paramVal)
-    return getDataVarValueAsArray(pageValue, paramValue, dataVal, dataItem)
-}
-
-export const getInputWidgetInitialValue = (vars?: PageVariable[], pageVal?: number,
-                                           routeParams?: { [k: string]: string }, paramVal?: string): string => {
-
-    const pageValue = getPageVarValue(vars, pageVal)
-    const paramValue = getParamVarValue(routeParams, paramVal)
-
-    const values = [pageValue, paramValue]
-
-    return values.filter((value) => value && value.length).join(' ')
-}
-
-export const getRulesForInput = (widget: AppWidget, counter: number | undefined): unknown[] => {
+/**
+ * Gets the list of rules for an input widget based on the widget validation options and counter value.
+ * @param widget The widget to be displayed {@link AppWidget}
+ * @param counter Value of the input field counter
+ * @returns List of input rules.
+ **/
+export const getRulesForInput = (widget: AppWidget, counter?: number): unknown[] => {
     const rules = []
     const props = getArgsProps(widget)
 
@@ -293,20 +311,29 @@ export const getRulesForInput = (widget: AppWidget, counter: number | undefined)
     return rules
 }
 
+/**
+ * List of action types that a widget can execute.
+ * @returns List of widget actions.
+ **/
 export const getActionTypes = (): { id: string; name: string }[] => [
     {id: 'goToPage', name: i18n.t('editor.actionGoTo').toString()},
     {id: 'runMutation', name: i18n.t('editor.actionRunMutation').toString()}
 ]
 
+/**
+ * Returns an ordered list of a query property custom labels defined for the widget.
+ * @param widget The widget to be displayed {@link AppWidget}
+ * @returns List of custom labels.
+ **/
 export const getQueryPropLabels = (widget: AppWidget): { text: string; value: string }[] => {
     const dataPropGroup = widget.propGroups.find((group) => group.type === 'data')
 
     if (dataPropGroup) {
         const props = dataPropGroup.props
-        const prop = props.find((prop) => prop.id === 'queryId')
+        const query = props.find((prop) => prop.id === 'queryId')
 
-        if (prop && prop.labels) {
-            return prop.labels
+        if (query && query.labels) {
+            return query.labels
                 .filter(label => label.visible)
                 .sort((a, b) => Number(a.order) - Number(b.order))
         }
@@ -315,45 +342,63 @@ export const getQueryPropLabels = (widget: AppWidget): { text: string; value: st
     return []
 }
 
+/**
+ * Returns the name of the table that the widget uses as a source of its data (Property `dataTable`, group `source`).
+ * @param widget The widget to be displayed {@link AppWidget}
+ * @returns Name of the table.
+ **/
 export const getTableNameForWidget = (widget: AppWidget): string => {
     const dataPropGroups = widget.propGroups.find((group) => group.id === 'source')
 
     if (dataPropGroups) {
         const props = dataPropGroups.props
-        const prop = props.find((prop) => prop.id === 'dataTable')
-        return prop ? prop.value : ''
+        const dataTable = props.find((prop) => prop.id === 'dataTable')
+        return dataTable ? dataTable.value : ''
     }
 
     return ''
 }
 
-export const mapPageVarValuesToQueryVars = (widget: AppWidget, qrVars: QueryVariable[],
+/**
+ * Updates the widget query where parameters value with actual page variables value.
+ * @param widget The widget to be displayed {@link AppWidget}
+ * @param queryVars GraphQL query variables (list of {@link QueryVariable})
+ * @param pageVars Page variables (list of {@link PageVariable})
+ * @returns Name of the table.
+ **/
+export const mapPageVarValuesToQueryVars = (widget: AppWidget, queryVars: QueryVariable[],
                                             pageVars: PageVariable[]): QueryVariable[] => {
 
     const dataPropGroup = widget.propGroups.find((group: { type: string }) => group.type === 'data')
 
     if (dataPropGroup) {
         const props = dataPropGroup.props
-        const prop = props.find((prop) => prop.id === 'queryId')
+        const query = props.find((prop) => prop.id === 'queryId')
 
-        if (prop && prop.variablesMapping) {
-            qrVars.forEach((qrVar) => {
-                const mapping = prop.variablesMapping?.find((mapping) => mapping.qrVar === qrVar.name)
+        if (query && query.variablesMapping) {
+            queryVars.forEach((qrVar) => {
+                const mapping = query.variablesMapping?.find((mapping) => mapping.qrVar === qrVar.name)
                 const pageVar = pageVars.find((variable) => variable.id === mapping?.pageVar)
                 qrVar.value = pageVar?.value ?? ''
             })
         }
-
     }
 
-    return qrVars
+    return queryVars
 }
 
+/**
+ * Creates an error message for an action, based on the custom error message defined on a widget and the actual error.
+ * @param action The action that resulted in an error {@link ActionProp}
+ * @param vars The page defined variables (list of page variables {@link PageVariable})
+ * @param errorMsg The actual error message
+ * @returns The string error message.
+ **/
 export const getActionErrorMsg = (action: ActionProp, vars?: PageVariable[], errorMsg?: string): string => {
     let msg = ''
 
     if (action.errorMsgVar) {
-        msg += getPageVarValue(vars, action.errorMsgVar)
+        msg += getPageVariableValue(vars, action.errorMsgVar)
     }
 
     if (action.errorMsgShowResponse && errorMsg) {
@@ -367,24 +412,31 @@ export const getActionErrorMsg = (action: ActionProp, vars?: PageVariable[], err
     return msg
 }
 
-export const runWidgetClickAction = async (action: ActionProp, projectId: string, itemIndex: number,
-                                           datasource: Datasource, dataItem?: never, vars?: PageVariable[],
+/**
+ * Launches an action ({@link runOpenPageAction} / ${@link runMutationAction}).
+ * @param action The action that resulted in an error {@link ActionProp}
+ * @param projectId Id of the current app project
+ * @param datasource The graphQL datasource the action should be run on
+ * @param dataItem The data item (Query result object) used as an argument source for the action
+ * @param vars The page defined variables (list of page variables {@link PageVariable})
+ * used as an argument source for the action
+ * @param routeParams Vue route parameters ($route.params) used as an argument source for the action
+ * @param mutations List of mutations defined for this project {@link Mutation}
+ * @returns The result of a mutation if run.
+ **/
+export const runWidgetClickAction = async (action: ActionProp, projectId: string,
+                                           datasource: Datasource, dataItem?: never,
+                                           vars?: PageVariable[],
                                            routeParams?: { [k: string]: string },
                                            mutations?: Mutation[]): Promise<QueryResult | undefined> => {
 
     action.variables?.forEach((actionVar) => {
         if (actionVar.pageVar > 0) {
-            actionVar.value = getPageVarValue(vars, actionVar.pageVar)
+            actionVar.value = getPageVariableValue(vars, actionVar.pageVar)
         } else if (actionVar.tableVar && actionVar.tableVar.length > 0) {
-            const values = getDataVarValueAsArray('', '', actionVar.tableVar, dataItem)
-
-            if (values.includes('<>')) {
-                actionVar.value = values.split('<>')[itemIndex]
-            } else {
-                actionVar.value = values
-            }
+            actionVar.value = getQueryDataValue(dataItem, actionVar.tableVar)
         } else if (actionVar.paramVar && actionVar.paramVar.length > 0) {
-            actionVar.value = getParamVarValue(routeParams, actionVar.paramVar)
+            actionVar.value = getPageParamValue(routeParams, actionVar.paramVar)
         }
     })
 
@@ -397,17 +449,16 @@ export const runWidgetClickAction = async (action: ActionProp, projectId: string
     }
 }
 
-const runOpenPageAction = (action: ActionProp, projectId: string) => {
+export const runOpenPageAction = (action: ActionProp, projectId: string) => {
     const params = action.variables.map((variable) => `${variable.name}=${variable.value}`)
 
     router.push({
-        name: 'AppRunner', params:
-            {projectId: projectId, pageId: action.target.toString(), params: params.join('&')}
+        name: 'AppRunner', params: {projectId: projectId, pageId: action.target.toString(), params: params.join('&')}
     }).then()
 }
 
-const runMutationAction = async (action: ActionProp, projectId: string, datasource: Datasource,
-                                 mutations?: Mutation[]): Promise<QueryResult | undefined> => {
+export const runMutationAction = async (action: ActionProp, projectId: string, datasource: Datasource,
+                                        mutations?: Mutation[]): Promise<QueryResult | undefined> => {
 
     const mutation = mutations?.find((mutation) => mutation.id === action.target)
 

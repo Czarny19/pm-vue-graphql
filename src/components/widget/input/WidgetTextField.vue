@@ -39,7 +39,7 @@ export default Vue.extend({
       return this.widget as AppWidget
     },
     visible(): boolean {
-      return widget.widgetVisible(this.appWidget, undefined, this.dataItem)
+      return widget.isWidgetVisible(this.appWidget, this.dataItem)
     },
     cssProps(): ({ [p: string]: string })[] {
       return widget.getCssProps(this.appWidget, this.theme)
@@ -60,10 +60,10 @@ export default Vue.extend({
       return widget.getColorPropValue(this.theme, this.argsProps.bgColor)
     },
     label(): string {
-      return widget.getPageVarValue(this.variables as PageVariable[], Number(this.argsProps.label))
+      return widget.getPageVariableValue(this.variables as PageVariable[], Number(this.argsProps.label))
     },
     hint(): string {
-      return widget.getPageVarValue(this.variables as PageVariable[], Number(this.argsProps.hint))
+      return widget.getPageVariableValue(this.variables as PageVariable[], Number(this.argsProps.hint))
     },
     variable(): PageVariable | undefined {
       if (this.dataProps.variableId) {
@@ -93,12 +93,12 @@ export default Vue.extend({
   },
   beforeMount() {
     const variables = this.variables as PageVariable[]
-    const pagePropVal = Number(this.dataProps.initalPageVarId)
+    const pageVarId = Number(this.dataProps.initalPageVarId)
 
     const params = this.$route.params
-    const paramPropVal = this.dataProps.initalParamVarId
+    const paramName = this.dataProps.initalParamName
 
-    const intialValue = widget.getInputWidgetInitialValue(variables, pagePropVal, params, paramPropVal)
+    const intialValue = widget.getInputWidgetInitialValue(variables, pageVarId, params, paramName)
 
     this.updateVariableValue(intialValue)
   }

@@ -45,17 +45,17 @@ export const getGraphQLSchema = async (endpoint: string, secret?: string): Promi
 }
 
 /**
- * Creates a full list of table fields inculing relationships (In form of [relation].fieldName).
+ * Creates a full list of table fields inculing object (single) relationships (In form of [relation].fieldName).
  * @param table The base table
  * @param schema GraphQL schema
  * @returns The list of all fields for the specified table {@link SchemaItemField}.
  **/
-export const getAllTableFieldsWithRelations = (table: string, schema: SchemaItem[]): SchemaItemField[] => {
+export const getAllTableFieldsWithObjectRelations = (table: string, schema: SchemaItem[]): SchemaItemField[] => {
     const fields: SchemaItemField[] = []
     const schemaItems = (schema as SchemaItem[]).slice()
     const tableFields = schemaItems?.find((schemaItem) => schemaItem.name === table)?.fields.slice()
 
-    tableFields?.forEach((field) => {
+    tableFields?.filter((field) => !field.isList).forEach((field) => {
         if (schemaItems.map((item) => item.name).includes(field.type)) {
             getRelatedFields(field.name, fields, field, schemaItems)
         } else {
@@ -66,12 +66,25 @@ export const getAllTableFieldsWithRelations = (table: string, schema: SchemaItem
     return fields
 }
 
+/**
+ * Creates a full list of table array (multiple) relationships.
+ * @param table The base table
+ * @param schema GraphQL schema
+ * @returns The list of all fields for the specified table {@link SchemaItemField}.
+ **/
+export const getTableArrayRelations = (table: string, schema: SchemaItem[]): SchemaItemField[] => {
+    const schemaItems = (schema as SchemaItem[]).slice()
+    const tableFields = schemaItems?.find((schemaItem) => schemaItem.name === table)?.fields.slice()
+
+    return tableFields?.filter((field) => field.isList) ?? []
+}
+
 const getRelatedFields = (path: string, fields: SchemaItemField[], field: SchemaItemField, schema: SchemaItem[]) => {
     schema.find((item) => item.name === field.type)?.fields.slice().forEach((fld) => {
         if (schema.map((item) => item.name).includes(fld.type)) {
             getRelatedFields(`${path}.${fld.name}`, fields, fld, schema)
         } else {
-            const relationshipField = {name: fld.name, type: fld.type, isNullable: fld.isNullable}
+            const relationshipField = {name: fld.name, type: fld.type, isNullable: fld.isNullable, isList: fld.isList}
             relationshipField.name = `${path.length ? path + '.' : ''}${fld.name}`
             fields.push(relationshipField)
         }
@@ -121,12 +134,12 @@ const cleanSchema = (schema: unknown []): Types.SchemaItem [] => {
         const hasFields = schemaItem.fields;
         const nameNotIgnored = ignoredObjects.filter(ignored => schemaItem.name.endsWith(ignored)).length == 0
 
+        const listObjects: string[] = []
+
         if (isObject && hasFields && nameNotIgnored) {
             schemaItem.fields.forEach(field => {
                 const schemaField = (field as {
-                    name: string, type: {
-                        kind: string, name: string, ofType: { name: string, kind: string }
-                    }
+                    name: string, type: { kind: string, name: string, ofType: { name: string, kind: string } }
                 })
 
                 let fieldType: string | null
@@ -139,6 +152,7 @@ const cleanSchema = (schema: unknown []): Types.SchemaItem [] => {
                         break
                     case 'NON_NULL':
                         if (schemaField.type.ofType.kind === 'LIST') {
+                            listObjects.push(schemaField.name)
                             fieldType = null
                         } else if (schemaField.type.ofType.kind === 'OBJECT') {
                             fieldType = schemaField.type.ofType.name.replaceAll('_aggregate', '')
@@ -155,10 +169,10 @@ const cleanSchema = (schema: unknown []): Types.SchemaItem [] => {
                 }
 
                 if (fieldType != null) {
+                    const name = schemaField.name.replaceAll('_aggregate', '')
+
                     cleanSchemaItemFields.push({
-                        name: schemaField.name.replaceAll('_aggregate', ''),
-                        type: fieldType,
-                        isNullable: isNullable
+                        name: name, type: fieldType, isList: listObjects.includes(name), isNullable: isNullable
                     })
                 }
             })

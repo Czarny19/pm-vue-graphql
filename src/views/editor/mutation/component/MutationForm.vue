@@ -60,7 +60,7 @@ import MutationTester from "@/views/editor/mutation/component/MutationTester.vue
 import MutationFieldsUpdate from "@/views/editor/mutation/component/form/MutationFieldsUpdate.vue";
 import {Mutation, Query, SchemaItem, SchemaItemField} from "@/lib/types";
 import {mutationType} from "@/lib/graphql_gen";
-import {getAllTableFieldsWithRelations} from "@/lib/schema";
+import {getAllTableFieldsWithObjectRelations} from "@/lib/schema";
 
 export default Vue.extend({
   name: 'MutationForm',
@@ -99,7 +99,7 @@ export default Vue.extend({
       return (this.currentMutation as Mutation).type === mutationType.Delete
     },
     fields(): SchemaItemField[] {
-      return getAllTableFieldsWithRelations((this.mutation as Mutation).table, this.schema as SchemaItem[])
+      return getAllTableFieldsWithObjectRelations((this.mutation as Mutation).table, this.schema as SchemaItem[])
     },
     fieldsVisible(): boolean {
       return (this.currentMutation as Query).table.length > 0

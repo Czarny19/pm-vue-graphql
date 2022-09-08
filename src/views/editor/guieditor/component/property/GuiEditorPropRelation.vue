@@ -1,11 +1,11 @@
 <template>
   <v-select
-      v-if="fieldsVisible"
+      v-if="relationsVisible"
       class="pt-3"
       color="accent"
       outlined dense hide-details
       :label="prop.label"
-      :items="['', ...fields]"
+      :items="['', ...relationships]"
       v-model="currentProp.value"
       item-value="id"
       item-text="name"
@@ -16,11 +16,11 @@
 <script lang="ts">
 import Vue from "vue";
 import {SchemaItem, SchemaItemField} from "@/lib/types";
-import {getAllTableFieldsWithObjectRelations} from "@/lib/schema";
+import {getTableArrayRelations} from "@/lib/schema";
 import {getTableNameForWidget} from "@/lib/widget";
 
 export default Vue.extend({
-  name: 'GuiEditorPropTableField',
+  name: 'GuiEditorPropRelation',
   props: {
     prop: Object,
     widget: Object,
@@ -29,27 +29,27 @@ export default Vue.extend({
   data() {
     return {
       currentProp: {},
-      fields: []
+      relationships: []
     }
   },
   computed: {
     tableName(): string {
       return getTableNameForWidget(this.widget)
     },
-    fieldsVisible(): boolean {
+    relationsVisible(): boolean {
       return this.tableName.length > 0
     }
   },
   watch: {
-    tableName() {
-      (this.fields as SchemaItemField[]) = getAllTableFieldsWithObjectRelations(this.tableName, this.schema as SchemaItem[])
+    tableName(): void {
+      (this.relationships as SchemaItemField[]) = getTableArrayRelations(this.tableName, this.schema as SchemaItem[])
     }
   },
   beforeMount() {
     this.currentProp = this.prop;
 
     const tableName = getTableNameForWidget(this.widget);
-    (this.fields as SchemaItemField[]) = getAllTableFieldsWithObjectRelations(tableName, this.schema as SchemaItem[])
+    (this.relationships as SchemaItemField[]) = getTableArrayRelations(tableName, this.schema as SchemaItem[])
   }
 })
 </script>

@@ -81,7 +81,7 @@
 import Vue from "vue";
 import {ActionProp, ActionPropVariable, Page, SchemaItem, SchemaItemField} from "@/lib/types";
 import {getTableNameForWidget} from "@/lib/widget";
-import {getAllTableFieldsWithRelations} from "@/lib/schema";
+import {getAllTableFieldsWithObjectRelations} from "@/lib/schema";
 
 export default Vue.extend({
   name: 'GuiEditorActionGoToPage',
@@ -114,7 +114,7 @@ export default Vue.extend({
       return getTableNameForWidget(this.widget)
     },
     fields(): SchemaItemField[] {
-      return getAllTableFieldsWithRelations(this.tableName, this.schema as SchemaItem[])
+      return getAllTableFieldsWithObjectRelations(this.tableName, this.schema as SchemaItem[])
     },
     params(): string[] {
       return this.page.params.split(';')

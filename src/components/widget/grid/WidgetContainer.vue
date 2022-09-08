@@ -42,7 +42,7 @@ export default Vue.extend({
       return this.widget as AppWidget
     },
     visible(): boolean {
-      return widget.widgetVisible(this.appWidget, undefined, this.dataItem)
+      return widget.isWidgetVisible(this.appWidget, this.dataItem)
     },
     cssProps(): ({ [p: string]: string })[] {
       return getCssProps(this.appWidget, this.theme)

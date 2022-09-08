@@ -58,7 +58,7 @@ export default Vue.extend({
       return this.widget as AppWidget
     },
     visible(): boolean {
-      return widget.widgetVisible(this.appWidget, undefined, this.dataItem)
+      return widget.isWidgetVisible(this.appWidget, this.dataItem)
     },
     cssProps(): ({ [p: string]: string })[] {
       return widget.getCssProps(this.appWidget, this.theme)
@@ -95,19 +95,19 @@ export default Vue.extend({
   },
   methods: {
     title(item: never): string {
-      return item ? item[this.dataProps.titleQueryVarId] : ''
+      return item ? item[this.dataProps.titleQueryFieldName] : ''
     },
     description(item: never): string {
-      return item ? item[this.dataProps.descriptionQueryVarId] : ''
+      return item ? item[this.dataProps.descriptionQueryFieldName] : ''
     },
     imgSrc(item: never): string {
-      return item ? item[this.dataProps.imgQueryVarId] : ''
+      return item ? item[this.dataProps.imgQueryFieldName] : ''
     },
     bgColor(item: never): string {
-      return item ? item[this.dataProps.bgColorQueryVarId] : ''
+      return item ? item[this.dataProps.bgColorQueryFieldName] : ''
     },
     textColor(item: never): string {
-      return item ? item[this.dataProps.textColorQueryVarId] : ''
+      return item ? item[this.dataProps.textColorQueryFieldName] : ''
     }
   },
   watch: {

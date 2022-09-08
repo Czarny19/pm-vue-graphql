@@ -73,7 +73,7 @@ import QueryFields from "@/views/editor/query/component/form/QueryFields.vue";
 import EditorVariables from "@/components/editor/EditorVariables.vue";
 import EditorWhereBuilder from "@/components/editor/EditorWhereBuilder.vue";
 import {Query, SchemaItem, SchemaItemField} from "@/lib/types";
-import {getAllTableFieldsWithRelations} from "@/lib/schema";
+import {getAllTableFieldsWithObjectRelations} from "@/lib/schema";
 
 export default Vue.extend({
   name: 'QueryForm',
@@ -104,7 +104,7 @@ export default Vue.extend({
   },
   computed: {
     fields(): SchemaItemField[] {
-      return getAllTableFieldsWithRelations((this.currentQuery as Query).table, this.schema as SchemaItem[])
+      return getAllTableFieldsWithObjectRelations((this.currentQuery as Query).table, this.schema as SchemaItem[])
     },
     fieldsVisible(): boolean {
       return (this.currentQuery as Query).table.length > 0

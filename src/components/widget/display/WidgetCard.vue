@@ -48,7 +48,7 @@ export default Vue.extend({
       return this.widget as AppWidget
     },
     visible(): boolean {
-      return widget.widgetVisible(this.appWidget, undefined, this.dataItem)
+      return widget.isWidgetVisible(this.appWidget, this.dataItem)
     },
     cssProps(): ({ [p: string]: string })[] {
       return widget.getCssProps(this.appWidget, this.theme)
@@ -67,30 +67,30 @@ export default Vue.extend({
     },
     title(): string {
       const data = this.data
-      const queryVar = this.dataProps.titleQueryVarId
+      const queryFieldName = this.dataProps.titleQueryFieldName
 
       const variables = this.variables as PageVariable[]
-      const pageVar = Number(this.dataProps.titlePageVarId)
+      const pageVarId = Number(this.dataProps.titlePageVarId)
 
       const params = this.$route.params
-      const paramVar = this.dataProps.titleParamVarId
+      const pageParamName = this.dataProps.titlePageParamName
 
-      return widget.getDisplayWidgetVarValue(data, queryVar, variables, pageVar, params, paramVar)
+      return widget.getDisplayWidgetVarValue(data, queryFieldName, variables, pageVarId, params, pageParamName)
     },
     titleColor(): string {
       return widget.getColorPropValue(this.theme, this.argsProps.titleColor)
     },
     subtitle(): string {
       const data = this.data
-      const queryVar = this.dataProps.subtitleQueryVarId
+      const queryFieldName = this.dataProps.subtitleQueryFieldName
 
       const variables = this.variables as PageVariable[]
-      const pageVar = Number(this.dataProps.subtitlePageVarId)
+      const pageVarId = Number(this.dataProps.subtitlePageVarId)
 
       const params = this.$route.params
-      const paramVar = this.dataProps.subtitleParamVarId
+      const pageParamName = this.dataProps.subtitlePageParamName
 
-      return widget.getDisplayWidgetVarValue(data, queryVar, variables, pageVar, params, paramVar)
+      return widget.getDisplayWidgetVarValue(data, queryFieldName, variables, pageVarId, params, pageParamName)
     },
     subtitleColor(): string {
       return widget.getColorPropValue(this.theme, this.argsProps.subtitleColor)
@@ -106,15 +106,15 @@ export default Vue.extend({
     },
     text(): string {
       const data = this.data
-      const queryVar = this.dataProps.textQueryVarId
+      const queryFieldName = this.dataProps.textQueryFieldName
 
       const variables = this.variables as PageVariable[]
-      const pageVar = Number(this.dataProps.textPageVarId)
+      const pageVarId = Number(this.dataProps.textPageVarId)
 
       const params = this.$route.params
-      const paramVar = this.dataProps.textParamVarId
+      const pageParamName = this.dataProps.textPageParamName
 
-      return widget.getDisplayWidgetVarValue(data, queryVar, variables, pageVar, params, paramVar)
+      return widget.getDisplayWidgetVarValue(data, queryFieldName, variables, pageVarId, params, pageParamName)
     },
     elevation(): number {
       return Number(this.argsProps.elevation)
@@ -130,7 +130,7 @@ export default Vue.extend({
         const actions = this.appWidget.propGroups.find((group: { type: string }) => group.type === 'action')
         const action = actions?.props[0] as unknown as ActionProp
 
-        widget.runWidgetClickAction(action, projectId, 0, this.datasource, this.dataItem, variables, params)
+        widget.runWidgetClickAction(action, projectId, this.datasource, this.dataItem, variables, params)
       }
     },
     action2(): void {
@@ -142,7 +142,7 @@ export default Vue.extend({
         const actions = this.appWidget.propGroups.find((group: { type: string }) => group.type === 'action')
         const action = actions?.props[1] as unknown as ActionProp
 
-        widget.runWidgetClickAction(action, projectId, 1, this.dataItem, this.datasource, variables, params)
+        widget.runWidgetClickAction(action, projectId, this.dataItem, this.datasource, variables, params)
       }
     }
   }

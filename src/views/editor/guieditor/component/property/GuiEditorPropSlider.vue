@@ -1,6 +1,6 @@
 <template>
   <v-slider
-      class="pt-3"
+      class="pt-3 pl-2 pr-2"
       color="accent"
       :label="prop.label"
       dense hide-details thumb-label

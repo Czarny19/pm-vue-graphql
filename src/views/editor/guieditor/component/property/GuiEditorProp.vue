@@ -13,6 +13,7 @@
   <GuiEditorPropNumber v-else-if="prop.type === 'Number'" :prop="prop"/>
   <GuiEditorPropVar v-else-if="prop.type === 'Variable'" :prop="prop" :variables="variables"/>
   <GuiEditorPropParam v-else-if="prop.type === 'Param'" :prop="prop" :page="page"/>
+  <GuiEditorPropRelation v-else-if="prop.type === 'Relation'" :prop="prop" :widget="widget" :schema="schema"/>
 </template>
 
 <script lang="ts">
@@ -31,10 +32,12 @@ import GuiEditorPropNumber from "@/views/editor/guieditor/component/property/Gui
 import GuiEditorPropVar from "@/views/editor/guieditor/component/property/GuiEditorPropVar.vue";
 import GuiEditorPropTable from "@/views/editor/guieditor/component/property/GuiEditorPropTable.vue";
 import GuiEditorPropParam from "@/views/editor/guieditor/component/property/GuiEditorPropParam.vue";
+import GuiEditorPropRelation from "@/views/editor/guieditor/component/property/GuiEditorPropRelation.vue";
 
 export default Vue.extend({
   name: 'GuiEditorProp',
   components: {
+    GuiEditorPropRelation,
     GuiEditorPropParam,
     GuiEditorPropTable,
     GuiEditorPropVar,
