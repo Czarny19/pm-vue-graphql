@@ -1,38 +1,51 @@
 <template>
   <GuiEditorWidgetContainer
       v-if="widget.type === 'Container'"
+      :page="page"
       :widget="widget"
+      :drag="drag"
       @activewidget="setActive"
-      @move="move">
-  </GuiEditorWidgetContainer>
+      @dragstarted="dragStart"
+      @dragended="dragEnd"
+  />
 
   <GuiEditorWidgetRow
       v-else-if="widget.type === 'Row'"
+      :page="page"
       :widget="widget"
+      :drag="drag"
       @activewidget="setActive"
-      @move="move">
-  </GuiEditorWidgetRow>
+      @dragstarted="dragStart"
+      @dragended="dragEnd"
+  />
 
   <GuiEditorWidgetColumn
       v-else-if="widget.type === 'Column'"
+      :page="page"
       :widget="widget"
+      :drag="drag"
       @activewidget="setActive"
-      @move="move">
-  </GuiEditorWidgetColumn>
+      @dragstarted="dragStart"
+      @dragended="dragEnd"
+  />
 
   <GuiEditorWidgetForm
       v-else-if="widget.type === 'Form'"
+      :page="page"
       :widget="widget"
+      :drag="drag"
       @activewidget="setActive"
-      @move="move">
-  </GuiEditorWidgetForm>
+      @dragstarted="dragStart"
+      @dragended="dragEnd"
+  />
 
   <GuiEditorWidgetOther
       v-else
       :widget="widget"
       @activewidget="setActive"
-      @move="move">
-  </GuiEditorWidgetOther>
+      @dragstarted="dragStart"
+      @dragended="dragEnd"
+  />
 </template>
 
 <script lang="ts">
@@ -43,25 +56,34 @@ import Vue from "vue";
 import GuiEditorWidgetContainer from "@/views/editor/guieditor/component/widget/grid/GuiEditorWidgetContainer.vue";
 import GuiEditorWidgetRow from "@/views/editor/guieditor/component/widget/grid/GuiEditorWidgetRow.vue";
 import GuiEditorWidgetColumn from "@/views/editor/guieditor/component/widget/grid/GuiEditorWidgetColumn.vue";
-import GuiEditorWidgetOther from "@/views/editor/guieditor/component/widget/GuiEditorWidgetOther.vue";
-import {AppWidget} from "@/lib/types";
+import GuiEditorWidgetOther from "@/views/editor/guieditor/component/widget/grid/GuiEditorWidgetOther.vue";
 import GuiEditorWidgetForm from "@/views/editor/guieditor/component/widget/grid/GuiEditorWidgetForm.vue";
+import {AppWidget} from "@/lib/types";
 
 export default Vue.extend({
   name: 'GuiEditorWidget',
   components: {
     GuiEditorWidgetForm,
-    GuiEditorWidgetOther, GuiEditorWidgetContainer, GuiEditorWidgetRow, GuiEditorWidgetColumn},
+    GuiEditorWidgetOther,
+    GuiEditorWidgetContainer,
+    GuiEditorWidgetRow,
+    GuiEditorWidgetColumn
+  },
   props: {
-    widget: Object
+    page: Object,
+    widget: Object,
+    drag: Boolean
   },
   methods: {
     setActive(widget: AppWidget): void {
       this.$emit('activewidget', widget)
     },
-    move(up: boolean): void {
-      this.$emit('move', up)
-    }
+    dragStart(): void {
+      this.$emit('dragstarted')
+    },
+    dragEnd(): void {
+      this.$emit('dragended')
+    },
   }
 })
 

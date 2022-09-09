@@ -11,7 +11,8 @@
         draggable="true"
         elevation="0"
         color="primary"
-        @dragstart="startDrag(widget, $event)">
+        @dragstart="startDrag(widget, $event)"
+        @dragend="leaveDrag">
 
       <v-container>
         <v-row>
@@ -44,6 +45,8 @@ export default Vue.extend({
   },
   methods: {
     startDrag(widget: { id: string }, evt?: DragEvent): void {
+      this.$emit('dragstarted')
+
       const dataTransfer = evt?.dataTransfer;
 
       const widgetJSON = JSON.parse(JSON.stringify(widget))
@@ -57,6 +60,9 @@ export default Vue.extend({
         // eslint-disable-next-line
         dataTransfer!.setData('widget', JSON.stringify(widgetJSON))
       }
+    },
+    leaveDrag(): void {
+      this.$emit('dragended')
     }
   }
 })

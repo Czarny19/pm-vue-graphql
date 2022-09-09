@@ -31,17 +31,18 @@
         :widget="pageDefinition"
         :theme="theme"
         :datasource="datasource"
-        :variables="variables">
-    </WidgetPage>
+        :variables="variables"
+    />
 
     <GuiEditorWidgetPage
         v-else
         :style="{'height': height, 'overflow': 'auto'}"
         :widget="pageDefinition"
+        :drag="drag"
         @activewidget="setActive"
-        @move="move">
-    </GuiEditorWidgetPage>
-
+        @dragstarted="dragStart"
+        @dragended="dragEnd"
+    />
   </v-container>
 </template>
 
@@ -60,6 +61,7 @@ export default Vue.extend({
     leftNavShown: Boolean,
     rightNavShown: Boolean,
     previewOpen: Boolean,
+    drag: Boolean,
     datasource: Object,
     variables: Array
   },
@@ -72,14 +74,17 @@ export default Vue.extend({
     setActive(widget: AppWidget): void {
       this.$emit('activewidget', widget)
     },
+    dragStart(): void {
+      this.$emit('dragstarted')
+    },
+    dragEnd(): void {
+      this.$emit('dragended')
+    },
     changeLeftNavShown(): void {
       this.$emit('changeleftnav')
     },
     changeRightNavShown(): void {
       this.$emit('changerightnav')
-    },
-    move(up: boolean): void {
-      this.$emit('move', up)
     }
   },
   beforeMount() {

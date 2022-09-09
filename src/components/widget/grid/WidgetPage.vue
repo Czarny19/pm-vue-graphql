@@ -20,7 +20,7 @@
 
       <template v-slot:action="{ attrs }">
         <v-btn text v-bind="attrs" @click="errorSnackbar = false">
-          {{ i18n('runtime.close') }}
+          {{ i18n('common.close') }}
         </v-btn>
       </template>
     </v-snackbar>

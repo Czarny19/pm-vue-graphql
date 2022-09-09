@@ -15,18 +15,24 @@
         @swichpreview="switchPreview"
         @save="save"
         @reject="setRejectOpen"
-        @import="importPage">
-    </GuiEditorTopBar>
+        @import="importPage"
+    />
 
     <LoadingCircular v-if="loading"/>
 
     <v-container v-else fluid class="pa-0" :style="{'height': `calc(100% - 60px)`}">
       <v-row class="fill-height" no-gutters>
         <v-col v-if="leftNavShown && !previewOpen" cols="2">
-          <GuiEditorLeftNav :page-definition="page.definition" @activewidget="setActiveWidget"/>
+          <GuiEditorLeftNav
+              :page-definition="page.definition"
+              @activewidget="setActiveWidget"
+              @dragstarted="dragStart"
+              @dragended="dragEnd"
+          />
         </v-col>
 
         <v-col :cols="editorCols">
+
           <GuiEditorDisplay
               :page-definition="page.definition"
               :theme="theme"
@@ -35,11 +41,13 @@
               :preview-open="previewOpen"
               :datasource="datasource"
               :variables="variables"
+              :drag="dragStarted"
               @activewidget="setActiveWidget"
               @changeleftnav="changeLeftNavShown"
               @changerightnav="changeRightNavShown"
-              @move="(up) => moveWidget(up, page.definition)">
-          </GuiEditorDisplay>
+              @dragstarted="dragStart"
+              @dragended="dragEnd"
+          />
         </v-col>
 
         <v-col v-if="rightNavShown && !previewOpen" cols="2" class="text-end">
@@ -54,8 +62,8 @@
               :pages="pages"
               :params="pageParams"
               @delete="removeWidget(page.definition)"
-              @refreshvars="refreshVars">
-          </GuiEditorRightNav>
+              @refreshvars="refreshVars"
+          />
         </v-col>
       </v-row>
     </v-container>
@@ -104,6 +112,7 @@ export default Vue.extend({
       rightNavShown: true,
       previewOpen: false,
       isClosing: false,
+      dragStarted: false,
       editorCols: 8,
       project: {},
       theme: {},
@@ -234,25 +243,11 @@ export default Vue.extend({
         this.removeWidget(child)
       })
     },
-    moveWidget(up: boolean, parent: { children: [] }): void {
-      // TODO
-      parent.children.forEach((child, index) => {
-        if (child == this.activeWidget) {
-          if (up && index != 0) {
-            parent.children.splice(index, 1)
-            parent.children.splice(index - 1, 0, child)
-            return
-          }
-
-          if (!up && index != parent.children.length - 1) {
-            parent.children.splice(index, 1)
-            parent.children.splice(index + 1, 0, child)
-            return
-          }
-        }
-
-        this.moveWidget(up, child)
-      })
+    dragStart(): void {
+      this.dragStarted = true
+    },
+    dragEnd(): void {
+      this.dragStarted = false
     },
     importPage(importPage: JSON): void {
       (this.page as { definition: JSON }).definition = importPage

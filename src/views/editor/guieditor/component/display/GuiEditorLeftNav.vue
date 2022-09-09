@@ -18,9 +18,26 @@
     <v-divider></v-divider>
 
     <template v-if="navTab === 0">
-      <GuiEditorLeftNavWidgets :label="i18n('editor.widgetsGrid')" :widgets="gridWidgets"/>
-      <GuiEditorLeftNavWidgets :label="i18n('editor.widgetsDisplay')" :widgets="displayWidgets"/>
-      <GuiEditorLeftNavWidgets :label="i18n('editor.widgetsInput')" :widgets="inputWidgets"/>
+      <GuiEditorLeftNavWidgets
+          :label="i18n('editor.widgetsGrid')"
+          :widgets="gridWidgets"
+          @dragstarted="dragStart"
+          @dragended="dragEnd">
+      </GuiEditorLeftNavWidgets>
+
+      <GuiEditorLeftNavWidgets
+          :label="i18n('editor.widgetsDisplay')"
+          :widgets="displayWidgets"
+          @dragstarted="dragStart"
+          @dragended="dragEnd">
+      </GuiEditorLeftNavWidgets>
+
+      <GuiEditorLeftNavWidgets
+          :label="i18n('editor.widgetsInput')"
+          :widgets="inputWidgets"
+          @dragstarted="dragStart"
+          @dragended="dragEnd">
+      </GuiEditorLeftNavWidgets>
     </template>
 
     <template v-if="navTab === 1">
@@ -87,6 +104,12 @@ export default Vue.extend({
     },
     setActiveWidget(widget: AppWidget): void {
       this.$emit('activewidget', widget)
+    },
+    dragStart(): void {
+      this.$emit('dragstarted')
+    },
+    dragEnd(): void {
+      this.$emit('dragended')
     }
   },
   beforeMount() {

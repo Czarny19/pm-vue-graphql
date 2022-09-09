@@ -71,6 +71,7 @@ export type AppWidget = {
     id: number;
     type: string;
     group: string;
+    move: boolean;
     children: [];
     propGroups: AppWidgetPropGroup[];
 }
