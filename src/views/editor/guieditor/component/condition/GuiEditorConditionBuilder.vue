@@ -42,7 +42,6 @@
         <v-col>
           <IconButton
               class="mt-1 mb-1"
-              block
               :label="i18n('editor.addCondition')"
               color="success"
               icon="fa-plus"

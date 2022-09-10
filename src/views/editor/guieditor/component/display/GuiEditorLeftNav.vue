@@ -75,7 +75,7 @@ import {AppWidget} from "@/lib/types";
 import GuiEditorLeftNavWidgets from "@/views/editor/guieditor/component/display/GuiEditorLeftNavWidgets.vue";
 
 export default Vue.extend({
-  name: 'GuiEditorEditorLeftNav',
+  name: 'GuiEditorLeftNav',
   components: {GuiEditorLeftNavWidgets},
   props: {
     pageDefinition: {}

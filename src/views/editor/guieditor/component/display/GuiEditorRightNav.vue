@@ -8,12 +8,22 @@
           </v-btn>
         </v-col>
         <v-col class="pa-1">
-          <v-btn text block class="text-body-2" :style="{'opacity': navTab === 1 ? '1.0' : '0.2'}" @click="setTab(1)">
+          <v-btn text block class="text-body-2" :style="{'opacity': navTab === 1 ? '1.0' : '0.3'}" @click="setTab(1)">
+            {{ i18n('editor.restricitons') }}
+          </v-btn>
+        </v-col>
+        <v-col class="pa-1">
+          <v-btn text block class="text-body-2" :style="{'opacity': navTab === 2 ? '1.0' : '0.3'}" @click="setTab(2)">
+            {{ i18n('editor.actions') }}
+          </v-btn>
+        </v-col>
+        <v-col class="pa-1">
+          <v-btn text block class="text-body-2" :style="{'opacity': navTab === 3 ? '1.0' : '0.2'}" @click="setTab(3)">
             {{ i18n('editor.variables') }}
           </v-btn>
         </v-col>
         <v-col class="pa-1">
-          <v-btn text block class="text-body-2" :style="{'opacity': navTab === 2 ? '1.0' : '0.2'}" @click="setTab(2)">
+          <v-btn text block class="text-body-2" :style="{'opacity': navTab === 4 ? '1.0' : '0.2'}" @click="setTab(4)">
             {{ i18n('editor.params') }}
           </v-btn>
         </v-col>
@@ -60,24 +70,6 @@
           </template>
         </template>
 
-        <GuiEditorConditionBuilder
-            v-if="conditionPropGroup"
-            :conditions-group="conditionPropGroup"
-            :widget="widget"
-            :schema="schema"
-        />
-
-        <GuiEditorActionBuilder
-            v-if="actionPropGroup"
-            :actions-group="actionPropGroup"
-            :mutations="mutations"
-            :page="page"
-            :pages="pages"
-            :widget="widget"
-            :schema="schema"
-            :variables="variables"
-        />
-
         <div class="secondary text-start text-body-2 pa-3 pl-6">
           {{ i18n('editor.options') }}
         </div>
@@ -110,7 +102,48 @@
       </v-container>
     </template>
 
-    <template v-if="navTab === 1">
+    <template v-else-if="navTab === 1">
+      <GuiEditorConditionBuilder
+          v-if="conditionPropGroup"
+          :conditions-group="conditionPropGroup"
+          :widget="widget"
+          :schema="schema"
+      />
+    </template>
+
+    <template v-else-if="navTab === 2">
+      <GuiEditorActionBuilder
+          v-if="actionPropGroup"
+          :actions-group="actionPropGroup"
+          :mutations="mutations"
+          :page="page"
+          :pages="pages"
+          :widget="widget"
+          :schema="schema"
+          :variables="variables"
+      />
+
+      <v-container v-else>
+        <v-row>
+          <v-col class="text-center mt-6">
+            <v-btn class="disable-events" fab x-large color="error">
+              <v-icon x-large>fa-computer-mouse</v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col class="text-center mt-2 text-body-1">
+            {{ i18n('editor.notSupportingActions') }}
+          </v-col>
+        </v-row>
+      </v-container>
+    </template>
+
+    <template v-else-if="navTab === 3">
+      <div class="secondary text-start text-body-2 pa-3 pl-6">
+        {{ i18n('editor.props') }}
+      </div>
+
       <GuiEditorAddPropDialog :dialog="addVarDialog" @close="closeAddVar" @refresh="refreshVars"/>
 
       <IconButton
@@ -153,7 +186,11 @@
       </v-container>
     </template>
 
-    <template v-if="navTab === 2">
+    <template v-else-if="navTab === 4">
+      <div class="secondary text-start text-body-2 pa-3 pl-6">
+        {{ i18n('editor.pageParams') }}
+      </div>
+
       <IconButton
           class="mr-3 mt-4 mb-4 ml-3"
           color="success"
@@ -161,10 +198,6 @@
           :label="i18n('editor.addParam')"
           @click="addParam"
       />
-
-      <div class="secondary text-start text-body-2 pa-3 pl-6">
-        {{ i18n('editor.pageParams') }}
-      </div>
 
       <div class="pa-3 text-start">
         <div class="pt-1">
