@@ -28,13 +28,13 @@ export default Vue.extend({
   },
   computed: {
     datasourceSet(): boolean {
-      return Object.keys(this.datasource).length !== 0
+      return Object.keys(this.datasource).length !== 0;
     }
   },
   beforeMount() {
     getCleanGraphQLSchema(this.datasource.address, this.datasource.secret).then((result) => {
-      (this.schema as SchemaItem[]) = result.schema
-    })
+      (this.schema as SchemaItem[]) = result.schema;
+    });
   }
 })
 </script>

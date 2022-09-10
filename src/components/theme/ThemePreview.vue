@@ -17,17 +17,16 @@
     <div
         class="theme__preview--text text-start body-1"
         v-html="i18n('theme.primaryExampleText')"
-        :style="{'color': colors['text_color_1']}">
-    </div>
+        :style="{'color': colors['text_color_1']}"
+    />
 
     <div
         class="theme__preview--text text-start body-2 mb-10"
         v-html="i18n('theme.secondaryExampleText')"
-        :style="{'color': colors['text_color_2']}">
-    </div>
+        :style="{'color': colors['text_color_2']}"
+    />
 
-    <div class="theme__preview--message text-start white--text"
-         :style="{'background-color': colors['info_color']}">
+    <div class="theme__preview--message text-start white--text" :style="{'background-color': colors['info_color']}">
       <v-icon class="pr-4">fa-info-circle</v-icon>
       {{ i18n('theme.infoText') }}
     </div>

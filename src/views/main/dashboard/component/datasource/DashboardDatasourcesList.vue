@@ -19,8 +19,8 @@
                       class="pa-0 pt-4"
                       :address="datasource.address"
                       :secret="datasource.secret"
-                      :is-auto="true">
-                  </GraphQLConnectionTest>
+                      :is-auto="true"
+                  />
                 </v-col>
               </v-row>
             </v-container>
@@ -33,8 +33,8 @@
                 :label="i18n('common.modify')"
                 color="info"
                 icon="fa-edit"
-                @click="openModifyDatasource(datasource.id)">
-            </IconButton>
+                @click="openModifyDatasource(datasource.id)"
+            />
 
             <v-spacer></v-spacer>
 
@@ -42,8 +42,8 @@
                 :label="i18n('common.delete')"
                 color="error"
                 icon="fa-trash-can"
-                @click="deleteDatasourceClicked(datasource.id)">
-            </IconButton>
+                @click="deleteDatasourceClicked(datasource.id)"
+            />
           </v-card-actions>
         </v-card>
       </v-col>
@@ -64,10 +64,10 @@ export default Vue.extend({
   },
   methods: {
     openModifyDatasource(id: string): void {
-      this.$router.push({name: 'Datasource', params: {datasourceId: id}})
+      this.$router.push({name: 'Datasource', params: {datasourceId: id}});
     },
     deleteDatasourceClicked(id: number): void {
-      this.$emit('delete', id)
+      this.$emit('delete', id);
     }
   }
 })

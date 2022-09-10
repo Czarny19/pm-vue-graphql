@@ -12,8 +12,8 @@
         append-outer-icon="fa-times"
         prepend-icon="fa-database"
         item-text="name"
-        item-value="id">
-
+        item-value="id"
+    >
       <template v-slot:append-outer>
         <v-icon class="pl-2 pr-2" @click="clearDatasource">fa-times</v-icon>
       </template>
@@ -24,8 +24,8 @@
         v-if="currentDatasource"
         :address="currentDatasource.address"
         :secret="currentDatasource.secret"
-        :is-auto="false">
-    </GraphQLConnectionTest>
+        :is-auto="false"
+    />
   </v-card-text>
 </template>
 
@@ -49,16 +49,16 @@ export default Vue.extend({
   computed: {
     currentDatasource(): Datasource {
       return (this.datasources as Datasource[])
-          .filter((ds: Datasource) => ds.id === (this.projectData as AppProject).source_id)[0]
+          .filter((ds: Datasource) => ds.id === (this.projectData as AppProject).source_id)[0];
     }
   },
   methods: {
     clearDatasource(): void {
-      this.$emit('clearsource')
+      this.$emit('clearsource');
     },
   },
   beforeMount() {
-    this.projectData = this.project
+    this.projectData = this.project;
   }
 })
 </script>

@@ -8,8 +8,8 @@
         v-model="currentProp.target"
         item-value="id"
         item-text="name"
-        item-color="accent">
-    </v-select>
+        item-color="accent"
+    />
 
     <div class="text-body-1 pl-3 pr-3 pt-1 pb-1 mt-4 editor--action-tab">
       {{ i18n('editor.actionVars') }}
@@ -30,8 +30,8 @@
           item-value="id"
           item-text="name"
           item-color="accent"
-          @change="clearVarValues(variable)">
-      </v-select>
+          @change="clearVarValues(variable)"
+      />
 
       <v-select
           v-if="variable.varType === 0"
@@ -43,8 +43,8 @@
           v-model="variable.pageVar"
           item-value="id"
           item-text="name"
-          item-color="accent">
-      </v-select>
+          item-color="accent"
+      />
 
       <v-select
           v-if="variable.varType === 1"
@@ -56,8 +56,8 @@
           v-model="variable.tableVar"
           item-value="id"
           item-text="name"
-          item-color="accent">
-      </v-select>
+          item-color="accent"
+      />
 
       <v-select
           v-if="variable.varType === 2"
@@ -69,8 +69,8 @@
           v-model="variable.paramVar"
           item-value="id"
           item-text="name"
-          item-color="accent">
-      </v-select>
+          item-color="accent"
+      />
 
       <v-divider class="mt-3 mb-3"></v-divider>
     </div>
@@ -101,23 +101,23 @@ export default Vue.extend({
   },
   computed: {
     selectedMutation(): Mutation | undefined {
-      return (this.mutations as Mutation[])?.find((mutation) => mutation.id === this.prop.target)
+      return (this.mutations as Mutation[])?.find((mutation) => mutation.id === this.prop.target);
     },
     varTypes(): { id: number; name: string }[] {
       return [
         {id: 0, name: this.$t('editor.actionVarsPage').toString()},
         {id: 1, name: this.$t('editor.actionVarsTable').toString()},
         {id: 2, name: this.$t('editor.actionVarsParams').toString()}
-      ]
+      ];
     },
     tableName(): string {
-      return getTableNameForWidget(this.widget)
+      return getTableNameForWidget(this.widget);
     },
     fields(): SchemaItemField[] {
-      return getAllTableFieldsWithObjectRelations(this.tableName, this.schema as SchemaItem[])
+      return getAllTableFieldsWithObjectRelations(this.tableName, this.schema as SchemaItem[]);
     },
     params(): string[] {
-      return this.page.params.split(';')
+      return this.page.params.split(';');
     }
   },
   methods: {
@@ -131,17 +131,20 @@ export default Vue.extend({
     currentProp: {
       handler() {
         if ((this.currentProp as ActionProp).target !== this.currentMutationId) {
-          this.currentMutationId = (this.currentProp as ActionProp).target
+          this.currentMutationId = (this.currentProp as ActionProp).target;
 
           if (this.selectedMutation) {
-            (this.currentProp as ActionProp).variables = []
-            const mutationVars = this.selectedMutation.variables.length ? this.selectedMutation.variables.split(';') : []
+            (this.currentProp as ActionProp).variables = [];
+
+            const mutationVars = this.selectedMutation.variables.length
+                ? this.selectedMutation.variables.split(';')
+                : [];
 
             mutationVars.forEach((variable) => {
               (this.currentProp as ActionProp).variables.push({
                 name: variable, type: 'String', value: '', varType: -1, pageVar: -1, tableVar: '', paramVar: ''
-              })
-            })
+              });
+            });
           }
         }
       },
@@ -149,8 +152,8 @@ export default Vue.extend({
     }
   },
   async beforeMount() {
-    this.currentProp = this.prop
-    this.currentMutationId = (this.currentProp as ActionProp).target
+    this.currentProp = this.prop;
+    this.currentMutationId = (this.currentProp as ActionProp).target;
   }
 })
 </script>

@@ -9,8 +9,8 @@
             :readonly="currentProp.unit === 'auto'"
             :label="prop.label"
             v-model="currentProp.value"
-            @keydown="onKeydown">
-        </v-text-field>
+            @keydown="onKeydown"
+        />
       </v-col>
 
       <v-col cols="3" class="pl-0">
@@ -23,12 +23,11 @@
             :value="currentProp.unit"
             v-model="currentProp.unit"
             :readonly="currentProp.lockUnit"
-            item-color="accent">
-
+            item-color="accent"
+        >
           <template v-slot:item="{item}">
             <div class="text-start">{{ item }}</div>
           </template>
-
         </v-select>
       </v-col>
     </v-row>
@@ -52,32 +51,32 @@ export default Vue.extend({
   },
   computed: {
     units(): string [] {
-      return sizeUnits
+      return sizeUnits;
     }
   },
   methods: {
     onKeydown(event: KeyboardEvent) {
-      filterNumbersOnly(event)
+      filterNumbersOnly(event);
     }
   },
   watch: {
     prop: {
       handler() {
-        this.currentProp = this.prop
+        this.currentProp = this.prop;
 
-        const prop = (this.currentProp as { value: string; unit: string })
+        const prop = (this.currentProp as { value: string; unit: string });
 
         if (prop.unit === 'auto') {
-          prop.value = 'auto'
+          prop.value = 'auto';
         } else if (prop.value === 'auto') {
-          prop.value = '0'
+          prop.value = '0';
         }
       },
       deep: true
     }
   },
   async beforeMount() {
-    this.currentProp = this.prop
+    this.currentProp = this.prop;
   }
 })
 </script>

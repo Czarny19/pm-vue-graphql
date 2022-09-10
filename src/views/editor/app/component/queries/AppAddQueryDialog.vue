@@ -13,8 +13,8 @@
               :counter="50"
               :rules="queryNameRules"
               prepend-icon="fa-tag"
-              required>
-          </v-text-field>
+              required
+          />
 
           <v-select
               class="pa-2"
@@ -28,8 +28,8 @@
               append-icon="fa-chevron-down"
               prepend-icon="fa-table"
               item-text="name"
-              item-value="id">
-          </v-select>
+              item-value="id"
+          />
         </v-form>
       </v-card-text>
 
@@ -72,10 +72,10 @@ export default Vue.extend({
   },
   methods: {
     save(): void {
-      (this.$refs.form as Vue & { validate: () => boolean }).validate()
+      (this.$refs.form as Vue & { validate: () => boolean }).validate();
 
       if (this.valid) {
-        this.addQuery()
+        this.addQuery();
       }
     },
     addQuery(): void {
@@ -87,25 +87,25 @@ export default Vue.extend({
           table: this.queryTable,
         }
       }).then(async () => {
-        this.queryName = ''
-        this.queryTable = ''
-        this.isOpen = false
-        this.$emit('refresh')
-        this.$emit('close')
+        this.queryName = '';
+        this.queryTable = '';
+        this.isOpen = false;
+        this.$emit('refresh');
+        this.$emit('close');
       }).catch(() => {
-        this.queryName = ''
-        this.queryTable = ''
-        this.isOpen = false
-        this.$emit('close')
+        this.queryName = '';
+        this.queryTable = '';
+        this.isOpen = false;
+        this.$emit('close');
       })
     },
     close() {
-      this.$emit('close')
+      this.$emit('close');
     }
   },
   watch: {
     dialog(): void {
-      this.isOpen = this.dialog
+      this.isOpen = this.dialog;
     }
   }
 })

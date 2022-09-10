@@ -19,8 +19,8 @@ export default Vue.extend({
     parentWidget: Object
   },
   methods: {
-    onDrop(evt?: DragEvent) {
-      this.$emit('eldrop', evt)
+    onDrop(evt?: DragEvent): void {
+      this.$emit('eldrop', evt);
     }
   }
 })

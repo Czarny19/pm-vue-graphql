@@ -11,8 +11,8 @@
               :title="i18n('editor.variables')"
               show-hide-button
               :is-hidden="variablesHidden"
-              @showhideclick="variablesHidden = !variablesHidden">
-          </CardSectionTitle>
+              @showhideclick="variablesHidden = !variablesHidden"
+          />
           <EditorVariables v-if="!variablesHidden" :object="mutation"/>
 
           <CardSectionTitle
@@ -21,8 +21,8 @@
               :title="i18n('editor.restrictions')"
               show-hide-button
               :is-hidden="whereHidden"
-              @showhideclick="whereHidden = !whereHidden">
-          </CardSectionTitle>
+              @showhideclick="whereHidden = !whereHidden"
+          />
           <EditorWhereBuilder v-if="!whereHidden && !isCreate" :object="mutation" :fields="fields"/>
 
           <CardSectionTitle
@@ -31,8 +31,8 @@
               :title="i18n('editor.fields')"
               show-hide-button
               :is-hidden="setHidden"
-              @showhideclick="setHidden = !setHidden">
-          </CardSectionTitle>
+              @showhideclick="setHidden = !setHidden"
+          />
           <MutationFieldsCreate v-if="!setHidden && isCreate" :mutation="mutation" :fields="fields"/>
           <MutationFieldsUpdate v-if="!setHidden && isUpdate" :mutation="mutation" :fields="fields"/>
         </v-card>
@@ -90,41 +90,41 @@ export default Vue.extend({
   },
   computed: {
     isCreate(): boolean {
-      return (this.currentMutation as Mutation).type === mutationType.Create
+      return (this.currentMutation as Mutation).type === mutationType.Create;
     },
     isUpdate(): boolean {
-      return (this.currentMutation as Mutation).type === mutationType.Update
+      return (this.currentMutation as Mutation).type === mutationType.Update;
     },
     isDelete(): boolean {
-      return (this.currentMutation as Mutation).type === mutationType.Delete
+      return (this.currentMutation as Mutation).type === mutationType.Delete;
     },
     fields(): SchemaItemField[] {
-      return getAllTableFieldsWithObjectRelations((this.mutation as Mutation).table, this.schema as SchemaItem[])
+      return getAllTableFieldsWithObjectRelations((this.mutation as Mutation).table, this.schema as SchemaItem[]);
     },
     fieldsVisible(): boolean {
-      return (this.currentMutation as Query).table.length > 0
+      return (this.currentMutation as Query).table.length > 0;
     },
     tablesNames(): string [] {
-      return (this.schema as { name: string }[])?.map((table) => table.name)
+      return (this.schema as { name: string }[])?.map((table) => table.name);
     }
   },
   watch: {
     query: {
       handler() {
-        this.currentMutation = this.mutation
+        this.currentMutation = this.mutation;
       },
       deep: true
     },
     schema: {
       handler() {
-        this.currentSchema = this.schema
+        this.currentSchema = this.schema;
       },
       deep: true
     }
   },
   beforeMount() {
-    this.currentMutation = this.mutation
-    this.currentSchema = this.schema
+    this.currentMutation = this.mutation;
+    this.currentSchema = this.schema;
   }
 })
 </script>

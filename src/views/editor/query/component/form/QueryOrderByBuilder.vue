@@ -12,8 +12,8 @@
                 :items="['', ...fieldsNames]"
                 :label="i18n('editor.field')"
                 required
-                append-icon="fa-chevron-down">
-            </v-select>
+                append-icon="fa-chevron-down"
+            />
           </v-col>
 
           <v-col cols="2" class="text-start">
@@ -22,16 +22,16 @@
                 :label="i18n('editor.sortAsc')"
                 color="info"
                 icon="fa-arrow-up"
-                @click="setOrderByAsc(orderBy)">
-            </IconButton>
+                @click="setOrderByAsc(orderBy)"
+            />
 
             <IconButton
                 v-else
                 :label="i18n('editor.sortDesc')"
                 color="info"
                 icon="fa-arrow-down"
-                @click="setOrderByAsc(orderBy)">
-            </IconButton>
+                @click="setOrderByAsc(orderBy)"
+            />
           </v-col>
 
           <v-spacer></v-spacer>
@@ -74,38 +74,40 @@ export default Vue.extend({
   },
   computed: {
     orderByList(): QueryOrderBy [] {
-      return this.orderByFields as QueryOrderBy []
+      return this.orderByFields as QueryOrderBy [];
     },
     fieldsNames(): string[] {
-      return (this.fields as SchemaItemField[]).map((field) => field.name)
+      return (this.fields as SchemaItemField[]).map((field) => field.name);
     }
   },
   methods: {
     addOrderBy(): void {
-      this.orderByList.push({field: '', isAsc: true})
+      this.orderByList.push({field: '', isAsc: true});
     },
     setOrderByAsc(orderBy: QueryOrderBy): void {
-      orderBy.isAsc = !orderBy.isAsc
+      orderBy.isAsc = !orderBy.isAsc;
     },
     deleteOrderBy(orderBy: QueryOrderBy): void {
       this.orderByFields.forEach((orderByField, index) => {
         if (orderByField == orderBy) {
-          this.orderByFields.splice(index, 1)
+          this.orderByFields.splice(index, 1);
         }
-      })
+      });
     }
   },
   watch: {
     orderByFields: {
       handler() {
-        const query = (this.currentQuery as Query)
-        query.order_by = this.orderByList.map(orderBy => (JSON.stringify(orderBy))).join(';')
+        const query = (this.currentQuery as Query);
+        query.order_by = this.orderByList.map(orderBy => (JSON.stringify(orderBy))).join(';');
       },
       deep: true
     }
   },
   beforeMount() {
-    (this.orderByFields as QueryOrderBy[]) = mapModelStringToQueryOrderByArray((this.query as Query).order_by ?? '')
+    (this.orderByFields as QueryOrderBy[]) =
+        mapModelStringToQueryOrderByArray((this.query as Query).order_by ?? '');
+
     this.currentQuery = this.query;
   }
 })

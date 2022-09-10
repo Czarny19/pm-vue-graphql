@@ -14,7 +14,8 @@
       :large="argsProps.size === 'large'"
       :x-large="argsProps.size === 'x-large'"
       light
-      @click="action">
+      @click="action"
+  >
     <span :style="{'color': textColor}">{{ label }}</span>
   </v-btn>
 </template>
@@ -38,83 +39,83 @@ export default Vue.extend({
   },
   computed: {
     appWidget(): AppWidget {
-      return this.widget as AppWidget
+      return this.widget as AppWidget;
     },
     visible(): boolean {
-      return widget.isWidgetVisible(this.appWidget, this.dataItem)
+      return widget.isWidgetVisible(this.appWidget, this.dataItem);
     },
     cssProps(): ({ [p: string]: string })[] {
-      return widget.getCssProps(this.appWidget, this.theme)
+      return widget.getCssProps(this.appWidget, this.theme);
     },
     argsProps(): { [k: string]: string } {
-      return widget.getArgsProps(this.appWidget)
+      return widget.getArgsProps(this.appWidget);
     },
     dataProps(): { [k: string]: string } {
-      return widget.getDataProps(this.appWidget)
+      return widget.getDataProps(this.appWidget);
     },
     color(): string {
-      return widget.getColorPropValue(this.theme, this.argsProps.color)
+      return widget.getColorPropValue(this.theme, this.argsProps.color);
     },
     textColor(): string {
-      return widget.getColorPropValue(this.theme, this.argsProps.textColor)
+      return widget.getColorPropValue(this.theme, this.argsProps.textColor);
     },
     data(): never {
-      return this.dataItem as never
+      return this.dataItem as never;
     },
     label(): string {
-      const data = this.data
-      const queryFieldName = this.dataProps.labelQueryFieldName
+      const data = this.data;
+      const queryFieldName = this.dataProps.labelQueryFieldName;
 
-      const variables = this.variables as PageVariable[]
-      const pageVarId = Number(this.dataProps.labelPageVarId)
+      const variables = this.variables as PageVariable[];
+      const pageVarId = Number(this.dataProps.labelPageVarId);
 
-      const params = this.$route.params
-      const pageParamName = this.dataProps.labelPageParamName
+      const params = this.$route.params;
+      const pageParamName = this.dataProps.labelPageParamName;
 
-      return widget.getDisplayWidgetVarValue(data, queryFieldName, variables, pageVarId, params, pageParamName)
+      return widget.getDisplayWidgetVarValue(data, queryFieldName, variables, pageVarId, params, pageParamName);
     }
   },
   methods: {
     async action(): Promise<void> {
       if (this.formRef) {
-        (this.formRef as Vue & { validate: () => boolean }).validate()
+        (this.formRef as Vue & { validate: () => boolean }).validate();
       }
 
       if (this.formRef && !this.formValid) {
-        return
+        return;
       }
 
       if (!this.$route.path.startsWith('/admin')) {
-        const projectId = this.$route.params.projectId
-        const variables = this.variables as PageVariable[]
-        const params = this.$route.params
-        const mutations = this.mutations as Mutation[]
+        const projectId = this.$route.params.projectId;
+        const variables = this.variables as PageVariable[];
+        const params = this.$route.params;
+        const mutations = this.mutations as Mutation[];
 
-        const actions = this.appWidget.propGroups.find((group: { type: string }) => group.type === 'action')
+        const actions = this.appWidget.propGroups.find((group: { type: string }) => group.type === 'action');
 
         for (const prop of actions?.props ?? []) {
-          const action = prop as unknown as ActionProp
+          const action = prop as unknown as ActionProp;
 
           if (action.type === 'runMutation') {
-            this.$emit('saving')
+            this.$emit('saving');
           }
 
           const result = await widget.runWidgetClickAction(action, projectId, this.datasource, this.dataItem,
-              variables, params, mutations)
+              variables, params, mutations);
 
           if (action.type === 'runMutation') {
-            this.$emit('savingdone')
+            this.$emit('savingdone');
           }
 
           if (result) {
             if (!result.isSuccessful) {
-              this.$emit('showerror', result.error)
-              return
+              this.$emit('showerror', result.error);
+              return;
             }
 
             if (!result.data) {
-              this.$emit('showerror', widget.getActionErrorMsg(action, variables, result.error))
-              return
+              this.$emit('showerror', widget.getActionErrorMsg(action, variables, result.error));
+              return;
             }
           }
         }

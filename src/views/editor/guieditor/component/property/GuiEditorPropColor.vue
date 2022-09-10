@@ -8,8 +8,8 @@
         :label="prop.label"
         :items="themeColors"
         v-model="displayColor"
-        item-color="accent">
-
+        item-color="accent"
+    >
       <template v-slot:item="{item}">
         <div v-if="item !== 'custom'" class="text-start">
           {{ i18n('theme.' + item) }}
@@ -68,50 +68,50 @@ export default Vue.extend({
   },
   computed: {
     themeColors(): string [] {
-      return themeColorsPicker
+      return themeColorsPicker;
     },
     themeColorAsHex(): string {
       if (this.displayColor === 'custom') {
-        return this.pickerColor
+        return this.pickerColor;
       }
 
-      const displayColor = this.displayColor as keyof ThemeColors
-      return this.theme[displayColor]
+      const displayColor = this.displayColor as keyof ThemeColors;
+      return this.theme[displayColor];
     }
   },
   methods: {
     openColorPicker(): void {
-      const prop = (this.currentProp as { value: string })
-      prop.value = this.pickerColor
-      this.isOpen = true
+      const prop = (this.currentProp as { value: string });
+      prop.value = this.pickerColor;
+      this.isOpen = true;
     },
     closeColorPicker(): void {
-      this.isOpen = false
+      this.isOpen = false;
     }
   },
   watch: {
-    displayColor() {
-      const prop = (this.currentProp as { value: string })
+    displayColor(): void {
+      const prop = (this.currentProp as { value: string });
 
       if (this.displayColor !== 'custom') {
-        prop.value = this.displayColor
+        prop.value = this.displayColor;
       }
     },
-    pickerColor() {
-      const prop = (this.currentProp as { value: string })
-      prop.value = this.pickerColor
+    pickerColor(): void {
+      const prop = (this.currentProp as { value: string });
+      prop.value = this.pickerColor;
     }
   },
   beforeMount() {
-    this.currentProp = this.prop
-    const propValue = (this.currentProp as { value: string }).value
+    this.currentProp = this.prop;
+    const propValue = (this.currentProp as { value: string }).value;
 
     if (this.themeColors.includes(propValue)) {
-      this.displayColor = propValue
-      this.pickerColor = ''
+      this.displayColor = propValue;
+      this.pickerColor = '';
     } else {
-      this.displayColor = 'custom'
-      this.pickerColor = propValue
+      this.displayColor = 'custom';
+      this.pickerColor = propValue;
     }
   }
 })

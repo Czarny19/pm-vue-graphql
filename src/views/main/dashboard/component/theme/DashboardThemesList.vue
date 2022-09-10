@@ -17,8 +17,8 @@
                   :label="i18n('common.modify')"
                   color="info"
                   icon="fa-edit"
-                  @click="openModifyTheme(theme.id)">
-              </IconButton>
+                  @click="openModifyTheme(theme.id)"
+              />
               <ThemePreviewTooltip :colors="colors(index)"/>
             </v-col>
 
@@ -27,8 +27,8 @@
                   :label="i18n('common.delete')"
                   color="error"
                   icon="fa-trash-can"
-                  @click="deleteThemeClicked(theme.id)">
-              </IconButton>
+                  @click="deleteThemeClicked(theme.id)"
+              />
             </v-col>
           </v-row>
         </v-container>
@@ -55,10 +55,10 @@ export default Vue.extend({
       return this.themes[index] as ThemeColors;
     },
     openModifyTheme(id: string): void {
-      this.$router.push({name: 'Theme', params: {themeId: id}})
+      this.$router.push({name: 'Theme', params: {themeId: id}});
     },
     deleteThemeClicked(id: number): void {
-      this.$emit('delete', id)
+      this.$emit('delete', id);
     }
   }
 })

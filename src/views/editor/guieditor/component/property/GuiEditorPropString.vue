@@ -5,8 +5,8 @@
       outlined dense hide-details
       :rows="2"
       :label="prop.label"
-      v-model="currentProp.value">
-  </v-textarea>
+      v-model="currentProp.value"
+  />
 </template>
 
 <script lang="ts">
@@ -23,7 +23,7 @@ export default Vue.extend({
     }
   },
   beforeMount() {
-    this.currentProp = this.prop
+    this.currentProp = this.prop;
   }
 })
 </script>

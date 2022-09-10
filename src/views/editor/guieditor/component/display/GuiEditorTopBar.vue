@@ -18,8 +18,8 @@
         :label="i18n('editor.closePreview')"
         icon="fa-eye"
         color="error"
-        @click="switchPreview">
-    </IconButton>
+        @click="switchPreview"
+    />
 
     <IconButton
         v-else
@@ -27,16 +27,16 @@
         :label="i18n('editor.preview')"
         icon="fa-eye"
         color="primary"
-        @click="switchPreview">
-    </IconButton>
+        @click="switchPreview"
+    />
 
     <IconButton
         class="mr-4"
         :label="i18n('common.save')"
         icon="fa-save"
         color="success"
-        @click="save">
-    </IconButton>
+        @click="save"
+    />
 
     <IconButton
         v-if="rejectVisible"
@@ -44,23 +44,23 @@
         :label="i18n('editor.rejectChanges')"
         icon="fa-trash-can"
         color="error"
-        @click="rejectChanges">
-    </IconButton>
+        @click="rejectChanges"
+    />
 
     <IconButton
         class="mr-4"
         :label="i18n('editor.import')"
         icon="fa-file-import"
         color="info"
-        @click="importPage">
-    </IconButton>
+        @click="importPage"
+    />
 
     <IconButton
         :label="i18n('editor.export')"
         icon="fa-file-export"
         color="info"
-        @click="exportPage">
-    </IconButton>
+        @click="exportPage"
+    />
   </v-toolbar>
 </template>
 
@@ -80,27 +80,27 @@ export default Vue.extend({
   },
   methods: {
     closeEditor(): void {
-      this.$emit('closeeditor')
+      this.$emit('closeeditor');
     },
     switchPreview(): void {
-      this.$emit('swichpreview')
+      this.$emit('swichpreview');
     },
     save(): void {
-      this.$emit('save')
+      this.$emit('save');
     },
     rejectChanges(): void {
-      this.$emit('reject')
+      this.$emit('reject');
     },
     importPage(): void {
-      document.getElementById('fileUpload')?.click()
+      document.getElementById('fileUpload')?.click();
     },
     async setImportedPage(): Promise<void> {
-      const input = document.getElementById('fileUpload') as HTMLInputElement
-      const fileList = input?.files
-      const file: File | null | undefined = fileList?.item(0)
+      const input = document.getElementById('fileUpload') as HTMLInputElement;
+      const fileList = input?.files;
+      const file: File | null | undefined = fileList?.item(0);
 
       if (file != null) {
-        this.$emit('import', JSON.parse(await file.text()))
+        this.$emit('import', JSON.parse(await file.text()));
       }
     },
     exportPage(): void {

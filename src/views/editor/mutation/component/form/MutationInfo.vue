@@ -9,8 +9,8 @@
           :counter="50"
           :rules="mutationNameRules"
           prepend-icon="fa-tag"
-          required>
-      </v-text-field>
+          required
+      />
 
       <v-select
           class="pa-2"
@@ -24,8 +24,8 @@
           append-icon="fa-chevron-down"
           prepend-icon="fa-table"
           item-text="name"
-          item-value="id">
-      </v-select>
+          item-value="id"
+      />
 
       <v-text-field
           class="pa-2"
@@ -33,8 +33,8 @@
           v-model="typeDisplay"
           :label="i18n('editor.mutationType')"
           prepend-icon="fa-bolt"
-          readonly>
-      </v-text-field>
+          readonly
+      />
     </div>
   </v-card-text>
 </template>
@@ -69,18 +69,18 @@ export default Vue.extend({
     typeDisplay(): string {
       switch ((this.currentMutation as Mutation).type) {
         case mutationType.Create:
-          return this.$t('editor.mutationInsert').toString()
+          return this.$t('editor.mutationInsert').toString();
         case mutationType.Update:
-          return this.$t('editor.mutationUpdate').toString()
+          return this.$t('editor.mutationUpdate').toString();
         case mutationType.Delete:
-          return this.$t('editor.mutationDelete').toString()
+          return this.$t('editor.mutationDelete').toString();
         default:
-          return (this.currentMutation as Mutation).type
+          return (this.currentMutation as Mutation).type;
       }
     }
   },
   beforeMount() {
-    this.currentMutation = this.mutation
+    this.currentMutation = this.mutation;
   }
 })
 </script>

@@ -18,8 +18,8 @@
         :items="['', ...queryData]"
         :item-text="dataProps.textQueryFieldName"
         :item-value="dataProps.valueQueryFieldName"
-        @change="updateVariableValue">
-    </v-select>
+        @change="updateVariableValue"
+    />
   </div>
 </template>
 
@@ -47,82 +47,82 @@ export default Vue.extend({
   },
   computed: {
     appWidget(): AppWidget {
-      return this.widget as AppWidget
+      return this.widget as AppWidget;
     },
     visible(): boolean {
-      return widget.isWidgetVisible(this.appWidget, this.dataItem)
+      return widget.isWidgetVisible(this.appWidget, this.dataItem);
     },
     cssProps(): ({ [p: string]: string })[] {
-      return widget.getCssProps(this.appWidget, this.theme)
+      return widget.getCssProps(this.appWidget, this.theme);
     },
     argsProps(): { [k: string]: string } {
-      return widget.getArgsProps(this.appWidget)
+      return widget.getArgsProps(this.appWidget);
     },
     dataProps(): { [k: string]: string } {
-      return widget.getDataProps(this.appWidget)
+      return widget.getDataProps(this.appWidget);
     },
     color(): string {
-      return widget.getColorPropValue(this.theme, this.argsProps.color)
+      return widget.getColorPropValue(this.theme, this.argsProps.color);
     },
     bgColor(): string {
-      return widget.getColorPropValue(this.theme, this.argsProps.bgColor)
+      return widget.getColorPropValue(this.theme, this.argsProps.bgColor);
     },
     label(): string {
-      return widget.getPageVariableValue(this.variables as PageVariable[], Number(this.argsProps.label))
+      return widget.getPageVariableValue(this.variables as PageVariable[], Number(this.argsProps.label));
     },
     hint(): string {
-      return widget.getPageVariableValue(this.variables as PageVariable[], Number(this.argsProps.hint))
+      return widget.getPageVariableValue(this.variables as PageVariable[], Number(this.argsProps.hint));
     },
     variable(): PageVariable | undefined {
       if (this.dataProps.variableId) {
-        const variableId = Number(this.dataProps.variableId)
-        return (this.variables as PageVariable[])?.find((variable) => variable.id === variableId)
+        const variableId = Number(this.dataProps.variableId);
+        return (this.variables as PageVariable[])?.find((variable) => variable.id === variableId);
       }
 
-      return undefined
+      return undefined;
     },
     variableValue(): string | undefined {
       if (this.variable) {
-        return this.variable.value
+        return this.variable.value;
       }
 
-      return undefined
+      return undefined;
     },
     rules(): unknown[] {
-      return widget.getRulesForInput(this.appWidget, undefined)
+      return widget.getRulesForInput(this.appWidget, undefined);
     },
     graphQlQueryWhere(): QueryWhere[] {
-      return graphql_gen.mapModelStringToQueryWhereArray((this.query as Query).where ?? '')
+      return graphql_gen.mapModelStringToQueryWhereArray((this.query as Query).where ?? '');
     },
     graphQlQueryOrderBy(): QueryOrderBy[] {
-      return graphql_gen.mapModelStringToQueryOrderByArray((this.query as Query).order_by ?? '')
+      return graphql_gen.mapModelStringToQueryOrderByArray((this.query as Query).order_by ?? '');
     },
     graphQlQueryVars(): QueryVariable[] {
-      const vars = graphql_gen.mapModelStringToQueryVariableArray((this.query as Query).variables ?? '')
-      return widget.mapPageVarValuesToQueryVars(this.appWidget, vars, this.variables as PageVariable[])
+      const vars = graphql_gen.mapModelStringToQueryVariableArray((this.query as Query).variables ?? '');
+      return widget.mapPageVarValuesToQueryVars(this.appWidget, vars, this.variables as PageVariable[]);
     },
     graphQLQuery(): string {
-      const query = (this.query as Query)
+      const query = (this.query as Query);
 
       if (!query.name) {
-        return ''
+        return '';
       }
 
       return graphql_gen.generateGraphQLQuery(query.name, query.table, query.fields, this.graphQlQueryWhere,
-          this.graphQlQueryOrderBy, query.limit, this.graphQlQueryVars)
+          this.graphQlQueryOrderBy, query.limit, this.graphQlQueryVars);
     }
   },
   methods: {
     updateVariableValue(val: never): void {
       if (this.variable) {
-        this.variable.value = val
+        this.variable.value = val;
       }
     }
   },
   watch: {
     variables: {
       handler() {
-        this.$apollo.queries.QUERY.refetch()
+        this.$apollo.queries.QUERY.refetch();
       },
       deep: true
     }
@@ -137,28 +137,28 @@ export default Vue.extend({
         }
       },
       skip(): boolean {
-        return !this.dataProps.queryId || !this.datasource
+        return !this.dataProps.queryId || !this.datasource;
       },
       result({data}): void {
-        this.query = data.QUERY[0]
+        this.query = data.QUERY[0];
 
         graphql_gen.runQuery(this.datasource.address, this.graphQLQuery, (this.query as Query).table,
             this.datasource.secret, this.graphQlQueryWhere, this.graphQlQueryVars).then((result) => {
           (this.queryData as unknown[]) = result.data;
-        })
+        });
       }
     }
   },
   beforeMount() {
-    const variables = this.variables as PageVariable[]
-    const pageVarId = Number(this.dataProps.initalPageVarId)
+    const variables = this.variables as PageVariable[];
+    const pageVarId = Number(this.dataProps.initalPageVarId);
 
-    const params = this.$route.params
-    const paramName = this.dataProps.initalParamName
+    const params = this.$route.params;
+    const paramName = this.dataProps.initalParamName;
 
-    const intialValue = widget.getInputWidgetInitialValue(variables, pageVarId, params, paramName)
+    const intialValue = widget.getInputWidgetInitialValue(variables, pageVarId, params, paramName);
 
-    this.updateVariableValue((isNaN(Number(intialValue)) ? intialValue : Number(intialValue)) as never)
+    this.updateVariableValue((isNaN(Number(intialValue)) ? intialValue : Number(intialValue)) as never);
   }
 })
 </script>

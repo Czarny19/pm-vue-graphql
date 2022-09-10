@@ -23,8 +23,8 @@
             v-model="prop.type"
             item-value="id"
             item-text="name"
-            item-color="accent">
-        </v-select>
+            item-color="accent"
+        />
 
         <v-select
             class="pt-3"
@@ -35,15 +35,15 @@
             v-model="prop.errorMsgVar"
             item-value="id"
             item-text="name"
-            item-color="accent">
-        </v-select>
+            item-color="accent"
+        />
 
         <v-switch
             class="pt-0"
             color="success"
             v-model="prop.errorMsgShowResponse"
-            :label="i18n('editor.errorShowResponse')">
-        </v-switch>
+            :label="i18n('editor.errorShowResponse')"
+        />
 
         <div class="text-body-1 pl-3 pr-3 pt-1 pb-1 mt-0 mb-3 editor--action-tab">
           {{ i18n('editor.actionTarget') }}
@@ -58,8 +58,8 @@
               :mutations="mutations"
               :widget="widget"
               :schema="schema"
-              :variables="variables">
-          </GuiEditorActionRunMutation>
+              :variables="variables"
+          />
 
           <GuiEditorActionGoToPage
               class="pt-2"
@@ -69,8 +69,8 @@
               :pages="pages"
               :widget="widget"
               :schema="schema"
-              :variables="variables">
-          </GuiEditorActionGoToPage>
+              :variables="variables"
+          />
         </template>
       </div>
 
@@ -82,8 +82,8 @@
               :label="i18n('editor.addAction')"
               color="success"
               icon="fa-plus"
-              @click="addAction">
-          </IconButton>
+              @click="addAction"
+          />
         </v-col>
       </v-row>
     </v-container>
@@ -117,7 +117,7 @@ export default Vue.extend({
   },
   computed: {
     types(): { id: string; name: string }[] {
-      return getActionTypes()
+      return getActionTypes();
     }
   },
   methods: {
@@ -125,18 +125,18 @@ export default Vue.extend({
       (this.actionGroupProps as ActionProp[]).push({
         id: this.actionGroupProps.length + 1, type: '', target: -1, variables: [],
         errorMsgVar: -1, errorMsgShowResponse: false
-      })
+      });
     },
     deleteAction(action: ActionProp): void {
       (this.actionGroupProps as ActionProp[]).forEach((actionProp, index) => {
         if (actionProp == action) {
-          this.actionGroupProps.splice(index, 1)
+          this.actionGroupProps.splice(index, 1);
         }
-      })
+      });
     }
   },
   beforeMount() {
-    this.actionGroupProps = this.actionsGroup.props
+    this.actionGroupProps = this.actionsGroup.props;
   }
 })
 </script>

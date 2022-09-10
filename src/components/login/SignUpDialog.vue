@@ -24,8 +24,8 @@
               v-model="userEmail"
               :label="i18n('user.email')"
               prepend-icon="fa-envelope"
-              readonly>
-          </v-text-field>
+              readonly
+          />
 
           <v-textarea
               class="pl-2 pr-2"
@@ -37,8 +37,8 @@
               prepend-icon="fa-user"
               required
               auto-grow
-              rows="1">
-          </v-textarea>
+              rows="1"
+          />
         </v-form>
       </v-card-text>
 
@@ -78,21 +78,21 @@ export default Vue.extend({
   },
   watch: {
     dialog(): void {
-      this.isOpen = this.dialog
+      this.isOpen = this.dialog;
     }
   },
   methods: {
     save(): void {
-      (this.$refs.form as Vue & { validate: () => boolean }).validate()
+      (this.$refs.form as Vue & { validate: () => boolean }).validate();
 
       if (this.valid) {
-        this.loading = true
-        this.updateUsername()
+        this.loading = true;
+        this.updateUsername();
       }
     },
     updateUsername(): void {
       if (this.$auth.isAuthenticated) {
-        this.$auth.isAuthenticated = false
+        this.$auth.isAuthenticated = false;
       }
 
       this.$apollo.mutate({
@@ -111,7 +111,7 @@ export default Vue.extend({
       }).catch(() => {
         this.loading = false
         this.isOpen = false
-      })
+      });
     }
   },
   apollo: {
@@ -136,15 +136,15 @@ export default Vue.extend({
                 email: data.USER[0].email,
               },
             },
-          })
+          });
 
-          this.userEmail = data.USER[0].email
-          this.userUsername = data.USER[0].email.toString().substring(0, 59)
-          this.loading = false
-          return
+          this.userEmail = data.USER[0].email;
+          this.userUsername = data.USER[0].email.toString().substring(0, 59);
+          this.loading = false;
+          return;
         }
 
-        this.$router.go()
+        this.$router.go();
       }
     }
   }

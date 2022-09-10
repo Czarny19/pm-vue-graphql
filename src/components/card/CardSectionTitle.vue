@@ -24,7 +24,7 @@ export default Vue.extend({
   },
   methods: {
     showHideClicked(): void {
-      this.$emit('showhideclick')
+      this.$emit('showhideclick');
     }
   }
 })

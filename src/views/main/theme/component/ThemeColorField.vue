@@ -45,28 +45,28 @@ export default Vue.extend({
   computed: {
     cols(): { cols: number; sm: number, md: number; lg: number; xl: number } {
       if (this.large) {
-        return {cols: 12, sm: 12, md: 12, lg: 6, xl: 6}
+        return {cols: 12, sm: 12, md: 12, lg: 6, xl: 6};
       }
 
       if (this.xlarge) {
-        return {cols: 12, sm: 12, md: 12, lg: 12, xl: 12}
+        return {cols: 12, sm: 12, md: 12, lg: 12, xl: 12};
       }
 
-      return {cols: 6, sm: 6, md: 6, lg: 4, xl: 4}
+      return {cols: 6, sm: 6, md: 6, lg: 4, xl: 4};
     }
   },
   methods: {
     close(): void {
-      this.isOpen = false
+      this.isOpen = false;
     }
   },
   watch: {
     pickerColor(): void {
-      this.$emit('updateColor', this.pickerColor)
+      this.$emit('updateColor', this.pickerColor);
     }
   },
   beforeMount() {
-    this.pickerColor = this.color
+    this.pickerColor = this.color;
   }
 })
 </script>

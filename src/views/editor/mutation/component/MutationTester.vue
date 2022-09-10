@@ -65,42 +65,42 @@ export default Vue.extend({
   },
   computed: {
     graphQLMutation(): string {
-      const mutation = (this.mutation as Mutation)
+      const mutation = (this.mutation as Mutation);
 
       if (!mutation.name) {
-        return ''
+        return '';
       }
 
-      const where = graphql_gen.mapModelStringToQueryWhereArray(mutation.where ?? '')
-      const vars = graphql_gen.mapModelStringToQueryVariableArray(mutation.variables ?? '')
-      const fields = graphql_gen.mapModelStringToQuerySetValueArray(mutation.fields ?? '')
+      const where = graphql_gen.mapModelStringToQueryWhereArray(mutation.where ?? '');
+      const vars = graphql_gen.mapModelStringToQueryVariableArray(mutation.variables ?? '');
+      const fields = graphql_gen.mapModelStringToQuerySetValueArray(mutation.fields ?? '');
 
       return graphql_gen.generateGraphQLMutation(mutation.name, mutation.table, mutation.type as mutationType,
-          fields, where, vars)
+          fields, where, vars);
     },
     previewMutation(): string {
-      const mutation = (this.mutation as Mutation)
+      const mutation = (this.mutation as Mutation);
 
       if (!mutation.name) {
-        return ''
+        return '';
       }
 
-      const where = graphql_gen.mapModelStringToQueryWhereArray(mutation.where ?? '')
-      const vars = graphql_gen.mapModelStringToQueryVariableArray(mutation.variables ?? '')
-      const fields = graphql_gen.mapModelStringToQuerySetValueArray(mutation.fields ?? '')
+      const where = graphql_gen.mapModelStringToQueryWhereArray(mutation.where ?? '');
+      const vars = graphql_gen.mapModelStringToQueryVariableArray(mutation.variables ?? '');
+      const fields = graphql_gen.mapModelStringToQuerySetValueArray(mutation.fields ?? '');
 
       return graphql_gen.generateGraphQLPreviewMutation(mutation.name, mutation.table, mutation.type as mutationType,
-          fields, where, vars)
+          fields, where, vars);
     },
     graphQLVariablesPreview(): string {
-      const vars = graphql_gen.mapModelStringToQueryVariableArray(this.mutation.variables ?? '')
-      return graphql_gen.generateGraphQLPreviewVariables(vars)
+      const vars = graphql_gen.mapModelStringToQueryVariableArray(this.mutation.variables ?? '');
+      return graphql_gen.generateGraphQLPreviewVariables(vars);
     }
   },
   methods: {
     async run(): Promise<void> {
       const result = await graphql_gen.runMutation(this.datasource.address, this.graphQLMutation,
-          this.mutation.table, this.mutation.type as mutationType, this.datasource.secret, this.mutation.variables)
+          this.mutation.table, this.mutation.type as mutationType, this.datasource.secret, this.mutation.variables);
 
       this.isSuccessful = result.isSuccessful;
       this.queryRun = true;

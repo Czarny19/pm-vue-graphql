@@ -9,8 +9,8 @@
         :reject-visible="changesMade"
         @save="save"
         @reject="setRejectOpen"
-        @closeeditor="closeEditor">
-    </QueryTopBar>
+        @closeeditor="closeEditor"
+    />
 
     <LoadingCircular v-if="loadingQuery || loadingDatasource"/>
 
@@ -49,34 +49,34 @@ export default Vue.extend({
   },
   computed: {
     queryId(): number {
-      return Number(this.$route.params.queryId)
+      return Number(this.$route.params.queryId);
     },
     datasourceId(): number {
-      return Number(this.$route.params.datasourceId)
+      return Number(this.$route.params.datasourceId);
     },
     datasourceTyped(): Datasource {
-      return this.datasource as Datasource
+      return this.datasource as Datasource;
     },
     queryTyped(): Query {
-      return this.query as Query
+      return this.query as Query;
     }
   },
   watch: {
     query: {
       handler() {
         if (!this.queryInitialized) {
-          this.queryInitialized = true
+          this.queryInitialized = true;
           return
         }
 
-        this.changesMade = true
+        this.changesMade = true;
       },
       deep: true
     }
   },
   methods: {
     save(): void {
-      this.saving = true
+      this.saving = true;
 
       this.$apollo.mutate({
         mutation: UPDATE_QUERY,
@@ -92,38 +92,38 @@ export default Vue.extend({
           modifyDate: new Date()
         }
       }).then(() => {
-        this.changesMade = false
-        this.saving = false
-      })
+        this.changesMade = false;
+        this.saving = false;
+      });
     },
     closeEditor(): void {
       if (this.changesMade) {
-        this.isClosing = true
-        this.setRejectOpen()
-        return
+        this.isClosing = true;
+        this.setRejectOpen();
+        return;
       }
 
-      this.$router.back()
+      this.$router.back();
     },
     setRejectOpen(): void {
-      this.reject = true
+      this.reject = true;
     },
     cancelRejectChanges(): void {
-      this.isClosing = false
-      this.reject = false
+      this.isClosing = false;
+      this.reject = false;
     },
     rejectChanges(): void {
-      this.reject = false
-      this.queryInitialized = false
+      this.reject = false;
+      this.queryInitialized = false;
       this.changesMade = false;
-      this.loadingQuery = true
+      this.loadingQuery = true;
 
       if (this.isClosing) {
-        this.$router.back()
-        return
+        this.$router.back();
+        return;
       }
 
-      this.$apollo.queries.QUERY.refetch()
+      this.$apollo.queries.QUERY.refetch();
     }
   },
   apollo: {
@@ -136,17 +136,17 @@ export default Vue.extend({
         }
       },
       skip(): boolean {
-        return !this.queryId
+        return !this.queryId;
       },
       result({data}): void {
-        this.query = data.QUERY[0]
+        this.query = data.QUERY[0];
 
         if (this.query.limit === -1) {
-          this.query.limit = undefined
+          this.query.limit = undefined;
         }
 
-        this.changesMade = false
-        this.loadingQuery = false
+        this.changesMade = false;
+        this.loadingQuery = false;
       }
     },
     DATA_SOURCE: {
@@ -158,16 +158,16 @@ export default Vue.extend({
         }
       },
       skip(): boolean {
-        return !this.datasourceId
+        return !this.datasourceId;
       },
       async result({data}): Promise<void> {
-        this.datasource = data.DATA_SOURCE[0]
-        this.datasource.secret = decodeDatasourceSecret(data.DATA_SOURCE[0].secret)
+        this.datasource = data.DATA_SOURCE[0];
+        this.datasource.secret = decodeDatasourceSecret(data.DATA_SOURCE[0].secret);
 
         await getCleanGraphQLSchema(this.datasourceTyped.address, this.datasourceTyped.secret).then((result) => {
-          this.schema = result.schema
-          this.loadingDatasource = false
-        })
+          this.schema = result.schema;
+          this.loadingDatasource = false;
+        });
       }
     }
   }

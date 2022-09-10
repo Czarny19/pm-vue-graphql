@@ -8,8 +8,8 @@
         :counter="30"
         :rules="nameRules"
         prepend-icon="fa-tag"
-        required>
-    </v-text-field>
+        required
+    />
 
     <v-textarea
         class="pl-2 pr-2"
@@ -21,8 +21,8 @@
         prepend-icon="fa-globe"
         required
         auto-grow
-        rows="1">
-    </v-textarea>
+        rows="1"
+    />
 
     <v-text-field
         class="pl-2 pr-2"
@@ -33,8 +33,8 @@
         type="password"
         required
         auto-grow
-        rows="1">
-    </v-text-field>
+        rows="1"
+    />
   </v-card-text>
 </template>
 
@@ -61,13 +61,13 @@ export default Vue.extend({
   watch: {
     datasource: {
       handler() {
-        this.datasourceData = this.datasource
+        this.datasourceData = this.datasource;
       },
       deep: true
     }
   },
   beforeMount() {
-    this.datasourceData = this.datasource
+    this.datasourceData = this.datasource;
   }
 })
 </script>

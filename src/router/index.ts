@@ -42,8 +42,8 @@ const routes = [
     },
     {name: 'AppRunner', path: '/app/:projectId/page/:pageId?/params/:params?', component: AppRunnerPage},
     {path: '*', redirect: '/admin/main/dashboard/tab=0'}
-]
+];
 
-const router = new VueRouter({base: '/', routes})
+const router = new VueRouter({base: '/', routes});
 
-export default router
+export default router;

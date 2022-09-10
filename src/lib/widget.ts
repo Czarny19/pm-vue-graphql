@@ -16,19 +16,19 @@ import {
 } from "@/lib/types";
 
 export const themeColors = ['primary_color', 'secondary_color', 'accent_color', 'info_color',
-    'success_color', 'error_color', 'text_color_1', 'text_color_2', 'background_color']
+    'success_color', 'error_color', 'text_color_1', 'text_color_2', 'background_color'];
 
-export const themeColorsPicker = [...themeColors, 'custom']
+export const themeColorsPicker = [...themeColors, 'custom'];
 
-export const sizeUnits = ['px', '%', 'cm', 'pt', 'em', 'vw', 'vh', 'auto']
+export const sizeUnits = ['px', '%', 'cm', 'pt', 'em', 'vw', 'vh', 'auto'];
 
-export const borders = ['dotted', 'dashed', 'solid', 'double', 'groove', 'ridge', 'inset', 'outset', 'none', 'hidden']
+export const borders = ['dotted', 'dashed', 'solid', 'double', 'groove', 'ridge', 'inset', 'outset', 'none', 'hidden'];
 
-export const numCondTypes = ['=', '!=', '>', '>=', '=null', '!=null', '<', '<=']
+export const numCondTypes = ['=', '!=', '>', '>=', '=null', '!=null', '<', '<='];
 
-export const stringCondTypes = ['=', '!=', '>', '>=', '=null', '!=null', '<', '<=', '%', '!%']
+export const stringCondTypes = ['=', '!=', '>', '>=', '=null', '!=null', '<', '<=', '%', '!%'];
 
-export const boolCondTypes = ['=']
+export const boolCondTypes = ['='];
 
 /**
  * Generates a new page definition to be inserted on page add to the database.
@@ -36,7 +36,7 @@ export const boolCondTypes = ['=']
  * @returns New JSON page definition.
  **/
 export const generateInitialPageDefinition = (id: string) => {
-    return {"id": id, "type": "Page", "label": "Strona", "icon": "fa-th", "children": []}
+    return {"id": id, "type": "Page", "label": "Strona", "icon": "fa-th", "children": []};
 }
 
 /**
@@ -47,59 +47,57 @@ export const generateInitialPageDefinition = (id: string) => {
  **/
 export const isWidgetVisible = (widget: AppWidget, dataItem?: never): boolean => {
     if (!dataItem) {
-        return true
+        return true;
     }
 
-    const conditionGroups = widget ? widget.propGroups.slice() : []
+    const conditionGroups = widget ? widget.propGroups.slice() : [];
 
-    let props: ConditionProp[] = []
+    let props: ConditionProp[] = [];
 
     conditionGroups
         .filter((group) => group.type === 'condition')
-        .forEach((group) => props = props.concat(group.props as unknown as ConditionProp[]))
+        .forEach((group) => props = props.concat(group.props as unknown as ConditionProp[]));
 
     for (const prop of props) {
-        const cond = prop.condition
-        const condVal = prop.value?.toString()
-        const dataValue = getQueryDataValue(dataItem, prop.field).toString()
+        const cond = prop.condition;
+        const condVal = prop.value?.toString();
+        const dataValue = getQueryDataValue(dataItem, prop.field).toString();
 
-        if (dataValue && !checkIfWidgetConditionMet(dataValue, cond, condVal)) {
-            return false
-        } else if (!dataValue) {
-            return false
+        if ((dataValue && !checkIfWidgetConditionMet(dataValue, cond, condVal)) || !dataValue) {
+            return false;
         }
     }
 
-    return true
+    return true;
 }
 
 const checkIfWidgetConditionMet = (actualValue: string, condition: string, expectedValue?: string): boolean => {
-    actualValue = actualValue.toString()
-    expectedValue = expectedValue?.toString()
+    actualValue = actualValue.toString();
+    expectedValue = expectedValue?.toString();
 
     switch (condition) {
         case '=':
-            return actualValue === expectedValue
+            return actualValue === expectedValue;
         case '!=':
-            return actualValue !== expectedValue
+            return actualValue !== expectedValue;
         case '>':
-            return expectedValue ? actualValue > expectedValue : true
+            return expectedValue ? actualValue > expectedValue : true;
         case '>=':
-            return expectedValue ? actualValue >= expectedValue : true
+            return expectedValue ? actualValue >= expectedValue : true;
         case '=null':
-            return (actualValue?.length ?? 0) === 0
+            return (actualValue?.length ?? 0) === 0;
         case '!=null':
-            return (actualValue?.length ?? 0) !== 0
+            return (actualValue?.length ?? 0) !== 0;
         case '<':
-            return expectedValue ? actualValue < expectedValue : true
+            return expectedValue ? actualValue < expectedValue : true;
         case '<=':
-            return expectedValue ? actualValue <= expectedValue : true
+            return expectedValue ? actualValue <= expectedValue : true;
         case '%':
-            return expectedValue ? actualValue.includes(expectedValue) : true
+            return expectedValue ? actualValue.includes(expectedValue) : true;
         case '!%':
-            return expectedValue ? !actualValue.includes(expectedValue) : true
+            return expectedValue ? !actualValue.includes(expectedValue) : true;
         default:
-            return true
+            return true;
     }
 }
 
@@ -110,20 +108,20 @@ const checkIfWidgetConditionMet = (actualValue: string, condition: string, expec
  * @returns The widgets css type props, mapped with theme values.
  **/
 export const getCssProps = (widget: AppWidget, theme: ThemeColors) => {
-    const propGroups = widget ? widget.propGroups.slice() : []
+    const propGroups = widget ? widget.propGroups.slice() : [];
 
-    let cssProps: AppWidgetProp[] = []
+    let cssProps: AppWidgetProp[] = [];
 
     propGroups
         .filter((group) => group.type === 'css')
-        .forEach((group) => cssProps = cssProps.concat(group.props))
+        .forEach((group) => cssProps = cssProps.concat(group.props));
 
     return cssProps.map((prop: AppWidgetProp) => {
         if (prop.type === 'Color' && themeColors.includes(prop.value)) {
-            return {[prop.id]: theme[prop.value as keyof ThemeColors]}
+            return {[prop.id]: theme[prop.value as keyof ThemeColors]};
         }
 
-        return {[prop.id]: prop.value + (prop.unit ?? '')}
+        return {[prop.id]: prop.value + (prop.unit ?? '')};
     })
 }
 
@@ -133,19 +131,19 @@ export const getCssProps = (widget: AppWidget, theme: ThemeColors) => {
  * @returns The widgets args type props.
  **/
 export const getArgsProps = (widget: AppWidget): { [k: string]: string } => {
-    const propGroups = widget ? widget.propGroups.slice() : []
+    const propGroups = widget ? widget.propGroups.slice() : [];
 
-    let argsProps: AppWidgetProp[] = []
+    let argsProps: AppWidgetProp[] = [];
 
     propGroups
         .filter((group) => group.type === 'args')
-        .forEach((group) => argsProps = argsProps.concat(group.props))
+        .forEach((group) => argsProps = argsProps.concat(group.props));
 
-    const argsObject: { [k: string]: string } = {}
+    const argsObject: { [k: string]: string } = {};
 
-    argsProps.forEach((prop: AppWidgetProp) => argsObject[prop.id] = prop.value)
+    argsProps.forEach((prop: AppWidgetProp) => argsObject[prop.id] = prop.value);
 
-    return argsObject
+    return argsObject;
 }
 
 /**
@@ -154,19 +152,19 @@ export const getArgsProps = (widget: AppWidget): { [k: string]: string } => {
  * @returns The widgets data type props.
  **/
 export const getDataProps = (widget: AppWidget): { [k: string]: string } => {
-    const propGroups = widget ? widget.propGroups.slice() : []
+    const propGroups = widget ? widget.propGroups.slice() : [];
 
-    let dataProps: AppWidgetProp[] = []
+    let dataProps: AppWidgetProp[] = [];
 
     propGroups
         .filter((group) => group.type === 'data')
-        .forEach((group) => dataProps = dataProps.concat(group.props))
+        .forEach((group) => dataProps = dataProps.concat(group.props));
 
-    const argsObject: { [k: string]: string } = {}
+    const argsObject: { [k: string]: string } = {};
 
-    dataProps.forEach((prop: AppWidgetProp) => argsObject[prop.id] = prop.value)
+    dataProps.forEach((prop: AppWidgetProp) => argsObject[prop.id] = prop.value);
 
-    return argsObject
+    return argsObject;
 }
 
 /**
@@ -176,7 +174,7 @@ export const getDataProps = (widget: AppWidget): { [k: string]: string } => {
  * @returns The hex color value.
  **/
 export const getColorPropValue = (theme: ThemeColors, propName: string): string => {
-    return themeColors.includes(propName) ? theme[propName as keyof ThemeColors] : propName
+    return themeColors.includes(propName) ? theme[propName as keyof ThemeColors] : propName;
 }
 
 /**
@@ -186,14 +184,14 @@ export const getColorPropValue = (theme: ThemeColors, propName: string): string 
  * @returns Value of the actual page parameter.
  **/
 export const getPageVariableValue = (vars?: PageVariable[], pageVarId?: number): string => {
-    let pageValue = ''
+    let pageValue = '';
 
     if (pageVarId && pageVarId > 0 && vars && vars.length) {
-        const variable = vars.find((variable) => variable.id === pageVarId)
-        pageValue = variable ? variable.value : ''
+        const variable = vars.find((variable) => variable.id === pageVarId);
+        pageValue = variable ? variable.value : '';
     }
 
-    return pageValue
+    return pageValue;
 }
 
 /**
@@ -204,12 +202,12 @@ export const getPageVariableValue = (vars?: PageVariable[], pageVarId?: number):
  **/
 export const getPageParamValue = (routeParams?: { [k: string]: string }, pageParamName?: string): string => {
     if (routeParams && routeParams.params && pageParamName) {
-        const params = routeParams.params.split('&')
-        const param = params.find((param) => param.includes(`${pageParamName}=`))
-        return param ? param.substring(param.indexOf('=') + 1) : ''
+        const params = routeParams.params.split('&');
+        const param = params.find((param) => param.includes(`${pageParamName}=`));
+        return param ? param.substring(param.indexOf('=') + 1) : '';
     }
 
-    return ''
+    return '';
 }
 
 /**
@@ -220,19 +218,19 @@ export const getPageParamValue = (routeParams?: { [k: string]: string }, pagePar
  **/
 export const getQueryDataValue = (dataItem?: never, queryFieldName?: string): string => {
     if (!queryFieldName || !dataItem) {
-        return ''
+        return '';
     }
 
-    const fieldIsRelation = dataItem && queryFieldName && queryFieldName.includes('.')
+    const fieldIsRelation = dataItem && queryFieldName && queryFieldName.includes('.');
 
     if (fieldIsRelation) {
-        const relation = queryFieldName.substring(0, queryFieldName.indexOf('.'))
-        const name = queryFieldName.substring(queryFieldName.indexOf('.') + 1)
+        const relation = queryFieldName.substring(0, queryFieldName.indexOf('.'));
+        const name = queryFieldName.substring(queryFieldName.indexOf('.') + 1);
 
-        return getQueryDataValue(dataItem[relation], name)
+        return getQueryDataValue(dataItem[relation], name);
     }
 
-    return dataItem ? dataItem[queryFieldName] : ''
+    return dataItem ? dataItem[queryFieldName] : '';
 }
 
 /**
@@ -251,11 +249,11 @@ export const getDisplayWidgetVarValue = (dataItem?: never, queryFieldName?: stri
                                          vars?: PageVariable[], pageVarId?: number,
                                          routeParams?: { [k: string]: string }, pageParamName?: string): string => {
 
-    const pageParamValue = getPageParamValue(routeParams, pageParamName)
-    const pageVarValue = getPageVariableValue(vars, pageVarId)
-    const queryDataValue = getQueryDataValue(dataItem, queryFieldName)
+    const pageParamValue = getPageParamValue(routeParams, pageParamName);
+    const pageVarValue = getPageVariableValue(vars, pageVarId);
+    const queryDataValue = getQueryDataValue(dataItem, queryFieldName);
 
-    return [pageParamValue, pageVarValue, queryDataValue].filter((value) => value && value.length).join(' ')
+    return [pageParamValue, pageVarValue, queryDataValue].filter((value) => value && value.length).join(' ');
 }
 
 /**
@@ -270,10 +268,10 @@ export const getDisplayWidgetVarValue = (dataItem?: never, queryFieldName?: stri
 export const getInputWidgetInitialValue = (vars?: PageVariable[], pageVarId?: number,
                                            routeParams?: { [k: string]: string }, pageParamName?: string): string => {
 
-    const pageParamValue = getPageParamValue(routeParams, pageParamName)
-    const pageVarValue = getPageVariableValue(vars, pageVarId)
+    const pageParamValue = getPageParamValue(routeParams, pageParamName);
+    const pageVarValue = getPageVariableValue(vars, pageVarId);
 
-    return [pageParamValue, pageVarValue].filter((value) => value && value.length).join(' ')
+    return [pageParamValue, pageVarValue].filter((value) => value && value.length).join(' ');
 }
 
 /**
@@ -283,32 +281,32 @@ export const getInputWidgetInitialValue = (vars?: PageVariable[], pageVarId?: nu
  * @returns List of input rules.
  **/
 export const getRulesForInput = (widget: AppWidget, counter?: number): unknown[] => {
-    const rules = []
-    const props = getArgsProps(widget)
+    const rules = [];
+    const props = getArgsProps(widget);
 
     if (props.required) {
-        rules.push((v: string) => (!!v) || i18n.t('editor.valueRequired'))
+        rules.push((v: string) => (!!v) || i18n.t('editor.valueRequired'));
     }
 
-    // TODO
     if (counter) {
-        rules.push((v: string) => (v && v.length <= Number(counter ?? 0)) || i18n.t('editor.valueTooLong'))
+        rules.push((v: string) =>
+            (!v || (v && v.length <= Number(counter ?? 0))) || i18n.t('editor.valueTooLong'));
     }
 
     if (props.specialChars) {
-        rules.push((v: string) => (v && !/[^a-zA-Z0-9]/.test(v)) || i18n.t('editor.valueNoSpecialChars'))
+        rules.push((v: string) => (!v || (v && !/[^a-zA-Z0-9]/.test(v)) || i18n.t('editor.valueNoSpecialChars')));
     }
 
     if (props.customRegex) {
-        const regex = new RegExp(props.customRegex.replaceAll('/', ''))
-        rules.push((v: string) => (v && regex.test(v)) || (props.customRegexMsg ?? ''))
+        const regex = new RegExp(props.customRegex.replaceAll('/', ''));
+        rules.push((v: string) => (!v || v && regex.test(v)) || (props.customRegexMsg ?? ''));
     }
 
     if (props.mustBeChecked) {
-        rules.push((v: boolean) => v || i18n.t('editor.valueRequired'))
+        rules.push((v: boolean) => v || i18n.t('editor.valueRequired'));
     }
 
-    return rules
+    return rules;
 }
 
 /**
@@ -318,7 +316,7 @@ export const getRulesForInput = (widget: AppWidget, counter?: number): unknown[]
 export const getActionTypes = (): { id: string; name: string }[] => [
     {id: 'goToPage', name: i18n.t('editor.actionGoTo').toString()},
     {id: 'runMutation', name: i18n.t('editor.actionRunMutation').toString()}
-]
+];
 
 /**
  * Returns an ordered list of a query property custom labels defined for the widget.
@@ -326,20 +324,20 @@ export const getActionTypes = (): { id: string; name: string }[] => [
  * @returns List of custom labels.
  **/
 export const getQueryPropLabels = (widget: AppWidget): { text: string; value: string }[] => {
-    const dataPropGroup = widget.propGroups.find((group) => group.type === 'data')
+    const dataPropGroup = widget.propGroups.find((group) => group.type === 'data');
 
     if (dataPropGroup) {
-        const props = dataPropGroup.props
-        const query = props.find((prop) => prop.id === 'queryId')
+        const props = dataPropGroup.props;
+        const query = props.find((prop) => prop.id === 'queryId');
 
         if (query && query.labels) {
             return query.labels
                 .filter(label => label.visible)
-                .sort((a, b) => Number(a.order) - Number(b.order))
+                .sort((a, b) => Number(a.order) - Number(b.order));
         }
     }
 
-    return []
+    return [];
 }
 
 /**
@@ -348,15 +346,15 @@ export const getQueryPropLabels = (widget: AppWidget): { text: string; value: st
  * @returns Name of the table.
  **/
 export const getTableNameForWidget = (widget: AppWidget): string => {
-    const dataPropGroups = widget.propGroups.find((group) => group.id === 'source')
+    const dataPropGroups = widget.propGroups.find((group) => group.id === 'source');
 
     if (dataPropGroups) {
-        const props = dataPropGroups.props
-        const dataTable = props.find((prop) => prop.id === 'dataTable')
-        return dataTable ? dataTable.value : ''
+        const props = dataPropGroups.props;
+        const dataTable = props.find((prop) => prop.id === 'dataTable');
+        return dataTable ? dataTable.value : '';
     }
 
-    return ''
+    return '';
 }
 
 /**
@@ -369,22 +367,22 @@ export const getTableNameForWidget = (widget: AppWidget): string => {
 export const mapPageVarValuesToQueryVars = (widget: AppWidget, queryVars: QueryVariable[],
                                             pageVars: PageVariable[]): QueryVariable[] => {
 
-    const dataPropGroup = widget.propGroups.find((group: { type: string }) => group.type === 'data')
+    const dataPropGroup = widget.propGroups.find((group: { type: string }) => group.type === 'data');
 
     if (dataPropGroup) {
-        const props = dataPropGroup.props
-        const query = props.find((prop) => prop.id === 'queryId')
+        const props = dataPropGroup.props;
+        const query = props.find((prop) => prop.id === 'queryId');
 
         if (query && query.variablesMapping) {
             queryVars.forEach((qrVar) => {
-                const mapping = query.variablesMapping?.find((mapping) => mapping.qrVar === qrVar.name)
-                const pageVar = pageVars.find((variable) => variable.id === mapping?.pageVar)
-                qrVar.value = pageVar?.value ?? ''
+                const mapping = query.variablesMapping?.find((mapping) => mapping.qrVar === qrVar.name);
+                const pageVar = pageVars.find((variable) => variable.id === mapping?.pageVar);
+                qrVar.value = pageVar?.value ?? '';
             })
         }
     }
 
-    return queryVars
+    return queryVars;
 }
 
 /**
@@ -395,21 +393,21 @@ export const mapPageVarValuesToQueryVars = (widget: AppWidget, queryVars: QueryV
  * @returns The string error message.
  **/
 export const getActionErrorMsg = (action: ActionProp, vars?: PageVariable[], errorMsg?: string): string => {
-    let msg = ''
+    let msg = '';
 
     if (action.errorMsgVar) {
-        msg += getPageVariableValue(vars, action.errorMsgVar)
+        msg += getPageVariableValue(vars, action.errorMsgVar);
     }
 
     if (action.errorMsgShowResponse && errorMsg) {
-        msg += `\n ${i18n.t('runtime.error')}: ${errorMsg}`
+        msg += `\n ${i18n.t('runtime.error')}: ${errorMsg}`;
     }
 
     if (!msg.trim().length) {
-        msg = i18n.t('runtime.errorOccured').toString()
+        msg = i18n.t('runtime.errorOccured').toString();
     }
 
-    return msg
+    return msg;
 }
 
 /**
@@ -432,54 +430,54 @@ export const runWidgetClickAction = async (action: ActionProp, projectId: string
 
     action.variables?.forEach((actionVar) => {
         if (actionVar.pageVar > 0) {
-            actionVar.value = getPageVariableValue(vars, actionVar.pageVar)
+            actionVar.value = getPageVariableValue(vars, actionVar.pageVar);
         } else if (actionVar.tableVar && actionVar.tableVar.length > 0) {
-            actionVar.value = getQueryDataValue(dataItem, actionVar.tableVar)
+            actionVar.value = getQueryDataValue(dataItem, actionVar.tableVar);
         } else if (actionVar.paramVar && actionVar.paramVar.length > 0) {
-            actionVar.value = getPageParamValue(routeParams, actionVar.paramVar)
+            actionVar.value = getPageParamValue(routeParams, actionVar.paramVar);
         }
     })
 
     switch (action.type) {
         case 'goToPage':
-            runOpenPageAction(action, projectId)
-            return undefined
+            runOpenPageAction(action, projectId);
+            return undefined;
         case 'runMutation':
-            return await runMutationAction(action, projectId, datasource, mutations)
+            return await runMutationAction(action, projectId, datasource, mutations);
     }
 }
 
 export const runOpenPageAction = (action: ActionProp, projectId: string) => {
-    const params = action.variables.map((variable) => `${variable.name}=${variable.value}`)
+    const params = action.variables.map((variable) => `${variable.name}=${variable.value}`);
 
     router.push({
         name: 'AppRunner', params: {projectId: projectId, pageId: action.target.toString(), params: params.join('&')}
-    }).then()
+    }).then();
 }
 
 export const runMutationAction = async (action: ActionProp, projectId: string, datasource: Datasource,
                                         mutations?: Mutation[]): Promise<QueryResult | undefined> => {
 
-    const mutation = mutations?.find((mutation) => mutation.id === action.target)
+    const mutation = mutations?.find((mutation) => mutation.id === action.target);
 
     if (!mutation) {
-        return undefined
+        return undefined;
     }
 
-    const where = graphql_gen.mapModelStringToQueryWhereArray(mutation.where ?? '')
-    const variables = [...mapModelStringToQueryVariableArray(mutation.variables ?? '') ?? []]
-    const fields = graphql_gen.mapModelStringToQuerySetValueArray(mutation.fields ?? '')
+    const where = graphql_gen.mapModelStringToQueryWhereArray(mutation.where ?? '');
+    const variables = [...mapModelStringToQueryVariableArray(mutation.variables ?? '') ?? []];
+    const fields = graphql_gen.mapModelStringToQuerySetValueArray(mutation.fields ?? '');
 
     variables.forEach((variable) => {
-        const param = action.variables.find((actionVar) => actionVar.name === variable.name)
-        if (param) variable.value = param?.value
+        const param = action.variables.find((actionVar) => actionVar.name === variable.name);
+        if (param) variable.value = param?.value;
     })
 
-    const mutationVars = variables.map((variable) => JSON.stringify(variable)).join(';')
+    const mutationVars = variables.map((variable) => JSON.stringify(variable)).join(';');
 
     const graphQLMutation = graphql_gen.generateGraphQLMutation(mutation.name, mutation.table,
-        mutation.type as mutationType, fields, where, variables)
+        mutation.type as mutationType, fields, where, variables);
 
     return await graphql_gen.runMutation(datasource.address, graphQLMutation, mutation.table,
-        mutation.type as mutationType, datasource.secret, mutationVars)
+        mutation.type as mutationType, datasource.secret, mutationVars);
 }

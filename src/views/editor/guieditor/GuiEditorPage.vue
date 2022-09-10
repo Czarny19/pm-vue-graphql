@@ -127,51 +127,51 @@ export default Vue.extend({
   },
   computed: {
     projectId(): number {
-      return Number(this.$route.params.projectId)
+      return Number(this.$route.params.projectId);
     },
     pageId(): number {
-      return Number(this.$route.params.pageId)
+      return Number(this.$route.params.pageId);
     },
     datasourceId(): number {
-      return Number(this.$route.params.datasourceId)
+      return Number(this.$route.params.datasourceId);
     },
     page(): Page {
-      return (this.pages as Page[]).filter((page) => page.id == this.pageId)[0]
+      return (this.pages as Page[]).filter((page) => page.id == this.pageId)[0];
     },
     pageParams(): string[] {
-      return this.page.params.length ? this.page.params.split(';') : []
+      return this.page.params.length ? this.page.params.split(';') : [];
     }
   },
   watch: {
     page: {
       handler() {
         if (!this.pageInitialized) {
-          this.pageInitialized = true
-          return
+          this.pageInitialized = true;
+          return;
         }
 
-        this.changesMade = true
+        this.changesMade = true;
       },
       deep: true
     }
   },
   methods: {
     setActiveWidget(widget: AppWidget): void {
-      (this.activeWidget as AppWidget | null) = null
+      (this.activeWidget as AppWidget | null) = null;
 
       if (widget.type === 'Page') {
-        return
+        return;
       }
 
-      this.activeWidget = widget
+      this.activeWidget = widget;
     },
     switchPreview(): void {
-      this.previewOpen = !this.previewOpen
-      this.activeWidget = {}
-      this.calcDisplayCols()
+      this.previewOpen = !this.previewOpen;
+      this.activeWidget = {};
+      this.calcDisplayCols();
     },
     save(): void {
-      this.saving = true
+      this.saving = true;
 
       this.$apollo.mutate({
         mutation: UPDATE_PAGE_DEFINITION,
@@ -184,76 +184,76 @@ export default Vue.extend({
       }).then(() => {
         this.changesMade = false
         this.saving = false
-      })
+      });
     },
     closeEditor(): void {
       if (this.changesMade) {
-        this.isClosing = true
-        this.setRejectOpen()
-        return
+        this.isClosing = true;
+        this.setRejectOpen();
+        return;
       }
 
-      this.$router.back()
+      this.$router.back();
     },
     setRejectOpen(): void {
-      this.reject = true
+      this.reject = true;
     },
     cancelRejectChanges(): void {
-      this.isClosing = false
-      this.reject = false
+      this.isClosing = false;
+      this.reject = false;
     },
     rejectChanges(): void {
-      this.reject = false
-      this.pageInitialized = false
-      this.changesMade = false
-      this.loading = true
+      this.reject = false;
+      this.pageInitialized = false;
+      this.changesMade = false;
+      this.loading = true;
 
       if (this.isClosing) {
-        this.$router.back()
-        return
+        this.$router.back();
+        return;
       }
 
-      this.$apollo.queries.PAGE.refetch()
+      this.$apollo.queries.PAGE.refetch();
     },
     changeLeftNavShown(): void {
-      this.leftNavShown = !this.leftNavShown
-      this.calcDisplayCols()
+      this.leftNavShown = !this.leftNavShown;
+      this.calcDisplayCols();
     },
     changeRightNavShown(): void {
-      this.rightNavShown = !this.rightNavShown
-      this.calcDisplayCols()
+      this.rightNavShown = !this.rightNavShown;
+      this.calcDisplayCols();
     },
     calcDisplayCols(): void {
       if (this.previewOpen) {
-        this.editorCols = 12
-        return
+        this.editorCols = 12;
+        return;
       }
 
-      const leftCols = this.leftNavShown ? 2 : 0
-      const rightCols = this.rightNavShown ? 2 : 0
-      this.editorCols = 12 - leftCols - rightCols
+      const leftCols = this.leftNavShown ? 2 : 0;
+      const rightCols = this.rightNavShown ? 2 : 0;
+      this.editorCols = 12 - leftCols - rightCols;
     },
     removeWidget(parent: { children: [] }): void {
       parent.children.forEach((child, index) => {
         if (child == this.activeWidget) {
-          parent.children.splice(index, 1)
-          return
+          parent.children.splice(index, 1);
+          return;
         }
 
-        this.removeWidget(child)
-      })
+        this.removeWidget(child);
+      });
     },
     dragStart(): void {
-      this.dragStarted = true
+      this.dragStarted = true;
     },
     dragEnd(): void {
-      this.dragStarted = false
+      this.dragStarted = false;
     },
     importPage(importPage: JSON): void {
-      (this.page as { definition: JSON }).definition = importPage
+      (this.page as { definition: JSON }).definition = importPage;
     },
     refreshVars(): void {
-      this.$apollo.queries.PROP.refetch()
+      this.$apollo.queries.PROP.refetch();
     }
   },
   apollo: {
@@ -269,10 +269,10 @@ export default Vue.extend({
         }
       },
       skip(): boolean {
-        return !this.currentUser
+        return !this.currentUser;
       },
       result({data}): void {
-        this.project = data.PROJECT[0]
+        this.project = data.PROJECT[0];
       },
     },
     THEME: {
@@ -284,10 +284,10 @@ export default Vue.extend({
         }
       },
       skip(): boolean {
-        return !this.project.theme_id
+        return !this.project.theme_id;
       },
       result({data}): void {
-        this.theme = data.THEME[0]
+        this.theme = data.THEME[0];
       }
     },
     PAGE: {
@@ -299,11 +299,11 @@ export default Vue.extend({
         }
       },
       skip(): boolean {
-        return !this.projectId
+        return !this.projectId;
       },
       result({data}): void {
-        this.pages = data.PAGE
-        this.loading = false
+        this.pages = data.PAGE;
+        this.loading = false;
       }
     },
     PROP: {
@@ -315,10 +315,10 @@ export default Vue.extend({
         }
       },
       skip(): boolean {
-        return !this.pageId
+        return !this.pageId;
       },
       result({data}): void {
-        this.variables = data.PROP
+        this.variables = data.PROP;
       }
     },
     DATA_SOURCE: {
@@ -330,15 +330,15 @@ export default Vue.extend({
         }
       },
       skip(): boolean {
-        return !this.datasourceId
+        return !this.datasourceId;
       },
       async result({data}): Promise<void> {
-        this.datasource = data.DATA_SOURCE[0]
-        this.datasource.secret = decodeDatasourceSecret(data.DATA_SOURCE[0].secret)
+        this.datasource = data.DATA_SOURCE[0];
+        this.datasource.secret = decodeDatasourceSecret(data.DATA_SOURCE[0].secret);
 
         await getCleanGraphQLSchema(this.datasource.address, this.datasource.secret).then((result) => {
-          this.schema = result.schema
-        })
+          this.schema = result.schema;
+        });
       }
     },
     QUERY: {
@@ -350,10 +350,10 @@ export default Vue.extend({
         }
       },
       skip(): boolean {
-        return !this.datasourceId
+        return !this.datasourceId;
       },
       result({data}): void {
-        this.queries = data.QUERY
+        this.queries = data.QUERY;
       }
     },
     MUTATION: {
@@ -365,10 +365,10 @@ export default Vue.extend({
         }
       },
       skip(): boolean {
-        return !this.datasourceId
+        return !this.datasourceId;
       },
       result({data}): void {
-        this.mutations = data.MUTATION
+        this.mutations = data.MUTATION;
       }
     }
   }

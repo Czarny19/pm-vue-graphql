@@ -24,7 +24,7 @@ export default Vue.extend({
   },
   computed: {
     themeId(): number {
-      return Number(this.$route.params.themeId)
+      return Number(this.$route.params.themeId);
     }
   },
   apollo: {
@@ -40,17 +40,17 @@ export default Vue.extend({
         }
       },
       skip(): boolean {
-        return !this.themeId
+        return !this.themeId;
       },
       result({data}): void {
-        this.loading = false
-        this.theme = data.THEME[0]
+        this.loading = false;
+        this.theme = data.THEME[0];
       }
     }
   },
   beforeMount() {
     if (!this.themeId) {
-      this.loading = false
+      this.loading = false;
     }
   }
 })

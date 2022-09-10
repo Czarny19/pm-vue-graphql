@@ -70,31 +70,31 @@ export default Vue.extend({
   },
   computed: {
     appWidget(): AppWidget {
-      return this.widget as AppWidget
+      return this.widget as AppWidget;
     },
     argsProps(): { [k: string]: string } {
-      return getArgsProps(this.appWidget)
+      return getArgsProps(this.appWidget);
     }
   },
   methods: {
-    setActive(widget: AppWidget) {
-      this.$emit('activewidget', widget)
+    setActive(widget: AppWidget): void {
+      this.$emit('activewidget', widget);
     },
     startDrag(evt?: DragEvent): void {
-      this.$emit('dragstarted')
+      this.$emit('dragstarted');
 
       const dataTransfer = evt?.dataTransfer;
 
       if (dataTransfer != null && !evt?.dataTransfer?.getData('widget')) {
         (this.column as AppWidget).move = true;
-        const widgetJSON = JSON.parse(JSON.stringify(this.appWidget))
+        const widgetJSON = JSON.parse(JSON.stringify(this.appWidget));
 
         // eslint-disable-next-line
-        dataTransfer!.dropEffect = 'move'
+        dataTransfer!.dropEffect = 'move';
         // eslint-disable-next-line
-        dataTransfer!.effectAllowed = 'move'
+        dataTransfer!.effectAllowed = 'move';
         // eslint-disable-next-line
-        dataTransfer!.setData('widget', JSON.stringify(widgetJSON))
+        dataTransfer!.setData('widget', JSON.stringify(widgetJSON));
       }
     },
     endDrag(): void {
@@ -102,15 +102,15 @@ export default Vue.extend({
       (this.column as AppWidget).move = false;
     },
     startChildDrag(index: number): void {
-      this.$emit('dragstarted')
-      this.dragIndex = index
+      this.$emit('dragstarted');
+      this.dragIndex = index;
     },
     endChildDrag(): void {
-      this.$emit('dragended')
-      this.dragIndex = -1
+      this.$emit('dragended');
+      this.dragIndex = -1;
     },
-    onDrop(index: number, evt?: DragEvent) {
-      this.$emit('dragended')
+    onDrop(index: number, evt?: DragEvent): void {
+      this.$emit('dragended');
 
       const dataTransfer = evt?.dataTransfer;
 
@@ -119,10 +119,10 @@ export default Vue.extend({
         const widget = JSON.parse(dataTransfer!.getData('widget'));
 
         if (this.dragIndex >= 0 && this.dragIndex < index && this.isThisLayerWidgetMoved()) {
-          index--
+          index--;
         }
 
-        this.dragIndex = -1
+        this.dragIndex = -1;
 
         this.removeWidgetFromTree(this.page, widget);
         (this.column.children as AppWidgetProp[]).splice(index, 0, widget);
@@ -134,27 +134,27 @@ export default Vue.extend({
 
         if ((child as AppWidget).move) {
           widget.move = false;
-          parent.children.splice(index, 1)
+          parent.children.splice(index, 1);
           return;
         }
 
-        this.removeWidgetFromTree(child, widget)
+        this.removeWidgetFromTree(child, widget);
       }
     },
     isThisLayerWidgetMoved(): boolean {
-      return this.column.children.find((child) => (child as AppWidget).move) !== undefined
+      return this.column.children.find((child) => (child as AppWidget).move) !== undefined;
     }
   },
   watch: {
     widget: {
       handler() {
-        this.column = this.widget
+        this.column = this.widget;
       },
       deep: true
     }
   },
   beforeMount() {
-    this.column = this.widget
+    this.column = this.widget;
   }
 })
 </script>

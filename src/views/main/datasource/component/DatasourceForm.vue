@@ -22,8 +22,8 @@
                   :secret="datasourceTyped.secret"
                   :is-auto="false"
                   @setschema="setSchema"
-                  @error="clearSchema">
-              </GraphQLConnectionTest>
+                  @error="clearSchema"
+              />
             </v-card-text>
 
             <v-divider class="ml-4 mr-4"></v-divider>
@@ -83,26 +83,26 @@ export default Vue.extend({
   },
   computed: {
     datasourceTyped(): Datasource {
-      return (this.datasourceData as Datasource)
+      return (this.datasourceData as Datasource);
     }
   },
   methods: {
     submit(): void {
-      (this.$refs.form as Vue & { validate: () => boolean }).validate()
+      (this.$refs.form as Vue & { validate: () => boolean }).validate();
 
       if (this.valid) {
-        this.saving = true
-        this.datasourceTyped.id ? this.updateDatasource() : this.createDatasource()
+        this.saving = true;
+        this.datasourceTyped.id ? this.updateDatasource() : this.createDatasource();
       }
     },
     cancel(): void {
-      this.$router.back()
+      this.$router.back();
     },
     setSchema(schema: SchemaItem[]): void {
-      this.schema = schema as []
+      this.schema = schema as [];
     },
     clearSchema(): void {
-      this.schema = []
+      this.schema = [];
     },
     updateDatasource(): void {
       this.$apollo.mutate({
@@ -114,11 +114,11 @@ export default Vue.extend({
           secret: encodeDatasourceSecret(this.datasourceTyped.secret ?? '')
         }
       }).then(() => {
-        this.saving = false
-        this.$router.back()
+        this.saving = false;
+        this.$router.back();
       }).catch(() => {
-        this.saving = false
-      })
+        this.saving = false;
+      });
     },
     createDatasource(): void {
       this.$apollo.mutate({
@@ -130,17 +130,17 @@ export default Vue.extend({
           secret: encodeDatasourceSecret(this.datasourceTyped.secret ?? '')
         }
       }).then(() => {
-        this.saving = false
-        this.$router.back()
+        this.saving = false;
+        this.$router.back();
       }).catch(() => {
-        this.saving = false
-      })
+        this.saving = false;
+      });
     }
   },
   watch: {
     datasource: {
       handler() {
-        this.datasourceData = this.datasource
+        this.datasourceData = this.datasource;
       },
       deep: true
     }

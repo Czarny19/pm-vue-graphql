@@ -4,8 +4,8 @@
         :dialog="addPageDialog"
         :project-id="projectId"
         @refresh="refresh"
-        @close="closeAddPage">
-    </AppAddPageDialog>
+        @close="closeAddPage"
+    />
 
     <DeleteConfirmationDialog :dialog="deleteDialog" @confirm="deletePage" @cancel="cancelDeletePage"/>
 
@@ -18,8 +18,8 @@
           :project-id="projectId"
           :datasource-id="datasourceId"
           :pages="pages"
-          @delete="deletePageClicked">
-      </AppMenuPagesList>
+          @delete="deletePageClicked"
+      />
     </v-container>
   </div>
 </template>
@@ -59,28 +59,28 @@ export default Vue.extend({
   },
   methods: {
     addPage(): void {
-      this.addPageDialog = true
+      this.addPageDialog = true;
     },
     closeAddPage(): void {
-      this.addPageDialog = false
+      this.addPageDialog = false;
     },
     refresh(): void {
-      this.$emit('refresh')
+      this.$emit('refresh');
     },
     deletePageClicked(id: number): void {
-      this.deleteId = id
-      this.deleteDialog = true
+      this.deleteId = id;
+      this.deleteDialog = true;
     },
     cancelDeletePage(): void {
-      this.deleteId = -1
-      this.deleteDialog = false
+      this.deleteId = -1;
+      this.deleteDialog = false;
     },
     deletePage(): void {
-      this.deleteDialog = false
+      this.deleteDialog = false;
 
       this.$apollo.mutate({mutation: DELETE_PAGE, variables: {id: this.deleteId}}).then(() => {
-        this.$emit('refresh')
-      })
+        this.$emit('refresh');
+      });
     }
   }
 })

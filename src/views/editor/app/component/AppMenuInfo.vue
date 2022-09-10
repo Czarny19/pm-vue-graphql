@@ -20,8 +20,8 @@
               prepend-icon="fa-palette"
               flat readonly
               :label="i18n('project.theme')"
-              :value="themeName">
-          </v-text-field>
+              :value="themeName"
+          />
         </v-col>
 
         <v-col cols="auto" class="text-start">
@@ -30,8 +30,8 @@
               prepend-icon="fa-database"
               flat readonly
               :label="i18n('project.datasource')"
-              :value="datasourceName">
-          </v-text-field>
+              :value="datasourceName"
+          />
         </v-col>
       </v-row>
     </v-container>

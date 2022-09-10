@@ -27,7 +27,7 @@ export default Vue.extend({
   },
   watch: {
     dialog(): void {
-      this.isOpen = this.dialog
+      this.isOpen = this.dialog;
     }
   }
 })

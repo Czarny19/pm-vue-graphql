@@ -12,8 +12,8 @@
         elevation="0"
         color="primary"
         @dragstart="startDrag(widget, $event)"
-        @dragend="leaveDrag">
-
+        @dragend="leaveDrag"
+    >
       <v-container>
         <v-row>
           <v-col class="pa-0 ma-auto" cols="3">
@@ -30,6 +30,7 @@
 <script lang="ts">
 import Vue from "vue";
 import lib from "@/lib/widgets.json";
+import {AppWidgetPropGroup} from "@/lib/types";
 
 export default Vue.extend({
   name: 'GuiEditorLeftNavWidgets',
@@ -38,31 +39,31 @@ export default Vue.extend({
     widgets: Array
   },
   computed: {
-    commonProps() {
-      const common = JSON.parse(JSON.stringify(lib.widgets.filter((widget) => widget.type === 'Common')))[0]
-      return common.propGroups
+    commonProps(): AppWidgetPropGroup[] {
+      const common = JSON.parse(JSON.stringify(lib.widgets.filter((widget) => widget.type === 'Common')))[0];
+      return common.propGroups;
     }
   },
   methods: {
     startDrag(widget: { id: string }, evt?: DragEvent): void {
-      this.$emit('dragstarted')
+      this.$emit('dragstarted');
 
       const dataTransfer = evt?.dataTransfer;
 
-      const widgetJSON = JSON.parse(JSON.stringify(widget))
-      widgetJSON.propGroups.push(...this.commonProps)
+      const widgetJSON = JSON.parse(JSON.stringify(widget));
+      widgetJSON.propGroups.push(...this.commonProps);
 
       if (dataTransfer != null) {
         // eslint-disable-next-line
-        dataTransfer!.dropEffect = 'move'
+        dataTransfer!.dropEffect = 'move';
         // eslint-disable-next-line
-        dataTransfer!.effectAllowed = 'move'
+        dataTransfer!.effectAllowed = 'move';
         // eslint-disable-next-line
-        dataTransfer!.setData('widget', JSON.stringify(widgetJSON))
+        dataTransfer!.setData('widget', JSON.stringify(widgetJSON));
       }
     },
     leaveDrag(): void {
-      this.$emit('dragended')
+      this.$emit('dragended');
     }
   }
 })

@@ -5,7 +5,8 @@
       draggable="true"
       @click="setActive(appWidget)"
       @dragstart="startDrag($event)"
-      @dragend="endDrag">
+      @dragend="endDrag"
+  >
     <span v-if="widget.id"> {{ appWidget.id }} :: {{ appWidget.label }}</span>
     <span v-else>{{ appWidget.label }}</span>
   </v-card>
@@ -27,15 +28,15 @@ export default Vue.extend({
   },
   computed: {
     appWidget(): AppWidget {
-      return this.widget as AppWidget
+      return this.widget as AppWidget;
     }
   },
   methods: {
     setActive(widget: AppWidget): void {
-      this.$emit('activewidget', widget)
+      this.$emit('activewidget', widget);
     },
     startDrag(evt?: DragEvent): void {
-      this.$emit('dragstarted')
+      this.$emit('dragstarted');
       const dataTransfer = evt?.dataTransfer;
 
       if (dataTransfer != null) {
@@ -43,28 +44,28 @@ export default Vue.extend({
         const widgetJSON = JSON.parse(JSON.stringify(this.thisWidget));
 
         // eslint-disable-next-line
-        dataTransfer!.dropEffect = 'move'
+        dataTransfer!.dropEffect = 'move';
         // eslint-disable-next-line
-        dataTransfer!.effectAllowed = 'move'
+        dataTransfer!.effectAllowed = 'move';
         // eslint-disable-next-line
-        dataTransfer!.setData('widget', JSON.stringify(widgetJSON))
+        dataTransfer!.setData('widget', JSON.stringify(widgetJSON));
       }
     },
     endDrag(): void {
-      (this.thisWidget as AppWidget).move = false
-      this.$emit('dragended')
+      (this.thisWidget as AppWidget).move = false;
+      this.$emit('dragended');
     }
   },
   watch: {
     widget: {
       handler() {
-        this.thisWidget = this.widget
+        this.thisWidget = this.widget;
       },
       deep: true
     }
   },
   beforeMount() {
-    this.thisWidget = this.widget
+    this.thisWidget = this.widget;
   }
 })
 </script>

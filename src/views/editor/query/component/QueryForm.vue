@@ -11,34 +11,34 @@
               :title="i18n('editor.fields')"
               show-hide-button
               :is-hidden="fieldsHidden"
-              @showhideclick="fieldsHidden = !fieldsHidden">
-          </CardSectionTitle>
+              @showhideclick="fieldsHidden = !fieldsHidden"
+          />
           <QueryFields
               v-if="fieldsVisible && !fieldsHidden"
               :query="query"
-              :fields="fields">
-          </QueryFields>
+              :fields="fields"
+          />
 
           <CardSectionTitle
               class="mt-2"
               :title="i18n('editor.sorting')"
               show-hide-button
               :is-hidden="sortHidden"
-              @showhideclick="sortHidden = !sortHidden">
-          </CardSectionTitle>
+              @showhideclick="sortHidden = !sortHidden"
+          />
           <QueryOrderByBuilder
               v-if="!sortHidden"
               :query="query"
-              :fields="fields">
-          </QueryOrderByBuilder>
+              :fields="fields"
+          />
 
           <CardSectionTitle
               class="mt-2"
               :title="i18n('editor.variables')"
               show-hide-button
               :is-hidden="variablesHidden"
-              @showhideclick="variablesHidden = !variablesHidden">
-          </CardSectionTitle>
+              @showhideclick="variablesHidden = !variablesHidden"
+          />
           <EditorVariables v-if="!variablesHidden" :object="query"/>
 
           <CardSectionTitle
@@ -46,8 +46,8 @@
               :title="i18n('editor.restrictions')"
               show-hide-button
               :is-hidden="whereHidden"
-              @showhideclick="whereHidden = !whereHidden">
-          </CardSectionTitle>
+              @showhideclick="whereHidden = !whereHidden"
+          />
           <EditorWhereBuilder v-if="!whereHidden" :object="query" :fields="fields"/>
         </v-card>
       </v-col>
@@ -104,32 +104,32 @@ export default Vue.extend({
   },
   computed: {
     fields(): SchemaItemField[] {
-      return getAllTableFieldsWithObjectRelations((this.currentQuery as Query).table, this.schema as SchemaItem[])
+      return getAllTableFieldsWithObjectRelations((this.currentQuery as Query).table, this.schema as SchemaItem[]);
     },
     fieldsVisible(): boolean {
-      return (this.currentQuery as Query).table.length > 0
+      return (this.currentQuery as Query).table.length > 0;
     },
     tablesNames(): string [] {
-      return (this.schema as { name: string }[])?.map((table) => table.name)
+      return (this.schema as { name: string }[])?.map((table) => table.name);
     }
   },
   watch: {
     query: {
       handler() {
-        this.currentQuery = this.query
+        this.currentQuery = this.query;
       },
       deep: true
     },
     schema: {
       handler() {
-        this.currentSchema = this.schema
+        this.currentSchema = this.schema;
       },
       deep: true
     }
   },
   beforeMount() {
-    this.currentQuery = this.query
-    this.currentSchema = this.schema
+    this.currentQuery = this.query;
+    this.currentSchema = this.schema;
   }
 })
 </script>

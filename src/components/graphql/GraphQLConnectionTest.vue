@@ -42,25 +42,25 @@ export default Vue.extend({
     async checkConnection(): Promise<void> {
       const result = await getCleanGraphQLSchema(this.address, this.secret);
       (this.schema as SchemaItem[]) = result.schema;
-      this.errorMsg = result.errorMsg.toString()
+      this.errorMsg = result.errorMsg.toString();
 
       if (this.errorMsg.length) {
-        this.connectionStatusColor = 'error'
-        this.connectionStatusDesc = this.$t('datasource.statusError').toString()
-        this.$emit('error')
+        this.connectionStatusColor = 'error';
+        this.connectionStatusDesc = this.$t('datasource.statusError').toString();
+        this.$emit('error');
         return
       } else {
-        this.connectionStatusColor = 'success'
-        this.connectionStatusDesc = this.$t('datasource.statusSuccess').toString()
-        this.$emit('setschema', this.schema)
+        this.connectionStatusColor = 'success';
+        this.connectionStatusDesc = this.$t('datasource.statusSuccess').toString();
+        this.$emit('setschema', this.schema);
       }
     }
   },
   watch: {
-    address() {
-      this.connectionStatusDesc = this.$t('datasource.statusNone').toString()
-      this.connectionStatusColor = 'grey'
-      this.errorMsg = ''
+    address(): void {
+      this.connectionStatusDesc = this.$t('datasource.statusNone').toString();
+      this.connectionStatusColor = 'grey';
+      this.errorMsg = '';
 
       if (this.isAuto) {
         this.checkConnection();
@@ -68,8 +68,8 @@ export default Vue.extend({
     }
   },
   async beforeMount() {
-    this.connectionStatusDesc = this.$t('datasource.statusNone').toString()
-    this.connectionStatusColor = 'grey'
+    this.connectionStatusDesc = this.$t('datasource.statusNone').toString();
+    this.connectionStatusColor = 'grey';
 
     if (this.isAuto) {
       await this.checkConnection();

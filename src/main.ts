@@ -18,47 +18,47 @@ import {Auth0} from "./plugins/auth0";
 import "roboto-fontface/css/roboto/roboto-fontface.css";
 import "@fortawesome/fontawesome-free/css/all.css";
 
-document.title = 'PM Vue-Graphql Demo'
-Vue.config.productionTip = false
+document.title = 'PM Vue-Graphql Demo';
+Vue.config.productionTip = false;
 
 const apolloLink = new HttpLink({
     uri: 'https://magister-app.herokuapp.com/v1/graphql', fetch, headers: () => {
-        const headers = {authorization: ''}
-        const token = window.localStorage.getItem('apollo-token')
-        if (token) headers.authorization = `Bearer ${token}`
-        return headers
+        const headers = {authorization: ''};
+        const token = window.localStorage.getItem('apollo-token');
+        if (token) headers.authorization = `Bearer ${token}`;
+        return headers;
     }
 })
 
-const apolloCache = new InMemoryCache({addTypename: false})
-const apolloStorage = window.localStorage as PersistentStorage<PersistedData<NormalizedCacheObject>>
+const apolloCache = new InMemoryCache({addTypename: false});
+const apolloStorage = window.localStorage as PersistentStorage<PersistedData<NormalizedCacheObject>>;
 
 export const apolloClient = new ApolloClient({
     typeDefs: typeDefs,
     link: apolloLink,
     cache: apolloCache,
     resolvers: {}
-})
+});
 
-const apolloProvider = new VueApollo({defaultClient: apolloClient})
+const apolloProvider = new VueApollo({defaultClient: apolloClient});
 
-persistCache({cache: apolloCache, storage: apolloStorage}).then()
+persistCache({cache: apolloCache, storage: apolloStorage}).then();
 
-Vue.use(VueI18n)
-Vue.use(VModal)
-Vue.use(VueApollo)
-Vue.use(VueCookies)
+Vue.use(VueI18n);
+Vue.use(VModal);
+Vue.use(VueApollo);
+Vue.use(VueCookies);
 Vue.use(Auth0, {domain: auth0Domain, clientId: auth0CientId, onRedirectCallback: auth0OnRedirectCallback});
 
-export const i18n = new VueI18n({locale: defaultLocale, messages, fallbackLocale: defaultLocale})
-export const cryptoKey = 'jXn2r5u8x/A?D(G+KbPeShVkYp3s6v9y'
+export const i18n = new VueI18n({locale: defaultLocale, messages, fallbackLocale: defaultLocale});
+export const cryptoKey = 'jXn2r5u8x/A?D(G+KbPeShVkYp3s6v9y';
 
 Vue.mixin({
     methods: {
         i18n(key: string): string {
-            return this.$t(key).toString()
+            return this.$t(key).toString();
         }
     }
 })
 
-new Vue({router, apolloProvider, i18n, vuetify, render: h => h(App)}).$mount('#app')
+new Vue({router, apolloProvider, i18n, vuetify, render: h => h(App)}).$mount('#app');

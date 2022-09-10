@@ -5,8 +5,8 @@
         :datasource-id="datasource.id"
         :tables="tables"
         @refresh="refresh"
-        @close="closeAddQuery">
-    </AppAddQueryDialog>
+        @close="closeAddQuery"
+    />
 
     <DeleteConfirmationDialog :dialog="deleteDialog" @confirm="deleteQuery" @cancel="cancelDeleteQuery"/>
 
@@ -63,42 +63,42 @@ export default Vue.extend({
   },
   computed: {
     datasourceSet(): boolean {
-      return Object.keys(this.datasource).length !== 0
+      return Object.keys(this.datasource).length !== 0;
     },
     tables(): string [] {
-      return (this.schema as SchemaItem[]).map(table => table.name)
+      return (this.schema as SchemaItem[]).map(table => table.name);
     }
   },
   methods: {
     addQuery(): void {
-      this.addQueryDialog = true
+      this.addQueryDialog = true;
     },
     closeAddQuery(): void {
-      this.addQueryDialog = false
+      this.addQueryDialog = false;
     },
     refresh(): void {
-      this.$emit('refresh')
+      this.$emit('refresh');
     },
     deleteQueryClicked(id: number): void {
-      this.deleteId = id
-      this.deleteDialog = true
+      this.deleteId = id;
+      this.deleteDialog = true;
     },
     cancelDeleteQuery(): void {
-      this.deleteId = -1
-      this.deleteDialog = false
+      this.deleteId = -1;
+      this.deleteDialog = false;
     },
     deleteQuery(): void {
-      this.deleteDialog = false
+      this.deleteDialog = false;
 
       this.$apollo.mutate({mutation: DELETE_QUERY, variables: {id: this.deleteId}}).then(() => {
-        this.$emit('refresh')
-      })
+        this.$emit('refresh');
+      });
     }
   },
   beforeMount() {
     getCleanGraphQLSchema(this.datasource.address, this.datasource.secret).then((result) => {
-      (this.schema as SchemaItem[]) = result.schema
-    })
+      (this.schema as SchemaItem[]) = result.schema;
+    });
   }
 })
 </script>

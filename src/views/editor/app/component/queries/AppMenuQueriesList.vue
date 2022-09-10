@@ -15,15 +15,16 @@
                 :label="i18n('common.edit')"
                 icon="fa-edit"
                 color="info"
-                @click="openQuery(query.id)">
-            </IconButton>
+                @click="openQuery(query.id)"
+            />
+
             <IconButton
                 class="ml-6"
                 :label="i18n('common.delete')"
                 icon="fa-trash-can"
                 color="error"
-                @click="deleteQueryClicked(query.id)">
-            </IconButton>
+                @click="deleteQueryClicked(query.id)"
+            />
           </v-col>
         </v-row>
       </v-container>
@@ -44,10 +45,10 @@ export default Vue.extend({
   },
   methods: {
     openQuery(id: number): void {
-      this.$router.push({name: 'Query', params: {datasourceId: this.datasourceId.toString(), queryId: id.toString()}})
+      this.$router.push({name: 'Query', params: {datasourceId: this.datasourceId.toString(), queryId: id.toString()}});
     },
     deleteQueryClicked(id: number): void {
-      this.$emit('delete', id)
+      this.$emit('delete', id);
     }
   }
 })

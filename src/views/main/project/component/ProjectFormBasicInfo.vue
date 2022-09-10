@@ -8,8 +8,8 @@
         :counter="30"
         :rules="nameRules"
         prepend-icon="fa-tag"
-        required>
-    </v-text-field>
+        required
+    />
 
     <v-textarea
         class="pl-2 pr-2"
@@ -21,8 +21,8 @@
         prepend-icon="fa-pen"
         required
         auto-grow
-        rows="1">
-    </v-textarea>
+        rows="1"
+    />
 
     <v-select
         class="pl-2 pr-2"
@@ -36,8 +36,8 @@
         append-icon="fa-chevron-down"
         prepend-icon="fa-palette"
         item-text="name"
-        item-value="id">
-
+        item-value="id"
+    >
       <template v-slot:append-outer>
         <v-icon class="pl-2 pr-2" @click="clearTheme">fa-times</v-icon>
       </template>
@@ -72,19 +72,19 @@ export default Vue.extend({
   },
   methods: {
     clearTheme(): void {
-      this.$emit('cleartheme')
+      this.$emit('cleartheme');
     },
   },
   watch: {
     project: {
       handler() {
-        this.projectData = this.project
+        this.projectData = this.project;
       },
       deep: true
     }
   },
   beforeMount() {
-    this.projectData = this.project
+    this.projectData = this.project;
   }
 })
 </script>

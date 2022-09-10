@@ -8,8 +8,8 @@
       :mutations="mutations"
       @showerror="showError"
       @saving="saving"
-      @savingdone="savingDone">
-  </WidgetContainer>
+      @savingdone="savingDone"
+  />
 
   <WidgetRow
       v-else-if="widget.type === 'Row'"
@@ -21,8 +21,8 @@
       :mutations="mutations"
       @showerror="showError"
       @saving="saving"
-      @savingdone="savingDone">
-  </WidgetRow>
+      @savingdone="savingDone"
+  />
 
   <WidgetColumn
       v-else-if="widget.type === 'Column'"
@@ -34,8 +34,8 @@
       :mutations="mutations"
       @showerror="showError"
       @saving="saving"
-      @savingdone="savingDone">
-  </WidgetColumn>
+      @savingdone="savingDone"
+  />
 
   <WidgetForm
       v-else-if="widget.type === 'Form'"
@@ -47,16 +47,16 @@
       :mutations="mutations"
       @showerror="showError"
       @saving="saving"
-      @savingdone="savingDone">
-  </WidgetForm>
+      @savingdone="savingDone"
+  />
 
   <WidgetText
       v-else-if="widget.type === 'Text'"
       :widget="widget"
       :theme="theme"
       :data-item="dataItem"
-      :variables="variables">
-  </WidgetText>
+      :variables="variables"
+  />
 
   <WidgetCard
       v-else-if="widget.type === 'Card'"
@@ -64,31 +64,31 @@
       :theme="theme"
       :data-item="dataItem"
       :datasource="datasource"
-      :variables="variables">
-  </WidgetCard>
+      :variables="variables"
+  />
 
   <WidgetLink
       v-else-if="widget.type === 'Link'"
       :widget="widget"
       :theme="theme"
       :data-item="dataItem"
-      :variables="variables">
-  </WidgetLink>
+      :variables="variables"
+  />
 
   <WidgetDivider
       v-else-if="widget.type === 'Divider'"
       :widget="widget"
       :data-item="dataItem"
-      :theme="theme">
-  </WidgetDivider>
+      :theme="theme"
+  />
 
   <WidgetCarousel
       v-else-if="widget.type === 'Carousel'"
       :widget="widget"
       :datasource="datasource"
       :data-item="dataItem"
-      :variables="variables">
-  </WidgetCarousel>
+      :variables="variables"
+  />
 
   <WidgetTable
       v-else-if="widget.type === 'Table'"
@@ -96,32 +96,32 @@
       :theme="theme"
       :datasource="datasource"
       :data-item="dataItem"
-      :variables="variables">
-  </WidgetTable>
+      :variables="variables"
+  />
 
   <WidgetTextField
       v-else-if="widget.type === 'Text-Field'"
       :widget="widget"
       :theme="theme"
       :data-item="dataItem"
-      :variables="variables">
-  </WidgetTextField>
+      :variables="variables"
+  />
 
   <WidgetNumberField
       v-else-if="widget.type === 'Number-Field'"
       :widget="widget"
       :theme="theme"
       :data-item="dataItem"
-      :variables="variables">
-  </WidgetNumberField>
+      :variables="variables"
+  />
 
   <WidgetTextArea
       v-else-if="widget.type === 'Text-Area'"
       :widget="widget"
       :theme="theme"
       :data-item="dataItem"
-      :variables="variables">
-  </WidgetTextArea>
+      :variables="variables"
+  />
 
   <WidgetSelect
       v-else-if="widget.type === 'Select'"
@@ -129,16 +129,16 @@
       :datasource="datasource"
       :theme="theme"
       :data-item="dataItem"
-      :variables="variables">
-  </WidgetSelect>
+      :variables="variables"
+  />
 
   <WidgetCheckbox
       v-else-if="widget.type === 'Checkbox'"
       :widget="widget"
       :theme="theme"
       :data-item="dataItem"
-      :variables="variables">
-  </WidgetCheckbox>
+      :variables="variables"
+  />
 
   <WidgetButton
       v-else-if="widget.type === 'Button'"
@@ -152,8 +152,8 @@
       :mutations="mutations"
       @showerror="showError"
       @saving="saving"
-      @savingdone="savingDone">
-  </WidgetButton>
+      @savingdone="savingDone"
+  />
 </template>
 
 <script lang="ts">
@@ -209,14 +209,14 @@ export default Vue.extend({
     mutations: Array
   },
   methods: {
-    showError(error: string) {
-      this.$emit('showerror', error)
+    showError(error: string): void {
+      this.$emit('showerror', error);
     },
     saving(): void {
-      this.$emit('saving')
+      this.$emit('saving');
     },
     savingDone(): void {
-      this.$emit('savingdone')
+      this.$emit('savingdone');
     }
   }
 })

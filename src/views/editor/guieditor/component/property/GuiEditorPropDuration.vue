@@ -8,8 +8,8 @@
             outlined dense hide-details
             :label="prop.label"
             v-model="currentProp.value"
-            @keydown="filterNumbersOnly">
-        </v-text-field>
+            @keydown="filterNumbersOnly"
+        />
       </v-col>
 
       <v-col cols="3" class="pl-0">
@@ -18,8 +18,8 @@
             color="accent"
             outlined dense hide-details
             value="ms"
-            readonly>
-        </v-text-field>
+            readonly
+        />
       </v-col>
     </v-row>
   </v-container>
@@ -40,12 +40,12 @@ export default Vue.extend({
     }
   },
   methods: {
-    filterNumbersOnly(event: KeyboardEvent) {
-      filterNumbersOnly(event)
+    filterNumbersOnly(event: KeyboardEvent): void {
+      filterNumbersOnly(event);
     }
   },
   async beforeMount() {
-    this.currentProp = this.prop
+    this.currentProp = this.prop;
   }
 })
 </script>

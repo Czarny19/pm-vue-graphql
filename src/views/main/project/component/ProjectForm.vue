@@ -20,8 +20,8 @@
                   v-if="project"
                   :project="projectData"
                   :datasources="datasources"
-                  @clearsource="clearDatasource">
-              </ProjectFormDatasource>
+                  @clearsource="clearDatasource"
+              />
             </v-form>
 
             <v-divider class="ml-4 mr-4"></v-divider>
@@ -83,21 +83,21 @@ export default Vue.extend({
   },
   methods: {
     submit(): void {
-      (this.$refs.form as Vue & { validate: () => boolean }).validate()
+      (this.$refs.form as Vue & { validate: () => boolean }).validate();
 
       if (this.valid) {
-        this.saving = true
-        this.project.id ? this.updateProject() : this.createProject()
+        this.saving = true;
+        this.project.id ? this.updateProject() : this.createProject();
       }
     },
     cancel(): void {
-      this.$router.back()
+      this.$router.back();
     },
     clearTheme(): void {
-      this.projectTyped.theme_id = undefined
+      this.projectTyped.theme_id = undefined;
     },
     clearDatasource(): void {
-      this.projectTyped.source_id = undefined
+      this.projectTyped.source_id = undefined;
     },
     updateProject(): void {
       this.$apollo.mutate({
@@ -110,10 +110,10 @@ export default Vue.extend({
           datasourceId: this.projectTyped.source_id
         }
       }).then(() => {
-        this.$emit('saving', false)
-        this.$router.back()
+        this.$emit('saving', false);
+        this.$router.back();
       }).catch(() => {
-        this.$emit('saving', false)
+        this.$emit('saving', false);
       })
     },
     createProject(): void {
@@ -127,24 +127,24 @@ export default Vue.extend({
           datasourceId: this.projectTyped.source_id
         }
       }).then(() => {
-        this.$emit('saving', false)
-        this.$router.back()
+        this.$emit('saving', false);
+        this.$router.back();
       }).catch(() => {
-        this.$emit('saving', false)
+        this.$emit('saving', false);
       })
     }
   },
   watch: {
     project: {
       handler() {
-        this.projectData = this.project
+        this.projectData = this.project;
       },
       deep: true
     },
     projectData: {
       handler() {
         if (this.projectTyped.theme_id) {
-          this.currentTheme = (this.themes as Theme[]).filter((theme) => theme.id === this.projectTyped.theme_id)[0]
+          this.currentTheme = (this.themes as Theme[]).filter((theme) => theme.id === this.projectTyped.theme_id)[0];
         }
       },
       deep: true

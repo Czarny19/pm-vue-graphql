@@ -16,15 +16,15 @@
         :label="i18n('editor.rejectChanges')"
         icon="fa-trash-can"
         color="error"
-        @click="rejectChanges">
-    </IconButton>
+        @click="rejectChanges"
+    />
 
     <IconButton
         :label="i18n('common.save')"
         icon="fa-save"
         color="success"
-        @click="save">
-    </IconButton>
+        @click="save"
+    />
   </v-toolbar>
 </template>
 
@@ -41,13 +41,13 @@ export default Vue.extend({
   },
   methods: {
     closeEditor(): void {
-      this.$emit('closeeditor')
+      this.$emit('closeeditor');
     },
     save(): void {
-      this.$emit('save')
+      this.$emit('save');
     },
     rejectChanges(): void {
-      this.$emit('reject')
+      this.$emit('reject');
     }
   }
 })

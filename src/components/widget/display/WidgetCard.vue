@@ -5,14 +5,16 @@
       :color="cardColor"
       :outlined="argsProps.outlined"
       :elevation="elevation"
-      :shaped="argsProps.shaped">
-
+      :shaped="argsProps.shaped"
+  >
     <v-card-title v-if="title" class="text-h6" :style="{'color': titleColor}">
       {{ title }}
     </v-card-title>
+
     <v-card-subtitle v-if="subtitle" class="text-start text-body-1" :style="{'color': subtitleColor}">
       {{ subtitle }}
     </v-card-subtitle>
+
     <v-card-text v-if="text" class="text-start text-body-1 pb-2" :style="{'color': textColor}">
       {{ text }}
     </v-card-text>
@@ -45,104 +47,104 @@ export default Vue.extend({
   },
   computed: {
     appWidget(): AppWidget {
-      return this.widget as AppWidget
+      return this.widget as AppWidget;
     },
     visible(): boolean {
-      return widget.isWidgetVisible(this.appWidget, this.dataItem)
+      return widget.isWidgetVisible(this.appWidget, this.dataItem);
     },
     cssProps(): ({ [p: string]: string })[] {
-      return widget.getCssProps(this.appWidget, this.theme)
+      return widget.getCssProps(this.appWidget, this.theme);
     },
     argsProps(): { [k: string]: string } {
-      return widget.getArgsProps(this.appWidget)
+      return widget.getArgsProps(this.appWidget);
     },
     dataProps(): { [k: string]: string } {
-      return widget.getDataProps(this.appWidget)
+      return widget.getDataProps(this.appWidget);
     },
     data(): never {
-      return this.dataItem as never
+      return this.dataItem as never;
     },
     cardColor(): string {
-      return widget.getColorPropValue(this.theme, this.argsProps.backgroundColor)
+      return widget.getColorPropValue(this.theme, this.argsProps.backgroundColor);
     },
     title(): string {
-      const data = this.data
-      const queryFieldName = this.dataProps.titleQueryFieldName
+      const data = this.data;
+      const queryFieldName = this.dataProps.titleQueryFieldName;
 
-      const variables = this.variables as PageVariable[]
-      const pageVarId = Number(this.dataProps.titlePageVarId)
+      const variables = this.variables as PageVariable[];
+      const pageVarId = Number(this.dataProps.titlePageVarId);
 
-      const params = this.$route.params
-      const pageParamName = this.dataProps.titlePageParamName
+      const params = this.$route.params;
+      const pageParamName = this.dataProps.titlePageParamName;
 
-      return widget.getDisplayWidgetVarValue(data, queryFieldName, variables, pageVarId, params, pageParamName)
+      return widget.getDisplayWidgetVarValue(data, queryFieldName, variables, pageVarId, params, pageParamName);
     },
     titleColor(): string {
-      return widget.getColorPropValue(this.theme, this.argsProps.titleColor)
+      return widget.getColorPropValue(this.theme, this.argsProps.titleColor);
     },
     subtitle(): string {
-      const data = this.data
-      const queryFieldName = this.dataProps.subtitleQueryFieldName
+      const data = this.data;
+      const queryFieldName = this.dataProps.subtitleQueryFieldName;
 
-      const variables = this.variables as PageVariable[]
-      const pageVarId = Number(this.dataProps.subtitlePageVarId)
+      const variables = this.variables as PageVariable[];
+      const pageVarId = Number(this.dataProps.subtitlePageVarId);
 
-      const params = this.$route.params
-      const pageParamName = this.dataProps.subtitlePageParamName
+      const params = this.$route.params;
+      const pageParamName = this.dataProps.subtitlePageParamName;
 
-      return widget.getDisplayWidgetVarValue(data, queryFieldName, variables, pageVarId, params, pageParamName)
+      return widget.getDisplayWidgetVarValue(data, queryFieldName, variables, pageVarId, params, pageParamName);
     },
     subtitleColor(): string {
-      return widget.getColorPropValue(this.theme, this.argsProps.subtitleColor)
+      return widget.getColorPropValue(this.theme, this.argsProps.subtitleColor);
     },
     action1Color(): string {
-      return widget.getColorPropValue(this.theme, this.argsProps.action1Color)
+      return widget.getColorPropValue(this.theme, this.argsProps.action1Color);
     },
     action2Color(): string {
-      return widget.getColorPropValue(this.theme, this.argsProps.action2Color)
+      return widget.getColorPropValue(this.theme, this.argsProps.action2Color);
     },
     textColor(): string {
-      return widget.getColorPropValue(this.theme, this.argsProps.textColor)
+      return widget.getColorPropValue(this.theme, this.argsProps.textColor);
     },
     text(): string {
-      const data = this.data
-      const queryFieldName = this.dataProps.textQueryFieldName
+      const data = this.data;
+      const queryFieldName = this.dataProps.textQueryFieldName;
 
-      const variables = this.variables as PageVariable[]
-      const pageVarId = Number(this.dataProps.textPageVarId)
+      const variables = this.variables as PageVariable[];
+      const pageVarId = Number(this.dataProps.textPageVarId);
 
-      const params = this.$route.params
-      const pageParamName = this.dataProps.textPageParamName
+      const params = this.$route.params;
+      const pageParamName = this.dataProps.textPageParamName;
 
-      return widget.getDisplayWidgetVarValue(data, queryFieldName, variables, pageVarId, params, pageParamName)
+      return widget.getDisplayWidgetVarValue(data, queryFieldName, variables, pageVarId, params, pageParamName);
     },
     elevation(): number {
-      return Number(this.argsProps.elevation)
+      return Number(this.argsProps.elevation);
     }
   },
   methods: {
     action1(): void {
       if (!this.$route.path.startsWith('/admin')) {
-        const projectId = this.$route.params.projectId
-        const variables = this.variables as PageVariable[]
-        const params = this.$route.params
+        const projectId = this.$route.params.projectId;
+        const variables = this.variables as PageVariable[];
+        const params = this.$route.params;
 
-        const actions = this.appWidget.propGroups.find((group: { type: string }) => group.type === 'action')
-        const action = actions?.props[0] as unknown as ActionProp
+        const actions = this.appWidget.propGroups.find((group: { type: string }) => group.type === 'action');
+        const action = actions?.props[0] as unknown as ActionProp;
 
-        widget.runWidgetClickAction(action, projectId, this.datasource, this.dataItem, variables, params)
+        widget.runWidgetClickAction(action, projectId, this.datasource, this.dataItem, variables, params);
       }
     },
     action2(): void {
       if (!this.$route.path.startsWith('/admin')) {
-        const projectId = this.$route.params.projectId
-        const variables = this.variables as PageVariable[]
-        const params = this.$route.params
+        const projectId = this.$route.params.projectId;
+        const variables = this.variables as PageVariable[];
+        const params = this.$route.params;
 
-        const actions = this.appWidget.propGroups.find((group: { type: string }) => group.type === 'action')
-        const action = actions?.props[1] as unknown as ActionProp
+        const actions = this.appWidget.propGroups.find((group: { type: string }) => group.type === 'action');
+        const action = actions?.props[1] as unknown as ActionProp;
 
-        widget.runWidgetClickAction(action, projectId, this.dataItem, this.datasource, variables, params)
+        widget.runWidgetClickAction(action, projectId, this.dataItem, this.datasource, variables, params);
       }
     }
   }

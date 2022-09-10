@@ -6,8 +6,8 @@
         :project="project"
         :datasources="datasources"
         :themes="themes"
-        :user-id="currentUser.id">
-    </ProjectForm>
+        :user-id="currentUser.id"
+    />
   </v-container>
 </template>
 
@@ -38,10 +38,10 @@ export default Vue.extend({
   },
   computed: {
     projectId(): number {
-      return Number(this.$route.params.projectId)
+      return Number(this.$route.params.projectId);
     },
     loading(): boolean {
-      return this.loadingProject || this.loadingThemes || this.loadingDatasources
+      return this.loadingProject || this.loadingThemes || this.loadingDatasources;
     }
   },
   apollo: {
@@ -57,11 +57,11 @@ export default Vue.extend({
         }
       },
       skip(): boolean {
-        return !this.projectId
+        return !this.projectId;
       },
       result({data}): void {
-        this.project = data.PROJECT[0]
-        this.loadingProject = false
+        this.project = data.PROJECT[0];
+        this.loadingProject = false;
       }
     },
     THEME: {
@@ -73,11 +73,11 @@ export default Vue.extend({
         }
       },
       skip(): boolean {
-        return !this.currentUser
+        return !this.currentUser;
       },
       result({data}): void {
-        this.themes = data.THEME
-        this.loadingThemes = false
+        this.themes = data.THEME;
+        this.loadingThemes = false;
       }
     },
     DATA_SOURCE: {
@@ -89,18 +89,18 @@ export default Vue.extend({
         }
       },
       skip(): boolean {
-        return !this.currentUser
+        return !this.currentUser;
       },
       result({data}): void {
-        this.datasources = data.DATA_SOURCE
-        this.datasources.forEach((ds: Datasource) => ds.secret = decodeDatasourceSecret(ds.secret ?? ''))
-        this.loadingDatasources = false
+        this.datasources = data.DATA_SOURCE;
+        this.datasources.forEach((ds: Datasource) => ds.secret = decodeDatasourceSecret(ds.secret ?? ''));
+        this.loadingDatasources = false;
       }
     }
   },
   beforeMount() {
     if (!this.projectId) {
-      this.loadingProject = false
+      this.loadingProject = false;
     }
   }
 })

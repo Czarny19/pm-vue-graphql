@@ -61,19 +61,19 @@ export default Vue.extend({
     }
   },
   methods: {
-    setActive(widget: AppWidget) {
-      this.$emit('activewidget', widget)
+    setActive(widget: AppWidget): void {
+      this.$emit('activewidget', widget);
     },
     dragStart(index: number): void {
-      this.dragIndex = index
-      this.$emit('dragstarted')
+      this.dragIndex = index;
+      this.$emit('dragstarted');
     },
     dragEnd(): void {
-      this.dragIndex = -1
-      this.$emit('dragended')
+      this.dragIndex = -1;
+      this.$emit('dragended');
     },
     onDrop(index: number, evt?: DragEvent) {
-      this.$emit('dragended')
+      this.$emit('dragended');
 
       const dataTransfer = evt?.dataTransfer;
 
@@ -82,15 +82,15 @@ export default Vue.extend({
         const widget = JSON.parse(dataTransfer!.getData('widget'));
 
         if (widget.group === 'Grid' && widget.type !== 'Container') {
-          this.errorSnackbar = true
-          return
+          this.errorSnackbar = true;
+          return;
         }
 
         if (this.dragIndex >= 0 && this.dragIndex < index && this.isThisLayerWidgetMoved()) {
-          index--
+          index--;
         }
 
-        this.dragIndex = -1
+        this.dragIndex = -1;
 
         this.moveWidgets(this.page as AppWidget, widget);
         (this.page.children as AppWidget[]).splice(index, 0, widget);
@@ -102,19 +102,19 @@ export default Vue.extend({
 
         if ((child as AppWidget).move) {
           widget.move = false;
-          parent.children.splice(index, 1)
+          parent.children.splice(index, 1);
           continue;
         }
 
-        this.moveWidgets(child, widget)
+        this.moveWidgets(child, widget);
       }
     },
     isThisLayerWidgetMoved(): boolean {
-      return this.page.children.find((child) => (child as AppWidget).move) !== undefined
+      return this.page.children.find((child) => (child as AppWidget).move) !== undefined;
     }
   },
   beforeMount() {
-    this.page = this.widget
+    this.page = this.widget;
   }
 })
 </script>

@@ -13,8 +13,8 @@
               :counter="50"
               :rules="mutationNameRules"
               prepend-icon="fa-tag"
-              required>
-          </v-text-field>
+              required
+          />
 
           <v-select
               class="pa-2"
@@ -28,8 +28,8 @@
               append-icon="fa-chevron-down"
               prepend-icon="fa-table"
               item-text="name"
-              item-value="id">
-          </v-select>
+              item-value="id"
+          />
 
           <v-select
               class="pa-2"
@@ -43,8 +43,8 @@
               append-icon="fa-chevron-down"
               prepend-icon="fa-table"
               item-text="name"
-              item-value="id">
-          </v-select>
+              item-value="id"
+          />
         </v-form>
       </v-card-text>
 
@@ -96,15 +96,15 @@ export default Vue.extend({
         {id: mutationType.Create, name: this.$t('editor.mutationInsert').toString()},
         {id: mutationType.Update, name: this.$t('editor.mutationUpdate').toString()},
         {id: mutationType.Delete, name: this.$t('editor.mutationDelete').toString()}
-      ]
+      ];
     }
   },
   methods: {
     save(): void {
-      (this.$refs.form as Vue & { validate: () => boolean }).validate()
+      (this.$refs.form as Vue & { validate: () => boolean }).validate();
 
       if (this.valid) {
-        this.addMutation()
+        this.addMutation();
       }
     },
     addMutation(): void {
@@ -117,27 +117,27 @@ export default Vue.extend({
           type: this.mutationType
         }
       }).then(async () => {
-        this.mutationName = ''
-        this.mutationTable = ''
-        this.mutationType = ''
-        this.isOpen = false
-        this.$emit('refresh')
-        this.$emit('close')
+        this.mutationName = '';
+        this.mutationTable = '';
+        this.mutationType = '';
+        this.isOpen = false;
+        this.$emit('refresh');
+        this.$emit('close');
       }).catch(() => {
-        this.mutationName = ''
-        this.mutationTable = ''
-        this.mutationType = ''
-        this.isOpen = false
-        this.$emit('close')
+        this.mutationName = '';
+        this.mutationTable = '';
+        this.mutationType = '';
+        this.isOpen = false;
+        this.$emit('close');
       })
     },
-    close() {
-      this.$emit('close')
+    close(): void {
+      this.$emit('close');
     }
   },
   watch: {
     dialog(): void {
-      this.isOpen = this.dialog
+      this.isOpen = this.dialog;
     }
   }
 })

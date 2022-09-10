@@ -9,8 +9,8 @@
           :counter="50"
           :rules="queryNameRules"
           prepend-icon="fa-tag"
-          required>
-      </v-text-field>
+          required
+      />
 
       <v-select
           class="pa-2"
@@ -24,8 +24,8 @@
           append-icon="fa-chevron-down"
           prepend-icon="fa-table"
           item-text="name"
-          item-value="id">
-      </v-select>
+          item-value="id"
+      />
 
       <v-text-field
           class="pa-2"
@@ -34,8 +34,8 @@
           :label="i18n('editor.limit')"
           :rules="limitRules"
           prepend-icon="fa-list-ol"
-          @keydown="filterNumbersOnly">
-      </v-text-field>
+          @keydown="filterNumbersOnly"
+      />
     </div>
   </v-card-text>
 </template>
@@ -67,24 +67,24 @@ export default Vue.extend({
     }
   },
   methods: {
-    filterNumbersOnly(event: KeyboardEvent) {
-      filterNumbersOnly(event)
+    filterNumbersOnly(event: KeyboardEvent): void {
+      filterNumbersOnly(event);
     }
   },
   watch: {
     currentQuery: {
       handler() {
-        const query = (this.currentQuery as Query)
+        const query = (this.currentQuery as Query);
 
         if ((query.limit?.toString()) === '') {
-          query.limit = undefined
+          query.limit = undefined;
         }
       },
       deep: true
     }
   },
   beforeMount() {
-    this.currentQuery = this.query
+    this.currentQuery = this.query;
   }
 })
 </script>

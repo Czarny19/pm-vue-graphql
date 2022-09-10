@@ -37,15 +37,16 @@
                   :label="i18n('common.modify')"
                   color="info"
                   icon="fa-edit"
-                  @click="openModifyProject(project.id)">
-              </IconButton>
+                  @click="openModifyProject(project.id)"
+              />
+
               <IconButton
                   class="ml-6"
                   :label="i18n('dashboard.editor')"
                   color="secondary"
                   icon="fa-pencil"
-                  @click="openApp(project.id)">
-              </IconButton>
+                  @click="openApp(project.id)"
+              />
             </v-col>
 
             <v-col class="text-end">
@@ -53,8 +54,8 @@
                   :label="i18n('common.delete')"
                   color="error"
                   icon="fa-trash-can"
-                  @click="deleteProjectClicked(project.id)">
-              </IconButton>
+                  @click="deleteProjectClicked(project.id)"
+              />
             </v-col>
           </v-row>
         </v-container>
@@ -76,13 +77,13 @@ export default Vue.extend({
   },
   methods: {
     openModifyProject(id: string): void {
-      this.$router.push({name: 'Project', params: {projectId: id}})
+      this.$router.push({name: 'Project', params: {projectId: id}});
     },
     openApp(id: string): void {
-      this.$router.push({name: 'App', params: {projectId: id, tab: '0'}})
+      this.$router.push({name: 'App', params: {projectId: id, tab: '0'}});
     },
     deleteProjectClicked(id: number): void {
-      this.$emit('delete', id)
+      this.$emit('delete', id);
     }
   }
 })

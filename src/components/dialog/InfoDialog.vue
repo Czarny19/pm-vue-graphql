@@ -5,6 +5,7 @@
         <slot name="activator"/>
       </div>
     </template>
+
     <v-card>
       <v-card-title class="text-start">{{ title }}</v-card-title>
       <v-card-text class="text-start text-body-2">{{ msg }}</v-card-text>
@@ -33,12 +34,12 @@ export default Vue.extend({
   },
   watch: {
     dialog(): void {
-      this.isOpen = this.dialog
+      this.isOpen = this.dialog;
     }
   },
   methods: {
-    close() {
-      this.$emit('close')
+    close(): void {
+      this.$emit('close');
     }
   }
 })

@@ -9,8 +9,8 @@
       v-model="currentProp.value"
       item-value="id"
       item-text="name"
-      item-color="accent">
-  </v-select>
+      item-color="accent"
+  />
 </template>
 
 <script lang="ts">
@@ -34,22 +34,23 @@ export default Vue.extend({
   },
   computed: {
     tableName(): string {
-      return getTableNameForWidget(this.widget)
+      return getTableNameForWidget(this.widget);
     },
     fieldsVisible(): boolean {
-      return this.tableName.length > 0
+      return this.tableName.length > 0;
     }
   },
   watch: {
-    tableName() {
-      (this.fields as SchemaItemField[]) = getAllTableFieldsWithObjectRelations(this.tableName, this.schema as SchemaItem[])
+    tableName(): void {
+      (this.fields as SchemaItemField[]) =
+          getAllTableFieldsWithObjectRelations(this.tableName, this.schema as SchemaItem[]);
     }
   },
   beforeMount() {
     this.currentProp = this.prop;
 
     const tableName = getTableNameForWidget(this.widget);
-    (this.fields as SchemaItemField[]) = getAllTableFieldsWithObjectRelations(tableName, this.schema as SchemaItem[])
+    (this.fields as SchemaItemField[]) = getAllTableFieldsWithObjectRelations(tableName, this.schema as SchemaItem[]);
   }
 })
 </script>

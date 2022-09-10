@@ -6,8 +6,8 @@
       on-icon="fa-check-circle"
       hide-details
       :label="prop.label"
-      v-model="currentProp.value">
-  </v-checkbox>
+      v-model="currentProp.value"
+  />
 </template>
 
 <script lang="ts">
@@ -24,7 +24,7 @@ export default Vue.extend({
     }
   },
   beforeMount() {
-    this.currentProp = this.prop
+    this.currentProp = this.prop;
   }
 })
 </script>

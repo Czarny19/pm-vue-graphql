@@ -35,8 +35,8 @@
             dense
             hide-details
             :label="i18n('editor.description')"
-            v-model="currentWidget.id">
-        </v-text-field>
+            v-model="currentWidget.id"
+        />
 
         <template v-for="(group, index) in groups">
           <template v-if="group.type !== 'action' && group.type !== 'condition'">
@@ -53,8 +53,8 @@
                     :theme="theme"
                     :queries="queries"
                     :schema="schema"
-                    :variables="variables">
-                </GuiEditorProp>
+                    :variables="variables"
+                />
               </v-col>
             </v-row>
           </template>
@@ -64,8 +64,8 @@
             v-if="conditionPropGroup"
             :conditions-group="conditionPropGroup"
             :widget="widget"
-            :schema="schema">
-        </GuiEditorConditionBuilder>
+            :schema="schema"
+        />
 
         <GuiEditorActionBuilder
             v-if="actionPropGroup"
@@ -75,11 +75,11 @@
             :pages="pages"
             :widget="widget"
             :schema="schema"
-            :variables="variables">
-        </GuiEditorActionBuilder>
+            :variables="variables"
+        />
 
         <div class="secondary text-start text-body-2 pa-3 pl-6">
-          {{ i18n('editor.options')}}
+          {{ i18n('editor.options') }}
         </div>
 
         <v-row no-gutters class="pa-4 mb-8">
@@ -89,8 +89,8 @@
               color="error"
               icon="fa-trash-can"
               :label="i18n('editor.deleteComponent')"
-              @click="deleteComponent">
-          </IconButton>
+              @click="deleteComponent"
+          />
         </v-row>
       </v-container>
 
@@ -118,8 +118,8 @@
           color="success"
           icon="fa-add"
           :label="i18n('editor.addVariable')"
-          @click="addProp">
-      </IconButton>
+          @click="addProp"
+      />
 
       <v-container v-for="(type, index) in varTypes" :key="index" fluid class="text-start pa-0 pb-3">
         <div class="secondary text-start text-body-2 pa-3 pl-6">
@@ -138,8 +138,8 @@
                     :rows="1"
                     :value="variable.value"
                     persistent-hint
-                    outlined hide-details dense readonly disabled>
-                </v-textarea>
+                    outlined hide-details dense readonly disabled
+                />
               </v-col>
 
               <v-col cols="2" class="mt-auto text-end">
@@ -159,8 +159,8 @@
           color="success"
           icon="fa-add"
           :label="i18n('editor.addParam')"
-          @click="addParam">
-      </IconButton>
+          @click="addParam"
+      />
 
       <div class="secondary text-start text-body-2 pa-3 pl-6">
         {{ i18n('editor.pageParams') }}
@@ -174,8 +174,8 @@
                   class="pt-1 pb-3"
                   color="accent"
                   v-model="currentParams[index]"
-                  outlined hide-details dense>
-              </v-text-field>
+                  outlined hide-details dense
+              />
             </v-col>
 
             <v-col cols="2" class="mt-auto text-end" :key="param">
@@ -233,7 +233,7 @@ export default Vue.extend({
   },
   computed: {
     id(): string {
-      return this.currentWidget ? (this.currentWidget as { id: '', propGroups: [] }).id : ''
+      return this.currentWidget ? (this.currentWidget as { id: '', propGroups: [] }).id : '';
     },
     varTypes(): string[] {
       return (this.variables as PageVariable[])
@@ -241,20 +241,20 @@ export default Vue.extend({
           .filter((v, i, a) => a.indexOf(v) === i);
     },
     actionPropGroup(): { type: string } | undefined {
-      return (this.groups as { type: string }[]).find((group) => group.type === 'action')
+      return (this.groups as { type: string }[]).find((group) => group.type === 'action');
     },
     conditionPropGroup(): { type: string } | undefined {
-      return (this.groups as { type: string }[]).find((group) => group.type === 'condition')
+      return (this.groups as { type: string }[]).find((group) => group.type === 'condition');
     }
   },
   watch: {
     widget: {
       handler() {
         if (this.currentWidget != this.widget) {
-          this.widgetKey = this.widgetKey + 1
-          this.currentWidget = this.widget
-          this.groups = []
-          this.groups = this.currentWidget ? (this.currentWidget as { id: '', propGroups: [] }).propGroups : []
+          this.widgetKey = this.widgetKey + 1;
+          this.currentWidget = this.widget;
+          this.groups = [];
+          this.groups = this.currentWidget ? (this.currentWidget as { id: '', propGroups: [] }).propGroups : [];
         }
       },
       deep: true
@@ -262,38 +262,38 @@ export default Vue.extend({
   },
   methods: {
     setTab(tabNum: number): void {
-      this.navTab = tabNum
+      this.navTab = tabNum;
     },
     deleteComponent(): void {
-      this.currentWidget = null
-      this.$emit('delete')
+      this.currentWidget = null;
+      this.$emit('delete');
     },
     addProp(): void {
-      this.addVarDialog = true
+      this.addVarDialog = true;
     },
     closeAddVar(): void {
-      this.addVarDialog = false
+      this.addVarDialog = false;
     },
     refreshVars(): void {
-      this.$emit('refreshvars')
+      this.$emit('refreshvars');
     },
     deleteVar(id: number): void {
       this.$apollo.mutate({mutation: DELETE_PROP, variables: {id: id}}).then(async () => {
-        this.$emit('refreshvars')
-      })
+        this.$emit('refreshvars');
+      });
     },
     addParam(): void {
-      (this.currentParams as string[]).push('')
+      (this.currentParams as string[]).push('');
     },
     deleteParam(index: number): void {
-      (this.currentParams as string[]).splice(index, 1)
+      (this.currentParams as string[]).splice(index, 1);
     }
   },
   beforeMount() {
     this.height = `${window.innerHeight - 124}px`;
 
     addEventListener('resize', () => {
-      this.height = `${window.innerHeight - 124}px`
+      this.height = `${window.innerHeight - 124}px`;
     });
 
     (this.currentParams as string[]) = (this.params as string[]);

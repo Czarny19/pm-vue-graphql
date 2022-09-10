@@ -32,27 +32,27 @@ export default Vue.extend({
     }
   },
   computed: {
-    isOpen() {
-      return !this.$auth.isAuthenticated
+    isOpen(): boolean {
+      return !this.$auth.isAuthenticated;
     }
   },
   methods: {
     async login(): Promise<void> {
-      this.loading = true
-      await this.$auth.loginWithPopup()
+      this.loading = true;
+      await this.$auth.loginWithPopup();
 
       if (this.$auth.error) {
-        this.loading = false
-        return
+        this.loading = false;
+        return;
       }
 
       if (this.$auth.isAuthenticated) {
-        this.$auth.isAuthenticated = false
-        this.email = this.$auth.user.email
-        this.$apollo.queries.USER.skip = false
+        this.$auth.isAuthenticated = false;
+        this.email = this.$auth.user.email;
+        this.$apollo.queries.USER.skip = false;
 
-        await this.$apollo.queries.USER.refetch()
-        this.$auth.isAuthenticated = true
+        await this.$apollo.queries.USER.refetch();
+        this.$auth.isAuthenticated = true;
       }
     },
     createUser(): void {
@@ -63,7 +63,7 @@ export default Vue.extend({
           username: this.email,
         }
       }).then((response) => {
-        this.$emit('signup', response.data.insert_USER.returning[0].id)
+        this.$emit('signup', response.data.insert_USER.returning[0].id);
       }).catch()
     }
   },
@@ -86,14 +86,14 @@ export default Vue.extend({
                 email: data.USER[0].email
               }
             }
-          })
+          });
 
-          this.loading = false
+          this.loading = false;
 
           return
         } else if (this.email) {
-          this.loading = false
-          this.createUser()
+          this.loading = false;
+          this.createUser();
         }
       }
     }

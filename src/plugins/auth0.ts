@@ -36,12 +36,12 @@ declare interface Auth0Plugin {
     error: Error;
 }
 
-let instance: any
+let instance: any;
 
-export const getInstance = () => instance
+export const getInstance = () => instance;
 
 export const useAuth0 = (options: Auth0PluginOptions) => {
-    if (instance) return instance
+    if (instance) return instance;
 
     instance = new _Vue({
         data() {
@@ -56,42 +56,42 @@ export const useAuth0 = (options: Auth0PluginOptions) => {
         },
         methods: {
             async loginWithPopup(options: PopupLoginOptions, config: PopupConfigOptions) {
-                this.popupOpen = true
+                this.popupOpen = true;
 
                 try {
-                    await this.auth0Client.loginWithPopup(options, config)
-                    this.user = await this.auth0Client.getUser()
-                    this.isAuthenticated = await this.auth0Client.isAuthenticated()
-                    this.error = null
+                    await this.auth0Client.loginWithPopup(options, config);
+                    this.user = await this.auth0Client.getUser();
+                    this.isAuthenticated = await this.auth0Client.isAuthenticated();
+                    this.error = null;
                 } catch (e) {
-                    this.user = null
-                    this.isAuthenticated = false
-                    this.error = e
+                    this.user = null;
+                    this.isAuthenticated = false;
+                    this.error = e;
                     return
                 } finally {
-                    this.popupOpen = false
+                    this.popupOpen = false;
                 }
 
-                this.user = await this.auth0Client.getUser()
-                this.isAuthenticated = true
+                this.user = await this.auth0Client.getUser();
+                this.isAuthenticated = true;
             },
             /** Handles the callback when logging in using a redirect */
             async handleRedirectCallback() {
-                this.loading = true
+                this.loading = true;
 
                 try {
-                    await this.auth0Client.handleRedirectCallback()
-                    this.user = await this.auth0Client.getUser()
-                    this.isAuthenticated = true
-                    this.error = null
+                    await this.auth0Client.handleRedirectCallback();
+                    this.user = await this.auth0Client.getUser();
+                    this.isAuthenticated = true;
+                    this.error = null;
                 } catch (e) {
-                    this.error = e
+                    this.error = e;
                 } finally {
-                    this.loading = false
+                    this.loading = false;
                 }
             },
             logout(options: LogoutOptions) {
-                return this.auth0Client.logout(options)
+                return this.auth0Client.logout(options);
             }
         },
         async created() {
@@ -105,21 +105,21 @@ export const useAuth0 = (options: Auth0PluginOptions) => {
 
             try {
                 if (window.location.search.includes('code=') && window.location.search.includes('state=')) {
-                    const {appState} = await this.auth0Client.handleRedirectCallback()
-                    this.error = null
-                    options.onRedirectCallback(appState)
+                    const {appState} = await this.auth0Client.handleRedirectCallback();
+                    this.error = null;
+                    options.onRedirectCallback(appState);
                 }
             } catch (e) {
                 this.error = e;
             } finally {
-                this.isAuthenticated = await this.auth0Client.isAuthenticated()
-                this.user = await this.auth0Client.getUser()
-                this.loading = false
+                this.isAuthenticated = await this.auth0Client.isAuthenticated();
+                this.user = await this.auth0Client.getUser();
+                this.loading = false;
             }
         }
     });
 
-    return instance
+    return instance;
 };
 
 declare module 'vue/types/vue' {

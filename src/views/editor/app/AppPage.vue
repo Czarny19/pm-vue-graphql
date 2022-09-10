@@ -9,8 +9,8 @@
         v-if="currentTab === 0"
         :project="project"
         :pages="pages"
-        :loading="loadingPages">
-    </AppMenuTabSettings>
+        :loading="loadingPages"
+    />
 
     <AppMenuTabPages
         v-if="currentTab === 1"
@@ -18,29 +18,26 @@
         :pages="pages"
         :project-id="project.id"
         :datasource-id="datasource.id"
-        @refresh="refreshPages">
-    </AppMenuTabPages>
+        @refresh="refreshPages"
+    />
 
-    <AppMenuTabTables
-        v-else-if="currentTab === 2"
-        :datasource="datasource">
-    </AppMenuTabTables>
+    <AppMenuTabTables v-else-if="currentTab === 2" :datasource="datasource"/>
 
     <AppMenuTabQueries
         v-else-if="currentTab === 3 && !loadingQueries"
         :datasource="datasource"
         :queries="queries"
         :loading="loadingQueries"
-        @refresh="refreshQueries">
-    </AppMenuTabQueries>
+        @refresh="refreshQueries"
+    />
 
     <AppMenuTabMutations
         v-else-if="currentTab === 4 && !loadingMutations"
         :datasource="datasource"
         :mutations="mutations"
         :loading="loadingMutations"
-        @refresh="refreshMutations">
-    </AppMenuTabMutations>
+        @refresh="refreshMutations"
+    />
   </div>
 </template>
 
@@ -89,24 +86,24 @@ export default Vue.extend({
   },
   computed: {
     projectId(): number {
-      return Number(this.$route.params.projectId)
+      return Number(this.$route.params.projectId);
     }
   },
   methods: {
     changeTab(tab: number): void {
       if (tab != undefined && tab !== this.currentTab) {
-        this.currentTab = tab
-        this.$router.push({name: 'App', params: {projectId: this.projectId.toString(), tab: tab.toString()}})
+        this.currentTab = tab;
+        this.$router.push({name: 'App', params: {projectId: this.projectId.toString(), tab: tab.toString()}});
       }
     },
     refreshPages(): void {
-      this.$apollo.queries.PAGE.refetch()
+      this.$apollo.queries.PAGE.refetch();
     },
     refreshQueries(): void {
-      this.$apollo.queries.QUERY.refetch()
+      this.$apollo.queries.QUERY.refetch();
     },
     refreshMutations(): void {
-      this.$apollo.queries.MUTATION.refetch()
+      this.$apollo.queries.MUTATION.refetch();
     }
   },
   apollo: {
@@ -122,10 +119,10 @@ export default Vue.extend({
         }
       },
       skip(): boolean {
-        return !this.currentUser
+        return !this.currentUser;
       },
       result({data}): void {
-        this.project = data.PROJECT[0]
+        this.project = data.PROJECT[0];
       },
     },
     PAGE: {
@@ -137,11 +134,11 @@ export default Vue.extend({
         }
       },
       skip(): boolean {
-        return !this.currentUser
+        return !this.currentUser;
       },
       result({data}): void {
-        this.pages = data.PAGE
-        this.loadingPages = false
+        this.pages = data.PAGE;
+        this.loadingPages = false;
       }
     },
     THEME: {
@@ -153,10 +150,10 @@ export default Vue.extend({
         }
       },
       skip(): boolean {
-        return !this.project.theme_id
+        return !this.project.theme_id;
       },
       result({data}): void {
-        this.theme = data.THEME[0]
+        this.theme = data.THEME[0];
       }
     },
     DATA_SOURCE: {
@@ -168,11 +165,11 @@ export default Vue.extend({
         }
       },
       skip(): boolean {
-        return !this.project.source_id
+        return !this.project.source_id;
       },
       result({data}): void {
-        this.datasource = data.DATA_SOURCE[0]
-        this.datasource.secret = decodeDatasourceSecret(data.DATA_SOURCE[0].secret)
+        this.datasource = data.DATA_SOURCE[0];
+        this.datasource.secret = decodeDatasourceSecret(data.DATA_SOURCE[0].secret);
       }
     },
     QUERY: {
@@ -184,11 +181,11 @@ export default Vue.extend({
         }
       },
       skip(): boolean {
-        return !this.project.source_id
+        return !this.project.source_id;
       },
       result({data}): void {
-        this.queries = data.QUERY
-        this.loadingQueries = false
+        this.queries = data.QUERY;
+        this.loadingQueries = false;
       }
     },
     MUTATION: {
@@ -200,16 +197,16 @@ export default Vue.extend({
         }
       },
       skip(): boolean {
-        return !this.project.source_id
+        return !this.project.source_id;
       },
       result({data}): void {
-        this.mutations = data.MUTATION
-        this.loadingMutations = false
+        this.mutations = data.MUTATION;
+        this.loadingMutations = false;
       }
     }
   },
   async beforeMount() {
-    this.currentTab = Number(this.$route.params.tab)
+    this.currentTab = Number(this.$route.params.tab);
   }
 })
 </script>

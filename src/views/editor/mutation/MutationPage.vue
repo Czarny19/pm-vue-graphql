@@ -9,8 +9,8 @@
         :reject-visible="changesMade"
         @save="save"
         @reject="setRejectOpen"
-        @closeeditor="closeEditor">
-    </MutationTopBar>
+        @closeeditor="closeEditor"
+    />
 
     <LoadingCircular v-if="loadingMutation || loadingDatasource"/>
 
@@ -49,27 +49,27 @@ export default Vue.extend({
   },
   computed: {
     mutationId(): number {
-      return Number(this.$route.params.mutationId)
+      return Number(this.$route.params.mutationId);
     },
     datasourceId(): number {
-      return Number(this.$route.params.datasourceId)
+      return Number(this.$route.params.datasourceId);
     },
     datasourceTyped(): Datasource {
-      return this.datasource as Datasource
+      return this.datasource as Datasource;
     },
     mutationTyped(): Mutation {
-      return this.mutation as Mutation
+      return this.mutation as Mutation;
     }
   },
   watch: {
     mutation: {
       handler() {
         if (!this.mutationInitialized) {
-          this.mutationInitialized = true
-          return
+          this.mutationInitialized = true;
+          return;
         }
 
-        this.changesMade = true
+        this.changesMade = true;
       },
       deep: true
     }
@@ -90,38 +90,38 @@ export default Vue.extend({
           modifyDate: new Date()
         }
       }).then(() => {
-        this.changesMade = false
-        this.saving = false
-      })
+        this.changesMade = false;
+        this.saving = false;
+      });
     },
     closeEditor(): void {
       if (this.changesMade) {
-        this.isClosing = true
-        this.setRejectOpen()
-        return
+        this.isClosing = true;
+        this.setRejectOpen();
+        return;
       }
 
-      this.$router.back()
+      this.$router.back();
     },
     setRejectOpen(): void {
-      this.reject = true
+      this.reject = true;
     },
     cancelRejectChanges(): void {
-      this.isClosing = false
-      this.reject = false
+      this.isClosing = false;
+      this.reject = false;
     },
     rejectChanges(): void {
-      this.reject = false
-      this.mutationInitialized = false
+      this.reject = false;
+      this.mutationInitialized = false;
       this.changesMade = false;
-      this.loadingMutation = true
+      this.loadingMutation = true;
 
       if (this.isClosing) {
-        this.$router.back()
-        return
+        this.$router.back();
+        return;
       }
 
-      this.$apollo.queries.MUTATION.refetch()
+      this.$apollo.queries.MUTATION.refetch();
     }
   },
   apollo: {
@@ -134,12 +134,12 @@ export default Vue.extend({
         }
       },
       skip(): boolean {
-        return !this.mutationId
+        return !this.mutationId;
       },
       result({data}): void {
-        this.mutation = data.MUTATION[0]
-        this.changesMade = false
-        this.loadingMutation = false
+        this.mutation = data.MUTATION[0];
+        this.changesMade = false;
+        this.loadingMutation = false;
       }
     },
     DATA_SOURCE: {
@@ -151,16 +151,16 @@ export default Vue.extend({
         }
       },
       skip(): boolean {
-        return !this.datasourceId
+        return !this.datasourceId;
       },
       async result({data}): Promise<void> {
-        this.datasource = data.DATA_SOURCE[0]
-        this.datasource.secret = decodeDatasourceSecret(data.DATA_SOURCE[0].secret)
+        this.datasource = data.DATA_SOURCE[0];
+        this.datasource.secret = decodeDatasourceSecret(data.DATA_SOURCE[0].secret);
 
         await getCleanGraphQLSchema(this.datasourceTyped.address, this.datasourceTyped.secret).then((result) => {
-          this.schema = result.schema
-          this.loadingDatasource = false
-        })
+          this.schema = result.schema;
+          this.loadingDatasource = false;
+        });
       }
     }
   }

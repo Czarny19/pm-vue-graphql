@@ -72,27 +72,27 @@ export default Vue.extend({
   },
   methods: {
     setActive(widget: AppWidget): void {
-      this.$emit('activewidget', widget)
+      this.$emit('activewidget', widget);
     },
     dragStart(): void {
-      this.$emit('dragstarted')
+      this.$emit('dragstarted');
     },
     dragEnd(): void {
-      this.$emit('dragended')
+      this.$emit('dragended');
     },
     changeLeftNavShown(): void {
-      this.$emit('changeleftnav')
+      this.$emit('changeleftnav');
     },
     changeRightNavShown(): void {
-      this.$emit('changerightnav')
+      this.$emit('changerightnav');
     }
   },
   beforeMount() {
-    this.height = `${window.innerHeight - 170}px`
+    this.height = `${window.innerHeight - 170}px`;
 
     addEventListener('resize', () => {
-      this.height = `${window.innerHeight - 170}px`
-    })
+      this.height = `${window.innerHeight - 170}px`;
+    });
   }
 })
 </script>

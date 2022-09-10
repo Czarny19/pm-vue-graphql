@@ -1,11 +1,11 @@
 import ApolloClient from "apollo-client";
 import {typeDefs} from "@/graphql/typedefs";
-import {HttpLink} from "apollo-link-http";
-import {InMemoryCache} from "apollo-cache-inmemory";
 import {GET_SCHEMA} from "@/graphql/queries/schema";
 import {cryptoKey} from "@/main";
 import * as Types from "@/lib/types";
 import {SchemaItem, SchemaItemField} from "@/lib/types";
+import {HttpLink} from "apollo-link-http";
+import {InMemoryCache} from "apollo-cache-inmemory";
 import * as CryptoJS from "crypto-js";
 
 /**
@@ -16,8 +16,8 @@ import * as CryptoJS from "crypto-js";
  **/
 export const getCleanGraphQLSchema = async (endpoint: string,
                                             secret?: string): Promise<Types.CleanSchemaConnectionResult> => {
-    const result = await getGraphQLSchema(endpoint, secret)
-    return {schema: cleanSchema(result.schema), errorMsg: result.errorMsg}
+    const result = await getGraphQLSchema(endpoint, secret);
+    return {schema: cleanSchema(result.schema), errorMsg: result.errorMsg};
 }
 
 /**
@@ -27,21 +27,21 @@ export const getCleanGraphQLSchema = async (endpoint: string,
  * @returns Promise containing the graphQL schema as returned from the schema query {@link SchemaConnectionResult}.
  **/
 export const getGraphQLSchema = async (endpoint: string, secret?: string): Promise<Types.SchemaConnectionResult> => {
-    const linkOptions = {uri: endpoint, headers: schemaHeaders(secret)}
+    const linkOptions = {uri: endpoint, headers: schemaHeaders(secret)};
 
     const client = new ApolloClient({
         typeDefs: typeDefs,
         link: new HttpLink(linkOptions),
         cache: new InMemoryCache({addTypename: true}),
         resolvers: {}
-    })
+    });
 
     return await client.query({query: GET_SCHEMA, fetchPolicy: 'no-cache'}).then(response => {
-        const schema = response.data.__schema.types
-        return {schema: schema, errorMsg: ''}
+        const schema = response.data.__schema.types;
+        return {schema: schema, errorMsg: ''};
     }).catch(err => {
-        return {schema: [], errorMsg: err}
-    })
+        return {schema: [], errorMsg: err};
+    });
 }
 
 /**
@@ -51,19 +51,19 @@ export const getGraphQLSchema = async (endpoint: string, secret?: string): Promi
  * @returns The list of all fields for the specified table {@link SchemaItemField}.
  **/
 export const getAllTableFieldsWithObjectRelations = (table: string, schema: SchemaItem[]): SchemaItemField[] => {
-    const fields: SchemaItemField[] = []
-    const schemaItems = (schema as SchemaItem[]).slice()
-    const tableFields = schemaItems?.find((schemaItem) => schemaItem.name === table)?.fields.slice()
+    const fields: SchemaItemField[] = [];
+    const schemaItems = (schema as SchemaItem[]).slice();
+    const tableFields = schemaItems?.find((schemaItem) => schemaItem.name === table)?.fields.slice();
 
     tableFields?.filter((field) => !field.isList).forEach((field) => {
         if (schemaItems.map((item) => item.name).includes(field.type)) {
-            getRelatedFields(field.name, fields, field, schemaItems)
+            getRelatedFields(field.name, fields, field, schemaItems);
         } else {
-            fields.push(field)
+            fields.push(field);
         }
     })
 
-    return fields
+    return fields;
 }
 
 /**
@@ -73,22 +73,22 @@ export const getAllTableFieldsWithObjectRelations = (table: string, schema: Sche
  * @returns The list of all fields for the specified table {@link SchemaItemField}.
  **/
 export const getTableArrayRelations = (table: string, schema: SchemaItem[]): SchemaItemField[] => {
-    const schemaItems = (schema as SchemaItem[]).slice()
-    const tableFields = schemaItems?.find((schemaItem) => schemaItem.name === table)?.fields.slice()
+    const schemaItems = (schema as SchemaItem[]).slice();
+    const tableFields = schemaItems?.find((schemaItem) => schemaItem.name === table)?.fields.slice();
 
-    return tableFields?.filter((field) => field.isList) ?? []
+    return tableFields?.filter((field) => field.isList) ?? [];
 }
 
 const getRelatedFields = (path: string, fields: SchemaItemField[], field: SchemaItemField, schema: SchemaItem[]) => {
     schema.find((item) => item.name === field.type)?.fields.slice().forEach((fld) => {
         if (schema.map((item) => item.name).includes(fld.type)) {
-            getRelatedFields(`${path}.${fld.name}`, fields, fld, schema)
+            getRelatedFields(`${path}.${fld.name}`, fields, fld, schema);
         } else {
-            const relationshipField = {name: fld.name, type: fld.type, isNullable: fld.isNullable, isList: fld.isList}
-            relationshipField.name = `${path.length ? path + '.' : ''}${fld.name}`
-            fields.push(relationshipField)
+            const relationshipField = {name: fld.name, type: fld.type, isNullable: fld.isNullable, isList: fld.isList};
+            relationshipField.name = `${path.length ? path + '.' : ''}${fld.name}`;
+            fields.push(relationshipField);
         }
-    })
+    });
 }
 
 /**
@@ -97,7 +97,7 @@ const getRelatedFields = (path: string, fields: SchemaItemField[], field: Schema
  * @returns Usable datasource secret.
  **/
 export const decodeDatasourceSecret = (secret: string): string =>
-    CryptoJS.AES.decrypt(secret, cryptoKey).toString(CryptoJS.enc.Utf8)
+    CryptoJS.AES.decrypt(secret, cryptoKey).toString(CryptoJS.enc.Utf8);
 
 /**
  * Encodes the datasource secret that can be stored in admin db.
@@ -105,75 +105,75 @@ export const decodeDatasourceSecret = (secret: string): string =>
  * @returns Encoded datasource secret.
  **/
 export const encodeDatasourceSecret = (secret: string): string =>
-    CryptoJS.AES.decrypt(secret, cryptoKey).toString(CryptoJS.enc.Utf8)
+    CryptoJS.AES.decrypt(secret, cryptoKey).toString(CryptoJS.enc.Utf8);
 
 const ignoredObjects = [
     '_aggregate', '_aggregate_fields', '_avg_fields', '_max_fields', '_min_fields', '_mutation_response',
     '_stddev_fields', '_stddev_pop_fields', '_stddev_samp_fields', '_sum_fields', '_var_pop_fields',
     '_var_samp_fields', '_variance_fields', '__Directive', '__EnumValue', '__Field', '__InputValue',
     '_Schema', '__Type', 'mutation_root', 'query_root', 'subscription_root'
-]
+];
 
 const schemaHeaders = (secret?: string): Types.SchemaConnectionHeaders => {
-    const headers = {'authorization': '', 'content-type': '', 'x-hasura-admin-secret': ''}
-    const token = window.localStorage.getItem('apollo-token')
-    if (token) headers.authorization = `Bearer ${token}`
-    headers['content-type'] = 'application/json'
-    headers['x-hasura-admin-secret'] = secret ?? ''
-    return headers
+    const headers = {'authorization': '', 'content-type': '', 'x-hasura-admin-secret': ''};
+    const token = window.localStorage.getItem('apollo-token');
+    if (token) headers.authorization = `Bearer ${token}`;
+    headers['content-type'] = 'application/json';
+    headers['x-hasura-admin-secret'] = secret ?? '';
+    return headers;
 }
 
 const cleanSchema = (schema: unknown []): Types.SchemaItem [] => {
     const cleanSchema: Types.SchemaItem [] = [];
 
     schema.forEach(item => {
-        const schemaItem = (item as { kind: string, fields: [], name: string, description: string | undefined })
-        const cleanSchemaItemFields: Types.SchemaItemField[] = []
+        const schemaItem = (item as { kind: string, fields: [], name: string, description: string | undefined });
+        const cleanSchemaItemFields: Types.SchemaItemField[] = [];
 
         const isObject = schemaItem.kind === 'OBJECT';
         const hasFields = schemaItem.fields;
-        const nameNotIgnored = ignoredObjects.filter(ignored => schemaItem.name.endsWith(ignored)).length == 0
+        const nameNotIgnored = ignoredObjects.filter(ignored => schemaItem.name.endsWith(ignored)).length == 0;
 
-        const listObjects: string[] = []
+        const listObjects: string[] = [];
 
         if (isObject && hasFields && nameNotIgnored) {
             schemaItem.fields.forEach(field => {
                 const schemaField = (field as {
                     name: string, type: { kind: string, name: string, ofType: { name: string, kind: string } }
-                })
+                });
 
-                let fieldType: string | null
-                let isNullable: boolean
+                let fieldType: string | null;
+                let isNullable: boolean;
 
                 switch (schemaField.type.kind) {
                     case 'OBJECT':
-                        fieldType = schemaField.type.name
-                        isNullable = true
+                        fieldType = schemaField.type.name;
+                        isNullable = true;
                         break
                     case 'NON_NULL':
                         if (schemaField.type.ofType.kind === 'LIST') {
-                            listObjects.push(schemaField.name)
-                            fieldType = null
+                            listObjects.push(schemaField.name);
+                            fieldType = null;
                         } else if (schemaField.type.ofType.kind === 'OBJECT') {
-                            fieldType = schemaField.type.ofType.name.replaceAll('_aggregate', '')
+                            fieldType = schemaField.type.ofType.name.replaceAll('_aggregate', '');
                         } else {
-                            fieldType = schemaField.type.ofType.name
+                            fieldType = schemaField.type.ofType.name;
                         }
 
-                        isNullable = false
-                        break
+                        isNullable = false;
+                        break;
                     default:
-                        fieldType = schemaField.type.name
-                        isNullable = true
-                        break
+                        fieldType = schemaField.type.name;
+                        isNullable = true;
+                        break;
                 }
 
                 if (fieldType != null) {
-                    const name = schemaField.name.replaceAll('_aggregate', '')
+                    const name = schemaField.name.replaceAll('_aggregate', '');
 
                     cleanSchemaItemFields.push({
                         name: name, type: fieldType, isList: listObjects.includes(name), isNullable: isNullable
-                    })
+                    });
                 }
             })
 
@@ -182,9 +182,9 @@ const cleanSchema = (schema: unknown []): Types.SchemaItem [] => {
                 kind: schemaItem.kind,
                 description: schemaItem.description ?? '',
                 fields: cleanSchemaItemFields
-            })
+            });
         }
-    })
+    });
 
     return cleanSchema;
 }

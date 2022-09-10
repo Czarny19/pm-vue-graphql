@@ -16,15 +16,16 @@
                 :label="i18n('common.edit')"
                 icon="fa-edit"
                 color="info"
-                @click="openEditor(page.id)">
-            </IconButton>
+                @click="openEditor(page.id)"
+            />
+
             <IconButton
                 class="ml-6"
                 :label="i18n('common.delete')"
                 icon="fa-trash-can"
                 color="error"
-                @click="deletePageClicked(page.id)">
-            </IconButton>
+                @click="deletePageClicked(page.id)"
+            />
           </v-col>
         </v-row>
       </v-container>
@@ -47,7 +48,7 @@ export default Vue.extend({
   },
   computed: {
     pagesOrdered(): Page[] {
-      return (this.pages as Page[]).sort((a, b) => Number(a.id) - Number(b.id))
+      return (this.pages as Page[]).sort((a, b) => Number(a.id) - Number(b.id));
     }
   },
   methods: {
@@ -59,10 +60,10 @@ export default Vue.extend({
           pageId: id.toString(),
           datasourceId: this.datasourceId.toString()
         }
-      })
+      });
     },
     deletePageClicked(id: number): void {
-      this.$emit('delete', id)
+      this.$emit('delete', id);
     }
   }
 })

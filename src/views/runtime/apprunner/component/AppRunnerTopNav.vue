@@ -29,12 +29,12 @@ export default Vue.extend({
   methods: {
     goToStart(): void {
       if (this.$route.params.pageId !== 'start') {
-        this.$router.push({name: 'AppRunner', params: {projectId: this.project.id, pageId: 'start'}})
+        this.$router.push({name: 'AppRunner', params: {projectId: this.project.id, pageId: 'start'}});
       }
     },
     goToPage(id: number): void {
       if (this.$route.params.pageId !== id.toString()) {
-        this.$router.push({name: 'AppRunner', params: {projectId: this.project.id, pageId: id.toString()}})
+        this.$router.push({name: 'AppRunner', params: {projectId: this.project.id, pageId: id.toString()}});
       }
     }
   }

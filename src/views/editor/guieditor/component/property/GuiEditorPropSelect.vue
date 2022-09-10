@@ -8,12 +8,11 @@
       item-value="id"
       :label="prop.label"
       :items="['', ...currentProp.list]"
-      v-model="currentProp.value">
-
+      v-model="currentProp.value"
+  >
     <template v-slot:item="{item}">
       <div class="text-start">{{ item.name }}</div>
     </template>
-
   </v-select>
 </template>
 
@@ -31,7 +30,7 @@ export default Vue.extend({
     }
   },
   async beforeMount() {
-    this.currentProp = this.prop
+    this.currentProp = this.prop;
   }
 })
 </script>

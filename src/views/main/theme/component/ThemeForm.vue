@@ -19,8 +19,8 @@
                     :label="i18n('theme.name')"
                     :counter="30"
                     :rules="nameRules"
-                    required>
-                </v-text-field>
+                    required
+                />
               </v-card-text>
             </v-form>
 
@@ -93,23 +93,23 @@ export default Vue.extend({
   },
   computed: {
     themeTyped(): Theme {
-      return (this.themeData as Theme)
+      return (this.themeData as Theme);
     }
   },
   methods: {
     submit(): void {
-      (this.$refs.form as Vue & { validate: () => boolean }).validate()
+      (this.$refs.form as Vue & { validate: () => boolean }).validate();
 
       if (this.valid) {
-        this.saving = true
-        this.themeTyped.id ? this.updateTheme() : this.createTheme()
+        this.saving = true;
+        this.themeTyped.id ? this.updateTheme() : this.createTheme();
       }
     },
     cancel(): void {
-      this.$router.back()
+      this.$router.back();
     },
     updateColor(colorData: { color: string; id: string }): void {
-      this.colors[colorData.id as keyof ThemeColors] = colorData.color
+      this.colors[colorData.id as keyof ThemeColors] = colorData.color;
     },
     updateTheme(): void {
       this.$apollo.mutate({
@@ -128,11 +128,11 @@ export default Vue.extend({
           background: this.colors['background_color']
         }
       }).then(() => {
-        this.saving = false
-        this.$router.back()
+        this.saving = false;
+        this.$router.back();
       }).catch(() => {
-        this.saving = false
-      })
+        this.saving = false;
+      });
     },
     createTheme(): void {
       this.$apollo.mutate({
@@ -151,11 +151,11 @@ export default Vue.extend({
           background: this.colors['background_color']
         }
       }).then(() => {
-        this.saving = false
-        this.$router.back()
+        this.saving = false;
+        this.$router.back();
       }).catch(() => {
-        this.saving = false
-      })
+        this.saving = false;
+      });
     }
   },
   watch: {

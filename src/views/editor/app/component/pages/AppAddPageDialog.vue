@@ -13,8 +13,8 @@
               :counter="30"
               :rules="pageNameRules"
               prepend-icon="fa-tag"
-              required>
-          </v-text-field>
+              required
+          />
 
           <div class="pt-4 text-body-1">{{ i18n('editor.pageParams') }}</div>
 
@@ -27,8 +27,8 @@
               :counter="30"
               :rules="pageParamRules"
               dense
-              @change="(val) => params[index] = val">
-
+              @change="(val) => params[index] = val"
+          >
             <template v-slot:append>
               <v-btn
                   class="ma-1"
@@ -48,8 +48,8 @@
                 :label="i18n('editor.addPageParam')"
                 icon="fa-plus"
                 color="info"
-                @click="params.push('')">
-            </IconButton>
+                @click="params.push('')"
+            />
           </div>
         </v-form>
       </v-card-text>
@@ -95,10 +95,10 @@ export default Vue.extend({
   },
   methods: {
     save(): void {
-      (this.$refs.form as Vue & { validate: () => boolean }).validate()
+      (this.$refs.form as Vue & { validate: () => boolean }).validate();
 
       if (this.valid) {
-        this.addPage()
+        this.addPage();
       }
     },
     addPage(): void {
@@ -111,23 +111,23 @@ export default Vue.extend({
           params: this.params.join(';')
         }
       }).then(async () => {
-        this.pageName = ''
-        this.isOpen = false
-        this.$emit('refresh')
-        this.$emit('close')
+        this.pageName = '';
+        this.isOpen = false;
+        this.$emit('refresh');
+        this.$emit('close');
       }).catch(() => {
-        this.pageName = ''
-        this.isOpen = false
-        this.$emit('close')
+        this.pageName = '';
+        this.isOpen = false;
+        this.$emit('close');
       })
     },
-    close() {
-      this.$emit('close')
+    close(): void {
+      this.$emit('close');
     }
   },
   watch: {
     dialog(): void {
-      this.isOpen = this.dialog
+      this.isOpen = this.dialog;
     }
   }
 })

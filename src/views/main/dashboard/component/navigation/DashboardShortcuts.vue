@@ -6,24 +6,24 @@
             :title="i18n('dashboard.addProject')"
             :sub-title="i18n('dashboard.addProjectDesc')"
             icon="fa-tablet"
-            :on-click="addProject">
-        </DashboardNavCard>
+            :on-click="addProject"
+        />
       </v-col>
       <v-col>
         <DashboardNavCard
             :title="i18n('dashboard.addDatasource')"
             :sub-title="i18n('dashboard.addDatasourceDesc')"
             icon="fa-database"
-            :on-click="addDatasource">
-        </DashboardNavCard>
+            :on-click="addDatasource"
+        />
       </v-col>
       <v-col>
         <DashboardNavCard
             :title="i18n('dashboard.addTheme')"
             :sub-title="i18n('dashboard.addThemeDesc')"
             icon="fa-palette"
-            :on-click="addTheme">
-        </DashboardNavCard>
+            :on-click="addTheme"
+        />
       </v-col>
     </v-row>
   </v-container>
@@ -38,13 +38,13 @@ export default Vue.extend({
   components: {DashboardNavCard},
   methods: {
     addProject(): void {
-      this.$router.push({name: 'NewProject'})
+      this.$router.push({name: 'NewProject'});
     },
     addDatasource(): void {
-      this.$router.push({name: 'NewDatasource'})
+      this.$router.push({name: 'NewDatasource'});
     },
     addTheme(): void {
-      this.$router.push({name: 'NewTheme'})
+      this.$router.push({name: 'NewTheme'});
     }
   }
 })

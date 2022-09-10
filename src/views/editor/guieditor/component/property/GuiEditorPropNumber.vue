@@ -5,8 +5,8 @@
       outlined dense hide-details
       :label="prop.label"
       v-model="currentProp.value"
-      @keydown="onKeydown">
-  </v-text-field>
+      @keydown="onKeydown"
+  />
 </template>
 
 <script lang="ts">
@@ -25,11 +25,11 @@ export default Vue.extend({
   },
   methods: {
     onKeydown(event: KeyboardEvent) {
-      filterNumbersOnly(event)
+      filterNumbersOnly(event);
     }
   },
   beforeMount() {
-    this.currentProp = this.prop
+    this.currentProp = this.prop;
   }
 })
 </script>

@@ -6,8 +6,8 @@
       :label="prop.label"
       :items="borders"
       v-model="currentProp.value"
-      item-color="accent">
-  </v-select>
+      item-color="accent"
+  />
 </template>
 
 <script lang="ts">
@@ -26,11 +26,11 @@ export default Vue.extend({
   },
   computed: {
     borders(): string [] {
-      return borders
+      return borders;
     }
   },
   beforeMount() {
-    this.currentProp = this.prop
+    this.currentProp = this.prop;
   }
 })
 </script>

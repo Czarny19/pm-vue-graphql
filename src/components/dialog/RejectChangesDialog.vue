@@ -2,7 +2,9 @@
   <v-dialog v-model="isOpen" width="500">
     <v-card>
       <v-card-title class="text-start">{{ i18n('editor.rejectChangesTitle') }}</v-card-title>
+
       <v-card-text class="text-start text-body-2">{{ i18n('editor.rejectChangesMsg') }}</v-card-text>
+
       <v-card-actions>
         <v-btn text @click="cancel">{{ i18n('common.cancel') }}</v-btn>
         <v-spacer></v-spacer>
@@ -27,15 +29,15 @@ export default Vue.extend({
   },
   watch: {
     dialog(): void {
-      this.isOpen = this.dialog
+      this.isOpen = this.dialog;
     }
   },
   methods: {
-    confirm() {
-      this.$emit('confirm')
+    confirm(): void {
+      this.$emit('confirm');
     },
-    cancel() {
-      this.$emit('cancel')
+    cancel(): void {
+      this.$emit('cancel');
     }
   }
 })

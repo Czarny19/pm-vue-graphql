@@ -14,8 +14,8 @@
             hide-default-footer
             dense
             disable-sort
-            class="elevation-0 primary pa-2">
-
+            class="elevation-0 primary pa-2"
+        >
           <template v-slot:[`item.isNullable`]="{item}">
             <v-simple-checkbox
                 dense
@@ -25,7 +25,6 @@
                 class="disable-events">
             </v-simple-checkbox>
           </template>
-
         </v-data-table>
       </v-expansion-panel-content>
 
@@ -47,7 +46,7 @@ export default Vue.extend({
         {text: this.$t('datasource.fieldName').toString(), value: 'name', width: '50%'},
         {text: this.$t('datasource.fieldType').toString(), value: 'type', width: '20%'},
         {text: this.$t('datasource.fieldIsNullable').toString(), value: 'isNullable', width: '30%', align: 'end'}
-      ]
+      ];
     }
   }
 })

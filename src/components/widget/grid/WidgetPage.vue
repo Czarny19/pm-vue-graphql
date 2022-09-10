@@ -11,8 +11,8 @@
           :mutations="mutations"
           @showerror="showError"
           @saving="saving"
-          @savingdone="savingDone">
-      </BaseWidget>
+          @savingdone="savingDone"
+      />
     </template>
 
     <v-snackbar v-model="errorSnackbar" :color="errColor" :timeout="8000">
@@ -50,19 +50,19 @@ export default Vue.extend({
   },
   computed: {
     errColor(): string {
-      return widget.getColorPropValue(this.theme, 'error_color')
+      return widget.getColorPropValue(this.theme, 'error_color');
     }
   },
   methods: {
     showError(error: string): void {
-      this.errorMsg = error
-      this.errorSnackbar = true
+      this.errorMsg = error;
+      this.errorSnackbar = true;
     },
     saving(): void {
-      this.$emit('saving')
+      this.$emit('saving');
     },
     savingDone(): void {
-      this.$emit('savingdone')
+      this.$emit('savingdone');
     }
   }
 })

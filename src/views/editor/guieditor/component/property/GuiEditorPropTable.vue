@@ -8,8 +8,8 @@
       v-model="currentProp.value"
       item-value="id"
       item-text="name"
-      item-color="accent">
-  </v-select>
+      item-color="accent"
+  />
 </template>
 
 <script lang="ts">
@@ -28,11 +28,11 @@ export default Vue.extend({
   },
   computed: {
     tablesNames(): string [] {
-      return (this.schema as { name: string }[]).slice()?.map((table) => table.name)
+      return (this.schema as { name: string }[]).slice()?.map((table) => table.name);
     }
   },
   beforeMount() {
-    this.currentProp = this.prop
+    this.currentProp = this.prop;
   }
 })
 </script>

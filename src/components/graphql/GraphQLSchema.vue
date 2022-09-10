@@ -19,7 +19,7 @@ export default Vue.extend({
   name: 'GraphQLSchema',
   components: {GraphQLTables, CardSectionTitle},
   props: {
-    schema: Array,
+    schema: Array
   }
 })
 </script>

@@ -8,8 +8,8 @@
         :label="i18n('editor.conditionOperator')"
         :items="conditions"
         v-model="currentProp.condition"
-        item-color="accent">
-    </v-select>
+        item-color="accent"
+    />
 
     <v-select
         v-if="type === 'bool'"
@@ -21,8 +21,8 @@
         v-model="currentProp.value"
         item-text="name"
         item-value="id"
-        item-color="accent">
-    </v-select>
+        item-color="accent"
+    />
 
     <v-text-field
         v-if="type === 'string'"
@@ -30,8 +30,8 @@
         color="accent"
         outlined dense hide-details
         :label="i18n('editor.conditionValue')"
-        v-model="currentProp.value">
-    </v-text-field>
+        v-model="currentProp.value"
+    />
 
     <v-text-field
         v-if="type === 'number'"
@@ -40,8 +40,8 @@
         outlined dense hide-details
         :label="i18n('editor.conditionValue')"
         v-model="currentProp.value"
-        @keydown="onKeydown">
-    </v-text-field>
+        @keydown="onKeydown"
+    />
   </div>
 </template>
 
@@ -66,51 +66,50 @@ export default Vue.extend({
   },
   computed: {
     condition(): ConditionProp {
-      return this.prop as ConditionProp
+      return this.prop as ConditionProp;
     },
     type(): string {
-      const field = (this.fields as SchemaItemField[]).find((field) => field.name === this.condition.field)
+      const field = (this.fields as SchemaItemField[]).find((field) => field.name === this.condition.field);
 
       if (field) {
         switch (field.type) {
           case 'String':
           case 'date':
           case 'time':
-            return 'string'
+            return 'string';
           case 'Int':
           case 'float8':
           case 'bigint':
-            return 'number'
+            return 'number';
           case 'Boolean':
-            return 'bool'
+            return 'bool';
           default:
-            return 'string'
+            return 'string';
         }
       }
 
-      return 'string'
+      return 'string';
     },
     conditions(): string[] {
       switch (this.type) {
         case 'string':
-          return widget.stringCondTypes
+          return widget.stringCondTypes;
         case 'number':
-          return widget.numCondTypes
+          return widget.numCondTypes;
         case 'bool':
-          return widget.boolCondTypes
+          return widget.boolCondTypes;
         default:
-          return widget.stringCondTypes
+          return widget.stringCondTypes;
       }
     }
   },
   methods: {
-    onKeydown(event: KeyboardEvent) {
-      filterNumbersOnly(event)
+    onKeydown(event: KeyboardEvent): void {
+      filterNumbersOnly(event);
     }
   },
-
   beforeMount() {
-    this.currentProp = this.prop
+    this.currentProp = this.prop;
   }
 })
 </script>

@@ -12,8 +12,8 @@
         :variables="variables"
         :mutations="mutations"
         @saving="showSavingDialog"
-        @savingdone="hideSavingDialog">
-    </AppRunnerPageHolder>
+        @savingdone="hideSavingDialog"
+    />
   </div>
 </template>
 
@@ -54,7 +54,7 @@ export default Vue.extend({
   },
   computed: {
     projectId(): number {
-      return Number(this.$route.params.projectId)
+      return Number(this.$route.params.projectId);
     },
     pageId(): number {
       let pageId = this.$route.params.pageId;
@@ -62,24 +62,24 @@ export default Vue.extend({
       return Number(pageId);
     },
     currentPage(): Page {
-      return (this.pages as Page[]).filter((page) => page.id === this.pageId)[0]
+      return (this.pages as Page[]).filter((page) => page.id === this.pageId)[0];
     },
     isLoading(): boolean {
       return this.loadingProject || this.loadingPages || this.loadingTheme
-          || this.loadingDatasource || this.loadingMutations
+          || this.loadingDatasource || this.loadingMutations;
     }
   },
   methods: {
     showSavingDialog(): void {
-      this.saving = true
+      this.saving = true;
     },
     hideSavingDialog(): void {
-      this.saving = false
+      this.saving = false;
     }
   },
   watch: {
-    $route() {
-      this.loadingVariables = true
+    $route(): void {
+      this.loadingVariables = true;
     }
   },
   apollo: {
@@ -92,8 +92,8 @@ export default Vue.extend({
         }
       },
       result({data}): void {
-        this.project = data.PROJECT[0]
-        this.loadingProject = false
+        this.project = data.PROJECT[0];
+        this.loadingProject = false;
       }
     },
     PAGE: {
@@ -105,11 +105,11 @@ export default Vue.extend({
         }
       },
       skip(): boolean {
-        return !this.projectId
+        return !this.projectId;
       },
       result({data}): void {
-        this.pages = data.PAGE
-        this.loadingPages = false
+        this.pages = data.PAGE;
+        this.loadingPages = false;
       }
     },
     PROP: {
@@ -121,11 +121,11 @@ export default Vue.extend({
         }
       },
       skip(): boolean {
-        return !this.pageId
+        return !this.pageId;
       },
       result({data}): void {
-        this.variables = data.PROP
-        this.loadingVariables = false
+        this.variables = data.PROP;
+        this.loadingVariables = false;
       }
     },
     THEME: {
@@ -137,15 +137,15 @@ export default Vue.extend({
         }
       },
       skip(): boolean {
-        return !this.project.theme_id
+        return !this.project.theme_id;
       },
       result({data}): void {
-        this.theme = data.THEME[0]
+        this.theme = data.THEME[0];
 
         // eslint-disable-next-line
-        document!.getElementById('app')!.style.backgroundColor = this.theme.background_color
+        document!.getElementById('app')!.style.backgroundColor = this.theme.background_color;
 
-        this.loadingTheme = false
+        this.loadingTheme = false;
       }
     },
     DATA_SOURCE: {
@@ -157,12 +157,12 @@ export default Vue.extend({
         }
       },
       skip(): boolean {
-        return !this.project.source_id
+        return !this.project.source_id;
       },
       result({data}): void {
-        this.datasource = data.DATA_SOURCE[0]
-        this.datasource.secret = decodeDatasourceSecret(data.DATA_SOURCE[0].secret)
-        this.loadingDatasource = false
+        this.datasource = data.DATA_SOURCE[0];
+        this.datasource.secret = decodeDatasourceSecret(data.DATA_SOURCE[0].secret);
+        this.loadingDatasource = false;
       }
     },
     MUTATION: {
@@ -174,11 +174,11 @@ export default Vue.extend({
         }
       },
       skip(): boolean {
-        return !this.project.source_id
+        return !this.project.source_id;
       },
       result({data}): void {
-        this.mutations = data.MUTATION
-        this.loadingMutations = false
+        this.mutations = data.MUTATION;
+        this.loadingMutations = false;
       }
     }
   }

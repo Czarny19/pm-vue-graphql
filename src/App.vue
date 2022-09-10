@@ -18,12 +18,12 @@ export default Vue.extend({
   components: {AppBar},
   computed: {
     isAdminPage(): boolean {
-      return this.$route.path.startsWith('/admin')
+      return this.$route.path.startsWith('/admin');
     }
   }
 })
 
-// TODO komponent ikony, dokończyć demo, rozwinąć komponent tabeli + drugi przykład, błąd po logowaniu
+// TODO komponent ikony, dokończyć demo, rozwinąć komponent tabeli + drugi przykład
 // TODO naprawić bugi, napisać readme, dodać komentarze gdzie potrzeba
 
 // Runtime | walidacja danych | skomplikowany przypadek | celem nie jest prototyp tylko analiza zagadnienia | cech |

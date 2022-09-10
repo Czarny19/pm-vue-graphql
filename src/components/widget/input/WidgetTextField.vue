@@ -16,8 +16,8 @@
         :single-line="argsProps.singleLine"
         :value="variableValue"
         :rules="rules"
-        @input="updateVariableValue">
-    </v-text-field>
+        @input="updateVariableValue"
+    />
   </div>
 </template>
 
@@ -36,71 +36,71 @@ export default Vue.extend({
   },
   computed: {
     appWidget(): AppWidget {
-      return this.widget as AppWidget
+      return this.widget as AppWidget;
     },
     visible(): boolean {
-      return widget.isWidgetVisible(this.appWidget, this.dataItem)
+      return widget.isWidgetVisible(this.appWidget, this.dataItem);
     },
     cssProps(): ({ [p: string]: string })[] {
-      return widget.getCssProps(this.appWidget, this.theme)
+      return widget.getCssProps(this.appWidget, this.theme);
     },
     argsProps(): { [k: string]: string } {
-      return widget.getArgsProps(this.appWidget)
+      return widget.getArgsProps(this.appWidget);
     },
     dataProps(): { [k: string]: string } {
-      return widget.getDataProps(this.appWidget)
+      return widget.getDataProps(this.appWidget);
     },
     counter(): number | undefined {
-      return this.argsProps.counter ? Number(this.argsProps.counterNum) : undefined
+      return this.argsProps.counter ? Number(this.argsProps.counterNum) : undefined;
     },
     color(): string {
-      return widget.getColorPropValue(this.theme, this.argsProps.color)
+      return widget.getColorPropValue(this.theme, this.argsProps.color);
     },
     bgColor(): string {
-      return widget.getColorPropValue(this.theme, this.argsProps.bgColor)
+      return widget.getColorPropValue(this.theme, this.argsProps.bgColor);
     },
     label(): string {
-      return widget.getPageVariableValue(this.variables as PageVariable[], Number(this.argsProps.label))
+      return widget.getPageVariableValue(this.variables as PageVariable[], Number(this.argsProps.label));
     },
     hint(): string {
-      return widget.getPageVariableValue(this.variables as PageVariable[], Number(this.argsProps.hint))
+      return widget.getPageVariableValue(this.variables as PageVariable[], Number(this.argsProps.hint));
     },
     variable(): PageVariable | undefined {
       if (this.dataProps.variableId) {
-        const variableId = Number(this.dataProps.variableId)
-        return (this.variables as PageVariable[])?.find((variable) => variable.id === variableId)
+        const variableId = Number(this.dataProps.variableId);
+        return (this.variables as PageVariable[])?.find((variable) => variable.id === variableId);
       }
 
-      return undefined
+      return undefined;
     },
     variableValue(): string | undefined {
       if (this.variable) {
-        return this.variable.value
+        return this.variable.value;
       }
 
-      return undefined
+      return undefined;
     },
     rules(): unknown[] {
-      return widget.getRulesForInput(this.appWidget, this.counter)
+      return widget.getRulesForInput(this.appWidget, this.counter);
     }
   },
   methods: {
     updateVariableValue(val: string): void {
       if (this.variable) {
-        this.variable.value = val
+        this.variable.value = val;
       }
     }
   },
   beforeMount() {
-    const variables = this.variables as PageVariable[]
-    const pageVarId = Number(this.dataProps.initalPageVarId)
+    const variables = this.variables as PageVariable[];
+    const pageVarId = Number(this.dataProps.initalPageVarId);
 
-    const params = this.$route.params
-    const paramName = this.dataProps.initalParamName
+    const params = this.$route.params;
+    const paramName = this.dataProps.initalParamName;
 
-    const intialValue = widget.getInputWidgetInitialValue(variables, pageVarId, params, paramName)
+    const intialValue = widget.getInputWidgetInitialValue(variables, pageVarId, params, paramName);
 
-    this.updateVariableValue(intialValue)
+    this.updateVariableValue(intialValue);
   }
 })
 </script>

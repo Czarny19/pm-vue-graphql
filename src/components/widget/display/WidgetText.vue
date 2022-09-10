@@ -17,34 +17,34 @@ export default Vue.extend({
   },
   computed: {
     appWidget(): AppWidget {
-      return this.widget as AppWidget
+      return this.widget as AppWidget;
     },
     visible(): boolean {
-      return widget.isWidgetVisible(this.appWidget, this.dataItem)
+      return widget.isWidgetVisible(this.appWidget, this.dataItem);
     },
     cssProps(): ({ [p: string]: string })[] {
-      return widget.getCssProps(this.appWidget, this.theme)
+      return widget.getCssProps(this.appWidget, this.theme);
     },
     argsProps(): { [k: string]: string } {
-      return widget.getArgsProps(this.appWidget)
+      return widget.getArgsProps(this.appWidget);
     },
     dataProps(): { [k: string]: string } {
-      return widget.getDataProps(this.appWidget)
+      return widget.getDataProps(this.appWidget);
     },
     data(): never {
-      return this.dataItem as never
+      return this.dataItem as never;
     },
     displayValue(): string {
-      const data = this.data
-      const queryFieldName = this.dataProps.textQueryFieldName
+      const data = this.data;
+      const queryFieldName = this.dataProps.textQueryFieldName;
 
-      const variables = this.variables as PageVariable[]
-      const pageVarId = Number(this.dataProps.textPageVarId)
+      const variables = this.variables as PageVariable[];
+      const pageVarId = Number(this.dataProps.textPageVarId);
 
-      const params = this.$route.params
-      const pageParamName = this.dataProps.textPageParamName
+      const params = this.$route.params;
+      const pageParamName = this.dataProps.textPageParamName;
 
-      return widget.getDisplayWidgetVarValue(data, queryFieldName, variables, pageVarId, params, pageParamName)
+      return widget.getDisplayWidgetVarValue(data, queryFieldName, variables, pageVarId, params, pageParamName);
     }
   }
 })

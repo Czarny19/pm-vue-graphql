@@ -13,8 +13,8 @@
               :counter="30"
               :rules="propNameRules"
               prepend-icon="fa-tag"
-              required>
-          </v-text-field>
+              required
+          />
 
           <v-select
               class="pa-2"
@@ -26,16 +26,16 @@
               item-value="id"
               item-text="name"
               item-color="accent"
-              prepend-icon="fa-keyboard">
-          </v-select>
+              prepend-icon="fa-keyboard"
+          />
 
           <v-text-field
               class="pa-2"
               color="accent"
               v-model="propValue"
               :label="i18n('editor.propValue')"
-              prepend-icon="fa-pen-clip">
-          </v-text-field>
+              prepend-icon="fa-pen-clip"
+          />
         </v-form>
       </v-card-text>
 
@@ -78,21 +78,21 @@ export default Vue.extend({
   },
   computed: {
     pageId(): number {
-      return Number(this.$route.params.pageId)
+      return Number(this.$route.params.pageId);
     },
     types(): { id: string; name: string }[] {
       return [
         {id: 'String', name: this.$t('editor.propString').toString()},
         {id: 'number', name: this.$t('editor.propNumber').toString()}
-      ]
+      ];
     }
   },
   methods: {
     save(): void {
-      (this.$refs.form as Vue & { validate: () => boolean }).validate()
+      (this.$refs.form as Vue & { validate: () => boolean }).validate();
 
       if (this.valid) {
-        this.addProp()
+        this.addProp();
       }
     },
     addProp(): void {
@@ -106,27 +106,27 @@ export default Vue.extend({
           value: this.propValue
         }
       }).then(async () => {
-        this.propName = ''
-        this.propType = ''
-        this.propValue = ''
-        this.isOpen = false
-        this.$emit('refresh')
-        this.$emit('close')
+        this.propName = '';
+        this.propType = '';
+        this.propValue = '';
+        this.isOpen = false;
+        this.$emit('refresh');
+        this.$emit('close');
       }).catch(() => {
-        this.propName = ''
-        this.propType = ''
-        this.propValue = ''
-        this.isOpen = false
-        this.$emit('close')
+        this.propName = '';
+        this.propType = '';
+        this.propValue = '';
+        this.isOpen = false;
+        this.$emit('close');
       })
     },
     close() {
-      this.$emit('close')
+      this.$emit('close');
     }
   },
   watch: {
     dialog(): void {
-      this.isOpen = this.dialog
+      this.isOpen = this.dialog;
     }
   }
 })

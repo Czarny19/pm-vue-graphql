@@ -23,8 +23,8 @@
                 color="accent"
                 v-model="field.name"
                 :label="i18n('editor.field')"
-                readonly>
-            </v-text-field>
+                readonly
+            />
           </v-col>
 
           <v-col cols="1">
@@ -33,8 +33,8 @@
                 color="accent"
                 :value="field.type"
                 readonly
-                :label="i18n('editor.variableType')">
-            </v-text-field>
+                :label="i18n('editor.variableType')"
+            />
           </v-col>
 
           <v-col cols="auto">
@@ -48,8 +48,8 @@
                 :label="i18n('editor.variable')"
                 required
                 append-icon="fa-chevron-down"
-                @change="(event) => setFieldVariable(event, field, index)">
-            </v-select>
+                @change="(event) => setFieldVariable(event, field, index)"
+            />
           </v-col>
         </v-row>
       </v-container>
@@ -77,35 +77,35 @@ export default Vue.extend({
   },
   computed: {
     selectedFieldsTyped(): QuerySetValue[] {
-      return this.selectedFields as QuerySetValue[]
+      return this.selectedFields as QuerySetValue[];
     },
     mutationFields(): SchemaItemField[] {
-      return (this.fields as SchemaItemField[]).filter((field) => !field.name.includes('.'))
+      return (this.fields as SchemaItemField[]).filter((field) => !field.name.includes('.'));
     }
   },
   methods: {
     variables(field: SchemaItemField): string [] {
-      const type = field.type
-      const mutation = this.mutation as Mutation
-      const variables = mapModelStringToQueryVariableArray(mutation.variables ?? '')
+      const type = field.type;
+      const mutation = this.mutation as Mutation;
+      const variables = mapModelStringToQueryVariableArray(mutation.variables ?? '');
 
-      const usableVars = variables?.filter((variable) => variable.type === type).map((variable) => variable.name) ?? []
+      const usableVars = variables?.filter((variable) => variable.type === type).map((variable) => variable.name) ?? [];
 
-      return [fieldAutoVar, ...usableVars]
+      return [fieldAutoVar, ...usableVars];
     },
     fieldIsSelected(field: SchemaItemField): boolean {
-      return this.selectedFieldsTyped.filter((selectedField) => selectedField.name === field.name).length > 0
+      return this.selectedFieldsTyped.filter((selectedField) => selectedField.name === field.name).length > 0;
     },
     selectField(field: SchemaItemField): void {
       const selectedField = {name: field.name, type: field.type, variable: ''};
-      this.selectedFieldsTyped.push(selectedField)
+      this.selectedFieldsTyped.push(selectedField);
     },
     unselectField(field: SchemaItemField): void {
       this.selectedFields.forEach((selectedField, index) => {
         if ((selectedField as QuerySetValue).name == field.name) {
-          this.selectedFields.splice(index, 1)
+          this.selectedFields.splice(index, 1);
         }
-      })
+      });
     },
     setFieldVariable(event: string, field: SchemaItemField, index: number): void {
       (this.selectedFieldsVariables[index] as string) = event;
@@ -120,14 +120,14 @@ export default Vue.extend({
   watch: {
     query: {
       handler() {
-        this.currentMutation = this.mutation
+        this.currentMutation = this.mutation;
       },
       deep: true
     },
     selectedFields: {
       handler() {
-        const mutation = this.mutation as Mutation
-        mutation.fields = this.selectedFields.map(selected => (JSON.stringify(selected))).join(';')
+        const mutation = this.mutation as Mutation;
+        mutation.fields = this.selectedFields.map(selected => (JSON.stringify(selected))).join(';');
       },
       deep: true
     }
@@ -138,16 +138,16 @@ export default Vue.extend({
 
     (this.fields as SchemaItemField[])?.filter((field) => !field.name.includes('.')).forEach((field) => {
       if (!field.isNullable) {
-        const fieldSelected = this.selectedFieldsTyped.filter((fld) => fld.name === field.name).length
+        const fieldSelected = this.selectedFieldsTyped.filter((fld) => fld.name === field.name).length;
 
         if (!fieldSelected) {
-          this.selectedFieldsTyped.push({name: field.name, type: field.type, variable: ''})
+          this.selectedFieldsTyped.push({name: field.name, type: field.type, variable: ''});
         }
       }
     });
 
     (this.selectedFields as QuerySetValue[]).forEach((field) => {
-      (this.selectedFieldsVariables as string[]).push(field.variable)
+      (this.selectedFieldsVariables as string[]).push(field.variable);
     });
 
     this.currentMutation = this.mutation;

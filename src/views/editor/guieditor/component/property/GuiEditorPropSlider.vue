@@ -6,8 +6,8 @@
       dense hide-details thumb-label
       :min="prop.minValue"
       :max="prop.maxValue"
-      v-model="currentProp.value">
-  </v-slider>
+      v-model="currentProp.value"
+  />
 </template>
 
 <script lang="ts">
@@ -24,7 +24,7 @@ export default Vue.extend({
     }
   },
   beforeMount() {
-    this.currentProp = this.prop
+    this.currentProp = this.prop;
   }
 })
 </script>

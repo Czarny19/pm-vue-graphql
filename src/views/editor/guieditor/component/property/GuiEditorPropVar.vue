@@ -8,8 +8,8 @@
       item-value="id"
       :label="prop.label"
       :items="['', ...variables]"
-      v-model="currentProp.value">
-  </v-select>
+      v-model="currentProp.value"
+  />
 </template>
 
 <script lang="ts">
@@ -27,7 +27,7 @@ export default Vue.extend({
     }
   },
   async beforeMount() {
-    this.currentProp = this.prop
+    this.currentProp = this.prop;
   }
 })
 </script>

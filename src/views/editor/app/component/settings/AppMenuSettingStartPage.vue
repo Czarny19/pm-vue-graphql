@@ -13,8 +13,8 @@
           item-text="name"
           required
           append-icon="fa-chevron-down"
-          @change="changed=true">
-      </v-select>
+          @change="changed=true"
+      />
     </v-card-text>
 
     <v-card-actions v-if="changed" class="pa-4 text-end">
@@ -50,14 +50,14 @@ export default Vue.extend({
           startPage: this.project.start_page
         }
       }).then(async () => {
-        this.changed = false
+        this.changed = false;
       }).catch(() => {
-        this.changed = false
+        this.changed = false;
       })
     }
   },
   beforeMount() {
-    this.currentProject = this.project
+    this.currentProject = this.project;
   }
 })
 </script>

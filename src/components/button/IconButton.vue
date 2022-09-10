@@ -17,8 +17,8 @@ export default Vue.extend({
     block: Boolean
   },
   methods: {
-    click() {
-      this.$emit('click')
+    click(): void {
+      this.$emit('click');
     }
   }
 })

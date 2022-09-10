@@ -10,21 +10,23 @@
           <v-col class="text-end">
             <span class="text-body-1 text--secondary pr-10">{{ mutation.type }}</span>
             <span class="text-body-2 text--secondary pr-6">
-            {{ i18n('editor.modifyDate') }}: {{ mutation.modify_date }}
-          </span>
+              {{ i18n('editor.modifyDate') }}: {{ mutation.modify_date }}
+            </span>
+
             <IconButton
                 :label="i18n('common.edit')"
                 icon="fa-edit"
                 color="info"
-                @click="openMutation(mutation.id)">
-            </IconButton>
+                @click="openMutation(mutation.id)"
+            />
+
             <IconButton
                 class="ml-6"
                 :label="i18n('common.delete')"
                 icon="fa-trash-can"
                 color="error"
-                @click="deleteMutationClicked(mutation.id)">
-            </IconButton>
+                @click="deleteMutationClicked(mutation.id)"
+            />
           </v-col>
         </v-row>
       </v-container>
@@ -47,10 +49,10 @@ export default Vue.extend({
     openMutation(id: number): void {
       this.$router.push({
         name: 'Mutation', params: {datasourceId: this.datasourceId.toString(), mutationId: id.toString()}
-      })
+      });
     },
     deleteMutationClicked(id: number): void {
-      this.$emit('delete', id)
+      this.$emit('delete', id);
     }
   }
 })

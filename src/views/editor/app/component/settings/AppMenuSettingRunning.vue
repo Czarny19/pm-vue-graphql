@@ -6,11 +6,12 @@
           color="success"
           v-model="currentProject.running"
           :label="i18n('editor.running')"
-          @change="changed=true">
-      </v-switch>
+          @change="changed=true"
+      />
+
       <v-spacer></v-spacer>
-      <IconButton color="success" :label="i18n('editor.openApp')" icon="fa-globe" @click="openApp">
-      </IconButton>
+
+      <IconButton color="success" :label="i18n('editor.openApp')" icon="fa-globe" @click="openApp"/>
     </v-card-title>
 
     <v-card-actions v-if="changed" class="pa-4 text-end">
@@ -43,17 +44,17 @@ export default Vue.extend({
         mutation: UPDATE_PROJECT_RUNNING,
         variables: {id: this.project.id, running: (this.currentProject as AppProject).running}
       }).then(async () => {
-        this.changed = false
+        this.changed = false;
       }).catch(() => {
-        this.changed = false
-      })
+        this.changed = false;
+      });
     },
     openApp(): void {
-      this.$router.push({name: 'AppRunner', params: {projectId: this.project.id, pageId: 'start'}})
+      this.$router.push({name: 'AppRunner', params: {projectId: this.project.id, pageId: 'start'}});
     }
   },
   beforeMount() {
-    this.currentProject = this.project
+    this.currentProject = this.project;
   }
 })
 </script>

@@ -5,8 +5,8 @@
         :datasource-id="datasource.id"
         :tables="tables"
         @refresh="refresh"
-        @close="closeAddMutation">
-    </AppAddMutationDialog>
+        @close="closeAddMutation"
+    />
 
     <DeleteConfirmationDialog :dialog="deleteDialog" @confirm="deleteMutation" @cancel="cancelDeleteMutation"/>
 
@@ -20,8 +20,8 @@
             v-else
             :datasource-id="datasource.id"
             :mutations="mutations"
-            @delete="deleteMutationClicked">
-        </AppMenuMutationsList>
+            @delete="deleteMutationClicked"
+        />
       </template>
 
       <AppMenuNoDatasource v-else/>
@@ -68,42 +68,42 @@ export default Vue.extend({
   },
   computed: {
     datasourceSet(): boolean {
-      return Object.keys(this.datasource).length !== 0
+      return Object.keys(this.datasource).length !== 0;
     },
     tables(): string [] {
-      return (this.schema as SchemaItem[]).map(table => table.name)
+      return (this.schema as SchemaItem[]).map(table => table.name);
     }
   },
   methods: {
     addMutation(): void {
-      this.addMutationDialog = true
+      this.addMutationDialog = true;
     },
     closeAddMutation(): void {
-      this.addMutationDialog = false
+      this.addMutationDialog = false;
     },
     refresh(): void {
-      this.$emit('refresh')
+      this.$emit('refresh');
     },
     deleteMutationClicked(id: number): void {
-      this.deleteId = id
-      this.deleteDialog = true
+      this.deleteId = id;
+      this.deleteDialog = true;
     },
     cancelDeleteMutation(): void {
-      this.deleteId = -1
-      this.deleteDialog = false
+      this.deleteId = -1;
+      this.deleteDialog = false;
     },
     deleteMutation(): void {
-      this.deleteDialog = false
+      this.deleteDialog = false;
 
       this.$apollo.mutate({mutation: DELETE_MUTATION, variables: {id: this.deleteId}}).then(() => {
-        this.$emit('refresh')
-      })
+        this.$emit('refresh');
+      });
     }
   },
   beforeMount() {
     getCleanGraphQLSchema(this.datasource.address, this.datasource.secret).then((result) => {
       (this.schema as SchemaItem[]) = result.schema
-    })
+    });
   }
 })
 </script>

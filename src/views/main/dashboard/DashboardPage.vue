@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :key="$auth.isAuthenticated">
     <LoginDialog @signup="openSignUp"/>
 
     <SignUpDialog :dialog="signUpOpen" :user-id="userId"/>
@@ -18,22 +18,22 @@
                 :loading="loadingProjects || loadingThemes"
                 :projects="projects"
                 :themes="themes"
-                @refresh="refreshProjects">
-            </DashboardProjectsTab>
+                @refresh="refreshProjects"
+            />
 
             <DashboardThemesTab
                 v-else-if="currentTab === 1"
                 :loading="loadingThemes"
                 :themes="themes"
-                @refresh="refreshThemes">
-            </DashboardThemesTab>
+                @refresh="refreshThemes"
+            />
 
             <DashboardDatasourcesTab
                 v-else
                 :loading="loadingDatasources"
                 :datasources="datasources"
-                @refresh="refreshDatasources">
-            </DashboardDatasourcesTab>
+                @refresh="refreshDatasources"
+            />
           </v-col>
         </v-row>
       </v-container>
@@ -85,22 +85,22 @@ export default Vue.extend({
   methods: {
     setTab(tab: number): void {
       if (tab != undefined && tab !== this.currentTab) {
-        this.currentTab = tab
-        this.$router.push({name: 'Dashboard', params: {tab: tab.toString()}})
+        this.currentTab = tab;
+        this.$router.push({name: 'Dashboard', params: {tab: tab.toString()}});
       }
     },
     openSignUp(id: number): void {
-      this.userId = id
-      this.signUpOpen = true
+      this.userId = id;
+      this.signUpOpen = true;
     },
     refreshProjects(): void {
-      this.$apollo.queries.PROJECT.refetch()
+      this.$apollo.queries.PROJECT.refetch();
     },
     refreshThemes(): void {
-      this.$apollo.queries.THEME.refetch()
+      this.$apollo.queries.THEME.refetch();
     },
     refreshDatasources(): void {
-      this.$apollo.queries.DATA_SOURCE.refetch()
+      this.$apollo.queries.DATA_SOURCE.refetch();
     }
   },
   apollo: {
@@ -116,11 +116,11 @@ export default Vue.extend({
         }
       },
       skip(): boolean {
-        return !this.currentUser || !this.currentUser.id
+        return !this.currentUser || !this.currentUser.id;
       },
       result({data}): void {
-        this.projects = data.PROJECT
-        this.loadingProjects = false
+        this.projects = data.PROJECT;
+        this.loadingProjects = false;
       },
     },
     THEME: {
@@ -132,11 +132,11 @@ export default Vue.extend({
         }
       },
       skip(): boolean {
-        return !this.currentUser || !this.currentUser.id
+        return !this.currentUser || !this.currentUser.id;
       },
       result({data}): void {
-        this.themes = data.THEME
-        this.loadingThemes = false
+        this.themes = data.THEME;
+        this.loadingThemes = false;
       }
     },
     DATA_SOURCE: {
@@ -148,17 +148,17 @@ export default Vue.extend({
         }
       },
       skip(): boolean {
-        return !this.currentUser || !this.currentUser.id
+        return !this.currentUser || !this.currentUser.id;
       },
       result({data}): void {
-        this.datasources = data.DATA_SOURCE
-        this.datasources.forEach((ds: Datasource) => ds.secret = decodeDatasourceSecret(ds.secret ?? ''))
-        this.loadingDatasources = false
+        this.datasources = data.DATA_SOURCE;
+        this.datasources.forEach((ds: Datasource) => ds.secret = decodeDatasourceSecret(ds.secret ?? ''));
+        this.loadingDatasources = false;
       }
     },
   },
   async beforeMount() {
-    this.currentTab = Number(this.$route.params.tab)
+    this.currentTab = Number(this.$route.params.tab);
   }
 })
 </script>

@@ -22,22 +22,22 @@
           :label="i18n('editor.widgetsGrid')"
           :widgets="gridWidgets"
           @dragstarted="dragStart"
-          @dragended="dragEnd">
-      </GuiEditorLeftNavWidgets>
+          @dragended="dragEnd"
+      />
 
       <GuiEditorLeftNavWidgets
           :label="i18n('editor.widgetsDisplay')"
           :widgets="displayWidgets"
           @dragstarted="dragStart"
-          @dragended="dragEnd">
-      </GuiEditorLeftNavWidgets>
+          @dragended="dragEnd"
+      />
 
       <GuiEditorLeftNavWidgets
           :label="i18n('editor.widgetsInput')"
           :widgets="inputWidgets"
           @dragstarted="dragStart"
-          @dragended="dragEnd">
-      </GuiEditorLeftNavWidgets>
+          @dragended="dragEnd"
+      />
     </template>
 
     <template v-if="navTab === 1">
@@ -49,8 +49,8 @@
           expand-icon="fa-caret-down"
           item-children="children"
           color="accent"
-          :items="[pageDefinition]">
-
+          :items="[pageDefinition]"
+      >
         <template v-slot:prepend="{ item }">
           <v-icon color="accent" small v-if="item.icon" @click="setActiveWidget(item)">
             {{ item.icon }}
@@ -89,35 +89,35 @@ export default Vue.extend({
   },
   computed: {
     gridWidgets() {
-      return lib.widgets.filter((widget) => widget.group === 'Grid')
+      return lib.widgets.filter((widget) => widget.group === 'Grid');
     },
     displayWidgets() {
-      return lib.widgets.filter((widget) => widget.group === 'Display')
+      return lib.widgets.filter((widget) => widget.group === 'Display');
     },
     inputWidgets() {
-      return lib.widgets.filter((widget) => widget.group === 'Input')
+      return lib.widgets.filter((widget) => widget.group === 'Input');
     }
   },
   methods: {
     setTab(tabNum: number): void {
-      this.navTab = tabNum
+      this.navTab = tabNum;
     },
     setActiveWidget(widget: AppWidget): void {
-      this.$emit('activewidget', widget)
+      this.$emit('activewidget', widget);
     },
     dragStart(): void {
-      this.$emit('dragstarted')
+      this.$emit('dragstarted');
     },
     dragEnd(): void {
-      this.$emit('dragended')
+      this.$emit('dragended');
     }
   },
   beforeMount() {
-    this.height = `${window.innerHeight - 124}px`
+    this.height = `${window.innerHeight - 124}px`;
 
     addEventListener('resize', () => {
-      this.height = `${window.innerHeight - 124}px`
-    })
+      this.height = `${window.innerHeight - 124}px`;
+    });
   }
 })
 </script>

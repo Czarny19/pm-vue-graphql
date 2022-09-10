@@ -76,13 +76,13 @@ export default Vue.extend({
   },
   methods: {
     setActive(widget: AppWidget): void {
-      this.$emit('activewidget', widget)
+      this.$emit('activewidget', widget);
     },
     dragStart(): void {
-      this.$emit('dragstarted')
+      this.$emit('dragstarted');
     },
     dragEnd(): void {
-      this.$emit('dragended')
+      this.$emit('dragended');
     },
   }
 })

@@ -19,8 +19,8 @@
           item-key="name"
           show-select
           class="elevation-0 ml-3 mr-3 pointer"
-          @click:row="selectField">
-
+          @click:row="selectField"
+      >
         <template v-slot:[`item.isNullable`]="{item}">
           <v-simple-checkbox
               dense
@@ -30,7 +30,6 @@
               class="disable-events">
           </v-simple-checkbox>
         </template>
-
       </v-data-table>
     </div>
   </v-card-text>
@@ -55,52 +54,52 @@ export default Vue.extend({
   },
   computed: {
     fieldsTyped(): SchemaItemField[] {
-      return this.fields as SchemaItemField[]
+      return this.fields as SchemaItemField[];
     },
     headers(): { text: string; value: string, width: string, align?: string }[] {
       return [
         {text: this.$t('datasource.fieldName').toString(), value: 'name', width: '50%'},
         {text: this.$t('datasource.fieldType').toString(), value: 'type', width: '20%'},
         {text: this.$t('datasource.fieldIsNullable').toString(), value: 'isNullable', width: '30%', align: 'end'}
-      ]
+      ];
     }
   },
   methods: {
     selectAllFields(): void {
-      this.allFieldsSelected = !this.allFieldsSelected
+      this.allFieldsSelected = !this.allFieldsSelected;
 
       if (this.allFieldsSelected) {
-        (this.selectedFields as SchemaItemField []) = this.fieldsTyped
-        return
+        (this.selectedFields as SchemaItemField []) = this.fieldsTyped;
+        return;
       }
 
-      this.selectedFields = []
+      this.selectedFields = [];
     },
     selectField(selectedField: SchemaItemField): void {
       for (const field of (this.selectedFields as SchemaItemField[])) {
         const index = (this.selectedFields as SchemaItemField[]).indexOf(field);
 
         if (field.name == selectedField.name) {
-          this.selectedFields.splice(index, 1)
-          return
+          this.selectedFields.splice(index, 1);
+          return;
         }
       }
 
-      (this.selectedFields as SchemaItemField[]).push(selectedField)
+      (this.selectedFields as SchemaItemField[]).push(selectedField);
     }
   },
   watch: {
-    selectedFields() {
-      const query = (this.currentQuery as Query)
-      this.allFieldsSelected = this.selectedFields.length === this.fields.length
+    selectedFields(): void {
+      const query = (this.currentQuery as Query);
+      this.allFieldsSelected = this.selectedFields.length === this.fields.length;
       query.fields = this.selectedFields
           .map((field) => (field as { name: string }).name)
           .join(';')
-          .replaceAll(' ', '')
+          .replaceAll(' ', '');
     }
   },
   beforeMount() {
-    const query = this.query as Query
+    const query = this.query as Query;
 
     this.currentQuery = query;
 
@@ -108,11 +107,11 @@ export default Vue.extend({
       if (query.fields != null) {
         query.fields.replaceAll(' ', '').split(';').forEach((qrField) => {
           if (tbField.name === qrField) {
-            (this.selectedFields as SchemaItemField[]).push(tbField)
+            (this.selectedFields as SchemaItemField[]).push(tbField);
           }
-        })
+        });
       }
-    })
+    });
   }
 })
 </script>

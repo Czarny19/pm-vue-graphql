@@ -52,12 +52,12 @@ export default Vue.extend({
         {title: this.$t('editor.tables').toString(), icon: 'fa-table'},
         {title: this.$t('editor.queries').toString(), icon: 'fa-terminal'},
         {title: this.$t('editor.mutations').toString(), icon: 'fa-bolt'}
-      ]
+      ];
     }
   },
   watch: {
     currentTab(): void {
-      this.$emit('tabchange', this.currentTab)
+      this.$emit('tabchange', this.currentTab);
     }
   },
   apollo: {
@@ -66,7 +66,7 @@ export default Vue.extend({
     }
   },
   async beforeMount() {
-    this.currentTab = this.tab
+    this.currentTab = this.tab;
   }
 })
 </script>

@@ -26,8 +26,8 @@
                 :items="['', ...fieldNames]"
                 :label="i18n('editor.field')"
                 required
-                append-icon="fa-chevron-down">
-            </v-select>
+                append-icon="fa-chevron-down"
+            />
           </v-col>
 
           <v-col cols="1">
@@ -37,8 +37,8 @@
                 color="accent"
                 :value="fieldType(wherePart)"
                 readonly
-                :label="i18n('editor.variableType')">
-            </v-text-field>
+                :label="i18n('editor.variableType')"
+            />
           </v-col>
 
           <v-col cols="2">
@@ -51,8 +51,8 @@
                 :items="operators(wherePart)"
                 :label="i18n('editor.operation')"
                 required
-                append-icon="fa-chevron-down">
-            </v-select>
+                append-icon="fa-chevron-down"
+            />
           </v-col>
 
           <v-col cols="3">
@@ -65,8 +65,8 @@
                 :items="['', ...variables(wherePart)]"
                 :label="i18n('editor.variable')"
                 required
-                append-icon="fa-chevron-down">
-            </v-select>
+                append-icon="fa-chevron-down"
+            />
           </v-col>
 
           <v-col cols="2">
@@ -75,8 +75,8 @@
                 class="mt-1"
                 color="success"
                 v-model="wherePart.required"
-                :label="i18n('editor.wherePartRequired')">
-            </v-switch>
+                :label="i18n('editor.wherePartRequired')"
+            />
           </v-col>
 
           <v-spacer></v-spacer>
@@ -119,7 +119,7 @@ export default Vue.extend({
   },
   computed: {
     fieldNames(): string[] {
-      return (this.fields as SchemaItemField[]).map((field) => field.name).filter((field) => !field.includes('.'))
+      return (this.fields as SchemaItemField[]).map((field) => field.name).filter((field) => !field.includes('.'));
     }
   },
   methods: {
@@ -127,72 +127,72 @@ export default Vue.extend({
       const field = (this.fields as SchemaItemField []).find((field) => field.name === wherePart.field);
 
       if (!field) {
-        return graphql_gen.stringOperators
+        return graphql_gen.stringOperators;
       }
 
       switch (field.type) {
         case 'String':
-          return graphql_gen.stringOperators
+          return graphql_gen.stringOperators;
         case 'Int':
         case 'float8':
         case 'bigint':
-          return graphql_gen.numberOperators
+          return graphql_gen.numberOperators;
         case 'Boolean':
-          return graphql_gen.boolOperators
+          return graphql_gen.boolOperators;
         case 'date':
-          return graphql_gen.dateOperators
+          return graphql_gen.dateOperators;
         case 'time':
-          return graphql_gen.timeOperators
+          return graphql_gen.timeOperators;
         default:
-          return graphql_gen.stringOperators
+          return graphql_gen.stringOperators;
       }
     },
     fieldType(wherePart: QueryWhere): string {
       const field = (this.fields as SchemaItemField []).find((field) => field.name === wherePart.field);
-      return field?.type ?? ''
+      return field?.type ?? '';
     },
     variables(wherePart: QueryWhere): string [] {
       const field = (this.fields as SchemaItemField []).find((field) => field.name === wherePart.field);
-      const type = field?.type ?? ''
-      const obj = this.object as { variables: string }
-      const variables = graphql_gen.mapModelStringToQueryVariableArray(obj.variables ?? '')
+      const type = field?.type ?? '';
+      const obj = this.object as { variables: string };
+      const variables = graphql_gen.mapModelStringToQueryVariableArray(obj.variables ?? '');
 
-      return variables?.filter((variable) => variable.type === type).map((variable) => variable.name) ?? []
+      return variables?.filter((variable) => variable.type === type).map((variable) => variable.name) ?? [];
     },
     addWherePart(): void {
       const newPart = {field: '', operator: '', variable: '', isAnd: true, required: true};
-      (this.whereParts as QueryWhere[]).push(newPart)
+      (this.whereParts as QueryWhere[]).push(newPart);
     },
     setPartIsAnd(wherePart: QueryWhere): void {
-      wherePart.isAnd = !wherePart.isAnd
+      wherePart.isAnd = !wherePart.isAnd;
     },
     deletePart(wherePart: QueryWhere): void {
       this.whereParts.forEach((part, index) => {
         if (part == wherePart) {
-          this.whereParts.splice(index, 1)
+          this.whereParts.splice(index, 1);
         }
-      })
+      });
     }
   },
   watch: {
     query: {
       handler() {
-        this.currentObject = this.object
+        this.currentObject = this.object;
       },
       deep: true
     },
     whereParts: {
       handler() {
-        const obj = this.currentObject as { where: string }
-        obj.where = this.whereParts.map(wherePart => (JSON.stringify(wherePart))).join(';')
+        const obj = this.currentObject as { where: string };
+        obj.where = this.whereParts.map(wherePart => (JSON.stringify(wherePart))).join(';');
       },
       deep: true
     }
   },
   beforeMount() {
-    const obj = this.object as { where: string }
-    (this.whereParts as QueryWhere[]) = graphql_gen.mapModelStringToQueryWhereArray(obj.where ?? '')
-    this.currentObject = this.object
+    const obj = this.object as { where: string };
+    (this.whereParts as QueryWhere[]) = graphql_gen.mapModelStringToQueryWhereArray(obj.where ?? '');
+    this.currentObject = this.object;
   }
 })
 </script>

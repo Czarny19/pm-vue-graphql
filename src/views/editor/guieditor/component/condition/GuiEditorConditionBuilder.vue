@@ -23,16 +23,16 @@
             v-model="prop.field"
             item-value="id"
             item-text="name"
-            item-color="accent">
-        </v-select>
+            item-color="accent"
+        />
 
         <template v-if="prop.field">
           <GuiEditorConditionValue
               :prop="prop"
               :widget="widget"
               :schema="schema"
-              :fields="fields">
-          </GuiEditorConditionValue>
+              :fields="fields"
+          />
         </template>
 
         <v-divider class="mt-3 mb-3"></v-divider>
@@ -46,8 +46,8 @@
               :label="i18n('editor.addCondition')"
               color="success"
               icon="fa-plus"
-              @click="addCondition">
-          </IconButton>
+              @click="addCondition"
+          />
         </v-col>
       </v-row>
     </v-container>
@@ -78,28 +78,28 @@ export default Vue.extend({
   },
   computed: {
     tableName(): string {
-      return widget.getTableNameForWidget(this.widget)
+      return widget.getTableNameForWidget(this.widget);
     },
     fields(): SchemaItemField[] {
-      return getAllTableFieldsWithObjectRelations(this.tableName, this.schema as SchemaItem[])
+      return getAllTableFieldsWithObjectRelations(this.tableName, this.schema as SchemaItem[]);
     }
   },
   methods: {
     addCondition(): void {
       (this.conditionGroupProps as ConditionProp[]).push({
         id: this.conditionGroupProps.length + 1, field: '', condition: '=', value: ''
-      })
+      });
     },
     deleteCondition(condition: ConditionProp): void {
       (this.conditionGroupProps as ConditionProp[]).forEach((condProp, index) => {
         if (condProp == condition) {
-          this.conditionGroupProps.splice(index, 1)
+          this.conditionGroupProps.splice(index, 1);
         }
-      })
+      });
     }
   },
   beforeMount() {
-    this.conditionGroupProps = this.conditionsGroup.props
+    this.conditionGroupProps = this.conditionsGroup.props;
   }
 })
 </script>

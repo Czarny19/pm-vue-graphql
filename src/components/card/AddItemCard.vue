@@ -17,7 +17,7 @@ export default Vue.extend({
   },
   methods: {
     add(): void {
-      this.$emit('add')
+      this.$emit('add');
     }
   }
 })

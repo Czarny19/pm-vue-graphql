@@ -6,8 +6,8 @@
         :dialog="warningDialog"
         :title="i18n('dashboard.datasourceDeleteWarning')"
         :msg="i18n('dashboard.datasourceProjectExists')"
-        @close="closeWarningDialog">
-    </InfoDialog>
+        @close="closeWarningDialog"
+    />
 
     <TitleCard :title="i18n('dashboard.datasources')" icon="fa-database"/>
     <AddItemCard :label="i18n('dashboard.addDatasource')" @add="createDatasource"/>
@@ -18,8 +18,8 @@
     <DashboardDatasourcesList
         v-if="datasources.length && !loading"
         :datasources="datasources"
-        @delete="deleteDatasourceClicked">
-    </DashboardDatasourcesList>
+        @delete="deleteDatasourceClicked"
+    />
   </div>
 </template>
 
@@ -59,25 +59,25 @@ export default Vue.extend({
   },
   methods: {
     createDatasource(): void {
-      this.$router.push({name: 'NewDatasource'})
+      this.$router.push({name: 'NewDatasource'});
     },
     deleteDatasourceClicked(id: number): void {
-      this.deleteId = id
-      this.$apollo.queries.DATA_SOURCE.refresh()
+      this.deleteId = id;
+      this.$apollo.queries.DATA_SOURCE.refresh();
     },
     cancelDeleteDatasource(): void {
-      this.deleteId = -1
-      this.deleteDialog = false
+      this.deleteId = -1;
+      this.deleteDialog = false;
     },
     deleteDatasource(): void {
-      this.deleteDialog = false
+      this.deleteDialog = false;
 
       this.$apollo.mutate({mutation: DELETE_DATA_SOURCE, variables: {id: this.deleteId}}).then(() => {
-        this.$emit('refresh')
-      })
+        this.$emit('refresh');
+      });
     },
     closeWarningDialog(): void {
-      this.warningDialog = false
+      this.warningDialog = false;
     }
   },
   apollo: {
@@ -90,16 +90,16 @@ export default Vue.extend({
         }
       },
       skip(): boolean {
-        return this.deleteId < 0
+        return this.deleteId < 0;
       },
       result({data}): void {
         if (data.PROJECT.length) {
-          this.warningDialog = true
-          this.deleteId = -1
-          return
+          this.warningDialog = true;
+          this.deleteId = -1;
+          return;
         }
 
-        this.deleteDialog = true
+        this.deleteDialog = true;
       }
     }
   }

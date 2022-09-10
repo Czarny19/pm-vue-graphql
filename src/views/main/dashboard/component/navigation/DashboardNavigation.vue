@@ -68,21 +68,21 @@ export default Vue.extend({
         {title: this.$t('dashboard.projects').toString(), icon: 'fa-tablet'},
         {title: this.$t('dashboard.themes').toString(), icon: 'fa-palette'},
         {title: this.$t('dashboard.datasources').toString(), icon: 'fa-database'}
-      ]
+      ];
     }
   },
   methods: {
     openApp(id: string): void {
-      this.$router.push({name: 'App', params: {projectId: id, tab: '0'}})
+      this.$router.push({name: 'App', params: {projectId: id, tab: '0'}});
     }
   },
   watch: {
     currentTab(): void {
-      this.$emit('tabchange', this.currentTab)
+      this.$emit('tabchange', this.currentTab);
     }
   },
   async beforeMount() {
-    this.currentTab = this.tab
+    this.currentTab = this.tab;
   }
 })
 </script>

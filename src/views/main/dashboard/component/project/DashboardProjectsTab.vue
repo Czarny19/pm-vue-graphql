@@ -6,8 +6,8 @@
         :dialog="warningDialog"
         :title="i18n('dashboard.projectThemeWarning')"
         :msg="i18n('dashboard.projectThemeRequired')"
-        @close="closeWarningDialog">
-    </InfoDialog>
+        @close="closeWarningDialog"
+    />
 
     <TitleCard :title="i18n('dashboard.projects')" icon="fa-tablet"/>
     <AddItemCard :label="i18n('dashboard.addProject')" @add="createProject"/>
@@ -56,29 +56,29 @@ export default Vue.extend({
   methods: {
     createProject(): void {
       if (this.themes.length === 0) {
-        this.warningDialog = true
-        return
+        this.warningDialog = true;
+        return;
       }
 
-      this.$router.push({name: 'NewProject'})
+      this.$router.push({name: 'NewProject'});
     },
     deleteProjectClicked(id: number): void {
-      this.deleteId = id
-      this.deleteDialog = true
+      this.deleteId = id;
+      this.deleteDialog = true;
     },
     cancelDeleteProject(): void {
-      this.deleteId = -1
-      this.deleteDialog = false
+      this.deleteId = -1;
+      this.deleteDialog = false;
     },
     deleteProject(): void {
-      this.deleteDialog = false
+      this.deleteDialog = false;
 
       this.$apollo.mutate({mutation: DELETE_PROJECT, variables: {id: this.deleteId}}).then(() => {
-        this.$emit('refresh')
-      })
+        this.$emit('refresh');
+      });
     },
     closeWarningDialog(): void {
-      this.warningDialog = false
+      this.warningDialog = false;
     }
   }
 })

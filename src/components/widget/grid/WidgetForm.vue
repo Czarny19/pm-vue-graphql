@@ -13,8 +13,8 @@
           :mutations="mutations"
           @showerror="showError"
           @saving="saving"
-          @savingdone="savingDone">
-      </BaseWidget>
+          @savingdone="savingDone"
+      />
     </template>
   </v-form>
 </template>
@@ -46,24 +46,24 @@ export default Vue.extend({
   },
   computed: {
     appWidget(): AppWidget {
-      return this.widget as AppWidget
+      return this.widget as AppWidget;
     },
     visible(): boolean {
-      return widget.isWidgetVisible(this.appWidget, this.dataItem)
+      return widget.isWidgetVisible(this.appWidget, this.dataItem);
     },
     cssProps(): ({ [p: string]: string })[] {
-      return getCssProps(this.appWidget, this.theme)
+      return getCssProps(this.appWidget, this.theme);
     }
   },
   methods: {
     showError(error: string) {
-      this.$emit('showerror', error)
+      this.$emit('showerror', error);
     },
     saving(): void {
-      this.$emit('saving')
+      this.$emit('saving');
     },
     savingDone(): void {
-      this.$emit('savingdone')
+      this.$emit('savingdone');
     }
   }
 })

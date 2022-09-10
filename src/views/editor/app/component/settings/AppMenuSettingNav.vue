@@ -9,8 +9,8 @@
             color="success"
             v-model="currentProject.top_nav"
             :label="i18n('editor.topNavigationEnabled')"
-            @change="changed=true">
-        </v-switch>
+            @change="changed=true"
+        />
 
         <template v-for="(item, index) in currentProject.top_nav_items.items">
           <v-container :key="index" fluid class="pa-0">
@@ -24,8 +24,8 @@
                     :counter="30"
                     :rules="nameRules"
                     required
-                    @change="changed=true">
-                </v-text-field>
+                    @change="changed=true"
+                />
               </v-col>
 
               <v-col cols="6" class="pl-3 pr-3">
@@ -40,8 +40,8 @@
                     item-text="name"
                     required
                     append-icon="fa-chevron-down"
-                    @change="changed=true">
-                </v-select>
+                    @change="changed=true"
+                />
               </v-col>
 
               <v-col cols="1" class="pl-3 text-end">
@@ -59,8 +59,8 @@
               :label="i18n('editor.topNavigationAdd')"
               icon="fa-plus"
               color="info"
-              @click="addNavItem">
-          </IconButton>
+              @click="addNavItem"
+          />
         </div>
       </v-form>
     </v-card-text>
@@ -101,12 +101,12 @@ export default Vue.extend({
   },
   methods: {
     submit(): void {
-      (this.$refs.form as Vue & { validate: () => boolean }).validate()
-      if (this.topNavValid) this.updateNav()
+      (this.$refs.form as Vue & { validate: () => boolean }).validate();
+      if (this.topNavValid) this.updateNav();
     },
     addNavItem(): void {
-      (this.currentProject as AppProject).top_nav_items.items.push({name: '', page: -1})
-      this.changed = true
+      (this.currentProject as AppProject).top_nav_items.items.push({name: '', page: -1});
+      this.changed = true;
     },
     updateNav(): void {
       this.$apollo.mutate({
@@ -117,24 +117,24 @@ export default Vue.extend({
           topNavItems: this.project.top_nav_items
         }
       }).then(async () => {
-        this.changed = false
+        this.changed = false;
       }).catch(() => {
-        this.changed = false
-      })
+        this.changed = false;
+      });
     },
     deleteNavItem(index: number): void {
-      (this.currentProject as AppProject).top_nav_items.items.splice(index, 1)
-      this.changed = true
+      (this.currentProject as AppProject).top_nav_items.items.splice(index, 1);
+      this.changed = true;
     }
   },
   beforeMount() {
-    this.currentProject = this.project
+    this.currentProject = this.project;
 
     if (!this.project.top_nav_items) {
-      (this.currentProject as AppProject).top_nav_items = {"items": []}
+      (this.currentProject as AppProject).top_nav_items = {"items": []};
     }
 
-    this.navItems = (this.currentProject as AppProject).top_nav_items.items
+    this.navItems = (this.currentProject as AppProject).top_nav_items.items;
   }
 })
 </script>

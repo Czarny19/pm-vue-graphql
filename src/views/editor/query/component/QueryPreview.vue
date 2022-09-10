@@ -59,43 +59,43 @@ export default Vue.extend({
   },
   computed: {
     graphQlQueryWhere(): QueryWhere[] {
-      return graphql_gen.mapModelStringToQueryWhereArray((this.query as Query).where ?? '')
+      return graphql_gen.mapModelStringToQueryWhereArray((this.query as Query).where ?? '');
     },
     graphQlQueryOrderBy(): QueryOrderBy[] {
-      return graphql_gen.mapModelStringToQueryOrderByArray((this.query as Query).order_by ?? '')
+      return graphql_gen.mapModelStringToQueryOrderByArray((this.query as Query).order_by ?? '');
     },
     graphQlQueryVars(): QueryVariable[] {
-      return graphql_gen.mapModelStringToQueryVariableArray((this.query as Query).variables ?? '')
+      return graphql_gen.mapModelStringToQueryVariableArray((this.query as Query).variables ?? '');
     },
     graphQLQuery(): string {
-      const query = (this.query as Query)
+      const query = (this.query as Query);
 
       if (!query.name) {
-        return ''
+        return '';
       }
 
       return graphql_gen.generateGraphQLQuery(query.name, query.table, query.fields, this.graphQlQueryWhere,
-          this.graphQlQueryOrderBy, query.limit, this.graphQlQueryVars)
+          this.graphQlQueryOrderBy, query.limit, this.graphQlQueryVars);
     },
     previewQuery(): string {
-      const query = (this.query as Query)
+      const query = (this.query as Query);
 
       if (!query.name) {
-        return ''
+        return '';
       }
 
       return graphql_gen.generateGraphQLPreviewQuery(query.name, query.table, query.fields,
-          this.graphQlQueryWhere, this.graphQlQueryOrderBy, query.limit, this.graphQlQueryVars)
+          this.graphQlQueryWhere, this.graphQlQueryOrderBy, query.limit, this.graphQlQueryVars);
     },
     graphQLVariablesPreview(): string {
-      const vars = graphql_gen.mapModelStringToQueryVariableArray(this.query.variables ?? '')
-      return graphql_gen.generateGraphQLPreviewVariables(vars)
+      const vars = graphql_gen.mapModelStringToQueryVariableArray(this.query.variables ?? '');
+      return graphql_gen.generateGraphQLPreviewVariables(vars);
     }
   },
   methods: {
     async run(): Promise<void> {
       const result = await graphql_gen.runQuery(this.datasource.address, this.graphQLQuery, this.query.table,
-          this.datasource.secret, this.graphQlQueryWhere, this.graphQlQueryVars)
+          this.datasource.secret, this.graphQlQueryWhere, this.graphQlQueryVars);
 
       this.isSuccessful = result.isSuccessful;
       (this.queryData as unknown[]) = result.data;

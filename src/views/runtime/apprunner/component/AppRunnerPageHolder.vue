@@ -6,8 +6,8 @@
       :variables="variables"
       :mutations="mutations"
       @saving="saving"
-      @savingdone="savingDone">
-  </WidgetPage>
+      @savingdone="savingDone"
+  />
 </template>
 
 <script lang="ts">
@@ -26,10 +26,10 @@ export default Vue.extend({
   },
   methods: {
     saving(): void {
-      this.$emit('saving')
+      this.$emit('saving');
     },
     savingDone(): void {
-      this.$emit('savingdone')
+      this.$emit('savingdone');
     }
   }
 })

@@ -6,8 +6,8 @@
         :dialog="warningDialog"
         :title="i18n('dashboard.themeDeleteWarning')"
         :msg="i18n('dashboard.themeProjectExists')"
-        @close="closeWarningDialog">
-    </InfoDialog>
+        @close="closeWarningDialog"
+    />
 
     <TitleCard :title="i18n('dashboard.themes')" icon="fa-palette"/>
     <AddItemCard :label="i18n('dashboard.addTheme')" @add="createTheme"/>
@@ -59,28 +59,28 @@ export default Vue.extend({
       return this.themes[index] as ThemeColors;
     },
     createTheme(): void {
-      this.$router.push({name: 'NewTheme'})
+      this.$router.push({name: 'NewTheme'});
     },
     openModifyTheme(id: string): void {
-      this.$router.push({name: 'Theme', params: {themeId: id}})
+      this.$router.push({name: 'Theme', params: {themeId: id}});
     },
     deleteThemeClicked(id: number): void {
-      this.deleteId = id
-      this.$apollo.queries.PROJECT.refresh()
+      this.deleteId = id;
+      this.$apollo.queries.PROJECT.refresh();
     },
     cancelDeleteTheme(): void {
-      this.deleteId = -1
-      this.deleteDialog = false
+      this.deleteId = -1;
+      this.deleteDialog = false;
     },
     deleteTheme(): void {
-      this.deleteDialog = false
+      this.deleteDialog = false;
 
       this.$apollo.mutate({mutation: DELETE_THEME, variables: {id: this.deleteId}}).then(() => {
-        this.$emit('refresh')
-      })
+        this.$emit('refresh');
+      });
     },
     closeWarningDialog(): void {
-      this.warningDialog = false
+      this.warningDialog = false;
     }
   },
   apollo: {
@@ -93,16 +93,16 @@ export default Vue.extend({
         }
       },
       skip(): boolean {
-        return this.deleteId < 0
+        return this.deleteId < 0;
       },
       result({data}): void {
         if (data.PROJECT.length) {
-          this.warningDialog = true
-          this.deleteId = -1
-          return
+          this.warningDialog = true;
+          this.deleteId = -1;
+          return;
         }
 
-        this.deleteDialog = true
+        this.deleteDialog = true;
       }
     }
   }
