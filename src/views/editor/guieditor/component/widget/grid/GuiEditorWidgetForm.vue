@@ -49,8 +49,8 @@
 
 import Vue from "vue";
 import GuiEditorGridWidgetHeader from "@/views/editor/guieditor/component/widget/grid/GuiEditorGridWidgetHeader.vue";
-import {AppWidget, AppWidgetProp} from "@/lib/types";
 import GuiEditorWidgetDropBox from "@/views/editor/guieditor/component/widget/GuiEditorWidgetDropBox.vue";
+import {AppWidget, AppWidgetProp} from "@/lib/types";
 
 export default Vue.extend({
   name: 'GuiEditorWidgetForm',
@@ -116,9 +116,11 @@ export default Vue.extend({
         // eslint-disable-next-line
         const widget = JSON.parse(dataTransfer!.getData('widget'));
 
-        if (this.dragIndex >= 0 && this.dragIndex <= index) {
+        if (this.dragIndex >= 0 && this.dragIndex < index && this.isThisLayerWidgetMoved()) {
           index--
         }
+
+        this.dragIndex = -1
 
         this.removeWidgetFromTree(this.page, widget);
         (this.form.children as AppWidgetProp[]).splice(index, 0, widget);
@@ -137,6 +139,9 @@ export default Vue.extend({
         this.removeWidgetFromTree(child, widget)
       }
     },
+    isThisLayerWidgetMoved(): boolean {
+      return this.form.children.find((child) => (child as AppWidget).move) !== undefined
+    }
   },
   watch: {
     widget: {

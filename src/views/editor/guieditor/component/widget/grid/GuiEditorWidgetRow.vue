@@ -128,9 +128,11 @@ export default Vue.extend({
           return
         }
 
-        if (this.dragIndex >= 0 && this.dragIndex <= index) {
+        if (this.dragIndex >= 0 && this.dragIndex < index && this.isThisLayerWidgetMoved()) {
           index--
         }
+
+        this.dragIndex = -1
 
         this.removeWidgetFromTree(this.page, widget);
         (this.row.children as AppWidgetProp[]).splice(index, 0, widget);
@@ -148,6 +150,9 @@ export default Vue.extend({
 
         this.removeWidgetFromTree(child, widget)
       }
+    },
+    isThisLayerWidgetMoved(): boolean {
+      return this.row.children.find((child) => (child as AppWidget).move) !== undefined
     }
   },
   watch: {

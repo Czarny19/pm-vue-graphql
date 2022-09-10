@@ -23,7 +23,7 @@ export default Vue.extend({
   }
 })
 
-// TODO komponent ikony, dokończyć demo, rozwinąć komponent tabeli + drugi przykład
+// TODO komponent ikony, dokończyć demo, rozwinąć komponent tabeli + drugi przykład, błąd po logowaniu
 // TODO naprawić bugi, napisać readme, dodać komentarze gdzie potrzeba
 
 // Runtime | walidacja danych | skomplikowany przypadek | celem nie jest prototyp tylko analiza zagadnienia | cech |

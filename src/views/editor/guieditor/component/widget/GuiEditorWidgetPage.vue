@@ -86,9 +86,11 @@ export default Vue.extend({
           return
         }
 
-        if (this.dragIndex >= 0 && this.dragIndex <= index) {
+        if (this.dragIndex >= 0 && this.dragIndex < index && this.isThisLayerWidgetMoved()) {
           index--
         }
+
+        this.dragIndex = -1
 
         this.moveWidgets(this.page as AppWidget, widget);
         (this.page.children as AppWidget[]).splice(index, 0, widget);
@@ -106,6 +108,9 @@ export default Vue.extend({
 
         this.moveWidgets(child, widget)
       }
+    },
+    isThisLayerWidgetMoved(): boolean {
+      return this.page.children.find((child) => (child as AppWidget).move) !== undefined
     }
   },
   beforeMount() {

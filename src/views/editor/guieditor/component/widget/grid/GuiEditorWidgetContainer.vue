@@ -116,9 +116,11 @@ export default Vue.extend({
         // eslint-disable-next-line
         const widget = JSON.parse(dataTransfer!.getData('widget'));
 
-        if (this.dragIndex >= 0 && this.dragIndex <= index) {
+        if (this.dragIndex >= 0 && this.dragIndex < index && this.isThisLayerWidgetMoved()) {
           index--
         }
+
+        this.dragIndex = -1
 
         this.removeWidgetFromTree(this.page, widget);
         (this.container.children as AppWidgetProp[]).splice(index, 0, widget);
@@ -136,6 +138,9 @@ export default Vue.extend({
 
         this.removeWidgetFromTree(child, widget)
       }
+    },
+    isThisLayerWidgetMoved(): boolean {
+      return this.container.children.find((child) => (child as AppWidget).move) !== undefined
     }
   },
   watch: {
