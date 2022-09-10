@@ -13,7 +13,7 @@
     <GuiEditorGridWidgetHeader :widget="widget" @activewidget="setActive"/>
 
     <GuiEditorWidgetDropBox
-        :drag="drag"
+        :drag="drag && !widget.move"
         :parent-widget="widget"
         @eldrop="(evt) => onDrop(0, evt)"
     />
@@ -23,7 +23,7 @@
           class="mr-2 ml-2 mb-2"
           :page="page"
           :widget="child"
-          :drag="drag"
+          :drag="drag && !widget.move"
           :key="child.name"
           @activewidget="setActive"
           @dragstarted="startChildDrag(index)"
@@ -32,7 +32,7 @@
 
       <GuiEditorWidgetDropBox
           :key="index"
-          :drag="drag"
+          :drag="drag && !widget.move"
           :parent-widget="widget"
           @eldrop="(evt) => onDrop(index + 1, evt)"
       />
@@ -98,7 +98,8 @@ export default Vue.extend({
       }
     },
     endDrag(): void {
-      this.$emit('dragended')
+      this.$emit('dragended');
+      (this.column as AppWidget).move = false;
     },
     startChildDrag(index: number): void {
       this.$emit('dragstarted')
@@ -113,7 +114,7 @@ export default Vue.extend({
 
       const dataTransfer = evt?.dataTransfer;
 
-      if (dataTransfer != null && !this.widget.move) {
+      if (dataTransfer != null) {
         // eslint-disable-next-line
         const widget = JSON.parse(dataTransfer!.getData('widget'));
 
