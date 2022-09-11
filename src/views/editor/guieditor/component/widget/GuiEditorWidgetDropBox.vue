@@ -2,6 +2,7 @@
   <v-card
       v-if="drag"
       class="editor--drag-container"
+      width="90%"
       @drop.self="onDrop"
       @dragover.prevent
       @dragenter.prevent

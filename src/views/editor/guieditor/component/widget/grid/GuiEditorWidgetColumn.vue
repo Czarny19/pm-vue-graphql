@@ -13,7 +13,6 @@
     <GuiEditorGridWidgetHeader :widget="widget" @activewidget="setActive"/>
 
     <GuiEditorWidgetDropBox
-        class="ma-2"
         :drag="drag && !widget.move"
         :parent-widget="widget"
         @eldrop="(evt) => onDrop(0, evt)"

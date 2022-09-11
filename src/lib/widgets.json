@@ -300,7 +300,6 @@
       "group": "Display",
       "label": "Tekst",
       "icon": "fa-quote-right",
-      "children": [],
       "propGroups": [
         {
           "id": "variables",
@@ -438,11 +437,53 @@
     },
     {
       "id": "",
+      "type": "Icon",
+      "group": "Display",
+      "label": "Ikona",
+      "icon": "fa-icons",
+      "propGroups": [
+        {
+          "id": "parameters",
+          "label": "Wartość - Parametr strony",
+          "type": "args",
+          "props": [
+            {
+              "id": "iconName",
+              "value": "fa-",
+              "label": "Ikona (FA)",
+              "type": "String"
+            }
+          ]
+        },
+        {
+          "id": "display",
+          "label": "Wygląd",
+          "type": "css",
+          "props": [
+            {
+              "id": "font-size",
+              "value": "12",
+              "unit": "pt",
+              "lockUnit": true,
+              "label": "Rozmiar",
+              "type": "Size"
+            },
+            {
+              "id": "color",
+              "value": "text_color_1",
+              "label": "Kolor",
+              "type": "Color"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "",
       "type": "Card",
       "group": "Display",
       "label": "Karta",
       "icon": "fa-address-card",
-      "children": [],
       "propGroups": [
         {
           "id": "variables",
@@ -649,7 +690,6 @@
       "group": "Display",
       "label": "Karuzela",
       "icon": "fa-images",
-      "children": [],
       "propGroups": [
         {
           "id": "properties",
@@ -735,7 +775,6 @@
       "group": "Display",
       "label": "Tabela",
       "icon": "fa-table-cells",
-      "children": [],
       "propGroups": [
         {
           "id": "data",
@@ -786,7 +825,6 @@
       "group": "Display",
       "label": "Link",
       "icon": "fa-link",
-      "children": [],
       "propGroups": [
         {
           "id": "variables",
@@ -914,7 +952,6 @@
       "group": "Display",
       "label": "Separator",
       "icon": "fa-minus",
-      "children": [],
       "propGroups": [
         {
           "id": "display",
@@ -967,7 +1004,6 @@
       "group": "Input",
       "label": "Pole tekstowe",
       "icon": "fa-pen",
-      "children": [],
       "propGroups": [
         {
           "id": "variables",
@@ -1126,7 +1162,6 @@
       "group": "Input",
       "label": "Pole numeryczne",
       "icon": "fa-hashtag",
-      "children": [],
       "propGroups": [
         {
           "id": "variables",
@@ -1285,7 +1320,6 @@
       "group": "Input",
       "label": "Duże pole tekstowe",
       "icon": "fa-keyboard",
-      "children": [],
       "propGroups": [
         {
           "id": "variables",
@@ -1450,7 +1484,6 @@
       "group": "Input",
       "label": "Pole Wyboru",
       "icon": "fa-caret-down",
-      "children": [],
       "propGroups": [
         {
           "id": "source",
@@ -1607,7 +1640,6 @@
       "group": "Input",
       "label": "Checkbox",
       "icon": "fa-square-check",
-      "children": [],
       "propGroups": [
         {
           "id": "variables",
@@ -1712,7 +1744,6 @@
       "group": "Input",
       "label": "Przycisk",
       "icon": "fa-caret-square-right",
-      "children": [],
       "propGroups": [
         {
           "id": "variables",

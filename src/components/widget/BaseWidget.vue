@@ -58,6 +58,13 @@
       :variables="variables"
   />
 
+  <WidgetIcon
+      v-else-if="widget.type === 'Icon'"
+      :widget="widget"
+      :theme="theme"
+      :data-item="dataItem"
+  />
+
   <WidgetCard
       v-else-if="widget.type === 'Card'"
       :widget="widget"
@@ -177,10 +184,12 @@ import WidgetCheckbox from "@/components/widget/input/WidgetCheckbox.vue";
 import WidgetNumberField from "@/components/widget/input/WidgetNumberField.vue";
 import WidgetButton from "@/components/widget/input/WidgetButton.vue";
 import WidgetLink from "@/components/widget/display/WidgetLink.vue";
+import WidgetIcon from "@/components/widget/display/WidgetIcon.vue";
 
 export default Vue.extend({
   name: 'BaseWidget',
   components: {
+    WidgetIcon,
     WidgetLink,
     WidgetButton,
     WidgetNumberField,
