@@ -1,17 +1,14 @@
 <template>
-  <v-container
-      fluid
-      class="pa-1 editor--widget-header"
-      draggable="true"
+  <v-card
+      class="pa-2 mb-1 pl-3 text-start"
+      color="secondary"
+      width="100%"
+      :ripple="false"
       @click="setActive(appWidget)"
   >
-    <v-row>
-      <v-col class="text-start text-body-2 text-pcolor mt-auto mb-auto pl-4">
-        <b v-if="widget.id"> {{ appWidget.id }} :: {{ appWidget.label }}</b>
-        <b v-else>{{ appWidget.label }}</b>
-      </v-col>
-    </v-row>
-  </v-container>
+    <span v-if="widget.id"> {{ appWidget.id }} :: {{ appWidget.label }}</span>
+    <span v-else>{{ appWidget.label }}</span>
+  </v-card>
 </template>
 
 <script lang="ts">

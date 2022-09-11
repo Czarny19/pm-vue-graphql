@@ -13,6 +13,7 @@
     <GuiEditorGridWidgetHeader :widget="widget" @activewidget="setActive"/>
 
     <GuiEditorWidgetDropBox
+        class="ma-2"
         :drag="drag && !widget.move"
         :parent-widget="widget"
         @eldrop="(evt) => onDrop(0, evt)"
@@ -20,7 +21,7 @@
 
     <template v-for="(child, index) in appWidget.children">
       <GuiEditorWidget
-          class="mr-2 ml-2 mb-2"
+          class="ma-2 mt-2 mb-2"
           :page="page"
           :widget="child"
           :drag="drag && !widget.move"
@@ -31,6 +32,7 @@
       />
 
       <GuiEditorWidgetDropBox
+          class="ma-2"
           :key="index"
           :drag="drag && !widget.move"
           :parent-widget="widget"

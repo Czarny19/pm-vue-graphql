@@ -3,6 +3,7 @@
       class="mt-2 mb-2 pa-2 pl-3 text-start"
       color="secondary"
       draggable="true"
+      :ripple="false"
       @click="setActive(appWidget)"
       @dragstart="startDrag($event)"
       @dragend="endDrag"

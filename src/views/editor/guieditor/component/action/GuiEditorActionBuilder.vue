@@ -1,15 +1,11 @@
 <template>
-  <div>
-    <div class="secondary text-start text-body-2 pa-3 pl-6">
-      {{ actionsGroup.label }}
-    </div>
+  <v-container fluid class="pa-0 pb-8">
+    <div v-for="(prop, index) in actionsGroup.props" :key="index">
+      <div class="secondary text-start text-body-2 pa-3 pl-6">
+        {{ `${i18n('editor.action')}: ${index + 1}` }}
+      </div>
 
-    <v-container fluid class="pa-4">
-      <div v-for="(prop, index) in actionsGroup.props" :key="index">
-        <div class="text-body-1 pl-3 pr-3 pt-1 pb-1 mt-1 mb-3 editor--action-tab">
-          {{ `${i18n('editor.action')}: ${index + 1}` }}
-        </div>
-
+      <div class="pa-4">
         <v-btn class="mt-2 mb-4 ml-auto mr-2" block small color="error" @click="deleteAction(prop)">
           {{ `${i18n('editor.deleteAction')} ${index + 1}` }}
         </v-btn>
@@ -73,20 +69,20 @@
           />
         </template>
       </div>
+    </div>
 
-      <v-row no-gutters v-if="!actionsGroup.addLocked">
-        <v-col>
-          <IconButton
-              class="mt-1 mb-1"
-              :label="i18n('editor.addAction')"
-              color="success"
-              icon="fa-plus"
-              @click="addAction"
-          />
-        </v-col>
-      </v-row>
-    </v-container>
-  </div>
+    <v-row no-gutters v-if="!actionsGroup.addLocked">
+      <v-col>
+        <IconButton
+            class="mr-3 mt-4 mb-4 ml-3"
+            :label="i18n('editor.addAction')"
+            color="success"
+            icon="fa-plus"
+            @click="addAction"
+        />
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script lang="ts">
@@ -99,7 +95,7 @@ import {getActionTypes} from "@/lib/widget";
 
 export default Vue.extend({
   name: 'GuiEditorActionBuilder',
-  components: {GuiEditorActionGoToPage, GuiEditorActionRunMutation, IconButton},
+  components: {IconButton, GuiEditorActionGoToPage, GuiEditorActionRunMutation},
   props: {
     actionsGroup: Object,
     mutations: Array,

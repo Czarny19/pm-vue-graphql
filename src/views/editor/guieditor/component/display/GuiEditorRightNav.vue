@@ -109,6 +109,21 @@
           :widget="widget"
           :schema="schema"
       />
+
+      <v-container v-else>
+        <v-row>
+          <v-col class="text-center mt-6">
+            <v-btn class="disable-events" fab x-large>
+              <v-icon x-large>fa-arrow-pointer</v-icon>
+            </v-btn>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col class="text-center mt-2 text-body-1">
+            {{ i18n('editor.chooseComponent') }}
+          </v-col>
+        </v-row>
+      </v-container>
     </template>
 
     <template v-else-if="navTab === 2">
@@ -199,7 +214,7 @@
           @click="addParam"
       />
 
-      <div class="pa-3 text-start">
+      <div class="pa-3 pb-8 text-start">
         <div class="pt-1">
           <v-row no-gutters v-for="(param, index) in currentParams" :key="index">
             <v-col cols="10">
