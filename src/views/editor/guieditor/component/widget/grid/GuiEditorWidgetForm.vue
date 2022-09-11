@@ -16,7 +16,6 @@
       <GuiEditorWidgetDropBox
           class="ma-2"
           :drag="drag && !widget.move"
-          :parent-widget="widget"
           @eldrop="(evt) => onDrop(0, evt)"
       />
 
@@ -36,7 +35,6 @@
             class="ma-2"
             :key="index"
             :drag="drag && !widget.move"
-            :parent-widget="widget"
             @eldrop="(evt) => onDrop(index + 1, evt)"
         />
       </template>

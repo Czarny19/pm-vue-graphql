@@ -16,8 +16,7 @@ import Vue from "vue";
 export default Vue.extend({
   name: 'GuiEditorWidgetDropBox',
   props: {
-    drag: Boolean,
-    parentWidget: Object
+    drag: Boolean
   },
   methods: {
     onDrop(evt?: DragEvent): void {

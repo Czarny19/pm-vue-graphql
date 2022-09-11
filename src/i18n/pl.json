@@ -279,7 +279,9 @@
     "conditionValue": "Wartość",
     "options": "Opcje",
     "cannotPlaceWidgetInPage": "Komponent Wiersz oraz Kolumna nie mogą być umieszczone na stronie. Komponenty te można umieszczać jedynie wewnątrz komponentu Kontenera.",
-    "cannotPlaceWidgetInRow": "W komponencie wiersza można umieszczać wyłącznie komponent Kolumny."
+    "cannotPlaceWidgetInRow": "W komponencie wiersza można umieszczać wyłącznie komponent Kolumny.",
+    "orderBy": "Sortuj po",
+    "orderByAsc": "Sortuj rosnąco"
   },
   "runtime": {
     "appOffline": "Aplikacja jest obecnie niedostępna, skontaktuj się z administratorem systemu",

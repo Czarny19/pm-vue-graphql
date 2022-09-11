@@ -1,6 +1,6 @@
 <template>
   <v-app-bar :color="theme.primary_color" app clipped-left>
-    <v-toolbar-title class="text-h6 pointer" @click="goToStart">
+    <v-toolbar-title class="text-h6">
       {{ project.name }}
     </v-toolbar-title>
 
@@ -27,11 +27,6 @@ export default Vue.extend({
     theme: Object
   },
   methods: {
-    goToStart(): void {
-      if (this.$route.params.pageId !== 'start') {
-        this.$router.push({name: 'AppRunner', params: {projectId: this.project.id, pageId: 'start'}});
-      }
-    },
     goToPage(id: number): void {
       if (this.$route.params.pageId !== id.toString()) {
         this.$router.push({name: 'AppRunner', params: {projectId: this.project.id, pageId: id.toString()}});

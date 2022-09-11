@@ -4,13 +4,13 @@
       <v-row :key="rowIndex" :style="cssProps" v-if="visible(rowItem)">
         <template v-for="(child, childIndex) in widget.children">
           <BaseWidget
-              v-for="(columnItem, colIndex) in columnDataItems(rowItem, columnRelationshipName(child))"
+              v-for="(columnItem, colIndex) in columnDataItems(rowItem, child)"
               :key="`${rowIndex}_${childIndex}_${colIndex}`"
               :widget="child"
               :theme="theme"
               :datasource="datasource"
               :variables="variables"
-              :data-item="columnItem"
+              :data-item="{...rowItem, ...columnItem}"
               :mutations="mutations"
               @showerror="showError"
               @saving="saving"
@@ -98,9 +98,26 @@ export default Vue.extend({
     columnRelationshipName(colWidget: AppWidget): string {
       return widget.getDataProps(colWidget).relationship;
     },
-    columnDataItems(rowDataItem: never, relationshipName: string): never[] {
+    columnDataItems(rowDataItem: never, column: AppWidget): never[] {
+      const relationshipName = this.columnRelationshipName(column);
+
       if (rowDataItem && relationshipName) {
-        return rowDataItem[relationshipName];
+        const relationshipInfo = widget.getWidgetRelationshipInfo(column);
+        const items = rowDataItem[relationshipName];
+
+        if (relationshipInfo.orderBy && items) {
+          if (relationshipInfo.orderAsc) {
+            return [...items].sort((a, b) => {
+              return a[relationshipInfo.orderBy].localeCompare(b[relationshipInfo.orderBy]);
+            });
+          }
+
+          return [...items].sort((a, b) => {
+            return b[relationshipInfo.orderBy].localeCompare(a[relationshipInfo.orderBy]);
+          });
+        }
+
+        return items;
       }
 
       if (rowDataItem) {

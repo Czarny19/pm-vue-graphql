@@ -1,5 +1,5 @@
 <template>
-  <v-col ref="col" v-if="visible && !isEmpty" :cols="cols" :style="cssProps" style="text-align: start">
+  <v-col ref="col" v-if="visible" :cols="cols" :style="cssProps" style="text-align: start">
     <template v-for="(child) in appWidget.children">
       <BaseWidget
           :widget="child"
@@ -35,11 +35,6 @@ export default Vue.extend({
     dataItem: Object,
     variables: Array,
     mutations: Array
-  },
-  data() {
-    return {
-      isEmpty: false
-    }
   },
   computed: {
     appWidget(): AppWidget {

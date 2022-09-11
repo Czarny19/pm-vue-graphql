@@ -9,14 +9,13 @@
       @dragover.prevent
       @dragenter.prevent
   >
-    <v-container class="pa-0">
+    <v-container fluid class="pa-0">
 
       <GuiEditorGridWidgetHeader :widget="widget" @activewidget="setActive"/>
 
       <GuiEditorWidgetDropBox
           class="ma-2"
           :drag="drag && !widget.move"
-          :parent-widget="widget"
           @eldrop="(evt) => onDrop(0, evt)"
       />
 
@@ -36,7 +35,6 @@
             class="ma-2"
             :key="index"
             :drag="drag && !widget.move"
-            :parent-widget="widget"
             @eldrop="(evt) => onDrop(index + 1, evt)"
         />
       </template>

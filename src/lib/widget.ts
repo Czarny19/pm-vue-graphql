@@ -410,6 +410,18 @@ export const getActionErrorMsg = (action: ActionProp, vars?: PageVariable[], err
     return msg;
 }
 
+export const getWidgetRelationshipInfo = (widget: AppWidget): AppWidgetProp | undefined => {
+    const propGroups = widget ? widget.propGroups.slice() : [];
+
+    let dataProps: AppWidgetProp[] = [];
+
+    propGroups
+        .filter((group) => group.type === 'data')
+        .forEach((group) => dataProps = dataProps.concat(group.props));
+
+    return dataProps.find((prop) => prop.id === 'relationship');
+}
+
 /**
  * Launches an action ({@link runOpenPageAction} / ${@link runMutationAction}).
  * @param action The action that resulted in an error {@link ActionProp}
@@ -449,10 +461,17 @@ export const runWidgetClickAction = async (action: ActionProp, projectId: string
 
 export const runOpenPageAction = (action: ActionProp, projectId: string) => {
     const params = action.variables.map((variable) => `${variable.name}=${variable.value}`);
+    const paramsValue = params.join('&').trim()
 
-    router.push({
-        name: 'AppRunner', params: {projectId: projectId, pageId: action.target.toString(), params: params.join('&')}
-    }).then();
+    if (paramsValue.length) {
+        router.push({
+            name: 'AppRunner', params: {projectId: projectId, pageId: action.target.toString(), params: paramsValue}
+        }).then();
+    } else {
+        router.push({
+            name: 'AppRunner', params: {projectId: projectId, pageId: action.target.toString()}
+        }).then();
+    }
 }
 
 export const runMutationAction = async (action: ActionProp, projectId: string, datasource: Datasource,
