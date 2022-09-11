@@ -185,12 +185,14 @@ export type ActionPropVariable = {
     value: string;
     varType: number;
     pageVar: number;
+    table: string;
     tableVar: string;
     paramVar: string;
 }
 
 export type ConditionProp = {
     id: number;
+    table: string;
     field: string;
     condition: string;
     value?: string | number | boolean;

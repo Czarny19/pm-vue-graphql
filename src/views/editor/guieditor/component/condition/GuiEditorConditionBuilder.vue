@@ -18,20 +18,33 @@
             class="pt-2"
             color="accent"
             outlined dense hide-details
+            :label="i18n('editor.conditionTable')"
+            :items="['', ...tablesNames]"
+            v-model="prop.table"
+            item-value="id"
+            item-text="name"
+            item-color="accent"
+        />
+
+        <v-select
+            v-if="prop.table"
+            class="pt-2"
+            color="accent"
+            outlined dense hide-details
             :label="i18n('editor.conditionField')"
-            :items="['', ...fields]"
+            :items="['', ...getFieldsForTable(prop.table)]"
             v-model="prop.field"
             item-value="id"
             item-text="name"
             item-color="accent"
         />
 
-        <template v-if="prop.field">
+        <template v-if="prop.table && prop.field">
           <GuiEditorConditionValue
               :prop="prop"
               :widget="widget"
               :schema="schema"
-              :fields="fields"
+              :fields="getFieldsForTable(prop.table)"
           />
         </template>
 
@@ -59,8 +72,6 @@ import IconButton from "@/components/button/IconButton.vue";
 import GuiEditorConditionValue from "@/views/editor/guieditor/component/condition/GuiEditorConditionValue.vue";
 import {ConditionProp, SchemaItem, SchemaItemField} from "@/lib/types";
 import {getAllTableFieldsWithObjectRelations} from "@/lib/schema";
-import * as widget from "@/lib/widget";
-
 
 export default Vue.extend({
   name: 'GuiEditorConditionBuilder',
@@ -76,17 +87,17 @@ export default Vue.extend({
     }
   },
   computed: {
-    tableName(): string {
-      return widget.getTableNameForWidget(this.widget);
-    },
-    fields(): SchemaItemField[] {
-      return getAllTableFieldsWithObjectRelations(this.tableName, this.schema as SchemaItem[]);
+    tablesNames(): string [] {
+      return (this.schema as { name: string }[]).slice()?.map((table) => table.name);
     }
   },
   methods: {
+    getFieldsForTable(tableName: string): SchemaItemField[] {
+      return getAllTableFieldsWithObjectRelations(tableName, this.schema as SchemaItem[]);
+    },
     addCondition(): void {
       (this.conditionGroupProps as ConditionProp[]).push({
-        id: this.conditionGroupProps.length + 1, field: '', condition: '=', value: ''
+        id: this.conditionGroupProps.length + 1, table: '', field: '', condition: '=', value: ''
       });
     },
     deleteCondition(condition: ConditionProp): void {

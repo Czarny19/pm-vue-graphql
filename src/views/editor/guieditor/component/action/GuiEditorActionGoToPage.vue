@@ -51,8 +51,21 @@
           class="pt-3"
           color="accent"
           outlined dense hide-details
+          :label="i18n('editor.actionVarTable')"
+          :items="['', ...tablesNames]"
+          v-model="variable.table"
+          item-value="id"
+          item-text="name"
+          item-color="accent"
+      />
+
+      <v-select
+          v-if="variable.varType === 1 && variable.table"
+          class="pt-3"
+          color="accent"
+          outlined dense hide-details
           :label="i18n('editor.actionVar')"
-          :items="['', ...fields]"
+          :items="['', ...getFieldsForTable(variable.table)]"
           v-model="variable.tableVar"
           item-value="id"
           item-text="name"
@@ -80,7 +93,6 @@
 <script lang="ts">
 import Vue from "vue";
 import {ActionProp, ActionPropVariable, Page, SchemaItem, SchemaItemField} from "@/lib/types";
-import {getTableNameForWidget} from "@/lib/widget";
 import {getAllTableFieldsWithObjectRelations} from "@/lib/schema";
 
 export default Vue.extend({
@@ -103,6 +115,9 @@ export default Vue.extend({
     selectedPage(): Page | undefined {
       return (this.pages as Page[])?.find((page) => page.id === this.prop.target);
     },
+    tablesNames(): string [] {
+      return (this.schema as { name: string }[]).slice()?.map((table) => table.name);
+    },
     varTypes(): { id: number; name: string }[] {
       return [
         {id: 0, name: this.$t('editor.actionVarsPage').toString()},
@@ -110,17 +125,14 @@ export default Vue.extend({
         {id: 2, name: this.$t('editor.actionVarsParams').toString()}
       ];
     },
-    tableName(): string {
-      return getTableNameForWidget(this.widget);
-    },
-    fields(): SchemaItemField[] {
-      return getAllTableFieldsWithObjectRelations(this.tableName, this.schema as SchemaItem[]);
-    },
     params(): string[] {
       return this.page.params.split(';');
     }
   },
   methods: {
+    getFieldsForTable(tableName: string): SchemaItemField[] {
+      return getAllTableFieldsWithObjectRelations(tableName, this.schema as SchemaItem[]);
+    },
     clearVarValues(variable: ActionPropVariable) {
       variable.paramVar = ''
       variable.tableVar = ''
@@ -139,7 +151,7 @@ export default Vue.extend({
 
             pageParams.forEach((param) => {
               (this.currentProp as ActionProp).variables.push({
-                name: param, type: 'String', value: '', varType: -1, pageVar: -1, tableVar: '', paramVar: ''
+                name: param, type: 'String', value: '', varType: -1, pageVar: -1, table: '', tableVar: '', paramVar: ''
               })
             });
           }

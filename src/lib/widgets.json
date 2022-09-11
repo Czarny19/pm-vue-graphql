@@ -269,6 +269,33 @@
           ]
         },
         {
+          "id": "alignment",
+          "label": "Ustawienie",
+          "type": "css",
+          "props": [
+            {
+              "id": "text-align",
+              "value": "start",
+              "label": "Położenie elementów",
+              "list": [
+                {
+                  "id": "start",
+                  "name": "Początek"
+                },
+                {
+                  "id": "center",
+                  "name": "Środek"
+                },
+                {
+                  "id": "end",
+                  "name": "Koniec"
+                }
+              ],
+              "type": "Select"
+            }
+          ]
+        },
+        {
           "id": "border",
           "label": "Obramowanie",
           "type": "css",

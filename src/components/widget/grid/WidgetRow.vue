@@ -1,7 +1,7 @@
 <template>
   <div>
     <template v-for="(rowItem, rowIndex) in dataItems">
-      <v-row :key="rowIndex" :style="cssProps" v-if="visible(rowItem)">
+      <v-row :key="rowIndex" :style="cssProps" v-if="visible(rowItem)" class="pt-2">
         <template v-for="(child, childIndex) in widget.children">
           <BaseWidget
               v-for="(columnItem, colIndex) in columnDataItems(rowItem, child)"

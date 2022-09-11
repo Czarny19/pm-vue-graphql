@@ -1,6 +1,6 @@
 <template>
   <v-checkbox
-      class="pb-1"
+      class="pb-1 pl-2"
       color="accent"
       off-icon="fa-times-circle"
       on-icon="fa-check-circle"

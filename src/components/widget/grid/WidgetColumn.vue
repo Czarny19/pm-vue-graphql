@@ -1,5 +1,5 @@
 <template>
-  <v-col ref="col" v-if="visible" :cols="cols" :style="cssProps" style="text-align: start">
+  <v-col v-if="visible" :cols="cols" :style="cssProps" style="text-align: start">
     <template v-for="(child) in appWidget.children">
       <BaseWidget
           :widget="child"
