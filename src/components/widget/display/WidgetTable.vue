@@ -19,8 +19,8 @@
             class="pt-4 pb-4"
             :style="{'background-color': 'grey'}"
             v-model="page"
-            :value="1"
-            :length="Math.ceil(queryData.length / pageSize)"
+            :value="page"
+            :length="Math.ceil(itemCount / pageSize)"
             prev-icon="fa-caret-left"
             next-icon="fa-caret-right">
         </v-pagination>
@@ -49,7 +49,8 @@ export default Vue.extend({
     return {
       query: {},
       queryData: [],
-      page: 0
+      page: 1,
+      itemCount: 0
     }
   },
   computed: {
@@ -86,7 +87,7 @@ export default Vue.extend({
       }
 
       return graphql_gen.generateGraphQLQuery(query.name, query.table, query.fields, this.graphQlQueryWhere,
-          this.graphQlQueryOrderBy, query.limit, this.graphQlQueryVars);
+          this.graphQlQueryOrderBy, query.limit, this.graphQlQueryVars, this.page - 1, this.pageSize);
     },
     tableHeaders(): { text: string; value: string }[] {
       return widget.getQueryPropLabels(this.appWidget);
@@ -115,6 +116,20 @@ export default Vue.extend({
         this.$apollo.queries.QUERY.refetch();
       },
       deep: true
+    },
+    query: {
+      async handler() {
+        const query = (this.query as Query);
+
+        if (query.name) {
+          this.itemCount =
+              await graphql_gen.getTableItemsCount(this.datasource.address, query.table, this.datasource.secret);
+        }
+      },
+      deep: true
+    },
+    page() {
+      this.$apollo.queries.QUERY.refetch();
     }
   },
   apollo: {

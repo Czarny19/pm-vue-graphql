@@ -96,6 +96,34 @@ export const runQuery = async (endpoint: string, query: string, table: string, s
 }
 
 /**
+ * Runs a graphQL query and returns the total item count for a table.
+ * @param endpoint Address of and existing graphQL endpoint
+ * @param table Name of the table that the query should be run on
+ * @param secret GraphQL endpoint secret (null if the endpoint is not secured)
+ * @returns Number of items in a graphQL table.
+ **/
+export const getTableItemsCount = async (endpoint: string, table: string, secret?: string): Promise<number> => {
+    const linkOptions = {uri: endpoint, headers: createQueryHeaders(secret)};
+
+    const client = new ApolloClient({
+        typeDefs: typeDefs,
+        link: new HttpLink(linkOptions),
+        cache: new InMemoryCache({addTypename: true}),
+        resolvers: {}
+    });
+
+    const query = `query count { ${table} { __typename } }`;
+
+    try {
+        return await client.query({query: gql`${query}`, fetchPolicy: 'network-only'}).then(response => {
+            return response.data[table].length;
+        })
+    } catch (e) {
+        return 0;
+    }
+}
+
+/**
  * Runs a graphQL mutation on an existing table.
  * @param endpoint Address of and existing graphQL endpoint
  * @param mutation Mutation to run (can be generated using {@link generateGraphQLMutation})
@@ -173,10 +201,13 @@ export const runMutation = async (endpoint: string, mutation: string, table: str
  * @param orderBy List of order by items (list of order by parts {@link QueryOrderBy})
  * @param limit Limit of the query result set
  * @param vars Variables to be used with the query (list of order by condition parts {@link QueryOrderBy})
+ * @param pageNum Optional parameter used for pagination, returns a single page of data
+ * @param pageSize Optional parameter used for pagination responible for the return data page size
  * @returns A string representation of a graphQL query.
  **/
 export const generateGraphQLQuery = (queryName: string, table: string, fields: string, where?: QueryWhere[],
-                                     orderBy?: QueryOrderBy[], limit?: number, vars?: QueryVariable[]): string => {
+                                     orderBy?: QueryOrderBy[], limit?: number, vars?: QueryVariable[],
+                                     pageNum?: number, pageSize?: number): string => {
     if (!table.length) {
         return '';
     }
@@ -185,6 +216,7 @@ export const generateGraphQLQuery = (queryName: string, table: string, fields: s
     const orderBySet = orderBy != undefined && orderBy.length;
     const limitSet = limit != undefined && limit > 0;
     const varsSet = vars != undefined && vars.length;
+    const offsetSet = pageNum != undefined && pageSize != undefined;
 
     const cleanName = queryName
         .replaceAll(/[^a-zA-Z ]/g, '')
@@ -217,9 +249,14 @@ export const generateGraphQLQuery = (queryName: string, table: string, fields: s
 
     query += `{\n\t${table} `;
 
-    if (limitSet || orderBySet || whereSet) query += '(';
+    if (limitSet || orderBySet || whereSet || offsetSet) query += '(';
 
-    if (limitSet) query += `limit: ${limit}`;
+    if (offsetSet) {
+        if (limitSet || orderBySet || whereSet) query += ', ';
+        query += `limit: ${pageSize}, offset: ${pageNum * pageSize}`;
+    } else if (limitSet) {
+        query += `limit: ${limit}`;
+    }
 
     if (orderBySet) {
         if (query.includes('limit:')) query += ', ';
@@ -235,7 +272,7 @@ export const generateGraphQLQuery = (queryName: string, table: string, fields: s
         }
     }
 
-    if (limitSet || orderBySet || whereSet) query += ') ';
+    if (limitSet || orderBySet || whereSet || offsetSet) query += ') ';
 
     query += `{`;
     query += generateGraphQLFields(fields?.split(';') ?? [], 1);
