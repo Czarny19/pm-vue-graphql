@@ -50,7 +50,8 @@ export default Vue.extend({
       });
     },
     openApp(): void {
-      this.$router.push({name: 'AppRunner', params: {projectId: this.project.id, pageId: 'start'}});
+      let routeData = this.$router.resolve({name: 'AppRunner', params: {projectId: this.project.id, pageId: 'start'}});
+      window.open(routeData.href, '_blank');
     }
   },
   beforeMount() {

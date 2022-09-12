@@ -1,5 +1,32 @@
 <template>
   <div>
+    <div class="text-body-1 pl-3 pr-3 pt-1 pb-1 mt-2 mb-2 editor--action-tab">
+      {{ i18n('editor.actionError') }}
+    </div>
+
+    <v-select
+        class="pt-3"
+        color="accent"
+        outlined dense hide-details
+        :label="i18n('editor.errorMsg')"
+        :items="['', ...variables]"
+        v-model="currentProp.errorMsgVar"
+        item-value="id"
+        item-text="name"
+        item-color="accent"
+    />
+
+    <v-switch
+        class="pt-0"
+        color="success"
+        v-model="currentProp.errorMsgShowResponse"
+        :label="i18n('editor.errorShowResponse')"
+    />
+
+    <div class="text-body-1 pl-3 pr-3 pt-1 pb-1 mt-1 mb-4 editor--action-tab">
+      {{ i18n('editor.actionTarget') }}
+    </div>
+
     <v-select
         color="accent"
         outlined dense hide-details
@@ -101,7 +128,6 @@ export default Vue.extend({
     prop: Object,
     page: Object,
     mutations: Array,
-    widget: Object,
     schema: Array,
     variables: Array
   },

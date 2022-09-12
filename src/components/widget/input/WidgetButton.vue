@@ -1,32 +1,44 @@
 <template>
-  <v-btn
-      v-if="visible"
-      :style="cssProps"
-      :color="color"
-      :disabled="argsProps.disabled"
-      :block="argsProps.block"
-      :depressed="argsProps.depressed"
-      :outlined="argsProps.outlined"
-      :rounded="argsProps.rounded"
-      :text="argsProps.text"
-      :x-small="argsProps.size === 'x-small'"
-      :small="argsProps.size === 'small'"
-      :large="argsProps.size === 'large'"
-      :x-large="argsProps.size === 'x-large'"
-      light
-      @click="action"
-  >
-    <span :style="{'color': textColor}">{{ label }}</span>
-  </v-btn>
+  <div>
+    <YesNoDialog
+        :dialog="yesNoDialog"
+        :title="yesNoDialogTitle"
+        :msg="yesNoDialogMsg"
+        :theme="theme"
+        @choiceclick="continueActions"
+    />
+
+    <v-btn
+        v-if="visible"
+        :style="cssProps"
+        :color="color"
+        :disabled="argsProps.disabled"
+        :block="argsProps.block"
+        :depressed="argsProps.depressed"
+        :outlined="argsProps.outlined"
+        :rounded="argsProps.rounded"
+        :text="argsProps.text"
+        :x-small="argsProps.size === 'x-small'"
+        :small="argsProps.size === 'small'"
+        :large="argsProps.size === 'large'"
+        :x-large="argsProps.size === 'x-large'"
+        light
+        @click="action"
+    >
+      <span :style="{'color': textColor}">{{ label }}</span>
+    </v-btn>
+  </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import {ActionProp, AppWidget, Mutation, PageVariable} from "@/lib/types";
 import * as widget from "@/lib/widget";
+import YesNoDialog from "@/components/widget/dialog/YesNoDialog.vue";
 
 export default Vue.extend({
   name: 'WidgetButton',
+  components: {YesNoDialog},
   props: {
     widget: Object,
     theme: Object,
@@ -36,6 +48,14 @@ export default Vue.extend({
     dataItem: Object,
     datasource: Object,
     mutations: Array
+  },
+  data() {
+    return {
+      yesNoDialog: false,
+      yesNoDialogTitle: '',
+      yesNoDialogMsg: '',
+      actionIndex: 0
+    }
   },
   computed: {
     appWidget(): AppWidget {
@@ -76,6 +96,17 @@ export default Vue.extend({
     }
   },
   methods: {
+    async continueActions(yesNoDialogConfirmed: boolean): Promise<void> {
+      this.yesNoDialog = false;
+
+      if (!yesNoDialogConfirmed) {
+        this.actionIndex = 0;
+        return;
+      }
+
+      await new Promise(resolve => setTimeout(resolve, 200));
+      await this.action();
+    },
     async action(): Promise<void> {
       if (this.formRef) {
         (this.formRef as Vue & { validate: () => boolean }).validate();
@@ -93,8 +124,16 @@ export default Vue.extend({
 
         const actions = this.appWidget.propGroups.find((group: { type: string }) => group.type === 'action');
 
-        for (const prop of actions?.props ?? []) {
-          const action = prop as unknown as ActionProp;
+        for (let i = this.actionIndex; i < (actions?.props ?? []).length; i++) {
+          const action = (actions?.props ?? [])[i] as unknown as ActionProp;
+          this.actionIndex++;
+
+          if (action.type === 'yesNoDialog') {
+            this.yesNoDialogTitle = widget.getPageVariableValue(variables, action.dialogTitleVar);
+            this.yesNoDialogMsg = widget.getPageVariableValue(variables, action.dialogMsgVar);
+            this.yesNoDialog = true;
+            return;
+          }
 
           if (action.type === 'runMutation') {
             this.$emit('saving');
@@ -107,19 +146,15 @@ export default Vue.extend({
             this.$emit('savingdone');
           }
 
-          if (result) {
-            if (!result.isSuccessful) {
-              this.$emit('showerror', result.error);
-              return;
-            }
-
-            if (!result.data) {
-              this.$emit('showerror', widget.getActionErrorMsg(action, variables, result.error));
-              return;
-            }
+          if (result && (!result.isSuccessful || !result.data)) {
+            this.$emit('showerror', widget.getActionErrorMsg(action, variables, result.error));
+            this.actionIndex = 0;
+            return;
           }
         }
       }
+
+      this.actionIndex = 0;
     }
   }
 })

@@ -253,7 +253,7 @@ export const getDisplayWidgetVarValue = (dataItem?: never, queryFieldName?: stri
     const pageVarValue = getPageVariableValue(vars, pageVarId);
     const queryDataValue = getQueryDataValue(dataItem, queryFieldName);
 
-    return [pageParamValue, pageVarValue, queryDataValue].filter((value) => value && value.length).join(' ');
+    return [pageVarValue, pageParamValue, queryDataValue].filter((value) => value && value.length).join('');
 }
 
 /**
@@ -315,6 +315,7 @@ export const getRulesForInput = (widget: AppWidget, counter?: number): unknown[]
  **/
 export const getActionTypes = (): { id: string; name: string }[] => [
     {id: 'goToPage', name: i18n.t('editor.actionGoTo').toString()},
+    {id: 'yesNoDialog', name: i18n.t('editor.actionYesNoDialog').toString()},
     {id: 'runMutation', name: i18n.t('editor.actionRunMutation').toString()}
 ];
 
@@ -410,6 +411,11 @@ export const getActionErrorMsg = (action: ActionProp, vars?: PageVariable[], err
     return msg;
 }
 
+/**
+ * Returns the info object of a schema relationship.
+ * @param widget The widget that contains the relationship used
+ * @returns Relationship object info {@link AppWidgetProp}.
+ **/
 export const getWidgetRelationshipInfo = (widget: AppWidget): AppWidgetProp | undefined => {
     const propGroups = widget ? widget.propGroups.slice() : [];
 
@@ -489,7 +495,7 @@ export const runMutationAction = async (action: ActionProp, projectId: string, d
 
     variables.forEach((variable) => {
         const param = action.variables.find((actionVar) => actionVar.name === variable.name);
-        if (param) variable.value = param?.value;
+        if (param && param.value) variable.value = param.value;
     })
 
     const mutationVars = variables.map((variable) => JSON.stringify(variable)).join(';');

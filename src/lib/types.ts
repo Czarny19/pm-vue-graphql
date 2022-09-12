@@ -176,6 +176,8 @@ export type ActionProp = {
     target: number;
     errorMsgVar?: number;
     errorMsgShowResponse: boolean;
+    dialogTitleVar?: number;
+    dialogMsgVar?: number;
     variables: ActionPropVariable[];
 }
 

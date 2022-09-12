@@ -22,29 +22,6 @@
             item-color="accent"
         />
 
-        <v-select
-            class="pt-3"
-            color="accent"
-            outlined dense hide-details
-            :label="i18n('editor.errorMsg')"
-            :items="['', ...variables]"
-            v-model="prop.errorMsgVar"
-            item-value="id"
-            item-text="name"
-            item-color="accent"
-        />
-
-        <v-switch
-            class="pt-0"
-            color="success"
-            v-model="prop.errorMsgShowResponse"
-            :label="i18n('editor.errorShowResponse')"
-        />
-
-        <div class="text-body-1 pl-3 pr-3 pt-1 pb-1 mt-0 mb-3 editor--action-tab">
-          {{ i18n('editor.actionTarget') }}
-        </div>
-
         <template v-if="prop.type">
           <GuiEditorActionRunMutation
               class="pt-2"
@@ -52,8 +29,14 @@
               :prop="prop"
               :page="page"
               :mutations="mutations"
-              :widget="widget"
               :schema="schema"
+              :variables="variables"
+          />
+
+          <GuiEditorActionYesNoDialog
+              class="pt-2"
+              v-if="prop.type === 'yesNoDialog'"
+              :prop="prop"
               :variables="variables"
           />
 
@@ -63,7 +46,6 @@
               :prop="prop"
               :page="page"
               :pages="pages"
-              :widget="widget"
               :schema="schema"
               :variables="variables"
           />
@@ -88,6 +70,7 @@
 <script lang="ts">
 import Vue from "vue";
 import IconButton from "@/components/button/IconButton.vue";
+import GuiEditorActionYesNoDialog from "@/views/editor/guieditor/component/action/GuiEditorActionYesNoDialog.vue";
 import GuiEditorActionGoToPage from "@/views/editor/guieditor/component/action/GuiEditorActionGoToPage.vue";
 import GuiEditorActionRunMutation from "@/views/editor/guieditor/component/action/GuiEditorActionRunMutation.vue";
 import {ActionProp} from "@/lib/types";
@@ -95,7 +78,7 @@ import {getActionTypes} from "@/lib/widget";
 
 export default Vue.extend({
   name: 'GuiEditorActionBuilder',
-  components: {IconButton, GuiEditorActionGoToPage, GuiEditorActionRunMutation},
+  components: {GuiEditorActionYesNoDialog, IconButton, GuiEditorActionGoToPage, GuiEditorActionRunMutation},
   props: {
     actionsGroup: Object,
     mutations: Array,

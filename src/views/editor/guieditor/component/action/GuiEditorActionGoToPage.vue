@@ -1,5 +1,9 @@
 <template>
   <div>
+    <div class="text-body-1 pl-3 pr-3 pt-1 pb-1 mt-2 mb-3 editor--action-tab">
+      {{ i18n('editor.actionTarget') }}
+    </div>
+
     <v-select
         color="accent"
         outlined dense hide-details
@@ -101,7 +105,6 @@ export default Vue.extend({
     prop: Object,
     page: Object,
     pages: Array,
-    widget: Object,
     schema: Array,
     variables: Array
   },
