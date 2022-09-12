@@ -77,7 +77,7 @@ export default Vue.extend({
       const params = this.$route.params;
       const pageParamName = this.dataProps.titlePageParamName;
 
-      return widget.getDisplayWidgetVarValue(data, queryFieldName, variables, pageVarId, params, pageParamName);
+      return widget.getWidgetVarValue(data, queryFieldName, variables, pageVarId, params, pageParamName);
     },
     titleColor(): string {
       return widget.getColorPropValue(this.theme, this.argsProps.titleColor);
@@ -92,7 +92,7 @@ export default Vue.extend({
       const params = this.$route.params;
       const pageParamName = this.dataProps.subtitlePageParamName;
 
-      return widget.getDisplayWidgetVarValue(data, queryFieldName, variables, pageVarId, params, pageParamName);
+      return widget.getWidgetVarValue(data, queryFieldName, variables, pageVarId, params, pageParamName);
     },
     subtitleColor(): string {
       return widget.getColorPropValue(this.theme, this.argsProps.subtitleColor);
@@ -116,7 +116,7 @@ export default Vue.extend({
       const params = this.$route.params;
       const pageParamName = this.dataProps.textPageParamName;
 
-      return widget.getDisplayWidgetVarValue(data, queryFieldName, variables, pageVarId, params, pageParamName);
+      return widget.getWidgetVarValue(data, queryFieldName, variables, pageVarId, params, pageParamName);
     },
     elevation(): number {
       return Number(this.argsProps.elevation);

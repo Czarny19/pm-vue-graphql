@@ -1,5 +1,6 @@
 <template>
   <v-data-table
+      class="pointer"
       v-if="visible"
       :items-per-page="argsProps.paging ? pageSize : -1"
       hide-default-footer
@@ -10,10 +11,13 @@
       :style="cssProps"
       :dark="argsProps.dark"
       :light="!argsProps.dark"
+      @click:row="clickRowAction"
   >
     <template v-slot:footer>
       <div v-if="argsProps.paging" class="text-center pt-2">
         <v-pagination
+            class="pt-4 pb-4"
+            :style="{'background-color': 'grey'}"
             v-model="page"
             :value="1"
             :length="Math.ceil(queryData.length / pageSize)"
@@ -28,7 +32,7 @@
 <script lang="ts">
 import Vue from "vue";
 import {GET_QUERY_BY_ID} from "@/graphql/queries/query";
-import {AppWidget, PageVariable, Query, QueryOrderBy, QueryVariable, QueryWhere} from "@/lib/types";
+import {ActionProp, AppWidget, PageVariable, Query, QueryOrderBy, QueryVariable, QueryWhere} from "@/lib/types";
 import * as graphql_gen from "@/lib/graphql_gen";
 import * as widget from "@/lib/widget";
 
@@ -89,6 +93,20 @@ export default Vue.extend({
     },
     pageSize(): number {
       return Number(this.argsProps.pageSize);
+    }
+  },
+  methods: {
+    clickRowAction(data: never, item: { index: number }): void {
+      if (!this.$route.path.startsWith('/admin')) {
+        const projectId = this.$route.params.projectId;
+        const variables = this.variables as PageVariable[];
+        const params = this.$route.params;
+
+        const actions = this.appWidget.propGroups.find((group: { type: string }) => group.type === 'action');
+        const action = actions?.props[0] as unknown as ActionProp;
+
+        widget.runWidgetClickAction(action, projectId, this.datasource, this.queryData[item.index], variables, params);
+      }
     }
   },
   watch: {

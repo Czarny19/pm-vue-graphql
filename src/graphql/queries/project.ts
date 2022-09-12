@@ -53,7 +53,8 @@ export const ADD_PROJECT = gql`mutation addProject(
         name: $name,
         user_id: $userId,
         theme_id: $themeId
-        source_id: $datasourceId
+        source_id: $datasourceId,
+        top_nav: false
     }){
         returning {
             id

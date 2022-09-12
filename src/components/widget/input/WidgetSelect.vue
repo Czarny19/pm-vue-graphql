@@ -110,6 +110,9 @@ export default Vue.extend({
 
       return graphql_gen.generateGraphQLQuery(query.name, query.table, query.fields, this.graphQlQueryWhere,
           this.graphQlQueryOrderBy, query.limit, this.graphQlQueryVars);
+    },
+    data(): never {
+      return this.dataItem as never;
     }
   },
   methods: {
@@ -123,6 +126,23 @@ export default Vue.extend({
     variables: {
       handler() {
         this.$apollo.queries.QUERY.refetch();
+      },
+      deep: true
+    },
+    dataItem: {
+      handler() {
+        const data = this.data;
+        const queryFieldName = this.dataProps.initialQueryFieldName;
+
+        const variables = this.variables as PageVariable[];
+        const pageVarId = Number(this.dataProps.initialPageVarId);
+
+        const params = this.$route.params;
+        const paramName = this.dataProps.initialParamName;
+
+        const intialValue = widget.getWidgetVarValue(data, queryFieldName, variables, pageVarId, params, paramName);
+
+        this.updateVariableValue((isNaN(Number(intialValue)) ? intialValue : Number(intialValue)) as never);
       },
       deep: true
     }
@@ -150,13 +170,16 @@ export default Vue.extend({
     }
   },
   beforeMount() {
+    const data = this.data;
+    const queryFieldName = this.dataProps.initialQueryFieldName;
+
     const variables = this.variables as PageVariable[];
-    const pageVarId = Number(this.dataProps.initalPageVarId);
+    const pageVarId = Number(this.dataProps.initialPageVarId);
 
     const params = this.$route.params;
-    const paramName = this.dataProps.initalParamName;
+    const paramName = this.dataProps.initialParamName;
 
-    const intialValue = widget.getInputWidgetInitialValue(variables, pageVarId, params, paramName);
+    const intialValue = widget.getWidgetVarValue(data, queryFieldName, variables, pageVarId, params, paramName);
 
     this.updateVariableValue((isNaN(Number(intialValue)) ? intialValue : Number(intialValue)) as never);
   }

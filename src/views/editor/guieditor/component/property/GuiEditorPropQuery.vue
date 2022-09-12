@@ -56,7 +56,7 @@
       </div>
     </div>
 
-    <div v-if="prop.customLabels">
+    <div v-if="prop.customLabels" class="pl-1 pr-1">
       {{ i18n('editor.labels') }}
 
       <div v-for="(label, index) in prop.labels" :key="index" class="pt-2">

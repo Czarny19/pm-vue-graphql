@@ -1,7 +1,7 @@
 <template>
   <v-select
       v-if="fieldsVisible"
-      class="pt-3"
+      className="pt-3"
       color="accent"
       outlined dense hide-details
       :label="prop.label"
@@ -20,7 +20,7 @@ import {getAllTableFieldsWithObjectRelations} from "@/lib/schema";
 import {getTableNameForWidget} from "@/lib/widget";
 
 export default Vue.extend({
-  name: 'GuiEditorPropTableField',
+  name: 'GuiEditorPropInitValueField',
   props: {
     prop: Object,
     widget: Object,
@@ -34,7 +34,7 @@ export default Vue.extend({
   },
   computed: {
     tableName(): string {
-      return getTableNameForWidget(this.widget, 'source', 'dataTable');
+      return getTableNameForWidget(this.widget, 'initialdata', 'initialDataTable');
     },
     fieldsVisible(): boolean {
       return this.tableName.length > 0;
@@ -49,7 +49,7 @@ export default Vue.extend({
   beforeMount() {
     this.currentProp = this.prop;
 
-    const tableName = getTableNameForWidget(this.widget, 'source', 'dataTable');
+    const tableName = getTableNameForWidget(this.widget, 'initialdata', 'initialDataTable');
     (this.fields as SchemaItemField[]) = getAllTableFieldsWithObjectRelations(tableName, this.schema as SchemaItem[]);
   }
 })

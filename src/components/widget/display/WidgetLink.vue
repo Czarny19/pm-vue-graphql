@@ -44,7 +44,7 @@ export default Vue.extend({
       const params = this.$route.params;
       const pageParamName = this.dataProps.labelPageParamName;
 
-      return widget.getDisplayWidgetVarValue(data, queryFieldName, variables, pageVarId, params, pageParamName);
+      return widget.getWidgetVarValue(data, queryFieldName, variables, pageVarId, params, pageParamName);
     },
     linkValue(): string {
       const data = this.data;
@@ -56,7 +56,7 @@ export default Vue.extend({
       const params = this.$route.params;
       const pageParamName = this.dataProps.linkPageParamName;
 
-      const link = widget.getDisplayWidgetVarValue(data, queryFieldName, variables, pageVarId, params, pageParamName);
+      const link = widget.getWidgetVarValue(data, queryFieldName, variables, pageVarId, params, pageParamName);
 
       return link ? link : this.labelValue;
     }

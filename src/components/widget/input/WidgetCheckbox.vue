@@ -79,6 +79,9 @@ export default Vue.extend({
     },
     rules(): unknown[] {
       return widget.getRulesForInput(this.appWidget, undefined);
+    },
+    data(): never {
+      return this.dataItem as never;
     }
   },
   methods: {
@@ -88,14 +91,36 @@ export default Vue.extend({
       }
     }
   },
+  watch: {
+    dataItem: {
+      handler() {
+        const data = this.data;
+        const queryFieldName = this.dataProps.initialQueryFieldName;
+
+        const variables = this.variables as PageVariable[];
+        const pageVarId = Number(this.dataProps.initialPageVarId);
+
+        const params = this.$route.params;
+        const paramName = this.dataProps.initialParamName;
+
+        const intialValue = widget.getWidgetVarValue(data, queryFieldName, variables, pageVarId, params, paramName);
+
+        this.updateVariableValue(intialValue);
+      },
+      deep: true
+    }
+  },
   beforeMount() {
+    const data = this.data;
+    const queryFieldName = this.dataProps.initialQueryFieldName;
+
     const variables = this.variables as PageVariable[];
-    const pageVarId = Number(this.dataProps.initalPageVarId);
+    const pageVarId = Number(this.dataProps.initialPageVarId);
 
     const params = this.$route.params;
-    const paramName = this.dataProps.initalParamName;
+    const paramName = this.dataProps.initialParamName;
 
-    const intialValue = widget.getInputWidgetInitialValue(variables, pageVarId, params, paramName);
+    const intialValue = widget.getWidgetVarValue(data, queryFieldName, variables, pageVarId, params, paramName);
 
     this.updateVariableValue(intialValue);
   }

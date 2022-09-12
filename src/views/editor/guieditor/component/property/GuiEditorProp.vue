@@ -7,6 +7,12 @@
   <GuiEditorPropQuery v-else-if="prop.type === 'Query'" :prop="prop" :queries="queries" :variables="variables"/>
   <GuiEditorPropTable v-else-if="prop.type === 'Table'" :prop="prop" :schema="schema"/>
   <GuiEditorPropTableField v-else-if="prop.type === 'TableField'" :prop="prop" :widget="widget" :schema="schema"/>
+  <GuiEditorPropInitValueField
+      v-else-if="prop.type === 'InitTableField'"
+      :prop="prop"
+      :widget="widget"
+      :schema="schema"
+  />
   <GuiEditorPropBorder v-else-if="prop.type === 'Border'" :prop="prop"/>
   <GuiEditorPropSelect v-else-if="prop.type === 'Select'" :prop="prop"/>
   <GuiEditorPropDuration v-else-if="prop.type === 'Duration'" :prop="prop"/>
@@ -33,10 +39,12 @@ import GuiEditorPropVar from "@/views/editor/guieditor/component/property/GuiEdi
 import GuiEditorPropTable from "@/views/editor/guieditor/component/property/GuiEditorPropTable.vue";
 import GuiEditorPropParam from "@/views/editor/guieditor/component/property/GuiEditorPropParam.vue";
 import GuiEditorPropRelation from "@/views/editor/guieditor/component/property/GuiEditorPropRelation.vue";
+import GuiEditorPropInitValueField from "@/views/editor/guieditor/component/property/GuiEditorPropInitValueField.vue";
 
 export default Vue.extend({
   name: 'GuiEditorProp',
   components: {
+    GuiEditorPropInitValueField,
     GuiEditorPropRelation,
     GuiEditorPropParam,
     GuiEditorPropTable,

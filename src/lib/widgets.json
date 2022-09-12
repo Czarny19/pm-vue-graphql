@@ -827,6 +827,25 @@
           ]
         },
         {
+          "id": "table",
+          "label": "Wygląd",
+          "type": "css",
+          "props": [
+            {
+              "id": "background-color",
+              "value": "background_color",
+              "label": "Tło",
+              "type": "Color"
+            },
+            {
+              "id": "color",
+              "value": "text_color_1",
+              "label": "Kolor tekstu",
+              "type": "Color"
+            }
+          ]
+        },
+        {
           "id": "display",
           "label": "Wygląd",
           "type": "args",
@@ -848,6 +867,21 @@
               "value": 10,
               "label": "Wielkość strony",
               "type": "Number"
+            }
+          ]
+        },
+        {
+          "id": "action",
+          "label": "Akcja",
+          "addLocked": true,
+          "actions": ["goToPage"],
+          "type": "action",
+          "props": [
+            {
+              "id": 1,
+              "type": "",
+              "target": -1,
+              "variables": []
             }
           ]
         }
@@ -1061,10 +1095,29 @@
           "type": "data",
           "props": [
             {
-              "id": "initalPageVarId",
+              "id": "initialPageVarId",
               "value": "",
               "label": "Wartość",
               "type": "Variable"
+            }
+          ]
+        },
+        {
+          "id": "initialdata",
+          "label": "Wartość początkowa - Źródło danych",
+          "type": "data",
+          "props": [
+            {
+              "id": "initialDataTable",
+              "value": "",
+              "label": "Tabela",
+              "type": "Table"
+            },
+            {
+              "id": "initialQueryFieldName",
+              "value": "",
+              "label": "Tekst",
+              "type": "InitTableField"
             }
           ]
         },
@@ -1074,7 +1127,7 @@
           "type": "data",
           "props": [
             {
-              "id": "initalParamName",
+              "id": "initialParamName",
               "value": "",
               "label": "Wartość",
               "type": "Param"
@@ -1220,10 +1273,29 @@
           "type": "data",
           "props": [
             {
-              "id": "initalPageVarId",
+              "id": "initialPageVarId",
               "value": "",
               "label": "Wartość",
               "type": "Variable"
+            }
+          ]
+        },
+        {
+          "id": "initialdata",
+          "label": "Wartość początkowa - Źródło danych",
+          "type": "data",
+          "props": [
+            {
+              "id": "initialDataTable",
+              "value": "",
+              "label": "Tabela",
+              "type": "Table"
+            },
+            {
+              "id": "initialQueryFieldName",
+              "value": "",
+              "label": "Tekst",
+              "type": "InitTableField"
             }
           ]
         },
@@ -1233,7 +1305,7 @@
           "type": "data",
           "props": [
             {
-              "id": "initalParamName",
+              "id": "initialParamName",
               "value": "",
               "label": "Wartość",
               "type": "Param"
@@ -1379,10 +1451,29 @@
           "type": "data",
           "props": [
             {
-              "id": "initalPageVarId",
+              "id": "initialPageVarId",
               "value": "",
               "label": "Wartość",
               "type": "Variable"
+            }
+          ]
+        },
+        {
+          "id": "initialdata",
+          "label": "Wartość początkowa - Źródło danych",
+          "type": "data",
+          "props": [
+            {
+              "id": "initialDataTable",
+              "value": "",
+              "label": "Tabela",
+              "type": "Table"
+            },
+            {
+              "id": "initialQueryFieldName",
+              "value": "",
+              "label": "Tekst",
+              "type": "InitTableField"
             }
           ]
         },
@@ -1392,7 +1483,7 @@
           "type": "data",
           "props": [
             {
-              "id": "initalParamName",
+              "id": "initialParamName",
               "value": "",
               "label": "Wartość",
               "type": "Param"
@@ -1578,10 +1669,29 @@
           "type": "data",
           "props": [
             {
-              "id": "initalPageVarId",
+              "id": "initialPageVarId",
               "value": "",
               "label": "Wartość",
               "type": "Variable"
+            }
+          ]
+        },
+        {
+          "id": "initialdata",
+          "label": "Wartość początkowa - Źródło danych",
+          "type": "data",
+          "props": [
+            {
+              "id": "initialDataTable",
+              "value": "",
+              "label": "Tabela",
+              "type": "Table"
+            },
+            {
+              "id": "initialQueryFieldName",
+              "value": "",
+              "label": "Tekst",
+              "type": "InitTableField"
             }
           ]
         },
@@ -1591,7 +1701,7 @@
           "type": "data",
           "props": [
             {
-              "id": "initalParamName",
+              "id": "initialParamName",
               "value": "",
               "label": "Wartość",
               "type": "Param"
@@ -1701,10 +1811,29 @@
           "type": "data",
           "props": [
             {
-              "id": "initalPageVarId",
+              "id": "initialPageVarId",
               "value": "",
               "label": "Wartość",
               "type": "Variable"
+            }
+          ]
+        },
+        {
+          "id": "initialdata",
+          "label": "Wartość początkowa - Źródło danych",
+          "type": "data",
+          "props": [
+            {
+              "id": "initialDataTable",
+              "value": "",
+              "label": "Tabela",
+              "type": "Table"
+            },
+            {
+              "id": "initialQueryFieldName",
+              "value": "",
+              "label": "Tekst",
+              "type": "InitTableField"
             }
           ]
         },
@@ -1714,7 +1843,7 @@
           "type": "data",
           "props": [
             {
-              "id": "initalParamName",
+              "id": "initialParamName",
               "value": "",
               "label": "Wartość",
               "type": "Param"

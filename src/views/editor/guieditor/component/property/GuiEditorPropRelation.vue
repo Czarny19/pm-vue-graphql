@@ -61,7 +61,7 @@ export default Vue.extend({
   },
   computed: {
     tableName(): string {
-      return getTableNameForWidget(this.widget);
+      return getTableNameForWidget(this.widget, 'source', 'dataTable');
     },
     relationsVisible(): boolean {
       return this.tableName.length > 0;
@@ -87,7 +87,7 @@ export default Vue.extend({
   beforeMount() {
     this.currentProp = this.prop;
 
-    const tableName = getTableNameForWidget(this.widget);
+    const tableName = getTableNameForWidget(this.widget, 'source', 'dataTable');
     (this.relationships as SchemaItemField[]) = getTableArrayRelations(tableName, this.schema as SchemaItem[]);
   }
 })

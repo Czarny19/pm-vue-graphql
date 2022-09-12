@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="!loading">
     <template v-for="(rowItem, rowIndex) in dataItems">
       <v-row :key="rowIndex" :style="cssProps" v-if="visible(rowItem)" class="pt-2">
         <template v-for="(child, childIndex) in widget.children">
@@ -46,7 +46,8 @@ export default Vue.extend({
   data() {
     return {
       query: {},
-      queryData: []
+      queryData: [],
+      loading: true
     }
   },
   computed: {
@@ -158,14 +159,19 @@ export default Vue.extend({
         }
       },
       skip(): boolean {
+        if (!this.dataProps.queryId) {
+          this.loading = false;
+        }
+
         return !this.dataProps.queryId || !this.datasource;
       },
       result({data}): void {
-        this.query = data.QUERY[0]
+        this.query = data.QUERY[0];
 
         graphql_gen.runQuery(this.datasource.address, this.graphQLQuery, (this.query as Query).table,
             this.datasource.secret, this.graphQlQueryWhere, this.graphQlQueryVars).then((result) => {
           (this.queryData as unknown[]) = result.data;
+          this.loading = false;
         });
       }
     }

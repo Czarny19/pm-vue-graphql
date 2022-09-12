@@ -234,7 +234,7 @@ export const getQueryDataValue = (dataItem?: never, queryFieldName?: string): st
 }
 
 /**
- * Creates the display value of a display widget, based on values of the widget page parameter,
+ * Creates the value of a widget, based on values of the widget page parameter,
  * page variable and query data field.
  * The final value is constructed as `{pageParamValue} {pageVarValue} {queryDataValue}`
  * @param dataItem The data item (Query result object) that the value should be found in
@@ -245,33 +245,15 @@ export const getQueryDataValue = (dataItem?: never, queryFieldName?: string): st
  * @param pageParamName The route parameter name
  * @returns Display string to be shown on the widget.
  **/
-export const getDisplayWidgetVarValue = (dataItem?: never, queryFieldName?: string,
-                                         vars?: PageVariable[], pageVarId?: number,
-                                         routeParams?: { [k: string]: string }, pageParamName?: string): string => {
+export const getWidgetVarValue = (dataItem?: never, queryFieldName?: string,
+                                  vars?: PageVariable[], pageVarId?: number,
+                                  routeParams?: { [k: string]: string }, pageParamName?: string): string => {
 
     const pageParamValue = getPageParamValue(routeParams, pageParamName);
     const pageVarValue = getPageVariableValue(vars, pageVarId);
     const queryDataValue = getQueryDataValue(dataItem, queryFieldName);
 
     return [pageVarValue, pageParamValue, queryDataValue].filter((value) => value && value.length).join('');
-}
-
-/**
- * Gets the initial value of an input widget, based on values of the widget page parameter and page variable.
- * The final value is constructed as `{pageParamValue} {pageVarValue}`
- * @param vars The page defined variables
- * @param pageVarId The page variable id
- * @param routeParams Vue route parameters ($route.params)
- * @param pageParamName The route parameter name
- * @returns Initial value string of the widget.
- **/
-export const getInputWidgetInitialValue = (vars?: PageVariable[], pageVarId?: number,
-                                           routeParams?: { [k: string]: string }, pageParamName?: string): string => {
-
-    const pageParamValue = getPageParamValue(routeParams, pageParamName);
-    const pageVarValue = getPageVariableValue(vars, pageVarId);
-
-    return [pageParamValue, pageVarValue].filter((value) => value && value.length).join(' ');
 }
 
 /**
@@ -344,14 +326,16 @@ export const getQueryPropLabels = (widget: AppWidget): { text: string; value: st
 /**
  * Returns the name of the table that the widget uses as a source of its data (Property `dataTable`, group `source`).
  * @param widget The widget to be displayed {@link AppWidget}
+ * @param tableGroupId The widget prop group id to be searched
+ * @param tablePropId The table prop id to be searched
  * @returns Name of the table.
  **/
-export const getTableNameForWidget = (widget: AppWidget): string => {
-    const dataPropGroups = widget.propGroups.find((group) => group.id === 'source');
+export const getTableNameForWidget = (widget: AppWidget, tableGroupId: string, tablePropId: string): string => {
+    const dataPropGroups = widget.propGroups.find((group) => group.id === tableGroupId);
 
     if (dataPropGroups) {
         const props = dataPropGroups.props;
-        const dataTable = props.find((prop) => prop.id === 'dataTable');
+        const dataTable = props.find((prop) => prop.id === tablePropId);
         return dataTable ? dataTable.value : '';
     }
 
