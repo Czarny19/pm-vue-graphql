@@ -1,7 +1,7 @@
 <template>
-  <div v-if="!loading">
+  <v-row v-if="!loading" style="width: 100% !important;" :style="cssProps" no-gutters>
     <template v-for="(rowItem, rowIndex) in dataItems">
-      <v-row :key="rowIndex" :style="cssProps" v-if="visible(rowItem)" class="pt-2">
+      <v-row :key="rowIndex" style="width: 100% !important;" v-if="visible(rowItem)" no-gutters>
         <template v-for="(child, childIndex) in widget.children">
           <BaseWidget
               v-for="(columnItem, colIndex) in columnDataItems(rowItem, child)"
@@ -19,7 +19,7 @@
         </template>
       </v-row>
     </template>
-  </div>
+  </v-row>
 </template>
 
 <script lang="ts">

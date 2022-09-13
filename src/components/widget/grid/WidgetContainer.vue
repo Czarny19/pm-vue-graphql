@@ -1,19 +1,18 @@
 <template>
   <v-container fluid :style="cssProps" v-if="visible">
-    <template v-for="(child) in widget.children">
-      <BaseWidget
-          :widget="child"
-          :theme="theme"
-          :datasource="datasource"
-          :key="child.name"
-          :data-item="dataItem"
-          :variables="variables"
-          :mutations="mutations"
-          @showerror="showError"
-          @saving="saving"
-          @savingdone="savingDone"
-      />
-    </template>
+    <BaseWidget
+        v-for="(child) in widget.children"
+        :widget="child"
+        :theme="theme"
+        :datasource="datasource"
+        :key="child.name"
+        :data-item="dataItem"
+        :variables="variables"
+        :mutations="mutations"
+        @showerror="showError"
+        @saving="saving"
+        @savingdone="savingDone"
+    />
   </v-container>
 </template>
 
@@ -44,8 +43,27 @@ export default Vue.extend({
     visible(): boolean {
       return widget.isWidgetVisible(this.appWidget, this.dataItem);
     },
+    argsProps(): { [k: string]: string } {
+      return widget.getArgsProps(this.appWidget);
+    },
     cssProps(): ({ [p: string]: string })[] {
-      return getCssProps(this.appWidget, this.theme);
+      const props = getCssProps(this.appWidget, this.theme);
+
+      if (this.argsProps.shadow) {
+        const color = widget.getColorPropValue(this.theme, this.argsProps.shadowColor);
+
+        props.push(
+            {'box-shadow': `0px 0px 10px 0px ${color}`},
+            {'-webkit-box-shadow': `0px 0px 10px 0px ${color}`},
+            {'-moz-box-shadow': `0px 0px 10px 0px ${color}`}
+        );
+      }
+
+      if (this.argsProps.rounded) {
+        props.push({'border-radius': '10px'});
+      }
+
+      return props;
     }
   },
   methods: {

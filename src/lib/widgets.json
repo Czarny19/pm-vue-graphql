@@ -147,6 +147,31 @@
           ]
         },
         {
+          "id": "shape",
+          "label": "Kształt",
+          "type": "args",
+          "props": [
+            {
+              "id": "rounded",
+              "value": false,
+              "label": "Zaokrąglone?",
+              "type": "Boolean"
+            },
+            {
+              "id": "shadow",
+              "value": false,
+              "label": "Cień?",
+              "type": "Boolean"
+            },
+            {
+              "id": "shadowColor",
+              "value": "",
+              "label": "Kolor cienia",
+              "type": "Color"
+            }
+          ]
+        },
+        {
           "id": "border",
           "label": "Obramowanie",
           "type": "css",
