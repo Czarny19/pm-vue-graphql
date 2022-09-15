@@ -1,6 +1,6 @@
 <template>
   <v-card
-      class="mt-2 mb-2 pa-2 pl-3 text-start"
+      class="pa-2 pl-3 text-start"
       color="secondary"
       draggable="true"
       :ripple="false"

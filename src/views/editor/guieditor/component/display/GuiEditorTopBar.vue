@@ -12,6 +12,14 @@
 
     <v-spacer></v-spacer>
 
+    <v-switch
+        class="mr-8 mt-6"
+        color="success"
+        v-model="projectViewLocal"
+        :label="projectViewEnabled ? i18n('editor.projectView') : i18n('editor.realView')"
+        @click="switchProjectView"
+    />
+
     <IconButton
         v-if="previewOpen"
         class="mr-4"
@@ -76,7 +84,13 @@ export default Vue.extend({
     pageName: String,
     pageDefinition: Object,
     rejectVisible: Boolean,
-    previewOpen: Boolean
+    previewOpen: Boolean,
+    projectViewEnabled: Boolean
+  },
+  data() {
+    return {
+      projectViewLocal: true
+    }
   },
   methods: {
     closeEditor(): void {
@@ -84,6 +98,9 @@ export default Vue.extend({
     },
     switchPreview(): void {
       this.$emit('swichpreview');
+    },
+    switchProjectView(): void {
+      this.$emit('switchprojectview')
     },
     save(): void {
       this.$emit('save');

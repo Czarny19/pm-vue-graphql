@@ -1,6 +1,6 @@
 <template>
   <v-row
-      class="editor--grid editor--row pb-8"
+      class="editor--grid editor--row pb-4 ma-0"
       draggable="true"
       @click.self="setActive(appWidget)"
       @click.prevent
@@ -12,27 +12,27 @@
     <GuiEditorGridWidgetHeader :widget="widget" @activewidget="setActive"/>
 
     <GuiEditorWidgetDropBox
-        class="ma-2"
         :drag="drag && !widget.move"
+        :project-view-enabled="projectViewEnabled"
         @eldrop="(evt) => onDrop(0, evt)"
     />
 
     <template v-for="(child, index) in widget.children">
       <GuiEditorWidget
-          class="mt-4 mb-4"
           :page="page"
           :widget="child"
           :drag="drag && !widget.move"
           :key="child.name"
+          :project-view-enabled="projectViewEnabled"
           @activewidget="setActive"
           @dragstarted="startChildDrag(index)"
           @dragended="endChildDrag"
       />
 
       <GuiEditorWidgetDropBox
-          class="ma-2"
           :key="index"
           :drag="drag && !widget.move"
+          :project-view-enabled="projectViewEnabled"
           @eldrop="(evt) => onDrop(index + 1, evt)"
       />
     </template>
@@ -68,7 +68,8 @@ export default Vue.extend({
   props: {
     page: Object,
     widget: Object,
-    drag: Boolean
+    drag: Boolean,
+    projectViewEnabled: Boolean
   },
   data() {
     return {

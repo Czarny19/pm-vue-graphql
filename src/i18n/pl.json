@@ -187,6 +187,8 @@
     "deleteComponent": "Usuń komponent",
     "preview": "Podgląd",
     "closePreview": "Zamknij podgląd",
+    "realView": "Widok rzeczywisty",
+    "projectView": "Widok projektowy",
     "chooseComponent": "Wybierz jeden z komponentów aby wyświetlić jego właściwości",
     "addWherePart": "Dodaj warunek",
     "variableName": "Nazwa zmiennej",

@@ -25,7 +25,6 @@
   }
 
   &--row {
-    padding-bottom: 20px;
     background-color: rgb(187, 187, 187);
   }
 
@@ -55,10 +54,15 @@
     font-weight: bold !important;
   }
 
-  &--drag-container {
-    background-color: #f6f6bc !important;
-    color: $primary !important;
-    margin: 12px;
-    padding: 10px;
+  &--drag-container-on {
+    background-color: #dfdd5b !important;
+    width: 100%;
+    height: 24px;
+  }
+
+  &--drag-container-off {
+    background-color: transparent !important;
+    width: 100%;
+    height: 24px;
   }
 }

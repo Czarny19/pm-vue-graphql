@@ -1,5 +1,5 @@
 <template>
-  <div class="pa-2 pb-12 accent">
+  <div class="pl-2 pr-2 pb-12 accent">
 
     <GuiEditorWidgetDropBox
         :drag="drag"
@@ -13,6 +13,7 @@
           :widget="child"
           :key="child.name"
           :drag="drag"
+          :project-view-enabled="projectViewEnabled"
           @activewidget="setActive"
           @dragstarted="dragStart(index)"
           @dragended="dragEnd"
@@ -51,7 +52,8 @@ export default Vue.extend({
   },
   props: {
     widget: Object,
-    drag: Boolean
+    drag: Boolean,
+    projectViewEnabled: Boolean,
   },
   data() {
     return {

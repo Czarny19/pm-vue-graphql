@@ -39,6 +39,7 @@
         :style="{'height': height, 'overflow': 'auto'}"
         :widget="pageDefinition"
         :drag="drag"
+        :project-view-enabled="projectViewEnabled"
         @activewidget="setActive"
         @dragstarted="dragStart"
         @dragended="dragEnd"
@@ -62,6 +63,7 @@ export default Vue.extend({
     rightNavShown: Boolean,
     previewOpen: Boolean,
     drag: Boolean,
+    projectViewEnabled: Boolean,
     datasource: Object,
     variables: Array
   },

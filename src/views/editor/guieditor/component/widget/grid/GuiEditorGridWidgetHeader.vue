@@ -1,6 +1,6 @@
 <template>
   <v-card
-      class="pa-2 mb-1 pl-3 text-start"
+      class="pa-2 pl-3 text-start"
       color="secondary"
       width="100%"
       :ripple="false"

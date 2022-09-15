@@ -2,7 +2,8 @@
   <v-col
       class="editor--grid editor--column pa-0 pb-4"
       draggable="true"
-      :cols="argsProps.cols ? Number(argsProps.cols) : ''"
+      :cols="argsProps.cols && !projectViewEnabled ? Number(argsProps.cols) : 12"
+      :style="columnStyle"
       @click.self="setActive(appWidget)"
       @click.prevent
       @dragstart="startDrag($event)"
@@ -14,16 +15,18 @@
 
     <GuiEditorWidgetDropBox
         :drag="drag && !widget.move"
+        :project-view-enabled="projectViewEnabled"
         @eldrop="(evt) => onDrop(0, evt)"
     />
 
     <template v-for="(child, index) in appWidget.children">
       <GuiEditorWidget
-          class="ma-2 mt-2 mb-2"
+          class="ml-2 mr-2"
           :page="page"
           :widget="child"
           :drag="drag && !widget.move"
           :key="child.name"
+          :project-view-enabled="projectViewEnabled"
           @activewidget="setActive"
           @dragstarted="startChildDrag(index)"
           @dragended="endChildDrag"
@@ -32,6 +35,7 @@
       <GuiEditorWidgetDropBox
           :key="index"
           :drag="drag && !widget.move"
+          :project-view-enabled="projectViewEnabled"
           @eldrop="(evt) => onDrop(index + 1, evt)"
       />
     </template>
@@ -58,7 +62,8 @@ export default Vue.extend({
   props: {
     page: Object,
     widget: Object,
-    drag: Boolean
+    drag: Boolean,
+    projectViewEnabled: Boolean
   },
   data() {
     return {
@@ -72,6 +77,13 @@ export default Vue.extend({
     },
     argsProps(): { [k: string]: string } {
       return getArgsProps(this.appWidget);
+    },
+    columnStyle(): { [k: string]: string } {
+      const hideMargins = this.projectViewEnabled || this.drag;
+      return {
+        'margin-top': `${hideMargins ? '0px' : '24px'}`,
+        'margin-bottom': `${hideMargins ? '0px' : '24px'}`
+      }
     }
   },
   methods: {

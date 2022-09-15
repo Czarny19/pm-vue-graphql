@@ -4,6 +4,7 @@
       :page="page"
       :widget="widget"
       :drag="drag"
+      :project-view-enabled="projectViewEnabled"
       @activewidget="setActive"
       @dragstarted="dragStart"
       @dragended="dragEnd"
@@ -14,6 +15,7 @@
       :page="page"
       :widget="widget"
       :drag="drag"
+      :project-view-enabled="projectViewEnabled"
       @activewidget="setActive"
       @dragstarted="dragStart"
       @dragended="dragEnd"
@@ -24,6 +26,7 @@
       :page="page"
       :widget="widget"
       :drag="drag"
+      :project-view-enabled="projectViewEnabled"
       @activewidget="setActive"
       @dragstarted="dragStart"
       @dragended="dragEnd"
@@ -34,6 +37,7 @@
       :page="page"
       :widget="widget"
       :drag="drag"
+      :project-view-enabled="projectViewEnabled"
       @activewidget="setActive"
       @dragstarted="dragStart"
       @dragended="dragEnd"
@@ -72,7 +76,8 @@ export default Vue.extend({
   props: {
     page: Object,
     widget: Object,
-    drag: Boolean
+    drag: Boolean,
+    projectViewEnabled: Boolean
   },
   methods: {
     setActive(widget: AppWidget): void {

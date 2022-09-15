@@ -11,8 +11,10 @@
         :page-definition="page.definition"
         :reject-visible="changesMade"
         :preview-open="previewOpen"
+        :project-view-enabled="projectViewEnabled"
         @closeeditor="closeEditor"
         @swichpreview="switchPreview"
+        @switchprojectview="switchProjectView"
         @save="save"
         @reject="setRejectOpen"
         @import="importPage"
@@ -42,6 +44,7 @@
               :datasource="datasource"
               :variables="variables"
               :drag="dragStarted"
+              :project-view-enabled="projectViewEnabled"
               @activewidget="setActiveWidget"
               @changeleftnav="changeLeftNavShown"
               @changerightnav="changeRightNavShown"
@@ -113,6 +116,7 @@ export default Vue.extend({
       previewOpen: false,
       isClosing: false,
       dragStarted: false,
+      projectViewEnabled: true,
       editorCols: 8,
       project: {},
       theme: {},
@@ -169,6 +173,9 @@ export default Vue.extend({
       this.previewOpen = !this.previewOpen;
       this.activeWidget = {};
       this.calcDisplayCols();
+    },
+    switchProjectView(): void {
+      this.projectViewEnabled = !this.projectViewEnabled;
     },
     save(): void {
       this.saving = true;

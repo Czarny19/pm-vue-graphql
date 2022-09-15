@@ -73,7 +73,7 @@ export default Vue.extend({
   methods: {
     clearTheme(): void {
       this.$emit('cleartheme');
-    },
+    }
   },
   watch: {
     project: {

@@ -4,7 +4,8 @@
       v-if="visible"
       :items-per-page="argsProps.paging ? pageSize : -1"
       hide-default-footer
-      :loading="!datasource"
+      disable-sort
+      :loading="!datasource || loading"
       :headers="tableHeaders"
       :page.sync="page"
       :items="queryData"
@@ -17,8 +18,9 @@
       <div v-if="argsProps.paging" class="text-center pt-2">
         <v-pagination
             class="pt-4 pb-4"
-            :style="{'background-color': 'grey'}"
+            :style="{'background-color': footerBgColor}"
             v-model="page"
+            :color="footerTextColor"
             :value="page"
             :length="Math.ceil(itemCount / pageSize)"
             prev-icon="fa-caret-left"
@@ -50,7 +52,8 @@ export default Vue.extend({
       query: {},
       queryData: [],
       page: 1,
-      itemCount: 0
+      itemCount: 0,
+      loading: true
     }
   },
   computed: {
@@ -94,6 +97,12 @@ export default Vue.extend({
     },
     pageSize(): number {
       return Number(this.argsProps.pageSize);
+    },
+    footerBgColor(): string {
+      return widget.getColorPropValue(this.theme, this.argsProps.footerBgColor);
+    },
+    footerTextColor(): string {
+      return widget.getColorPropValue(this.theme, this.argsProps.footerTextColor);
     }
   },
   methods: {
@@ -150,6 +159,7 @@ export default Vue.extend({
         graphql_gen.runQuery(this.datasource.address, this.graphQLQuery, (this.query as Query).table,
             this.datasource.secret, this.graphQlQueryWhere, this.graphQlQueryVars).then((result) => {
           (this.queryData as unknown[]) = result.data;
+          this.loading = false;
         });
       }
     }

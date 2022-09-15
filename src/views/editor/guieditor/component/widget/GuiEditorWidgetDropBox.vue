@@ -1,8 +1,17 @@
 <template>
-  <v-card
+  <div
       v-if="drag"
-      class="editor--drag-container"
-      width="90%"
+      class="editor--drag-container-on"
+      @drop.self="onDrop"
+      @dragover.prevent
+      @dragenter.prevent
+      @click.prevent
+  />
+
+  <div
+      v-else
+      class="editor--drag-container-off"
+      :style="{'width': `${projectViewEnabled ? '100%': '0%'}`}"
       @drop.self="onDrop"
       @dragover.prevent
       @dragenter.prevent
@@ -16,7 +25,8 @@ import Vue from "vue";
 export default Vue.extend({
   name: 'GuiEditorWidgetDropBox',
   props: {
-    drag: Boolean
+    drag: Boolean,
+    projectViewEnabled: Boolean
   },
   methods: {
     onDrop(evt?: DragEvent): void {
