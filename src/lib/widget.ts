@@ -61,9 +61,9 @@ export const isWidgetVisible = (widget: AppWidget, dataItem?: never): boolean =>
     for (const prop of props) {
         const cond = prop.condition;
         const condVal = prop.value?.toString();
-        const dataValue = getQueryDataValue(dataItem, prop.field).toString();
+        const dataValue = getQueryDataValue(dataItem, prop.field)?.toString();
 
-        if ((dataValue && !checkIfWidgetConditionMet(dataValue, cond, condVal)) || !dataValue) {
+        if (!checkIfWidgetConditionMet(dataValue, cond, condVal)) {
             return false;
         }
     }
@@ -71,8 +71,8 @@ export const isWidgetVisible = (widget: AppWidget, dataItem?: never): boolean =>
     return true;
 }
 
-const checkIfWidgetConditionMet = (actualValue: string, condition: string, expectedValue?: string): boolean => {
-    actualValue = actualValue.toString();
+const checkIfWidgetConditionMet = (actualValue?: string, condition?: string, expectedValue?: string): boolean => {
+    actualValue = actualValue?.toString();
     expectedValue = expectedValue?.toString();
 
     switch (condition) {
@@ -81,21 +81,21 @@ const checkIfWidgetConditionMet = (actualValue: string, condition: string, expec
         case '!=':
             return actualValue !== expectedValue;
         case '>':
-            return expectedValue ? actualValue > expectedValue : true;
+            return expectedValue && actualValue ? actualValue > expectedValue : true;
         case '>=':
-            return expectedValue ? actualValue >= expectedValue : true;
+            return expectedValue && actualValue ? actualValue >= expectedValue : true;
         case '=null':
             return (actualValue?.length ?? 0) === 0;
         case '!=null':
             return (actualValue?.length ?? 0) !== 0;
         case '<':
-            return expectedValue ? actualValue < expectedValue : true;
+            return expectedValue && actualValue ? actualValue < expectedValue : true;
         case '<=':
-            return expectedValue ? actualValue <= expectedValue : true;
+            return expectedValue && actualValue ? actualValue <= expectedValue : true;
         case '%':
-            return expectedValue ? actualValue.includes(expectedValue) : true;
+            return expectedValue && actualValue ? actualValue.includes(expectedValue) : true;
         case '!%':
-            return expectedValue ? !actualValue.includes(expectedValue) : true;
+            return expectedValue && actualValue ? !actualValue.includes(expectedValue) : true;
         default:
             return true;
     }
@@ -228,6 +228,14 @@ export const getQueryDataValue = (dataItem?: never, queryFieldName?: string): st
         const name = queryFieldName.substring(queryFieldName.indexOf('.') + 1);
 
         return getQueryDataValue(dataItem[relation], name);
+    }
+
+    if (dataItem && dataItem[queryFieldName] === true) {
+        return `${dataItem[queryFieldName]}`;
+    }
+
+    if (dataItem && !(isNaN(Number(dataItem[queryFieldName])))) {
+        return dataItem[queryFieldName] !== null ? `${dataItem[queryFieldName]}` : '';
     }
 
     return dataItem ? dataItem[queryFieldName] : '';

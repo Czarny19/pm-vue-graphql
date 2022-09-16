@@ -2,7 +2,7 @@
   <div :style="cssProps" v-if="visible">
     <v-select
         class="pa-0"
-        light persistent-hint
+        persistent-hint
         item-color="accent"
         :label="label"
         :color="color"
@@ -18,6 +18,8 @@
         :items="['', ...queryData]"
         :item-text="dataProps.textQueryFieldName"
         :item-value="dataProps.valueQueryFieldName"
+        :dark="argsProps.dark"
+        :light="!argsProps.dark"
         @change="updateVariableValue"
     />
   </div>
@@ -42,7 +44,8 @@ export default Vue.extend({
   data() {
     return {
       query: {},
-      queryData: []
+      queryData: [],
+      initialized: false
     }
   },
   computed: {
@@ -131,18 +134,21 @@ export default Vue.extend({
     },
     dataItem: {
       handler() {
-        const data = this.data;
-        const queryFieldName = this.dataProps.initialQueryFieldName;
+        if (!this.variableValue && !this.initialized) {
+          const data = this.data;
+          const queryFieldName = this.dataProps.initialQueryFieldName;
 
-        const variables = this.variables as PageVariable[];
-        const pageVarId = Number(this.dataProps.initialPageVarId);
+          const variables = this.variables as PageVariable[];
+          const pageVarId = Number(this.dataProps.initialPageVarId);
 
-        const params = this.$route.params;
-        const paramName = this.dataProps.initialParamName;
+          const params = this.$route.params;
+          const paramName = this.dataProps.initialParamName;
 
-        const intialValue = widget.getWidgetVarValue(data, queryFieldName, variables, pageVarId, params, paramName);
+          const intialValue = widget.getWidgetVarValue(data, queryFieldName, variables, pageVarId, params, paramName);
 
-        this.updateVariableValue((isNaN(Number(intialValue)) ? intialValue : Number(intialValue)) as never);
+          this.initialized = true;
+          this.updateVariableValue((isNaN(Number(intialValue)) ? intialValue : Number(intialValue)) as never);
+        }
       },
       deep: true
     }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card color="secondary" v-for="query in queries" :key="query.id" class="mt-3">
+    <v-card color="secondary" v-for="query in queriesOrderd" :key="query.id" class="mt-3">
       <v-container fluid class="pl-6 pr-6">
         <v-row no-gutters>
           <v-col class="text-start ma-auto text-body-1">
@@ -35,6 +35,7 @@
 <script lang="ts">
 import Vue from "vue";
 import IconButton from "@/components/button/IconButton.vue";
+import {Query} from "@/lib/types";
 
 export default Vue.extend({
   name: 'AppMenuQueriesList',
@@ -42,6 +43,11 @@ export default Vue.extend({
   props: {
     datasourceId: Number,
     queries: Array
+  },
+  computed: {
+    queriesOrderd(): Query[] {
+      return (this.queries as Query[]).sort((a, b) => Number(a.id) - Number(b.id));
+    }
   },
   methods: {
     openQuery(id: number): void {

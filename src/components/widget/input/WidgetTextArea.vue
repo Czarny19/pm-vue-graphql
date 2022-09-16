@@ -2,7 +2,7 @@
   <div :style="cssProps" v-if="visible">
     <v-textarea
         class="pa-0"
-        light persistent-hint
+        persistent-hint
         :label="label"
         :counter="counter"
         :rows="argsProps.rows"
@@ -17,6 +17,8 @@
         :no-resize="argsProps.noResize"
         :value="variableValue"
         :rules="rules"
+        :dark="argsProps.dark"
+        :light="!argsProps.dark"
         @input="updateVariableValue"
     />
   </div>
@@ -34,6 +36,11 @@ export default Vue.extend({
     theme: Object,
     dataItem: Object,
     variables: Array
+  },
+  data() {
+    return {
+      initialized: false
+    }
   },
   computed: {
     appWidget(): AppWidget {
@@ -98,18 +105,21 @@ export default Vue.extend({
   watch: {
     dataItem: {
       handler() {
-        const data = this.data;
-        const queryFieldName = this.dataProps.initialQueryFieldName;
+        if (!this.variableValue && !this.initialized) {
+          const data = this.data;
+          const queryFieldName = this.dataProps.initialQueryFieldName;
 
-        const variables = this.variables as PageVariable[];
-        const pageVarId = Number(this.dataProps.initialPageVarId);
+          const variables = this.variables as PageVariable[];
+          const pageVarId = Number(this.dataProps.initialPageVarId);
 
-        const params = this.$route.params;
-        const paramName = this.dataProps.initialParamName;
+          const params = this.$route.params;
+          const paramName = this.dataProps.initialParamName;
 
-        const intialValue = widget.getWidgetVarValue(data, queryFieldName, variables, pageVarId, params, paramName);
+          const intialValue = widget.getWidgetVarValue(data, queryFieldName, variables, pageVarId, params, paramName);
 
-        this.updateVariableValue(intialValue);
+          this.initialized = true;
+          this.updateVariableValue(intialValue);
+        }
       },
       deep: true
     }

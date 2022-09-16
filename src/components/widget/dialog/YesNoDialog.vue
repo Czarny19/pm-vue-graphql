@@ -44,7 +44,6 @@ export default Vue.extend({
   },
   watch: {
     dialog(): void {
-      console.log('open')
       this.isOpen = this.dialog;
     }
   }

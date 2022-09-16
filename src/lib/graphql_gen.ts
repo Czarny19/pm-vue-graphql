@@ -576,9 +576,7 @@ export const mapModelStringToQueryVariableArray = (values: string): QueryVariabl
     const objectParts: QueryVariable[] = [];
 
     if (values.length) {
-        values.replaceAll(' ', '')
-            .split(';')
-            .forEach((value) => objectParts.push(JSON.parse(value)));
+        values.split(';').forEach((value) => objectParts.push(JSON.parse(value)));
     }
 
     return objectParts;

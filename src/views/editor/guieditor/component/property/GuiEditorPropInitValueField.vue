@@ -1,7 +1,7 @@
 <template>
   <v-select
       v-if="fieldsVisible"
-      className="pt-3"
+      class="pt-3"
       color="accent"
       outlined dense hide-details
       :label="prop.label"

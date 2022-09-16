@@ -159,6 +159,10 @@ export default Vue.extend({
   },
   async beforeMount() {
     this.currentTab = Number(this.$route.params.tab);
+
+    if (!this.currentUser) {
+      this.$auth.logout();
+    }
   }
 })
 </script>

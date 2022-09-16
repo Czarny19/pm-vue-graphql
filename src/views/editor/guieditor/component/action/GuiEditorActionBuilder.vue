@@ -97,8 +97,6 @@ export default Vue.extend({
     types(): { id: string; name: string }[] {
       const availableActions = this.actionsGroup.actions;
 
-      console.log(getActionTypes())
-
       if (!availableActions) {
         return getActionTypes();
       }

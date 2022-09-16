@@ -1263,6 +1263,12 @@
               "type": "Color"
             },
             {
+              "id": "dark",
+              "value": false,
+              "label": "Ciemny motyw?",
+              "type": "Boolean"
+            },
+            {
               "id": "dense",
               "value": false,
               "label": "Zwarte?",
@@ -1439,6 +1445,12 @@
               "value": "",
               "label": "Kolor tła",
               "type": "Color"
+            },
+            {
+              "id": "dark",
+              "value": false,
+              "label": "Ciemny motyw?",
+              "type": "Boolean"
             },
             {
               "id": "dense",
@@ -1625,6 +1637,12 @@
               "type": "Color"
             },
             {
+              "id": "dark",
+              "value": false,
+              "label": "Ciemny motyw?",
+              "type": "Boolean"
+            },
+            {
               "id": "dense",
               "value": false,
               "label": "Zwarte?",
@@ -1807,6 +1825,12 @@
               "type": "Color"
             },
             {
+              "id": "dark",
+              "value": false,
+              "label": "Ciemny motyw?",
+              "type": "Boolean"
+            },
+            {
               "id": "dense",
               "value": false,
               "label": "Zwarte?",
@@ -1943,6 +1967,12 @@
               "type": "Color"
             },
             {
+              "id": "dark",
+              "value": false,
+              "label": "Ciemny motyw?",
+              "type": "Boolean"
+            },
+            {
               "id": "dense",
               "value": false,
               "label": "Zwarte?",
@@ -2034,6 +2064,12 @@
               "value": "",
               "label": "Kolor tekstu",
               "type": "Color"
+            },
+            {
+              "id": "dark",
+              "value": false,
+              "label": "Ciemny motyw?",
+              "type": "Boolean"
             },
             {
               "id": "size",

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card color="secondary" v-for="mutation in mutations" :key="mutation.id" class="mt-3">
+    <v-card color="secondary" v-for="mutation in mutationsOrderd" :key="mutation.id" class="mt-3">
       <v-container fluid class="pl-6 pr-6">
         <v-row no-gutters>
           <v-col class="text-start ma-auto text-body-1">
@@ -37,6 +37,7 @@
 <script lang="ts">
 import Vue from "vue";
 import IconButton from "@/components/button/IconButton.vue";
+import {Mutation} from "@/lib/types";
 
 export default Vue.extend({
   name: 'AppMenuMutationsList',
@@ -44,6 +45,11 @@ export default Vue.extend({
   props: {
     datasourceId: Number,
     mutations: Array
+  },
+  computed: {
+    mutationsOrderd(): Mutation[] {
+      return (this.mutations as Mutation[]).sort((a, b) => Number(a.id) - Number(b.id));
+    }
   },
   methods: {
     openMutation(id: number): void {

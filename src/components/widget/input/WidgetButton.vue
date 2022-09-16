@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="text-start">
     <YesNoDialog
         :dialog="yesNoDialog"
         :title="yesNoDialogTitle"
@@ -22,7 +22,8 @@
         :small="argsProps.size === 'small'"
         :large="argsProps.size === 'large'"
         :x-large="argsProps.size === 'x-large'"
-        light
+        :dark="argsProps.dark"
+        :light="!argsProps.dark"
         @click="action"
     >
       <span :style="{'color': textColor}">{{ label }}</span>
