@@ -18,18 +18,17 @@ import {Auth0} from "./plugins/auth0";
 import "roboto-fontface/css/roboto/roboto-fontface.css";
 import "@fortawesome/fontawesome-free/css/all.css";
 
-document.title = 'PM Vue-Graphql Demo';
+document.title = process.env.VUE_APP_NAME ?? '';
 Vue.config.productionTip = false;
 
-const apolloLink = new HttpLink({
-    uri: 'https://magister-app.herokuapp.com/v1/graphql', fetch, headers: () => {
-        const headers = {authorization: ''};
-        const token = window.localStorage.getItem('apollo-token');
-        if (token) headers.authorization = `Bearer ${token}`;
-        return headers;
-    }
-})
+const headers = {'authorization': '', 'content-type': '', 'x-hasura-admin-secret': ''};
 
+const token = window.localStorage.getItem('apollo-token');
+if (token) headers.authorization = `Bearer ${token}`;
+headers['content-type'] = 'application/json';
+headers['x-hasura-admin-secret'] = process.env.VUE_APP_GRAPHQL_ENDPOINT_SECRET ?? '';
+
+const apolloLink = new HttpLink({uri: process.env.VUE_APP_GRAPHQL_ENDPOINT_URL, fetch, headers: headers})
 const apolloCache = new InMemoryCache({addTypename: false});
 const apolloStorage = window.localStorage as PersistentStorage<PersistedData<NormalizedCacheObject>>;
 
@@ -51,7 +50,7 @@ Vue.use(VueCookies);
 Vue.use(Auth0, {domain: auth0Domain, clientId: auth0CientId, onRedirectCallback: auth0OnRedirectCallback});
 
 export const i18n = new VueI18n({locale: defaultLocale, messages, fallbackLocale: defaultLocale});
-export const cryptoKey = 'jXn2r5u8x/A?D(G+KbPeShVkYp3s6v9y';
+export const dataSourceCryptoKey = process.env.VUE_APP_DATA_SOURCE_SECRET_CRYPTO_KEY ?? '';
 
 Vue.mixin({
     methods: {

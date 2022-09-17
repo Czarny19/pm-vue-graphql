@@ -6,6 +6,7 @@
       hide-default-footer
       disable-sort
       :loading="!datasource || loading"
+      :loading-text="i18n('common.loading')"
       :headers="tableHeaders"
       :page.sync="page"
       :items="queryData"

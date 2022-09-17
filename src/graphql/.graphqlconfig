@@ -6,7 +6,8 @@
       "Default GraphQL Endpoint": {
         "url": "https://magister-app.herokuapp.com/v1/graphql",
         "headers": {
-          "user-agent": "JS GraphQL"
+          "user-agent": "JS GraphQL",
+          "x-hasura-admin-secret": ":bf>dv<Hid3`s$TP{iUhE]J\"Se_sZN"
         },
         "introspect": false
       }

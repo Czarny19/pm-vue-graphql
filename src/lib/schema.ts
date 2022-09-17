@@ -1,7 +1,7 @@
 import ApolloClient from "apollo-client";
 import {typeDefs} from "@/graphql/typedefs";
 import {GET_SCHEMA} from "@/graphql/queries/schema";
-import {cryptoKey} from "@/main";
+import {dataSourceCryptoKey} from "@/main";
 import * as Types from "@/lib/types";
 import {SchemaItem, SchemaItemField} from "@/lib/types";
 import {HttpLink} from "apollo-link-http";
@@ -97,7 +97,7 @@ const getRelatedFields = (path: string, fields: SchemaItemField[], field: Schema
  * @returns Usable datasource secret.
  **/
 export const decodeDatasourceSecret = (secret: string): string =>
-    CryptoJS.AES.decrypt(secret, cryptoKey).toString(CryptoJS.enc.Utf8);
+    CryptoJS.AES.decrypt(secret, dataSourceCryptoKey).toString(CryptoJS.enc.Utf8);
 
 /**
  * Encodes the datasource secret that can be stored in admin db.
@@ -105,7 +105,7 @@ export const decodeDatasourceSecret = (secret: string): string =>
  * @returns Encoded datasource secret.
  **/
 export const encodeDatasourceSecret = (secret: string): string =>
-    CryptoJS.AES.decrypt(secret, cryptoKey).toString(CryptoJS.enc.Utf8);
+    CryptoJS.AES.decrypt(secret, dataSourceCryptoKey).toString(CryptoJS.enc.Utf8);
 
 const ignoredObjects = [
     '_aggregate', '_aggregate_fields', '_avg_fields', '_max_fields', '_min_fields', '_mutation_response',

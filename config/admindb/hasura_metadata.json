@@ -1,0 +1,159 @@
+{
+  "version": 2,
+  "tables": [
+    {
+      "table": {
+        "schema": "public",
+        "name": "DATA_SOURCE"
+      },
+      "array_relationships": [
+        {
+          "name": "mutations",
+          "using": {
+            "manual_configuration": {
+              "remote_table": {
+                "schema": "public",
+                "name": "MUTATION"
+              },
+              "column_mapping": {
+                "id": "data_source_id"
+              }
+            }
+          }
+        },
+        {
+          "name": "queries",
+          "using": {
+            "manual_configuration": {
+              "remote_table": {
+                "schema": "public",
+                "name": "QUERY"
+              },
+              "column_mapping": {
+                "id": "data_source_id"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "table": {
+        "schema": "public",
+        "name": "MUTATION"
+      }
+    },
+    {
+      "table": {
+        "schema": "public",
+        "name": "PAGE"
+      }
+    },
+    {
+      "table": {
+        "schema": "public",
+        "name": "PROJECT"
+      },
+      "object_relationships": [
+        {
+          "name": "project_data_source",
+          "using": {
+            "manual_configuration": {
+              "remote_table": {
+                "schema": "public",
+                "name": "DATA_SOURCE"
+              },
+              "column_mapping": {
+                "source_id": "id"
+              }
+            }
+          }
+        },
+        {
+          "name": "project_theme",
+          "using": {
+            "manual_configuration": {
+              "remote_table": {
+                "schema": "public",
+                "name": "THEME"
+              },
+              "column_mapping": {
+                "theme_id": "id"
+              }
+            }
+          }
+        }
+      ],
+      "array_relationships": [
+        {
+          "name": "project_pages",
+          "using": {
+            "manual_configuration": {
+              "remote_table": {
+                "schema": "public",
+                "name": "PAGE"
+              },
+              "column_mapping": {
+                "id": "project_id"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "table": {
+        "schema": "public",
+        "name": "PROP"
+      }
+    },
+    {
+      "table": {
+        "schema": "public",
+        "name": "QUERY"
+      }
+    },
+    {
+      "table": {
+        "schema": "public",
+        "name": "THEME"
+      }
+    },
+    {
+      "table": {
+        "schema": "public",
+        "name": "USER"
+      },
+      "object_relationships": [
+        {
+          "name": "projects",
+          "using": {
+            "manual_configuration": {
+              "remote_table": {
+                "schema": "public",
+                "name": "PROJECT"
+              },
+              "column_mapping": {
+                "id": "user_id"
+              }
+            }
+          }
+        },
+        {
+          "name": "themes",
+          "using": {
+            "manual_configuration": {
+              "remote_table": {
+                "schema": "public",
+                "name": "THEME"
+              },
+              "column_mapping": {
+                "id": "user_id"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

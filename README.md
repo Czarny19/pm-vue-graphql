@@ -1,20 +1,5 @@
 # PM Vue GraphQL
 
-### TODO
-
-dokończyć demo - przykład z tabelą,
-komponent tabeli - opcje wyglądu,
-napisać readme,
-skrypt bazy,
-backup danych,
-backup definicji,
-fix bug apollo
-
-// Runtime | walidacja danych | skomplikowany przypadek | celem nie jest prototyp tylko analiza zagadnienia | cech |
-// funkc jako eksperyment + ocena wartości | celem jest ekesperyment! nie aplikacja
-// Jako komercyjny produkt czy się nada | readme | komentarze
-// Ciekawe przypadki jako el eksperymentu | sprawdzić na grupie osób
-
 ### Prototyp aplikacji wykorzystującej technologie Vue.js i GraphQL
 
 Obejmuje środowisko z graficznym edytorem pozwalającym na utworzenie i skonfigurowanie własnej aplikacji internetowej 
@@ -41,10 +26,12 @@ kodu aplikacji, zgodnie z wzorcami frameworku Vue i wykorzystując język GraphQ
 
 ## Struktura projektu
 
-1. `assets/` - Style css wykorzystywane przez platformę
-2. `components/` - Komponenty powszechnie wykorzystywane w aplikacji
+1. `config/` - Paiet zawierający zrzuty schematów baz danych wykorzystywanych do osługi platformy oraz zrzuty 
+przykładowej konfiguracji użytkownika
+2. `src/assets/` - Style css wykorzystywane przez platformę
+3. `src/components/` - Komponenty powszechnie wykorzystywane w aplikacji
    1. `widget/` - Komponenty generowane na widoku wynikowym projektu aplikacji w środowisku uruchomieniowym
-3. `graphql/` - Konfiguracja GraphQL, biblioteka zapytań obsługi platformy
+4. `src/graphql/` - Konfiguracja GraphQL, biblioteka zapytań obsługi platformy
    1. `queries/datasource.ts` - Zapytania obsługi definicji źródła danych wprowadzanych przez użytkownika
    2. `queries/mutation.ts` - Zapytania obsługi definicji mutacji GraphQL zdefiniowanych przez użytkownika
    3. `queries/page.ts` - Zapytania obsługi definicji sron zdefiniowanych przez użytkownika
@@ -54,10 +41,11 @@ kodu aplikacji, zgodnie z wzorcami frameworku Vue i wykorzystując język GraphQ
    7. `queries/schema.ts` - Zapytanie pobierające schemat bazy danych użytkownika
    8. `queries/theme.ts` - Zapytania obsługujące definicję kolorystyki aplikacji użytkownika
    9. `queries/user.ts` - Zapytania dotyczące obecnie zalogowanego użytkownika
-4. `i18n/` - Tłumaczenia stron administratora
-5. `views/main` - Komponenty tworzące panel administratora do zarządzania projektami, motywami oraz źródłami danych 
-6. `views/editor` - Komponenty tworzące edytor aplikacji wraz z zakładkami
-7. `views/runtime` - Komponenty odpowiedzialne za generowanie i wyświetlanie interfejsu aplikacji użytkownika
+5. `src/i18n/` - Tłumaczenia części administratorskiej systemu
+6. `src/lib/` - Biblioteka skryptów wykorzystywanych podczas zadań generowania kodu aplikacji
+7. `views/main` - Komponenty tworzące panel administratora do zarządzania projektami, motywami oraz źródłami danych 
+8. `views/editor` - Komponenty tworzące edytor aplikacji wraz z zakładkami
+9. `views/runtime` - Komponenty odpowiedzialne za generowanie i wyświetlanie interfejsu aplikacji użytkownika
 
 ![Alt text](readme/structure.png?raw=true "Project structure")
 

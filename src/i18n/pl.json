@@ -15,7 +15,8 @@
     "preview": "Podgląd",
     "yes": "Tak",
     "no": "Nie",
-    "close": "Zamknij"
+    "close": "Zamknij",
+    "loading": "Wczytywanie..."
   },
   "delete": {
     "title": "Czy na pewno chcesz usunąć wybrany element?",

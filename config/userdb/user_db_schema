@@ -1,0 +1,92 @@
+-- "Med_Appointments" definition
+
+-- Drop table
+
+-- DROP TABLE "Med_Appointments";
+
+CREATE TABLE "Med_Appointments" (
+	id bigserial NOT NULL,
+	"date" date NOT NULL,
+	doctor_id int8 NOT NULL,
+	location_id int8 NOT NULL,
+	CONSTRAINT "Med_Appointments_pkey" PRIMARY KEY (id)
+);
+
+
+-- "Med_Doctor" definition
+
+-- Drop table
+
+-- DROP TABLE "Med_Doctor";
+
+CREATE TABLE "Med_Doctor" (
+	id bigserial NOT NULL,
+	"name" text NOT NULL,
+	specialization text NOT NULL,
+	monday_hours text NULL,
+	tuesday_hours text NULL,
+	wednesday_hours text NULL,
+	thursday_hours text NULL,
+	friday_hours text NULL,
+	monday_location text NULL,
+	tuesday_location text NULL,
+	wednesday_location text NULL,
+	thursday_location text NULL,
+	friday_location text NULL,
+	CONSTRAINT "Med_Doctor_pkey" PRIMARY KEY (id)
+);
+
+
+-- "Med_Location" definition
+
+-- Drop table
+
+-- DROP TABLE "Med_Location";
+
+CREATE TABLE "Med_Location" (
+	id bigserial NOT NULL,
+	"name" text NOT NULL,
+	address_line_1 text NOT NULL,
+	address_line_2 text NOT NULL,
+	phone_number text NOT NULL,
+	description text NULL,
+	CONSTRAINT "Med_Location_pkey" PRIMARY KEY (id)
+);
+
+
+-- "Med_Pages" definition
+
+-- Drop table
+
+-- DROP TABLE "Med_Pages";
+
+CREATE TABLE "Med_Pages" (
+	id bigserial NOT NULL,
+	"name" text NOT NULL,
+	description text NOT NULL,
+	img_link text NULL,
+	bg_color text NULL,
+	text_color text NULL,
+	"order" int4 NULL,
+	CONSTRAINT "Med_Pages_pkey" PRIMARY KEY (id)
+);
+
+
+-- "Med_Reservation" definition
+
+-- Drop table
+
+-- DROP TABLE "Med_Reservation";
+
+CREATE TABLE "Med_Reservation" (
+	id bigserial NOT NULL,
+	appointment_id int8 NOT NULL,
+	"name" text NULL,
+	surname text NULL,
+	patient_phone_num text NULL,
+	is_reserved bool NULL DEFAULT false,
+	"hour" text NULL,
+	couse text NULL,
+	patient_email text NULL,
+	CONSTRAINT "Med_Reservation_pkey" PRIMARY KEY (id)
+);
