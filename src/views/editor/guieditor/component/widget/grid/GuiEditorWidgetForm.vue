@@ -9,10 +9,9 @@
       @dragover.prevent
       @dragenter.prevent
   >
-    <v-container class="pa-0">
+    <GuiEditorGridWidgetHeader :widget="widget" @activewidget="setActive"/>
 
-      <GuiEditorGridWidgetHeader :widget="widget" @activewidget="setActive"/>
-
+    <v-container fluid class="pa-0">
       <GuiEditorWidgetDropBox
           :drag="drag && !widget.move"
           @eldrop="(evt) => onDrop(0, evt)"
