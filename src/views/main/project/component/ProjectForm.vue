@@ -149,6 +149,11 @@ export default Vue.extend({
       },
       deep: true
     }
+  },
+  beforeMount() {
+    if (this.project.theme_id) {
+      this.currentTheme = (this.themes as Theme[]).filter((theme) => theme.id === this.projectTyped.theme_id)[0];
+    }
   }
 })
 </script>

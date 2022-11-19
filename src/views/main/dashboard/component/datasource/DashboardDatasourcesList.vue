@@ -1,5 +1,5 @@
 <template>
-  <v-container class="pa-0">
+  <v-container fluid class="pa-0">
     <v-row>
       <v-col cols="12" sm="12" md="12" lg="6" xl="6" v-for="datasource in datasources" :key="datasource.id">
         <v-card color="primary" class="fill-height">
